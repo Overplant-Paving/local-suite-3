@@ -555,6 +555,30 @@
       "flags": []
     },
     {
+      "id": "wildfire",
+      "file": "wildfire.html",
+      "name": "Wildfire Watchboard",
+      "cat": "earth",
+      "cx": "M",
+      "desc": "Active large fires near you: size, containment, distance.",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://services3.arcgis.com",
+        "https://api.zippopotam.us"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.location",
+        "suite.wildfire.radius",
+        "suite.wildfire.sort",
+        "suite.cache.wildfire.*"
+      ],
+      "cacheTtlMin": 30,
+      "since": "v1",
+      "flags": []
+    },
+    {
       "id": "volcano",
       "file": "volcano.html",
       "name": "Volcano Status Board",

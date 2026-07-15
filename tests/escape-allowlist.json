@@ -133,5 +133,14 @@
     "Math.round(near.km)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/radar/report.md",
     "secOpts": "local-only expression, recorded verified-clean with reasoning in tests/evidence/radar/report.md",
     "prodOpts": "local-only expression, recorded verified-clean with reasoning in tests/evidence/radar/report.md"
+  },
+  "wildfire.html": {
+    "state.radius": "local-only expression, recorded verified-clean with reasoning in tests/evidence/wildfire/report.md",
+    "state.sort===\"dist\"?\" selected\":\"\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/wildfire/report.md",
+    "fires.length": "local-only expression, recorded verified-clean with reasoning in tests/evidence/wildfire/report.md",
+    "totalAcres>=1000?Math.round(totalAcres).toLocaleString():Math.round(totalAcres)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/wildfire/report.md",
+    "nearest!=null&&isFinite(nearest)?Math.round(nearest)+\" km\":\"—\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/wildfire/report.md",
+    "state.sort===\"size\"?\" selected\":\"\"": "boolean-gated literal attribute",
+    "state.sort===\"new\"?\" selected\":\"\"": "boolean-gated literal attribute"
   }
 }
