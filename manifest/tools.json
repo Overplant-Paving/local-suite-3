@@ -461,6 +461,28 @@
       "flags": []
     },
     {
+      "id": "air",
+      "file": "air.html",
+      "name": "Air Quality & UV Panel",
+      "cat": "sky",
+      "cx": "S",
+      "desc": "AQI with pollutant breakdown on the EPA color scale, plus today's UV index.",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://air-quality-api.open-meteo.com",
+        "https://api.zippopotam.us"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.location",
+        "suite.cache.air"
+      ],
+      "cacheTtlMin": 10,
+      "since": "v1",
+      "flags": []
+    },
+    {
       "id": "zip",
       "file": "zip.html",
       "name": "ZIP & Area Code Lookup",

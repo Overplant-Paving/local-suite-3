@@ -95,5 +95,12 @@
   },
   "alerts.html": {
     "cards": "local-only expression, recorded verified-clean with reasoning in tests/evidence/alerts/report.md"
+  },
+  "air.html": {
+    "band.col": "local-only expression, recorded verified-clean with reasoning in tests/evidence/air/report.md",
+    "pinPct": "local-only expression, recorded verified-clean with reasoning in tests/evidence/air/report.md",
+    "uvb.col": "local-only expression, recorded verified-clean with reasoning in tests/evidence/air/report.md",
+    "aqiOutlook || '<div class=\"card-msg\">No forecast.</div>'": "local-only expression, recorded verified-clean with reasoning in tests/evidence/air/report.md",
+    "uvOutlook": "local-only expression, recorded verified-clean with reasoning in tests/evidence/air/report.md"
   }
 }

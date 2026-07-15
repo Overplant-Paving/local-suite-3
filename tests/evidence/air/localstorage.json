@@ -1,0 +1,14 @@
+{
+  "v1": {
+    "suite.cache.air": "{\"t\":1784136474419,\"key\":\"34.052,-118.244\",\"v\":{\"latitude\":34.1,\"longitude\":-118.2,\"generationtime_ms\":1.0437965393066406,\"utc_offset_seconds\":-25200,…(3812 chars)",
+    "suite.theme": "dark",
+    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}"
+  },
+  "v2": {
+    "suite.cache.air": "{\"t\":1784050072566,\"key\":\"34.061,-118.239\",\"v\":{\"latitude\":34.1,\"longitude\":-118.2,\"generationtime_ms\":0.7407665252685547,\"utc_offset_seconds\":-25200,…(3812 chars)",
+    "suite.location": "{\"lat\":34.0614,\"lon\":-118.2385,\"label\":\"Los Angeles, CA 90012\"}",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}

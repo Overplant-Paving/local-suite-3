@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Air Quality &amp; UV Panel · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  body { padding: 1.4rem 1.25rem 4rem; }
+  .wrap { max-width: 920px; margin: 0 auto; }
+  .topbar { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+  /* v1 back-link differs from core: muted at rest, accent (no underline) on hover */
+  .back { color: var(--muted); white-space: nowrap; }
+  .back:hover { color: var(--accent); text-decoration: none; }
+  .theme-btn { margin-left: auto; }
+  header h1 { font-size: 1.6rem; letter-spacing: -.02em; }
+  .locbar { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+    margin: .5rem 0 1.2rem; color: var(--muted); font-size: .9rem; }
+  .locbar .loclabel { color: var(--ink); font-weight: 600; }
+  .linklike { background: none; border: none; color: var(--accent); cursor: pointer;
+    font-size: .85rem; padding: 0; text-decoration: underline; }
+  .updated { font-size: .8rem; color: var(--muted); margin-left: auto; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 680px) { .grid { grid-template-columns: 1fr; } }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: var(--shadow); padding: 1.1rem 1.15rem 1.2rem; }
+  .p-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--muted); margin-bottom: .7rem; }
+  .hero { display: flex; align-items: flex-end; gap: 1rem; }
+  .hero .num { font-size: 3.6rem; font-weight: 800; line-height: .9; letter-spacing: -.02em; }
+  .hero .cat { font-size: 1.15rem; font-weight: 700; padding-bottom: .35rem; }
+  .hero .cat small { display: block; font-size: .72rem; font-weight: 500; text-transform: uppercase;
+    letter-spacing: .07em; color: var(--muted); }
+  .scale { height: 8px; border-radius: 5px; position: relative; margin: 1rem 0 .3rem;
+    background: linear-gradient(90deg, #4caf50 0%, #cbb733 25%, #e08b2f 42%, #d34a3d 57%, #8e63c0 78%, #7a3b45 100%); }
+  .scale .pin { position: absolute; top: -4px; width: 4px; height: 16px; background: var(--ink);
+    border-radius: 3px; box-shadow: 0 0 0 2px var(--card); transform: translateX(-50%); }
+  .scale-lbls { display: flex; justify-content: space-between; font-size: .68rem; color: var(--muted); }
+  .advice { margin-top: .9rem; font-size: .9rem; color: var(--ink); background: var(--accent-soft);
+    border-radius: 10px; padding: .65rem .8rem; }
+  .polls { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line);
+    border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin-top: .3rem; }
+  .poll { background: var(--card); padding: .7rem .8rem; }
+  .poll .k { font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .poll .v { font-size: 1.3rem; font-weight: 700; margin-top: .1rem; }
+  .poll .v small { font-size: .72rem; color: var(--muted); font-weight: 500; }
+  .uv-hero { display: flex; align-items: center; gap: 1rem; }
+  .uv-pill { font-size: 2.4rem; font-weight: 800; color: #fff; border-radius: 14px;
+    padding: .3rem 1rem; line-height: 1; }
+  .uv-cat { font-size: 1.1rem; font-weight: 700; }
+  .uv-cat small { display: block; font-size: .78rem; font-weight: 500; color: var(--muted); }
+  .outlook { display: flex; flex-direction: column; gap: .4rem; margin-top: .3rem; }
+  .day { display: grid; grid-template-columns: 3.2rem 1fr auto; align-items: center; gap: .7rem;
+    padding: .4rem .2rem; border-bottom: 1px dashed var(--line); }
+  .day:last-child { border-bottom: none; }
+  .day .dn { font-weight: 600; font-size: .9rem; }
+  .day .bar { height: 8px; border-radius: 5px; background: var(--chip); position: relative; overflow: hidden; }
+  .day .bar span { position: absolute; inset: 0 auto 0 0; border-radius: 5px; }
+  .day .val { font-size: .85rem; font-weight: 600; text-align: right; white-space: nowrap; min-width: 3.4rem; }
+  .badge { display: inline-block; font-size: .7rem; font-weight: 700; color: #fff;
+    border-radius: 6px; padding: .1rem .4rem; }
+  .card-msg { text-align: center; color: var(--muted); padding: 1.6rem 1.4rem; }
+  .card-msg .big { font-size: 1.15rem; color: var(--ink); margin-bottom: .4rem; font-weight: 600; }
+  .field { margin: .8rem auto; max-width: 320px; text-align: left; }
+  .field label { display: block; font-size: .8rem; color: var(--muted); margin-bottom: .3rem; }
+  .field input { width: 100%; padding: .6rem .75rem; font-size: 1rem; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+  .field input:focus { outline: none; border-color: var(--accent); }
+  .btn { border: none; border-radius: 10px; padding: .6rem 1rem; cursor: pointer;
+    font-size: .92rem; font-weight: 600; background: var(--accent); color: #fff; }
+  .btn.ghost { background: transparent; border: 1px solid var(--line); color: var(--ink); }
+  .row { display: flex; gap: .6rem; flex-wrap: wrap; justify-content: center; }
+  .notice { font-size: .82rem; color: var(--muted); margin-top: .6rem; }
+  footer { margin-top: 2.5rem; font-size: .82rem; padding-top: 1rem; }
+  .skel { background: var(--chip); border-radius: 8px; animation: pulse 1.3s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .5; } }
+  @media (prefers-reduced-motion: reduce) { .skel { animation: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header><h1>Air Quality &amp; UV Panel</h1></header>
+  <div class="locbar">
+    <span>Location:</span>
+    <span class="loclabel" id="locLabel">—</span>
+    <button class="linklike" id="changeLoc">change</button>
+    <span class="updated" id="updated"></span>
+  </div>
+
+  <main id="main"></main>
+
+  <footer>
+    Data: Open-Meteo Air Quality &amp; UV (open-meteo.com) · US AQI on the EPA color scale. No pollen — no free US pollen source exists.
+  </footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+const $ = s => document.querySelector(s);
+const esc = Suite.esc;
+const mainEl = Suite.liveRegion($("#main"));
+const locLabelEl = $("#locLabel");
+const updatedEl = Suite.liveRegion($("#updated"));
+
+/* v1 cache: one entry at suite.cache.air with the envelope {t, key, v} — key is the
+   location it was fetched for. Suite.fetchJSON reads/writes {t, v} at the same slot;
+   the tool re-adds the key field after each fresh fetch so v1 semantics survive. */
+const CACHE = "suite.cache.air";
+const TTL = 10 * 60 * 1000; // manifest cacheTtlMin: 10 — weather-class source (API-AND-RELAY.md §2)
+
+function relTime(ms) {
+  const s = Math.round((Date.now() - ms) / 1000);
+  if (s < 60) return "just now";
+  if (s < 3600) return Math.floor(s/60) + " min ago";
+  if (s < 86400) return Math.floor(s/3600) + " hr ago";
+  return new Date(ms).toLocaleString([], { month:"short", day:"numeric", hour:"numeric" });
+}
+
+/* ---------- scales ---------- */
+const AQI = [
+  { max: 50,  cat: "Good",                            col: "#4caf50", advice: "Air quality is satisfactory; enjoy your usual outdoor activities." },
+  { max: 100, cat: "Moderate",                         col: "#cbb733", advice: "Acceptable. Unusually sensitive people may consider limiting prolonged outdoor exertion." },
+  { max: 150, cat: "Unhealthy for Sensitive Groups",   col: "#e08b2f", advice: "Sensitive groups (heart/lung conditions, kids, older adults) should reduce prolonged outdoor exertion." },
+  { max: 200, cat: "Unhealthy",                         col: "#d34a3d", advice: "Everyone may begin to feel effects; sensitive groups should avoid prolonged outdoor exertion." },
+  { max: 300, cat: "Very Unhealthy",                    col: "#8e63c0", advice: "Health alert: the risk of effects is increased for everyone. Limit time outdoors." },
+  { max: 9999,cat: "Hazardous",                         col: "#7a3b45", advice: "Emergency conditions. Everyone should avoid outdoor exertion; stay indoors." }
+];
+function aqiBand(v) { return AQI.find(b => v <= b.max) || AQI[AQI.length-1]; }
+
+const UVB = [
+  { max: 2,   cat: "Low",       col: "#4caf50", advice: "No protection needed." },
+  { max: 5,   cat: "Moderate",  col: "#cbb733", advice: "Seek shade near midday; hat and sunscreen." },
+  { max: 7,   cat: "High",      col: "#e08b2f", advice: "Protection required — SPF 30+, hat, sunglasses." },
+  { max: 10,  cat: "Very High", col: "#d34a3d", advice: "Extra protection; avoid the sun 10am–4pm." },
+  { max: 99,  cat: "Extreme",   col: "#8e63c0", advice: "Take all precautions; unprotected skin can burn quickly." }
+];
+function uvBand(v) { return UVB.find(b => v <= b.max) || UVB[UVB.length-1]; }
+
+/* ---------- daily peaks from hourly ---------- */
+function dailyPeaks(times, values) {
+  const map = {};
+  for (let i = 0; i < times.length; i++) {
+    const v = values[i];
+    if (v == null) continue;
+    const day = times[i].slice(0, 10);
+    if (!(day in map) || v > map[day]) map[day] = v;
+  }
+  return map;
+}
+
+/* ---------- render ---------- */
+function skeleton() {
+  mainEl.innerHTML =
+    `<div class="grid">
+      <div class="panel"><div class="p-label">Air quality</div><div class="skel" style="height:120px"></div></div>
+      <div class="panel"><div class="p-label">UV index</div><div class="skel" style="height:120px"></div></div>
+    </div>`;
+}
+
+function render(data, stampMs) {
+  updatedEl.textContent = stampMs ? "updated " + relTime(stampMs) : "";
+  const cur = data.current || {};
+  const h = data.hourly || {};
+  const round = (x, d = 0) => (x == null ? "—" : (d ? x.toFixed(d) : Math.round(x)));
+
+  const aqi = cur.us_aqi;
+  const band = aqi != null ? aqiBand(aqi) : null;
+  const pinPct = aqi != null ? Math.min(100, (aqi / 350) * 100) : 0;
+
+  const uv = cur.uv_index;
+  const uvb = uv != null ? uvBand(uv) : null;
+
+  // multi-day outlook from hourly us_aqi + uv_index
+  const aqiPeaks = dailyPeaks(h.time || [], h.us_aqi || []);
+  const uvPeaks = dailyPeaks(h.time || [], h.uv_index || []);
+  const days = Object.keys(aqiPeaks).sort().slice(0, 5);
+  const dayName = iso => {
+    const d = new Date(iso + "T12:00:00");
+    return d.toLocaleDateString([], { weekday: "short" });
+  };
+  const isToday = iso => iso === new Date().toISOString().slice(0, 10);
+
+  const aqiOutlook = days.map(day => {
+    const v = Math.round(aqiPeaks[day]);
+    const b = aqiBand(v);
+    const pct = Math.min(100, (v / 300) * 100);
+    return `<div class="day">
+      <span class="dn">${isToday(day) ? "Today" : esc(dayName(day))}</span>
+      <span class="bar"><span style="width:${pct}%;background:${b.col}"></span></span>
+      <span class="val"><span class="badge" style="background:${b.col}">${esc(v)}</span></span>
+    </div>`;
+  }).join("");
+
+  const uvOutlook = days.map(day => {
+    const v = uvPeaks[day];
+    if (v == null) return "";
+    const rv = Math.round(v);
+    const b = uvBand(rv);
+    const pct = Math.min(100, (rv / 12) * 100);
+    return `<div class="day">
+      <span class="dn">${isToday(day) ? "Today" : esc(dayName(day))}</span>
+      <span class="bar"><span style="width:${pct}%;background:${b.col}"></span></span>
+      <span class="val"><span class="badge" style="background:${b.col}">${esc(rv)}</span> ${esc(b.cat)}</span>
+    </div>`;
+  }).join("");
+
+  mainEl.innerHTML =
+    `<div class="grid">
+      <div class="panel">
+        <div class="p-label">Air quality · US AQI</div>
+        ${band ? `
+        <div class="hero">
+          <div class="num" style="color:${band.col}">${esc(Math.round(aqi))}</div>
+          <div class="cat" style="color:${band.col}">${esc(band.cat)}<small>US AQI</small></div>
+        </div>
+        <div class="scale"><div class="pin" style="left:${pinPct}%"></div></div>
+        <div class="scale-lbls"><span>0</span><span>50</span><span>100</span><span>150</span><span>200</span><span>300+</span></div>
+        <div class="advice">${esc(band.advice)}</div>
+        ` : `<div class="card-msg">AQI unavailable for this location.</div>`}
+      </div>
+
+      <div class="panel">
+        <div class="p-label">UV index · now</div>
+        ${uvb ? `
+        <div class="uv-hero">
+          <div class="uv-pill" style="background:${uvb.col}">${esc(Math.round(uv))}</div>
+          <div class="uv-cat">${esc(uvb.cat)}<small>${esc(uvb.advice)}</small></div>
+        </div>` : `<div class="card-msg">UV data unavailable.</div>`}
+      </div>
+
+      <div class="panel">
+        <div class="p-label">Pollutants · now</div>
+        <div class="polls">
+          <div class="poll"><div class="k">PM2.5</div><div class="v">${esc(round(cur.pm2_5, 1))} <small>µg/m³</small></div></div>
+          <div class="poll"><div class="k">PM10</div><div class="v">${esc(round(cur.pm10, 1))} <small>µg/m³</small></div></div>
+          <div class="poll"><div class="k">Ozone</div><div class="v">${esc(round(cur.ozone))} <small>µg/m³</small></div></div>
+          <div class="poll"><div class="k">NO₂</div><div class="v">${esc(round(cur.nitrogen_dioxide))} <small>µg/m³</small></div></div>
+          <div class="poll"><div class="k">SO₂</div><div class="v">${esc(round(cur.sulphur_dioxide))} <small>µg/m³</small></div></div>
+          <div class="poll"><div class="k">CO</div><div class="v">${esc(round(cur.carbon_monoxide))} <small>µg/m³</small></div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="p-label">Multi-day outlook · daily peak</div>
+        <div style="font-size:.72rem;color:var(--muted);margin-bottom:.3rem">Peak AQI</div>
+        <div class="outlook">${aqiOutlook || '<div class="card-msg">No forecast.</div>'}</div>
+        <div style="font-size:.72rem;color:var(--muted);margin:.7rem 0 .3rem">Peak UV</div>
+        <div class="outlook">${uvOutlook}</div>
+      </div>
+    </div>`;
+}
+
+/* ---------- load ---------- */
+let refreshTimer = null;
+async function load() {
+  const loc = Suite.location.get();
+  if (!loc) { renderFirstRun(); return; }
+  locLabelEl.textContent = loc.label;
+
+  let cached = Suite.store.get(CACHE, null);
+  if (cached && (!cached.key || cached.key !== locKey(loc))) {
+    // the single cache slot belongs to a different location (v1 keyed it) —
+    // drop it so Suite.fetchJSON can't serve another place's air, fresh or stale
+    try { localStorage.removeItem(CACHE); } catch(e) {} // raw removal: Suite.store has no delete
+    cached = null;
+  }
+  if (cached && cached.t != null) render(cached.v, cached.t); else skeleton();
+
+  try {
+    const url = `https://air-quality-api.open-meteo.com/v1/air-quality`
+      + `?latitude=${loc.lat.toFixed(4)}&longitude=${loc.lon.toFixed(4)}`
+      + `&current=us_aqi,pm2_5,pm10,ozone,nitrogen_dioxide,sulphur_dioxide,carbon_monoxide,uv_index`
+      + `&hourly=us_aqi,uv_index`
+      + `&forecast_days=5&timezone=auto`;
+    const r = await Suite.fetchJSON(url, { cacheKey: "air", ttl: TTL, tries: 1 });
+    if (!r.fromCache) Suite.store.set(CACHE, { t: r.t, key: locKey(loc), v: r.v }); // restore the v1 envelope's key field
+    render(r.v, r.t);
+    if (r.stale) updatedEl.textContent = "offline · last data " + relTime(r.t);
+  } catch(e) {
+    // Suite.fetchJSON already fell back to cache when one existed; reaching here means no data at all
+    mainEl.innerHTML =
+      `<div class="panel"><div class="card-msg"><div class="big">Couldn't reach the air-quality service</div>
+       ${esc(e.message || e)}.
+       <div class="row" style="margin-top:1rem"><button class="btn" id="retry">Try again</button></div></div></div>`;
+    const rb = $("#retry"); if (rb) rb.addEventListener("click", load);
+  }
+}
+function locKey(loc) { return loc.lat.toFixed(3) + "," + loc.lon.toFixed(3); }
+
+/* ---------- first run ---------- */
+function renderFirstRun(msg) {
+  locLabelEl.textContent = "not set";
+  mainEl.innerHTML =
+    `<div class="panel"><div class="card-msg">
+      <div class="big">Set your location</div>
+      Air quality and UV are computed for your exact coordinates (works worldwide).
+      ${msg ? `<div class="notice" style="color:#c0392b">${esc(msg)}</div>` : ""}
+      <div class="field"><label for="zip">US ZIP code</label>
+        <input id="zip" inputmode="numeric" placeholder="e.g. 10001" maxlength="5"></div>
+      <div class="row">
+        <button class="btn" id="zipGo">Set location</button>
+        <button class="btn ghost" id="geoGo">Use my location</button>
+      </div>
+      <div class="notice" id="locMsg"></div>
+    </div></div>`;
+  const zip = $("#zip"), locMsg = $("#locMsg");
+  zip.focus();
+  zip.addEventListener("keydown", e => { if (e.key === "Enter") $("#zipGo").click(); });
+  $("#zipGo").addEventListener("click", async () => {
+    const z = (zip.value || "").trim();
+    if (!/^\d{5}$/.test(z)) { locMsg.textContent = "Enter a 5-digit ZIP code."; return; }
+    locMsg.textContent = "Looking up…";
+    try {
+      const d = (await Suite.fetchJSON(`https://api.zippopotam.us/us/${z}`)).v;
+      const place = d.places && d.places[0];
+      if (!place) throw new Error("ZIP not found");
+      Suite.location.set({ lat: parseFloat(place.latitude), lon: parseFloat(place.longitude),
+        label: `${place["place name"]}, ${place["state abbreviation"]} ${z}` });
+      load();
+    } catch(e) { locMsg.textContent = "Couldn't find that ZIP (" + (e.message || e) + ")."; }
+  });
+  $("#geoGo").addEventListener("click", () => {
+    if (!navigator.geolocation) { locMsg.textContent = "Geolocation isn't available here."; return; }
+    locMsg.textContent = "Requesting location… (may need http/https)";
+    navigator.geolocation.getCurrentPosition(
+      pos => { Suite.location.set({ lat: +pos.coords.latitude.toFixed(4), lon: +pos.coords.longitude.toFixed(4),
+        label: `My location (${pos.coords.latitude.toFixed(3)}, ${pos.coords.longitude.toFixed(3)})` }); load(); },
+      err => { locMsg.textContent = "Couldn't get location: " + err.message; });
+  });
+}
+$("#changeLoc").addEventListener("click", () => renderFirstRun());
+
+/* ---------- boot ---------- */
+function startTimer() { if (refreshTimer) clearInterval(refreshTimer); refreshTimer = setInterval(load, 15 * 60 * 1000); }
+document.addEventListener("visibilitychange", () => { if (!document.hidden) load(); });
+startTimer();
+load();
+</script>
+</body>
+</html>

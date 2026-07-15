@@ -121,7 +121,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 23 | flashcards.html | util | off | — | A | XP (keep) | ✅ `tests/evidence/flashcards/` |
 | 24 | alerts.html | sky | cors | — | B | | ✅ `tests/evidence/alerts/` |
 | 25 | radar.html | sky | cors | — | B | image loops (no CORS issue) | ⬜ |
-| 26 | air.html | sky | cors | — | B | | ⬜ |
+| 26 | air.html | sky | cors | — | B | | ✅ `tests/evidence/air/` |
 | 27 | spaceweather.html | sky | cors | — | B | ~1 MB aurora grid — cache | ⬜ |
 | 28 | tides.html | sky | cors | — | B | add `application=` param | ⬜ |
 | 29 | marine.html | sky | cors | — | B | NDBC path stays descoped (no CORS) | ⬜ |
