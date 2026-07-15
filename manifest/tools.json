@@ -555,6 +555,28 @@
       "flags": []
     },
     {
+      "id": "volcano",
+      "file": "volcano.html",
+      "name": "Volcano Status Board",
+      "cat": "earth",
+      "cx": "S",
+      "desc": "US volcanoes at elevated alert. Quietly reassuring, most days.",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://volcanoes.usgs.gov",
+        "https://api.zippopotam.us"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.location",
+        "suite.cache.volcano.*"
+      ],
+      "cacheTtlMin": 60,
+      "since": "v1",
+      "flags": []
+    },
+    {
       "id": "iss",
       "file": "iss.html",
       "name": "ISS Tracker",
