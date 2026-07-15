@@ -1,0 +1,4 @@
+SAFETY-CRITICAL CONTENT PARITY (textContent of "header h1, header .tag, .call911, .hotlines, nav.jump, section.topic, fieldset.card legend, footer")
+v1 length: 5859 chars
+v2 length: 5859 chars
+byte-for-byte identical: true

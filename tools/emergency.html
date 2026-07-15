@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Emergency Quick-Reference · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents: emergency red (3-layer, same pattern as core) */
+  :root { --emerg: #c0392b; --emerg-soft: #f7e4e1; }
+  @media (prefers-color-scheme: dark) {
+    :root { --emerg: #e0574a; --emerg-soft: #3a201d; }
+  }
+  :root[data-theme="light"] { --emerg: #c0392b; --emerg-soft: #f7e4e1; }
+  :root[data-theme="dark"] { --emerg: #e0574a; --emerg-soft: #3a201d; }
+
+  body { padding: 1.5rem 1.25rem 4rem; }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  /* core floats .theme-btn right; here it sits in the flex .topbar exactly as v1 */
+  .topbar .theme-btn { float: none; }
+  header h1 { font-size: 1.75rem; letter-spacing: -.02em; }
+  header .tag { color: var(--muted); margin-top: .3rem; }
+
+  .call911 {
+    background: var(--emerg); color: #fff; border-radius: 14px; padding: 1rem 1.2rem;
+    margin: 1.2rem 0; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  }
+  .call911 .big { font-size: 2.4rem; font-weight: 800; line-height: 1; }
+  .call911 a { color: #fff; }
+  .call911 .txt { font-size: 1rem; }
+
+  .hotlines { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: .7rem; margin-bottom: 1.4rem; }
+  .hot {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: .8rem .9rem; box-shadow: var(--shadow);
+  }
+  .hot .name { font-size: .82rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .hot .num { font-size: 1.35rem; font-weight: 700; }
+  .hot .num a { color: var(--emerg); text-decoration: none; }
+  .hot .desc { font-size: .82rem; color: var(--muted); margin-top: .15rem; }
+
+  nav.jump { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+  nav.jump a {
+    border: 1px solid var(--line); background: var(--card); color: var(--accent);
+    border-radius: 999px; padding: .3rem .8rem; font-size: .84rem; text-decoration: none;
+  }
+  nav.jump a:hover { border-color: var(--accent); }
+
+  section.topic {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 1.1rem 1.2rem; box-shadow: var(--shadow); margin-top: 1rem; scroll-margin-top: 1rem;
+  }
+  section.topic > h2 { font-size: 1.25rem; display: flex; align-items: center; gap: .5rem; }
+  section.topic > h2 .ic { font-size: 1.3rem; }
+  section.topic h3 { font-size: 1rem; margin: .9rem 0 .2rem; color: var(--accent); }
+  ol, ul { margin: .3rem 0 .3rem 1.3rem; }
+  li { margin: .28rem 0; }
+  .callout {
+    border-left: 4px solid var(--emerg); background: var(--emerg-soft);
+    padding: .5rem .8rem; border-radius: 8px; margin: .6rem 0; font-size: .92rem;
+  }
+  .callout b { color: var(--emerg); }
+
+  .metro { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin: .8rem 0;
+    background: var(--accent-soft); border-radius: 12px; padding: .8rem 1rem; }
+  .metro button {
+    border: none; background: var(--accent); color: #fff; border-radius: 10px;
+    padding: .6rem 1.1rem; font-size: 1rem; cursor: pointer; font-weight: 600;
+  }
+  .metro button.stop { background: var(--emerg); }
+  .metro .beat {
+    width: 2.4rem; height: 2.4rem; border-radius: 50%; background: var(--card);
+    border: 2px solid var(--accent); flex: none; transition: transform .06s, background .06s;
+  }
+  .metro .beat.on { background: var(--accent); transform: scale(1.18); }
+  .metro .lbl { font-size: .9rem; color: var(--muted); }
+  .metro .lbl b { color: var(--ink); }
+
+  fieldset.card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 1.1rem 1.2rem; box-shadow: var(--shadow); margin-top: 1rem;
+    /* core's .card sets display:flex + column + gap; v1 fieldsets are plain block flow */
+    display: block; flex-direction: row; gap: normal;
+  }
+  fieldset.card legend { font-size: 1.25rem; font-weight: 600; padding: 0 .4rem; }
+  .cardgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: .8rem; margin-top: .5rem; }
+  label.fld { display: block; font-size: .82rem; color: var(--muted); }
+  label.fld span { display: block; margin-bottom: .15rem; }
+  input.f, textarea.f {
+    width: 100%; font: inherit; font-size: .95rem; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 8px; padding: .45rem .6rem;
+  }
+  textarea.f { min-height: 3.2rem; resize: vertical; }
+  .cardactions { display: flex; gap: .6rem; margin-top: .9rem; flex-wrap: wrap; align-items: center; }
+  .cardactions button {
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    border-radius: 10px; padding: .5rem 1rem; font-size: .92rem; cursor: pointer;
+  }
+  .cardactions button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .saved { font-size: .82rem; color: var(--built); }
+
+  /* v1 footer is tighter than the core default */
+  footer { margin-top: 2.5rem; font-size: .82rem; padding-top: 1rem; }
+
+  @media print {
+    body { padding: 0; background: #fff; color: #000; font-size: 12pt; }
+    .topbar, nav.jump, header .tag, footer, .metro button, .theme-btn,
+    #topicsWrap, .call911 .txt, .cardactions { display: none !important; }
+    .call911 { background: #fff; color: #000; border: 2px solid #000; }
+    .call911 .big { color: #000; }
+    fieldset.card { border: 2px solid #000; box-shadow: none; page-break-inside: avoid; }
+    input.f, textarea.f { border: none; background: #fff; color: #000; padding: 0; }
+    .hotlines { display: grid; }
+    .hot { border: 1px solid #000; box-shadow: none; }
+    .hot .num a { color: #000; }
+    h1 { font-size: 18pt; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Emergency Quick-Reference</h1>
+    <p class="tag">Works with no internet, on any device. In a real emergency, <b>call 911 first</b> —
+      this page is a reminder, not a replacement for trained help.</p>
+  </header>
+
+  <div class="call911">
+    <div class="big"><a href="tel:911">911</a></div>
+    <div class="txt">Life-threatening emergency? Call now. Speak calmly: your location, what happened,
+      how many people, and stay on the line until told to hang up.</div>
+  </div>
+
+  <div class="hotlines">
+    <div class="hot">
+      <div class="name">Poison Control</div>
+      <div class="num"><a href="tel:18002221222">1-800-222-1222</a></div>
+      <div class="desc">24/7, free, confidential — swallowed, inhaled, or exposure to anything.</div>
+    </div>
+    <div class="hot">
+      <div class="name">Suicide &amp; Crisis Lifeline</div>
+      <div class="num"><a href="tel:988">988</a></div>
+      <div class="desc">Call or text 24/7 for mental-health crisis or emotional distress.</div>
+    </div>
+    <div class="hot">
+      <div class="name">Non-emergency</div>
+      <div class="num">311 / local</div>
+      <div class="desc">Use your local non-emergency line when it isn't life-threatening.</div>
+    </div>
+  </div>
+
+  <nav class="jump" id="topicsWrap" aria-label="First-aid topics">
+    <a href="#cpr">CPR</a>
+    <a href="#choking">Choking</a>
+    <a href="#bleeding">Bleeding</a>
+    <a href="#burns">Burns</a>
+    <a href="#stroke">Stroke (FAST)</a>
+    <a href="#heart">Heart attack</a>
+    <a href="#card">Emergency card</a>
+  </nav>
+
+  <section class="topic" id="cpr">
+    <h2><span class="ic" aria-hidden="true">❤️</span> CPR — no breathing / no pulse</h2>
+    <div class="callout"><b>Call 911 first</b> (or have someone call) and get an AED if available. Start CPR if the person is unresponsive and not breathing normally.</div>
+
+    <div class="metro">
+      <div class="beat" id="beat" aria-hidden="true"></div>
+      <button id="metroBtn">▶ Start 110 BPM</button>
+      <div class="lbl">Push to the beat — <b>100–120 compressions/min</b>. (This tone is ~110/min.)</div>
+    </div>
+
+    <h3>Adult</h3>
+    <ol>
+      <li>Kneel beside them. Place the heel of one hand in the <b>center of the chest</b>, other hand on top, fingers interlocked.</li>
+      <li>Push <b>hard and fast, at least 2 inches deep</b>, letting the chest fully recoil between pushes.</li>
+      <li>Keep the rhythm at 100–120/min (the metronome above). Minimize pauses.</li>
+      <li>If trained and willing: 30 compressions, then 2 rescue breaths. Otherwise <b>hands-only CPR is fine</b> — just keep pushing.</li>
+      <li>Continue until the person moves/breathes, an AED/medic takes over, or you're too exhausted to continue.</li>
+    </ol>
+
+    <h3>Child (1 year to puberty)</h3>
+    <ol>
+      <li>Use <b>one or two hands</b> in the center of the chest. Push about <b>2 inches</b> deep.</li>
+      <li>Same 100–120/min rhythm. If trained: 30:2 (or 15:2 with two rescuers).</li>
+      <li>If alone and unwitnessed collapse, give <b>2 minutes of CPR before</b> leaving to call 911.</li>
+    </ol>
+
+    <h3>Infant (under 1 year)</h3>
+    <ol>
+      <li>Use <b>two fingers</b> (or two thumbs encircling the chest) just below the nipple line.</li>
+      <li>Push about <b>1.5 inches</b> deep, 100–120/min.</li>
+      <li>If trained: 30:2 (single rescuer). Be gentle but firm; full recoil between pushes.</li>
+    </ol>
+    <div class="callout">Untrained and unsure? A 911 dispatcher can talk you through CPR step by step — <b>stay on the phone</b>.</div>
+  </section>
+
+  <section class="topic" id="choking">
+    <h2><span class="ic" aria-hidden="true">🫁</span> Choking</h2>
+    <div class="callout">If they can <b>cough forcefully or speak</b>, encourage coughing — don't interfere. Act when they <b>can't breathe, cough, or make sound</b>.</div>
+    <h3>Adult or child (responsive)</h3>
+    <ol>
+      <li>Give <b>5 back blows</b>: bend them forward, strike firmly between the shoulder blades with the heel of your hand.</li>
+      <li>Give <b>5 abdominal thrusts</b> (Heimlich): fist just above the navel, grasp with other hand, thrust inward and upward.</li>
+      <li>Alternate 5 back blows and 5 thrusts until the object clears or they become unresponsive.</li>
+      <li>If they go unresponsive: lower them safely, <b>call 911</b>, and start CPR (check the mouth for a visible object before breaths).</li>
+    </ol>
+    <h3>Infant (under 1)</h3>
+    <ol>
+      <li>Face-down along your forearm, head lower than body: <b>5 back blows</b> between the shoulder blades.</li>
+      <li>Turn face-up: <b>5 chest thrusts</b> with two fingers (as in infant CPR).</li>
+      <li>Repeat until cleared or unresponsive — then start infant CPR and call 911.</li>
+    </ol>
+    <div class="callout">Pregnant or very large person: give <b>chest thrusts</b> instead of abdominal thrusts.</div>
+  </section>
+
+  <section class="topic" id="bleeding">
+    <h2><span class="ic" aria-hidden="true">🩸</span> Severe bleeding</h2>
+    <ol>
+      <li><b>Call 911</b> for heavy or spurting bleeding. Protect yourself (gloves if available).</li>
+      <li>Apply <b>firm, direct pressure</b> with a clean cloth or gauze right on the wound.</li>
+      <li><b>Do not lift the cloth to peek</b> — if it soaks through, add more on top and keep pressing.</li>
+      <li>If it doesn't stop and you have a <b>tourniquet</b>, apply it 2–3 inches above the wound (not on a joint), tighten until bleeding stops, and note the time.</li>
+      <li>Keep the person warm and lying down; treat for shock. Stay with them until help arrives.</li>
+    </ol>
+    <div class="callout"><b>Embedded object?</b> Don't pull it out — press around it and pad to hold it in place.</div>
+  </section>
+
+  <section class="topic" id="burns">
+    <h2><span class="ic" aria-hidden="true">🔥</span> Burns</h2>
+    <ol>
+      <li><b>Cool it</b>: run <b>cool (not ice-cold) water</b> over the burn for 10–20 minutes. Remove rings/tight clothing near the area before it swells.</li>
+      <li><b>Do not</b> apply ice, butter, oil, or toothpaste. Don't break blisters.</li>
+      <li>Cover loosely with a clean, non-stick dressing or cling film.</li>
+      <li>Over-the-counter pain relief helps. Keep the person warm overall.</li>
+    </ol>
+    <div class="callout"><b>Call 911 / seek ER care</b> for burns that are: larger than the person's palm, on the face/hands/feet/genitals or over a joint, deep/white/charred, from chemicals or electricity, or on a child or older adult.</div>
+  </section>
+
+  <section class="topic" id="stroke">
+    <h2><span class="ic" aria-hidden="true">🧠</span> Stroke — think FAST</h2>
+    <ul>
+      <li><b>F — Face:</b> Ask them to smile. Does one side droop?</li>
+      <li><b>A — Arms:</b> Ask them to raise both arms. Does one drift down?</li>
+      <li><b>S — Speech:</b> Ask them to repeat a simple sentence. Is it slurred or strange?</li>
+      <li><b>T — Time:</b> Any one of these? <b>Call 911 immediately</b> and note the time symptoms started.</li>
+    </ul>
+    <div class="callout">Note the <b>time last known well</b> — treatment options depend on it. Don't give food, drink, or medication.</div>
+  </section>
+
+  <section class="topic" id="heart">
+    <h2><span class="ic" aria-hidden="true">💔</span> Heart attack</h2>
+    <p>Common signs: chest pressure/pain/squeezing; discomfort in arm(s), jaw, neck, or back; shortness of breath; cold sweat, nausea, lightheadedness. Signs can be subtler in women, older adults, and people with diabetes.</p>
+    <ol>
+      <li><b>Call 911 now</b> — don't drive yourself if you can avoid it.</li>
+      <li>Have the person <b>rest and stay calm</b>; loosen tight clothing.</li>
+      <li>If they're not allergic and it isn't advised against, an <b>aspirin (chew 1 adult or 4 low-dose)</b> can help — a dispatcher will advise.</li>
+      <li>If they become unresponsive and aren't breathing normally, <b>start CPR</b> and use an AED if available.</li>
+    </ol>
+  </section>
+
+  <fieldset class="card" id="card">
+    <legend>🪪 Family Emergency Card</legend>
+    <p class="tag" style="color:var(--muted);font-size:.9rem;margin-bottom:.4rem">Stored only on this device. Fill it in, then <b>Print</b> for a wallet/fridge copy.</p>
+    <div class="cardgrid">
+      <label class="fld"><span>Household / name</span><input class="f" id="f_name" placeholder="The Rivera family"></label>
+      <label class="fld"><span>Home address</span><input class="f" id="f_addr" placeholder="123 Main St, Apt 4"></label>
+      <label class="fld"><span>ICE contact 1 (name &amp; phone)</span><input class="f" id="f_ice1" placeholder="Sam — 555-123-4567"></label>
+      <label class="fld"><span>ICE contact 2 (name &amp; phone)</span><input class="f" id="f_ice2" placeholder="Grandma — 555-987-6543"></label>
+      <label class="fld"><span>Primary doctor / clinic</span><input class="f" id="f_doc" placeholder="Dr. Lee — 555-222-3333"></label>
+      <label class="fld"><span>Preferred hospital</span><input class="f" id="f_hosp" placeholder="County General"></label>
+      <label class="fld"><span>Insurance / policy #</span><input class="f" id="f_ins" placeholder="BlueCross · #ABC123"></label>
+      <label class="fld"><span>Blood types (if known)</span><input class="f" id="f_blood" placeholder="Mom O+, Kids A-"></label>
+    </div>
+    <div class="cardgrid" style="margin-top:.6rem">
+      <label class="fld"><span>Allergies</span><textarea class="f" id="f_allergy" placeholder="Penicillin (Mom); peanuts (Ana)"></textarea></label>
+      <label class="fld"><span>Current medications &amp; conditions</span><textarea class="f" id="f_meds" placeholder="Dad: metformin, high BP · Ana: inhaler (asthma)"></textarea></label>
+      <label class="fld"><span>Other notes (utilities shutoffs, pets, meeting spot)</span><textarea class="f" id="f_notes" placeholder="Gas valve behind house · meet at the oak tree · cat: Mochi"></textarea></label>
+    </div>
+    <div class="cardactions">
+      <button class="primary" id="saveBtn" type="button">Save</button>
+      <button id="printBtn" type="button">🖨 Print card</button>
+      <button id="clearBtn" type="button">Clear</button>
+      <span class="saved" id="savedMsg"></span>
+    </div>
+  </fieldset>
+
+  <footer>No network — everything happens on your machine. First-aid steps follow mainstream guidance
+    (Red Cross / AHA); when in doubt, call 911 and follow the dispatcher.</footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---------- CPR metronome (WebAudio, ~110 BPM) ---------- */
+let audioCtx = null, metroTimer = null, running = false;
+const beat = document.getElementById("beat");
+const metroBtn = document.getElementById("metroBtn");
+const BPM = 110, interval = 60000 / BPM;
+
+function click(){
+  if (!audioCtx) return;
+  const t = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.frequency.value = 1000;
+  gain.gain.setValueAtTime(0.0001, t);
+  gain.gain.exponentialRampToValueAtTime(0.5, t + 0.001);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+  osc.connect(gain).connect(audioCtx.destination);
+  osc.start(t); osc.stop(t + 0.06);
+  beat.classList.add("on");
+  setTimeout(() => beat.classList.remove("on"), 90);
+}
+function startMetro(){
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === "suspended") audioCtx.resume();
+  running = true;
+  click();
+  metroTimer = setInterval(click, interval);
+  metroBtn.textContent = "■ Stop";
+  metroBtn.classList.add("stop");
+}
+function stopMetro(){
+  running = false;
+  clearInterval(metroTimer); metroTimer = null;
+  beat.classList.remove("on");
+  metroBtn.textContent = "▶ Start 110 BPM";
+  metroBtn.classList.remove("stop");
+}
+metroBtn.addEventListener("click", () => running ? stopMetro() : startMetro());
+
+/* ---------- emergency card (localStorage) ---------- */
+const FIELDS = ["name","addr","ice1","ice2","doc","hosp","ins","blood","allergy","meds","notes"];
+const CARD_KEY = "suite.emergency.card";
+const savedMsg = Suite.liveRegion(document.getElementById("savedMsg"));
+function loadCard(){
+  const v = Suite.store.get(CARD_KEY);
+  const data = (v && typeof v === "object") ? v : {};
+  FIELDS.forEach(f => { const el = document.getElementById("f_" + f); if (el && data[f] != null) el.value = data[f]; });
+}
+function saveCard(){
+  const data = {};
+  FIELDS.forEach(f => { const el = document.getElementById("f_" + f); if (el) data[f] = el.value; });
+  Suite.store.set(CARD_KEY, data); /* never throws (ARCHITECTURE.md §3) — read back to keep v1's failure message */
+  const back = Suite.store.get(CARD_KEY);
+  if (back && JSON.stringify(back) === JSON.stringify(data)) flash("Saved to this device ✓");
+  else flash("Couldn't save (storage full?)");
+}
+function flash(msg){
+  savedMsg.textContent = msg;
+  setTimeout(() => { if (savedMsg.textContent === msg) savedMsg.textContent = ""; }, 2500);
+}
+document.getElementById("saveBtn").addEventListener("click", saveCard);
+document.getElementById("printBtn").addEventListener("click", () => { saveCard(); window.print(); });
+document.getElementById("clearBtn").addEventListener("click", () => {
+  if (!confirm("Clear all emergency-card fields on this device?")) return;
+  FIELDS.forEach(f => { const el = document.getElementById("f_" + f); if (el) el.value = ""; });
+  /* Suite.store exposes no remove(); raw removal keeps v1 behavior (key deleted, not blanked) */
+  try { localStorage.removeItem(CARD_KEY); } catch (e) {}
+  flash("Cleared");
+});
+// autosave on blur
+FIELDS.forEach(f => {
+  const el = document.getElementById("f_" + f);
+  if (el) el.addEventListener("change", saveCard);
+});
+loadCard();
+</script>
+</body>
+</html>

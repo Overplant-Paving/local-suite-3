@@ -1,0 +1,12 @@
+{
+  "v1": {
+    "suite.theme": "dark",
+    "suite.emergency.card": "{\"name\":\"The Rivera family\",\"addr\":\"\",\"ice1\":\"Sam — 555-123-4567\",\"ice2\":\"\",\"doc\":\"\",\"hosp\":\"County General\",\"ins\":\"\",\"blood\":\"\",\"allergy\":\"Penicillin…(194 chars)"
+  },
+  "v2": {
+    "suite.theme": "dark",
+    "suite.emergency.card": "{\"name\":\"The Rivera family\",\"addr\":\"\",\"ice1\":\"Sam — 555-123-4567\",\"ice2\":\"\",\"doc\":\"\",\"hosp\":\"County General\",\"ins\":\"\",\"blood\":\"\",\"allergy\":\"Penicillin…(194 chars)"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}

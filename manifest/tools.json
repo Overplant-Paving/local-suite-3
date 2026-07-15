@@ -105,6 +105,24 @@
       ]
     },
     {
+      "id": "emergency",
+      "file": "emergency.html",
+      "name": "Emergency Quick-Reference",
+      "cat": "health",
+      "cx": "S",
+      "desc": "First aid, poison control, CPR rhythm — guaranteed to work with no internet.",
+      "network": "offline",
+      "key": null,
+      "endpoints": [],
+      "storage": [
+        "suite.theme",
+        "suite.emergency.card"
+      ],
+      "cacheTtlMin": null,
+      "since": "v1",
+      "flags": []
+    },
+    {
       "id": "printables",
       "file": "printables.html",
       "name": "Printable Calendar & Planner",

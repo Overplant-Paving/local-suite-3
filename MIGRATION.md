@@ -101,7 +101,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 3 | almanac.html | sky | off | — | A | | ✅ `tests/evidence/almanac/` |
 | 4 | holidays.html | civic | off | — | A | | ✅ `tests/evidence/holidays/` |
 | 5 | voting.html | civic | off | — | A | curated static links, refresh each cycle | ✅ `tests/evidence/voting/` |
-| 6 | emergency.html | health | off | — | A | | ⬜ |
+| 6 | emergency.html | health | off | — | A | | ✅ `tests/evidence/emergency/` |
 | 7 | convert.html | ref | off | — | A | | ⬜ |
 | 8 | worldclock.html | time | off | — | A | | ⬜ |
 | 9 | dates.html | time | off | — | A | | ⬜ |

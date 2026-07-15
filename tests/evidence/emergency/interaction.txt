@@ -1,0 +1,16 @@
+content textContent captured: 5859 chars (parity vs v1 written by v1Interact)
+tel: links (3): tel:911 -> "911" | tel:18002221222 -> "1-800-222-1222" | tel:988 -> "988"
+jump to #cpr: hash=#cpr, section top=16px from viewport
+metronome started: button reads "■ Stop", has .stop class=true
+beat pulses in 6s of fake clock: 12, measured interval avg => 112.7 BPM (tool claims ~110)
+metronome stopped: button reads "▶ Start 110 BPM", beat .on=false
+jump to #card: hash=#card, fieldset top=253px from viewport
+after Save: savedMsg="Saved to this device ✓"
+stored suite.emergency.card: name="The Rivera family", ice1="Sam — 555-123-4567", allergy="Penicillin (Mom); peanuts (Ana)"
+autosave on blur: stored hosp="County General", savedMsg="Saved to this device ✓"
+print button: window.print called 1 time(s), savedMsg="Saved to this device ✓"
+clear then Cancel: f_name still "The Rivera family", key present=true
+clear then OK: f_name="", key present=false, savedMsg="Cleared"
+refilled + saved for final snapshot: savedMsg="Saved to this device ✓"
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)

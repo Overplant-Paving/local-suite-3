@@ -1,0 +1,28 @@
+== computed-style diff, light (12 differing values) ==
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.call911 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.call911 .big a { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.hotlines .hot { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.hot .num a { -webkit-font-smoothing: v1=auto | v2=antialiased }
+nav.jump a { -webkit-font-smoothing: v1=auto | v2=antialiased }
+section.topic { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.callout { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.metro { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.metro button { -webkit-font-smoothing: v1=auto | v2=antialiased }
+fieldset.card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+
+== computed-style diff, dark (12 differing values) ==
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.call911 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.call911 .big a { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.hotlines .hot { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.hot .num a { -webkit-font-smoothing: v1=auto | v2=antialiased }
+nav.jump a { -webkit-font-smoothing: v1=auto | v2=antialiased }
+section.topic { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.callout { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.metro { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.metro button { -webkit-font-smoothing: v1=auto | v2=antialiased }
+fieldset.card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+
