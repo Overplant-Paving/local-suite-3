@@ -1,0 +1,25 @@
+{
+  "id": "recalls",
+  "file": "recalls.html",
+  "name": "Recall Radar",
+  "cat": "civic",
+  "cx": "M",
+  "desc": "Food, vehicle, and product recalls that reach your household — one board.",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": [
+    "https://api.fda.gov",
+    "https://api.nhtsa.gov",
+    "https://www.saferproducts.gov"
+  ],
+  "storage": [
+    "suite.theme",
+    "suite.location",
+    "suite.state",
+    "suite.cars",
+    "suite.cache.recalls.*"
+  ],
+  "cacheTtlMin": 360,
+  "since": "v1",
+  "flags": []
+}

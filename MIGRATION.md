@@ -136,7 +136,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 38 | iss.html | space | cors | — | B | | ✅ `tests/evidence/iss/` |
 | 39 | asteroids.html | space | cors | — | B | | ⬜ |
 | 40 | fedregister.html | civic | cors | — | B | | ✅ `tests/evidence/fedregister/` |
-| 41 | recalls.html | civic | cors | — | B | 3 sources | ⬜ |
+| 41 | recalls.html | civic | cors | — | B | 3 sources | ✅ `tests/evidence/recalls/` |
 | 42 | treasury.html | civic | cors | — | B | | ⬜ |
 | 43 | yields.html | money | cors | — | B | | ⬜ |
 | 44 | currency.html | money | cors | — | B | | ✅ `tests/evidence/currency/` |
