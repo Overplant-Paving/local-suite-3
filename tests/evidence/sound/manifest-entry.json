@@ -1,0 +1,18 @@
+{
+  "id": "sound",
+  "file": "sound.html",
+  "name": "Sound Machine",
+  "cat": "util",
+  "cx": "M",
+  "desc": "White/pink/brown noise and rain-ish synthesis, sleep timer.",
+  "network": "offline",
+  "key": null,
+  "endpoints": [],
+  "storage": [
+    "suite.theme",
+    "suite.sound"
+  ],
+  "cacheTtlMin": null,
+  "since": "v1",
+  "flags": []
+}

@@ -1,0 +1,12 @@
+{
+  "v1": {
+    "suite.sound": "{\"vols\":{\"white\":0.6,\"pink\":0.55,\"brown\":0.6,\"rain\":0.6,\"ocean\":0.6,\"fan\":0.6},\"active\":{\"white\":false,\"pink\":true,\"brown\":false,\"rain\":false,\"ocean\":…(183 chars)",
+    "suite.theme": "dark"
+  },
+  "v2": {
+    "suite.sound": "{\"vols\":{\"white\":0.6,\"pink\":0.55,\"brown\":0.6,\"rain\":0.6,\"ocean\":0.6,\"fan\":0.6},\"active\":{\"white\":false,\"pink\":true,\"brown\":false,\"rain\":false,\"ocean\":…(183 chars)",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}
