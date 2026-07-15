@@ -1,0 +1,23 @@
+json: fname=fixture.json
+json: fmeta=3 records · array · 358 B
+json: modes=▦ Table[on] | ❯ Tree
+json: table rows rendered=3
+json: row1 cells=["1","3","charlie","99","[\"x\",\"y\"]","true"]
+escape(table): <script> elements inside #table=0
+escape(table): name cell row2 textContent=alpha <script>alert(1)</script>
+filter 'bravo': rows=1, rowInfo=1 row match
+filter cleared: rows=3
+sort score asc: first-row score=7, aria-sort=ascending
+sort score desc (keyboard Enter): first-row score=99, aria-sort=descending, focus-restored=true
+tree: twisties=6, <script> elements inside #tree=0
+tree: first string value="charlie"
+twisty click: collapsed=1, preview=5 keys }, aria-expanded=false
+twisty keyboard Enter: collapsed=0, aria-expanded=true
+collapseAll: collapsed=5
+expandAll: collapsed=0
+close: drop visible=true, filebar visible=false
+sample json: fmeta=object, modes=❯ Tree, tree visible=true
+csv: fmeta=3 rows · 3 cols · comma-separated · 91 B
+csv: rows=3, quoted cell=Fair Oaks, Ranch, numeric cell class=num
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)

@@ -1,0 +1,17 @@
+{
+  "id": "dataviewer",
+  "file": "dataviewer.html",
+  "name": "Data Viewer",
+  "cat": "util",
+  "cx": "M",
+  "desc": "Drop a JSON/CSV file → collapsible, searchable table.",
+  "network": "offline",
+  "key": null,
+  "endpoints": [],
+  "storage": [
+    "suite.theme"
+  ],
+  "cacheTtlMin": null,
+  "since": "v1",
+  "flags": []
+}

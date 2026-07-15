@@ -1,0 +1,26 @@
+[
+  {
+    "id": 3,
+    "name": "charlie",
+    "score": 99,
+    "tags": [
+      "x",
+      "y"
+    ],
+    "active": true
+  },
+  {
+    "id": 1,
+    "name": "alpha <script>alert(1)</script>",
+    "score": 42.5,
+    "tags": [],
+    "active": false
+  },
+  {
+    "id": 2,
+    "name": "bravo & \"quotes\"",
+    "score": 7,
+    "tags": null,
+    "active": true
+  }
+]
