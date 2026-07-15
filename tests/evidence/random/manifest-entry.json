@@ -1,0 +1,17 @@
+{
+  "id": "random",
+  "file": "random.html",
+  "name": "Decision Maker",
+  "cat": "util",
+  "cx": "S",
+  "desc": "Dice, coins, spinners, pick-from-list — fair, crypto-random.",
+  "network": "offline",
+  "key": null,
+  "endpoints": [],
+  "storage": [
+    "suite.theme"
+  ],
+  "cacheTtlMin": null,
+  "since": "v1",
+  "flags": []
+}
