@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wikipedia Reader · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  body { padding: 1.4rem 1.25rem 4rem; line-height: 1.6; }
+  .wrap { max-width: 1040px; margin: 0 auto; }
+  .topbar { display: flex; align-items: center; gap: .8rem; }
+  .spacer { flex: 1; }
+  .topbar .theme-btn { float: none; } /* v1: button sits in the flex topbar, no float */
+  header h1 { font-size: 1.7rem; letter-spacing: -.02em; margin-top: 1rem; }
+  header .tag { color: var(--muted); margin-top: .3rem; max-width: 46rem; font-size: .95rem; }
+  .searchrow { display: flex; gap: .5rem; margin: 1.3rem 0 .6rem; position: relative; }
+  .search {
+    flex: 1; padding: .7rem 1rem; font-size: 1.05rem; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 12px; background: var(--card);
+    box-shadow: var(--shadow); outline: none; font-family: inherit;
+  }
+  .search:focus { border-color: var(--accent); }
+  .btn { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 12px; padding: 0 1rem; cursor: pointer; font-size: .95rem; white-space: nowrap; }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.primary { border-color: var(--accent); background: var(--accent); color: #fff; }
+  .btn.primary:hover { filter: brightness(1.06); color: #fff; }
+  .suggest { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); z-index: 10; overflow: hidden; }
+  .suggest div { padding: .5rem .9rem; cursor: pointer; font-size: .95rem; border-bottom: 1px solid var(--line); }
+  .suggest div:last-child { border-bottom: none; }
+  .suggest div:hover, .suggest div.active { background: var(--accent-soft); }
+  .suggest small { color: var(--muted); display: block; font-size: .8rem; }
+  .layout { display: grid; grid-template-columns: 1fr 320px; gap: 1.1rem; margin-top: 1rem; align-items: start; }
+  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+  /* v1 card differs from the core .card (block layout, roomier padding, bottom margin) */
+  .card { display: block; flex-direction: row; gap: normal; padding: 1.3rem 1.4rem; margin-bottom: 1rem; }
+  .article h2 { font-size: 1.9rem; letter-spacing: -.01em; margin-bottom: .2rem; }
+  .article .desc { color: var(--muted); font-style: italic; margin-bottom: .9rem; }
+  .article img.thumb { float: right; max-width: 220px; width: 40%; border-radius: 10px; margin: 0 0 .8rem 1rem; border: 1px solid var(--line); }
+  .article .extract { font-size: 1.02rem; }
+  .article .actions { margin-top: 1.1rem; display: flex; gap: .6rem; flex-wrap: wrap; clear: both; }
+  .side h3 { font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: .7rem; }
+  .feeditem { border-bottom: 1px solid var(--line); padding: .5rem 0; cursor: pointer; font-size: .92rem; }
+  .feeditem:last-child { border-bottom: none; }
+  .feeditem:hover { color: var(--accent); }
+  .feeditem .yr { color: var(--accent); font-weight: 600; margin-right: .4rem; font-variant-numeric: tabular-nums; }
+  .readlist-item { display: flex; align-items: center; gap: .5rem; border-bottom: 1px solid var(--line); padding: .45rem 0; font-size: .92rem; }
+  .readlist-item:last-child { border-bottom: none; }
+  .readlist-item span { flex: 1; cursor: pointer; }
+  .readlist-item span:hover { color: var(--accent); }
+  .readlist-item button { border: none; background: none; color: var(--muted); cursor: pointer; font-size: 1rem; }
+  .readlist-item button:hover { color: #b0402d; }
+  .msg { padding: 1.1rem 1.2rem; border-radius: 12px; background: var(--accent-soft); font-size: .95rem; }
+  .msg.err { background: color-mix(in srgb, #c0402d 14%, transparent); }
+  .featured-mini { display: flex; gap: .7rem; cursor: pointer; }
+  .featured-mini img { width: 74px; height: 74px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); flex: none; }
+  .featured-mini b { font-size: .95rem; }
+  .featured-mini small { color: var(--muted); font-size: .82rem; }
+  .loading { color: var(--muted); }
+  .empty-side { color: var(--muted); font-size: .88rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <div class="spacer"></div>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Wikipedia Reader</h1>
+    <p class="tag">A calm reader view for Wikipedia: search, read clean summaries, roll a random article, and browse
+      what happened on this day. Save articles to a reading list that stays on your machine.</p>
+  </header>
+
+  <div class="searchrow">
+    <input class="search" id="q" type="search" placeholder="Search Wikipedia…" autocomplete="off" autofocus aria-label="Search Wikipedia">
+    <button class="btn primary" id="go">Search</button>
+    <button class="btn" id="rand" title="Random article">🎲 Random</button>
+    <div class="suggest" id="suggest" hidden></div>
+  </div>
+
+  <div class="layout">
+    <main>
+      <div id="article"></div>
+    </main>
+    <aside class="side">
+      <div class="card">
+        <h3 id="featTitle">Featured today</h3>
+        <div id="featured"><div class="loading">Loading…</div></div>
+      </div>
+      <div class="card">
+        <h3>On this day</h3>
+        <div id="onthisday"><div class="loading">Loading…</div></div>
+      </div>
+      <div class="card">
+        <h3>Reading list</h3>
+        <div id="readlist"></div>
+      </div>
+    </aside>
+  </div>
+
+  <footer>Data: Wikipedia REST API (en.wikipedia.org) · text under CC BY-SA. A personal reader, gentle on the servers.</footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---------- helpers ----------
+   SECURITY NOTE (QUALITY.md §1.3, "ea" flag): every remote string this tool renders
+   (titles, descriptions, extracts, feed text) is inserted via el()'s textContent /
+   createElement — never interpolated into innerHTML. innerHTML is only ever assigned
+   "" to clear a container. This is the v1 mechanism, preserved verbatim. */
+function el(tag, cls, txt){ const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+
+/* keyboard path for clickable rows (a11y, QUALITY.md §2) */
+function clickable(node, fn){
+  node.setAttribute("role", "button");
+  node.tabIndex = 0;
+  node.addEventListener("click", fn);
+  node.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fn(); } });
+}
+
+const REST = "https://en.wikipedia.org/api/rest_v1";
+/* manifest cacheTtlMin: 1440 — featured + on-this-day change once per UTC day and their
+   cache keys are date-scoped, so a longer TTL is inert across days; summaries are
+   reference-class text where a day-old copy is indistinguishable. v1 used 6 h/12 h. */
+const TTL = 1440 * 60000;
+
+const articleEl = Suite.liveRegion(document.getElementById("article"));
+const qEl = document.getElementById("q");
+const suggestEl = document.getElementById("suggest");
+
+/* ---------- article view ---------- */
+async function openArticle(title) {
+  suggestEl.hidden = true;
+  articleEl.innerHTML = "";
+  articleEl.append(el("div", "card loading", "Loading “" + title + "”…"));
+  try {
+    /* v1 cache key preserved: suite.cache.wiki.s:<title>. 404 → Suite.fetchJSON serves
+       the cached copy if one exists (v1 did the same), else throws → error card. */
+    const r = await Suite.fetchJSON(REST + "/page/summary/" + encodeURIComponent(title),
+      { cacheKey: "wiki.s:" + title, ttl: TTL });
+    renderArticle(r.v, r.stale, r.t);
+  } catch (e) {
+    articleEl.innerHTML = "";
+    const card = el("div", "card");
+    card.append(el("div", "msg err", "Couldn't load “" + title + "”. It may not exist, or you may be offline."));
+    articleEl.append(card);
+  }
+}
+function renderArticle(data, stale, t) {
+  articleEl.innerHTML = "";
+  const card = el("div", "card article");
+  if (data.thumbnail && data.thumbnail.source) {
+    const img = el("img", "thumb");
+    img.src = data.thumbnail.source; img.alt = data.title || ""; img.loading = "lazy";
+    img.addEventListener("error", () => img.remove());
+    card.append(img);
+  }
+  card.append(el("h2", null, data.title || ""));
+  if (data.description) card.append(el("div", "desc", data.description));
+  card.append(el("div", "extract", data.extract || "No summary available."));
+
+  const actions = el("div", "actions");
+  const url = (data.content_urls && data.content_urls.desktop && data.content_urls.desktop.page) ||
+              ("https://en.wikipedia.org/wiki/" + encodeURIComponent(data.title || ""));
+  const readA = el("a", "btn", "Read full article →");
+  readA.href = url; readA.target = "_blank"; readA.rel = "noopener";
+  actions.append(readA);
+  const saveBtn = el("button", "btn", inReadList(data.title) ? "✓ In reading list" : "★ Save to reading list");
+  saveBtn.addEventListener("click", () => { toggleReadList(data.title); saveBtn.textContent = inReadList(data.title) ? "✓ In reading list" : "★ Save to reading list"; });
+  actions.append(saveBtn);
+  card.append(actions);
+  if (stale) card.append(el("div", "desc", "· Offline — cached from " + new Date(t).toLocaleString()));
+  articleEl.append(card);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* ---------- search (title suggestions) ---------- */
+let suggestTimer = null, activeIdx = -1;
+qEl.addEventListener("input", () => {
+  clearTimeout(suggestTimer);
+  const q = qEl.value.trim();
+  if (q.length < 2) { suggestEl.hidden = true; return; }
+  suggestTimer = setTimeout(() => runSuggest(q), 200);
+});
+async function runSuggest(q) {
+  try {
+    /* typeahead is intentionally uncached: per-keystroke queries would flood
+       localStorage with one-shot keys; the 200 ms debounce is the etiquette here */
+    const r = await Suite.fetchJSON("https://en.wikipedia.org/w/rest.php/v1/search/title?q=" + encodeURIComponent(q) + "&limit=8");
+    const pages = (r.v && r.v.pages) || [];
+    if (!pages.length) { suggestEl.hidden = true; return; }
+    suggestEl.innerHTML = ""; activeIdx = -1;
+    pages.forEach(p => {
+      const d = document.createElement("div");
+      d.append(el("span", null, p.title));
+      if (p.description) d.append(el("small", null, p.description));
+      d.addEventListener("click", () => { qEl.value = p.title; openArticle(p.key || p.title); });
+      suggestEl.append(d);
+    });
+    suggestEl.hidden = false;
+  } catch (e) { suggestEl.hidden = true; }
+}
+qEl.addEventListener("keydown", e => {
+  const items = [...suggestEl.querySelectorAll("div")];
+  if (e.key === "ArrowDown" && items.length) { e.preventDefault(); activeIdx = Math.min(activeIdx + 1, items.length - 1); paintActive(items); }
+  else if (e.key === "ArrowUp" && items.length) { e.preventDefault(); activeIdx = Math.max(activeIdx - 1, 0); paintActive(items); }
+  else if (e.key === "Enter") {
+    if (activeIdx >= 0 && items[activeIdx]) items[activeIdx].click();
+    else if (qEl.value.trim()) openArticle(qEl.value.trim());
+  } else if (e.key === "Escape") suggestEl.hidden = true;
+});
+function paintActive(items){ items.forEach((it, i) => it.classList.toggle("active", i === activeIdx)); }
+document.getElementById("go").addEventListener("click", () => { if (qEl.value.trim()) openArticle(qEl.value.trim()); });
+document.addEventListener("click", e => { if (!e.target.closest(".searchrow")) suggestEl.hidden = true; });
+
+/* ---------- random ---------- */
+document.getElementById("rand").addEventListener("click", async () => {
+  articleEl.innerHTML = "";
+  articleEl.append(el("div", "card loading", "Rolling the dice…"));
+  try {
+    /* no cacheKey — a random roll must always fetch; cache the summary under its own
+       title afterwards exactly as v1 did, so reopening it later works offline */
+    const r = await Suite.fetchJSON(REST + "/page/random/summary");
+    Suite.store.set("suite.cache.wiki.s:" + r.v.title, { t: r.t, v: r.v });
+    renderArticle(r.v, false, r.t);
+  } catch (e) {
+    articleEl.innerHTML = "";
+    const card = el("div", "card");
+    card.append(el("div", "msg err", "Couldn't fetch a random article — you may be offline."));
+    articleEl.append(card);
+  }
+});
+
+/* ---------- featured today ---------- */
+function pad(n){ return String(n).padStart(2, "0"); }
+async function loadFeatured() {
+  const box = document.getElementById("featured");
+  const now = new Date();
+  const key = "feat:" + now.getFullYear() + pad(now.getMonth()+1) + pad(now.getDate());
+  try {
+    const r = await Suite.fetchJSON(
+      REST + "/feed/featured/" + now.getFullYear() + "/" + pad(now.getMonth()+1) + "/" + pad(now.getDate()),
+      { cacheKey: "wiki." + key, ttl: TTL });
+    renderFeatured(r.v, r.stale ? r.t : null);
+  } catch (e) {
+    box.innerHTML = "";
+    box.append(el("div", "empty-side", "Featured article unavailable right now."));
+  }
+}
+function renderFeatured(data, staleT) {
+  const box = document.getElementById("featured");
+  box.innerHTML = "";
+  const tfa = data.tfa;
+  if (!tfa) { box.append(el("div", "empty-side", "No featured article for today.")); return; }
+  const wrap = el("div", "featured-mini");
+  if (tfa.thumbnail && tfa.thumbnail.source) {
+    const img = el("img"); img.src = tfa.thumbnail.source; img.alt = tfa.title || ""; img.loading = "lazy";
+    img.addEventListener("error", () => img.remove());
+    wrap.append(img);
+  }
+  const txt = document.createElement("div");
+  txt.append(el("b", null, tfa.normalizedtitle || tfa.title || ""));
+  if (tfa.description) txt.append(el("small", null, tfa.description));
+  wrap.append(txt);
+  clickable(wrap, () => openArticle(tfa.title));
+  box.append(wrap);
+  if (staleT) box.append(el("div", "empty-side", "Offline — cached from " + new Date(staleT).toLocaleString()));
+}
+
+/* ---------- on this day ---------- */
+async function loadOnThisDay() {
+  const box = document.getElementById("onthisday");
+  const now = new Date();
+  const key = "otd:" + pad(now.getMonth()+1) + pad(now.getDate());
+  try {
+    const r = await Suite.fetchJSON(
+      REST + "/feed/onthisday/selected/" + pad(now.getMonth()+1) + "/" + pad(now.getDate()),
+      { cacheKey: "wiki." + key, ttl: TTL });
+    renderOtd(r.v, r.stale ? r.t : null);
+  } catch (e) {
+    box.innerHTML = "";
+    box.append(el("div", "empty-side", "On-this-day feed unavailable."));
+  }
+}
+function renderOtd(data, staleT) {
+  const box = document.getElementById("onthisday");
+  box.innerHTML = "";
+  const items = (data.selected || data.events || []).slice(0, 10);
+  if (!items.length) { box.append(el("div", "empty-side", "Nothing to show today.")); return; }
+  items.forEach(ev => {
+    const d = el("div", "feeditem");
+    if (ev.year != null) d.append(el("span", "yr", String(ev.year)));
+    d.append(document.createTextNode(ev.text || ""));
+    const target = ev.pages && ev.pages[0];
+    if (target) clickable(d, () => openArticle(target.title));
+    else d.style.cursor = "default";
+    box.append(d);
+  });
+  if (staleT) box.append(el("div", "empty-side", "Offline — cached from " + new Date(staleT).toLocaleString()));
+}
+
+/* ---------- reading list ---------- */
+function getReadList(){ const l = Suite.store.get("suite.wiki.readlist", []); return Array.isArray(l) ? l : []; }
+function setReadList(l){ Suite.store.set("suite.wiki.readlist", l); renderReadList(); }
+function inReadList(title){ return getReadList().includes(title); }
+function toggleReadList(title){
+  let l = getReadList();
+  if (l.includes(title)) l = l.filter(t => t !== title);
+  else l.unshift(title);
+  setReadList(l);
+}
+function renderReadList() {
+  const box = document.getElementById("readlist");
+  box.innerHTML = "";
+  const l = getReadList();
+  if (!l.length) { box.append(el("div", "empty-side", "Nothing saved yet. Use ★ on an article to add it.")); return; }
+  l.forEach(title => {
+    const row = el("div", "readlist-item");
+    const s = el("span", null, title);
+    clickable(s, () => openArticle(title));
+    const rm = el("button", null, "✕"); rm.title = "Remove";
+    rm.setAttribute("aria-label", "Remove “" + title + "” from reading list");
+    rm.addEventListener("click", () => toggleReadList(title));
+    row.append(s, rm);
+    box.append(row);
+  });
+}
+
+/* ---------- init ---------- */
+Suite.liveRegion(document.getElementById("featured"));
+Suite.liveRegion(document.getElementById("onthisday"));
+Suite.liveRegion(document.getElementById("readlist"));
+loadFeatured();
+loadOnThisDay();
+renderReadList();
+// open something pleasant on first load
+(function initArticle(){
+  const list = getReadList();
+  if (list.length) openArticle(list[0]);
+  else openArticle("Wikipedia");
+})();
+</script>
+</body>
+</html>

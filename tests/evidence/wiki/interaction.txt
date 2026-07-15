@@ -1,0 +1,28 @@
+initial article h2: "Wikipedia"
+  extract (first 140 chars): "Wikipedia is a free online encyclopedia written and maintained by a community of volunteers, known as Wikipedians, through open collaboratio…"
+thumbnail: upload.wikimedia.org → natural 330x302px (loaded)
+featured today: "CognitionMental process dealing with knowledge"
+on this day: 2 visible items
+  otd item: "2018Croatian Mario Mandžukić scored the first own goal in a FIFA World Cup final in their defeat to France."
+  otd item: "2016The Peace at Home Council, a faction of the Turkish Armed Forces, staged a coup d'état attempt against the governmen"
+suggestions for "Ada Lovelace": 6 shown, first: "Ada Lovelace"
+suggest hidden after Escape: true
+opened via Search: h2="Ada Lovelace", desc="English mathematician (1815–1852)"
+  extract (first 140 chars): "Augusta Ada King, Countess of Lovelace, also known as Ada Lovelace, was an English mathematician and writer chiefly known for work on Charle…"
+save button now reads: "✓ In reading list"
+suite.wiki.readlist = ["Ada Lovelace"]
+reading-list panel: "Ada Lovelace✕"
+random roll: h2="Guinea national football team"
+  cached as suite.cache.wiki.s:<title>: true
+offline stale article: h2="Ada Lovelace"
+  stale line: "· Offline — cached from 7/14/2026, 3:32:06 PM"
+offline featured panel: "CognitionMental process dealing with knowledgeOffline — cached from 7/14/2026, 3:32:06 PM"
+offline on-this-day: 10 items from cache, note: "Offline — cached from 7/14/2026, 3:32:06 PM"
+restored (fresh cache, no refetch): h2="Ada Lovelace"
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

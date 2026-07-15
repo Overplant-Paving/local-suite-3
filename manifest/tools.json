@@ -964,6 +964,30 @@
       ]
     },
     {
+      "id": "wiki",
+      "file": "wiki.html",
+      "name": "Wikipedia Reader",
+      "cat": "ref",
+      "cx": "M",
+      "desc": "Clean reader for summaries and articles; random button; on-this-day.",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://en.wikipedia.org",
+        "https://upload.wikimedia.org"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.wiki.readlist",
+        "suite.cache.wiki.*"
+      ],
+      "cacheTtlMin": 1440,
+      "since": "v1",
+      "flags": [
+        "ea"
+      ]
+    },
+    {
       "id": "zip",
       "file": "zip.html",
       "name": "ZIP & Area Code Lookup",
