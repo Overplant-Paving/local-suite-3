@@ -242,6 +242,8 @@ def gate_escaping_heuristic(source_texts, allowlist):
                 tick = body.find("`", m.end())
                 if tick == -1 or tick - m.end() > 200:
                     continue
+                if ";" in body[m.end():tick]:
+                    continue  # the backtick belongs to a later statement
                 exprs, _ = _template_exprs(body, tick)
                 for e in exprs:
                     if "esc(" in e:      # Suite.esc( or a local esc = Suite.esc alias
