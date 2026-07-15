@@ -578,6 +578,29 @@
       "flags": []
     },
     {
+      "id": "rivers",
+      "file": "rivers.html",
+      "name": "River & Streamflow Gauges",
+      "cat": "earth",
+      "cx": "M",
+      "desc": "Gauge height and flow for your rivers, with flood-stage context.",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://api.waterdata.usgs.gov",
+        "https://api.zippopotam.us"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.location",
+        "suite.rivers.favs",
+        "suite.cache.rivers.*"
+      ],
+      "cacheTtlMin": 15,
+      "since": "v1",
+      "flags": []
+    },
+    {
       "id": "wildfire",
       "file": "wildfire.html",
       "name": "Wildfire Watchboard",

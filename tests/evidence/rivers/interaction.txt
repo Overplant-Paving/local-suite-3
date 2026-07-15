@@ -1,0 +1,30 @@
+first-run setup card visible: true
+ZIP 90012 lookup -> locbar: "Near Los Angeles, CA change", suite.location = {"lat":34.0614,"lon":-118.2385,"label":"Los Angeles, CA"}
+locbar after LA seed: "Near Los Angeles, CA change"
+stamp: "Data from 3:14 PM"
+section header: "Nearby gauges 36 found"
+nearby gauge cards rendered: 36 (render caps at 60)
+first gauge name: "Rio Hondo below Whittier Narrows Dam Ca"
+first gauge sub: "USGS 11102300 · 15 km away"
+first gauge reading: "0 ft³/s DISCHARGE"
+first gauge reading: "0.62 ft GAUGE HEIGHT"
+first gauge read-time: "Read Jul 15, 2:30 PM"
+gauge links to waterdata.usgs.gov page: https://waterdata.usgs.gov/monitoring-location/11102300/
+flood-stage context note: "Readings are provisional and unreviewed. This new USGS API serves live gauge height and discharge; formal flood-stage ca…"
+nearby cache envelope: suite.cache.rivers.near_34.06_-118.24 — 35 gauges (cached at 2026-07-15T20:14:46.602Z)
+after star: favorites header "★ Favorites 1", placeholder card time: "favorite · couldn't refresh"
+star aria-pressed: true
+suite.rivers.favs = [{"id":"USGS-11102300","name":"Rio Hondo below Whittier Narrows Dam Ca","lat":34.0166788086788,"lon":-118.088401840919}]
+favorite after reload (live by-id fetch): name "Rio Hondo Below Whittier Narrows Dam Ca"
+favorite reading: "0 ft³/s DISCHARGE"
+favorite reading: "0.62 ft GAUGE HEIGHT"
+favorite read-time: "Read Jul 15, 2:30 PM"
+favorite cache envelope (policy-added): suite.cache.rivers.fav_USGS-11102300 — 2 features (cached at 2026-07-15T20:14:48.138Z)
+offline stale stamp: "Data from 3:14 PM · connection issue: Failed to fetch"
+offline: nearby still renders 36 cached cards
+offline favorite card time: "Read Jul 15, 2:30 PM" (stale cache served; ">3 h" amber marker expected)
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

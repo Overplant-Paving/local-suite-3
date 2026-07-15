@@ -105,6 +105,7 @@ Live world/regional quake map and list, filterable by magnitude and distance fro
 ### 2.2 River & Streamflow Gauges
 Current gauge height and discharge for your favorite rivers, with flood-stage context — fishing, paddling, and flood awareness.
 - **Data:** **build on the new** USGS Water Data API `https://api.waterdata.usgs.gov` (keyless; optional key raises limits). The legacy `waterservices.usgs.gov/nwis/iv/?format=json` still answers but is being decommissioned (degradation possible after Aug 2026, gone ~Q1 2027).
+- **Gotcha (verified Jul 2026, v2 migration):** the OGC API **rejects unknown query params** — appending the good-citizen `application=local-suite` param draws HTTP 400 `InvalidQuery` (curl-verified: same URL 200 without it). Identify-yourself params are per-API: CO-OPS wants `application=`, this API forbids it.
 - **Key:** none · **Local:** file:// ✅ (verify) · **Complexity:** M
 - **Suggested file:** `rivers.html`
 

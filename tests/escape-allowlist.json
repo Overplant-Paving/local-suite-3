@@ -168,5 +168,10 @@
     "scaleCell(\"R\", \"Radio blackout\", scales.R)": "scaleCell builds markup from literal args + a numeric scale level (parseInt'd remote value rendered via esc inside the builder)",
     "scaleCell(\"S\", \"Solar radiation\", scales.S)": "scaleCell builds markup from literal args + a numeric scale level (parseInt'd remote value rendered via esc inside the builder)",
     "scaleCell(\"G\", \"Geomagnetic\", scales.G)": "scaleCell builds markup from literal args + a numeric scale level (parseInt'd remote value rendered via esc inside the builder)"
+  },
+  "rivers.html": {
+    "favList.length": "local-only expression, recorded verified-clean with reasoning in tests/evidence/rivers/report.md",
+    "cards": "local-only expression, recorded verified-clean with reasoning in tests/evidence/rivers/report.md",
+    "lastNear.length": "local-only expression, recorded verified-clean with reasoning in tests/evidence/rivers/report.md"
   }
 }

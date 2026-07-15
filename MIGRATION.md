@@ -127,7 +127,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 29 | marine.html | sky | cors | — | B | NDBC path stays descoped (no CORS) | ⬜ |
 | 30 | normals.html | sky | cors | — | B | NCEI gotchas in CATALOG | ⬜ |
 | 31 | quakes.html | earth | cors | — | B | | ✅ `tests/evidence/quakes/` |
-| 32 | rivers.html | earth | cors | — | B | legacy NWIS API sunsets ~Q1 2027 — confirm new API | ⬜ |
+| 32 | rivers.html | earth | cors | — | B | legacy NWIS API sunsets ~Q1 2027 — confirm new API | ✅ `tests/evidence/rivers/` |
 | 33 | wildfire.html | earth | cors | — | B | | ✅ `tests/evidence/wildfire/` |
 | 34 | drought.html | earth | cors | — | B | via Living Atlas (USDM direct is no-CORS) | ✅ `tests/evidence/drought/` |
 | 35 | volcano.html | earth | cors | — | B | | ✅ `tests/evidence/volcano/` |
