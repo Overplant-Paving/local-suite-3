@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Climate Normals Comparator · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents: anomaly / chart palette (3-layer, same pattern as core) */
+  :root{ --warm:#c65f3f; --cool:#3a6ea8; --high:#c65f3f; --low:#3a6ea8; --normal:#8a8f98; }
+  @media (prefers-color-scheme: dark){
+    :root{ --warm:#e07a58; --cool:#6b9dd6; --high:#e07a58; --low:#6b9dd6; --normal:#8a8f98; }
+  }
+  :root[data-theme="light"]{ --warm:#c65f3f; --cool:#3a6ea8; --high:#c65f3f; --low:#3a6ea8; --normal:#8a8f98; }
+  :root[data-theme="dark"]{ --warm:#e07a58; --cool:#6b9dd6; --high:#e07a58; --low:#6b9dd6; --normal:#8a8f98; }
+
+  body{ padding:1.4rem 1.25rem 4rem; }
+  .wrap{ max-width:960px; margin:0 auto; }
+  .topbar{ display:flex; align-items:center; gap:.8rem; margin-bottom:1rem; }
+  /* v1: pill-style back link (core default is a plain accent link) */
+  .back{ color:var(--muted); border:1px solid var(--line); background:var(--card);
+    border-radius:999px; padding:.3rem .8rem; white-space:nowrap; }
+  .back:hover{ color:var(--accent); border-color:var(--accent); text-decoration:none; }
+  .spacer{ flex:1; }
+  /* v1: button sits in the flex topbar, no float */
+  .topbar .theme-btn{ float:none; }
+  header h1{ font-size:1.7rem; letter-spacing:-.02em; }
+  header .tag{ color:var(--muted); margin-top:.25rem; font-size:.95rem; }
+  .statusdot{ display:inline-block; width:.5rem; height:.5rem; border-radius:50%; background:var(--line); margin-right:.35rem; }
+  .statusdot.ok{ background:var(--built); } .statusdot.stale{ background:var(--warm); } .statusdot.err{ background:#c0523b; }
+  .stationbar{ display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; margin:1rem 0 .3rem; }
+  .stationbar .name{ font-weight:600; font-size:1.02rem; } .stationbar .meta{ color:var(--muted); font-size:.85rem; }
+  .mini{ border:1px solid var(--line); background:var(--card); color:var(--accent);
+    border-radius:999px; padding:.2rem .7rem; cursor:pointer; font-size:.8rem; }
+  /* v1 card is a plain block with its own padding (core's .card is a flex column) */
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:1.15rem 1.2rem;
+    box-shadow:var(--shadow); margin-top:.9rem; display:block; flex-direction:row; gap:normal; }
+  .card h2{ font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
+    font-weight:600; margin-bottom:.8rem; }
+  .verdict{ text-align:center; padding:.4rem 0 .2rem; }
+  .verdict .headline{ font-size:1.5rem; font-weight:600; }
+  .verdict .headline.warm{ color:var(--warm); } .verdict .headline.cool{ color:var(--cool); } .verdict .headline.norm{ color:var(--accent); }
+  .verdict .sub{ color:var(--muted); font-size:.9rem; margin-top:.2rem; }
+  .compare{ display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:.8rem; margin-top:1rem; }
+  .cmp{ background:var(--accent-soft); border-radius:10px; padding:.75rem .85rem; text-align:center; }
+  .cmp .cl{ font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+  .cmp .cv{ font-size:1.7rem; font-weight:600; line-height:1.05; margin-top:.2rem; }
+  .cmp .cx{ font-size:.78rem; color:var(--muted); }
+  .cmp.high .cv{ color:var(--high); } .cmp.low .cv{ color:var(--low); }
+  #yearChart{ width:100%; height:auto; display:block; }
+  .legend{ display:flex; gap:1.1rem; flex-wrap:wrap; font-size:.8rem; color:var(--muted); margin-top:.5rem; }
+  .legend i{ display:inline-block; width:.8rem; height:.8rem; border-radius:2px; margin-right:.3rem; vertical-align:-1px; }
+  /* v1 footer is tighter than core's default */
+  footer{ margin-top:2.5rem; font-size:.82rem; padding-top:1rem; }
+  .msg{ padding:1.4rem; text-align:center; color:var(--muted); }
+  .msg .big{ font-size:1.05rem; color:var(--ink); margin-bottom:.4rem; }
+  /* picker */
+  .backdrop{ position:fixed; inset:0; background:rgba(10,12,16,.55); display:none; place-items:center; z-index:20; padding:1rem; }
+  .backdrop.open{ display:grid; }
+  .modal{ background:var(--card); border:1px solid var(--line); border-radius:16px; width:min(500px,100%);
+    max-height:86vh; overflow:auto; padding:1.4rem; box-shadow:var(--shadow); }
+  .modal h2{ font-size:1.15rem; margin-bottom:.3rem; } .modal p{ color:var(--muted); font-size:.88rem; margin-bottom:.9rem; }
+  .fld{ display:flex; gap:.5rem; margin-bottom:.6rem; }
+  .fld input{ flex:1; border:1px solid var(--line); background:var(--bg); color:var(--ink); border-radius:9px;
+    padding:.55rem .7rem; font-size:1rem; }
+  .btn{ border:none; border-radius:9px; padding:.55rem .9rem; cursor:pointer; font-weight:600; font-size:.9rem; background:var(--accent); color:#fff; }
+  .btn.ghost{ background:transparent; border:1px solid var(--line); color:var(--ink); }
+  .divider{ border:none; border-top:1px solid var(--line); margin:1rem 0 .8rem; }
+  .stationlist{ display:flex; flex-direction:column; gap:.15rem; }
+  .st{ display:flex; justify-content:space-between; gap:.6rem; padding:.5rem .6rem; border-radius:9px; cursor:pointer; border:1px solid transparent; }
+  .st:hover{ background:var(--accent-soft); border-color:var(--line); }
+  .st .sn{ font-weight:500; } .st .sd{ color:var(--muted); font-size:.82rem; }
+  .listlabel{ font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:.3rem 0; }
+  .err{ color:#b0472f; font-size:.85rem; min-height:1.1em; margin-top:.3rem; }
+  .hidden{ display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <div class="spacer"></div>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Climate Normals Comparator</h1>
+    <p class="tag">Is today actually hotter than normal? Today's temperature against the 1991–2020 average for your station.</p>
+  </header>
+
+  <div class="stationbar">
+    <span><span class="statusdot" id="statusDot" aria-hidden="true"></span><span class="name" id="stName">Choose a station</span></span>
+    <span class="meta" id="stMeta"></span>
+    <button class="mini" id="changeStation">change station</button>
+    <span class="spacer"></span>
+    <span class="meta" id="updated"></span>
+  </div>
+
+  <div id="content">
+    <div class="card"><div class="msg"><div class="big">No station selected</div>Pick a weather station to compare today with its climate normals.</div></div>
+  </div>
+
+  <footer id="footer">
+    Data source loading…
+  </footer>
+</div>
+
+<div class="backdrop" id="backdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Choose a station">
+    <h2>Choose a station</h2>
+    <p>Enter a GHCND station ID, or pick a major US station. Find any station at
+      <a href="https://www.ncei.noaa.gov/access/search/data-search/normals-daily-1991-2020" target="_blank" rel="noopener">NCEI's station finder</a>.</p>
+    <div class="fld">
+      <input id="idIn" placeholder="GHCND ID (e.g. USW00023188)" aria-label="GHCND station ID">
+      <button class="btn" id="idBtn">Use ID</button>
+    </div>
+    <div class="err" id="pickErr"></div>
+    <hr class="divider">
+    <div id="nearWrap" class="hidden">
+      <div class="listlabel">Nearest to you</div>
+      <div class="stationlist" id="nearList"></div>
+      <div class="listlabel" style="margin-top:.8rem">All stations</div>
+    </div>
+    <div class="stationlist" id="allList"></div>
+    <hr class="divider">
+    <button class="btn ghost" id="closePicker">Cancel</button>
+  </div>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+/* v1 re-drew the SVG chart on theme flip (chart colors resolve from CSS variables
+   at draw time). Suite.theme.init() registered its toggle listener first, so the
+   theme has already flipped when this runs. */
+document.getElementById("themeBtn").addEventListener("click", () => { if (lastRender) render(lastRender); });
+
+/* ---------- location ---------- */
+function getLoc(){ return Suite.location.get(); }
+
+/* ---------- embedded major US stations (verified vs NCEI normals-daily, Jul 2026) ---------- */
+const STATIONS=[
+  {id:"USW00023188",n:"San Diego Intl",s:"CA",lat:32.7336,lon:-117.1831},
+  {id:"USW00023174",n:"Los Angeles Intl",s:"CA",lat:33.938,lon:-118.3888},
+  {id:"USW00093134",n:"Los Angeles Downtown",s:"CA",lat:34.0236,lon:-118.2911},
+  {id:"USW00023234",n:"San Francisco Intl",s:"CA",lat:37.6197,lon:-122.3647},
+  {id:"USW00023230",n:"Oakland",s:"CA",lat:37.7214,lon:-122.2208},
+  {id:"USW00024233",n:"Seattle-Tacoma",s:"WA",lat:47.4444,lon:-122.3138},
+  {id:"USW00024157",n:"Spokane",s:"WA",lat:47.6216,lon:-117.528},
+  {id:"USW00024229",n:"Portland",s:"OR",lat:45.5958,lon:-122.6093},
+  {id:"USW00024131",n:"Boise",s:"ID",lat:43.5666,lon:-116.2405},
+  {id:"USW00023169",n:"Las Vegas",s:"NV",lat:36.0719,lon:-115.1634},
+  {id:"USW00023183",n:"Phoenix",s:"AZ",lat:33.4277,lon:-112.0038},
+  {id:"USW00023050",n:"Albuquerque",s:"NM",lat:35.0419,lon:-106.6155},
+  {id:"USW00023044",n:"El Paso",s:"TX",lat:31.8111,lon:-106.3758},
+  {id:"USW00024127",n:"Salt Lake City",s:"UT",lat:40.7781,lon:-111.9694},
+  {id:"USW00003017",n:"Denver",s:"CO",lat:39.8328,lon:-104.6575},
+  {id:"USW00023066",n:"Grand Junction",s:"CO",lat:39.1342,lon:-108.54},
+  {id:"USW00023047",n:"Amarillo",s:"TX",lat:35.2295,lon:-101.7042},
+  {id:"USW00013967",n:"Oklahoma City",s:"OK",lat:35.3889,lon:-97.6006},
+  {id:"USW00003927",n:"Dallas-Fort Worth",s:"TX",lat:32.8978,lon:-97.0189},
+  {id:"USW00013904",n:"Austin",s:"TX",lat:30.1831,lon:-97.6799},
+  {id:"USW00012960",n:"Houston",s:"TX",lat:29.98,lon:-95.36},
+  {id:"USW00013957",n:"Shreveport",s:"LA",lat:32.4472,lon:-93.8244},
+  {id:"USW00012916",n:"New Orleans",s:"LA",lat:29.9975,lon:-90.2778},
+  {id:"USW00003947",n:"Kansas City",s:"MO",lat:39.2972,lon:-94.7306},
+  {id:"USW00013994",n:"St. Louis",s:"MO",lat:38.7525,lon:-90.3736},
+  {id:"USW00094846",n:"Chicago O'Hare",s:"IL",lat:41.995,lon:-87.9336},
+  {id:"USW00014837",n:"Madison",s:"WI",lat:43.1405,lon:-89.3452},
+  {id:"USW00014922",n:"Minneapolis-St. Paul",s:"MN",lat:44.8831,lon:-93.2289},
+  {id:"USW00014914",n:"Fargo",s:"ND",lat:46.9253,lon:-96.8111},
+  {id:"USW00024011",n:"Bismarck",s:"ND",lat:46.7825,lon:-100.7572},
+  {id:"USW00094847",n:"Detroit",s:"MI",lat:42.2313,lon:-83.3308},
+  {id:"USW00014820",n:"Cleveland",s:"OH",lat:41.4057,lon:-81.852},
+  {id:"USW00014733",n:"Buffalo",s:"NY",lat:42.9408,lon:-78.7358},
+  {id:"USW00014739",n:"Boston",s:"MA",lat:42.3606,lon:-71.0097},
+  {id:"USW00014765",n:"Providence",s:"RI",lat:41.7225,lon:-71.4325},
+  {id:"USW00014764",n:"Portland",s:"ME",lat:43.6497,lon:-70.3002},
+  {id:"USW00094728",n:"New York (Central Park)",s:"NY",lat:40.7889,lon:-73.9669},
+  {id:"USW00094789",n:"New York (JFK)",s:"NY",lat:40.6386,lon:-73.7622},
+  {id:"USW00014732",n:"New York (LaGuardia)",s:"NY",lat:40.7792,lon:-73.88},
+  {id:"USW00013739",n:"Philadelphia",s:"PA",lat:39.8683,lon:-75.2311},
+  {id:"USW00093721",n:"Baltimore-Washington",s:"MD",lat:39.1666,lon:-76.6833},
+  {id:"USW00013743",n:"Washington Reagan",s:"VA",lat:38.8483,lon:-77.0341},
+  {id:"USW00013740",n:"Richmond",s:"VA",lat:37.505,lon:-77.3202},
+  {id:"USW00013737",n:"Norfolk",s:"VA",lat:36.9033,lon:-76.1922},
+  {id:"USW00013881",n:"Charlotte",s:"NC",lat:35.2236,lon:-80.9552},
+  {id:"USW00003812",n:"Asheville",s:"NC",lat:35.4319,lon:-82.5375},
+  {id:"USW00013874",n:"Atlanta",s:"GA",lat:33.6301,lon:-84.4418},
+  {id:"USW00013889",n:"Jacksonville",s:"FL",lat:30.495,lon:-81.6936},
+  {id:"USW00012815",n:"Orlando",s:"FL",lat:28.4339,lon:-81.325},
+  {id:"USW00012842",n:"Tampa",s:"FL",lat:27.9619,lon:-82.5403},
+  {id:"USW00012839",n:"Miami",s:"FL",lat:25.7905,lon:-80.3163},
+  {id:"USW00022521",n:"Honolulu",s:"HI",lat:21.324,lon:-157.9294},
+  {id:"USW00026451",n:"Anchorage",s:"AK",lat:61.169,lon:-150.0278},
+  {id:"USW00025309",n:"Juneau",s:"AK",lat:58.3566,lon:-134.564},
+];
+
+/* ---------- helpers ---------- */
+function haversine(a,b,c,d){ const R=3959,rad=Math.PI/180; const dLat=(c-a)*rad,dLon=(d-b)*rad;
+  const s=Math.sin(dLat/2)**2 + Math.cos(a*rad)*Math.cos(c*rad)*Math.sin(dLon/2)**2; return 2*R*Math.asin(Math.sqrt(s)); }
+const esc=Suite.esc;
+function fmtClock(d){ return d.toLocaleTimeString([], {hour:"numeric", minute:"2-digit"}); }
+function fmtWhen(t){ const d=new Date(t); const sameDay=new Date().toDateString()===d.toDateString();
+  return fmtClock(d)+(sameDay?"":" "+d.toLocaleDateString([],{month:"short",day:"numeric"})); }
+const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function mmdd(d){ return `${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+function dayOfYear(d){ const start=new Date(d.getFullYear(),0,0); return Math.floor((d-start)/86400000); }
+
+/* ---------- cache TTLs ----------
+   manifest cacheTtlMin: 10080 — the 1991–2020 normals are static reference data
+   (7-day reference-class TTL per API-AND-RELAY.md §2). Today's conditions are
+   weather-class: 10 minutes. The archive fallback keeps v1's own 90-day cache
+   of the locally computed climatology. */
+const NORMALS_TTL=10080*60*1000;
+const ACTUAL_TTL=10*60*1000;
+
+/* v1 cache envelope helpers on the v1 keys (used by the archive fallback) */
+function cacheGet(k){ const e=Suite.store.get("suite.cache.normals."+k);
+  return (e && typeof e==="object" && "t" in e && "v" in e) ? e : null; }
+function cacheSet(k,v){ Suite.store.set("suite.cache.normals."+k,{t:Date.now(),v}); }
+
+/* ---------- NCEI normals (full year) ---------- */
+const NCEI="https://www.ncei.noaa.gov/access/services/data/v1";
+async function fetchNCEINormals(station){
+  // 2010 is a non-leap placeholder year; normals-daily is keyed to MM-DD
+  const url=`${NCEI}?dataset=normals-daily&stations=${encodeURIComponent(station.id)}`
+    +`&startDate=2010-01-01&endDate=2010-12-31&dataTypes=DLY-TMAX-NORMAL,DLY-TMIN-NORMAL&format=json`
+    +`&includeStationName=true&includeStationLocation=true&units=standard`;
+  const cacheKey="normals."+station.id;
+  /* v1 wrote a write-only {station,normals,actual} envelope on this same key and
+     never read it back; clear that legacy shape so Suite.fetchJSON never serves
+     it in place of an NCEI row array. */
+  const legacy=Suite.store.get("suite.cache."+cacheKey);
+  if (legacy && typeof legacy==="object" && "v" in legacy && !Array.isArray(legacy.v))
+    Suite.store.set("suite.cache."+cacheKey, null);
+  const r=await Suite.fetchJSON(url,{cacheKey, ttl:NORMALS_TTL, timeout:14000, tries:2});
+  const rows=r.v;
+  if (!Array.isArray(rows) || !rows.length) throw new Error("No normals for this station.");
+  const byDate={}; let name=null, lat=null, lon=null;
+  for (const row of rows){
+    name=name||row.NAME; if (row.LATITUDE) lat=parseFloat(row.LATITUDE); if (row.LONGITUDE) lon=parseFloat(row.LONGITUDE);
+    const hi=parseNorm(row["DLY-TMAX-NORMAL"]), lo=parseNorm(row["DLY-TMIN-NORMAL"]);
+    if (row.DATE) byDate[row.DATE]={hi,lo};
+  }
+  return { source:"NCEI", byDate, name, lat, lon, stale:r.stale, fetchedAt:r.t };
+}
+// NCEI units=standard returns temperatures already in °F (e.g. "74.6"), not tenths.
+function parseNorm(v){ if (v==null||v==="") return null; const n=parseFloat(v); if (!isFinite(n)||n<=-900) return null; return n; }
+
+/* ---------- Open-Meteo archive fallback: compute 1991-2020 climatology ---------- */
+async function fetchArchiveNormals(lat,lon){
+  const url=`https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}`
+    +`&start_date=1991-01-01&end_date=2020-12-31&daily=temperature_2m_max,temperature_2m_min`
+    +`&temperature_unit=fahrenheit&timezone=auto`;
+  /* no fetchJSON cacheKey here: the raw response is 30 years of daily data. v1
+     caches the small computed climatology instead (suite.cache.normals.archive.*,
+     90-day window below) — that key and shape are kept byte-identical. */
+  const r=await Suite.fetchJSON(url,{timeout:14000});
+  const j=r.v;
+  const d=j.daily; if (!d||!d.time) throw new Error("Archive returned no data.");
+  const acc={}; // "MM-DD" -> {hiSum,loSum,n}
+  for (let i=0;i<d.time.length;i++){
+    const key=d.time[i].slice(5); // MM-DD
+    const hi=d.temperature_2m_max[i], lo=d.temperature_2m_min[i];
+    if (hi==null||lo==null) continue;
+    if (!acc[key]) acc[key]={hs:0,ls:0,n:0};
+    acc[key].hs+=hi; acc[key].ls+=lo; acc[key].n++;
+  }
+  const byDate={};
+  for (const k in acc){ if (acc[k].n) byDate[k]={hi:acc[k].hs/acc[k].n, lo:acc[k].ls/acc[k].n}; }
+  return { source:"Open-Meteo archive (1991–2020, ERA5)", byDate, lat, lon };
+}
+
+/* ---------- actual current conditions ---------- */
+async function fetchActual(lat,lon){
+  const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`
+    +`&current=temperature_2m&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=auto`;
+  /* policy-added cache (v1 fetched this uncached every load). fallbackToCache:false —
+     a stale "right now" must not render as current; on failure the v1 null path
+     shows "—" and the "couldn't be fetched" verdict, exactly as before. */
+  const r=await Suite.fetchJSON(url,{cacheKey:"normals.actual."+lat.toFixed(2)+","+lon.toFixed(2),
+    ttl:ACTUAL_TTL, timeout:14000, fallbackToCache:false});
+  const j=r.v;
+  return { cur:j.current?.temperature_2m ?? null,
+    hi:j.daily?.temperature_2m_max?.[0] ?? null, lo:j.daily?.temperature_2m_min?.[0] ?? null };
+}
+
+/* ---------- state ---------- */
+const $=s=>document.querySelector(s);
+let station=null, lastRender=null;
+function setStatus(s){ $("#statusDot").className="statusdot "+s; }
+Suite.liveRegion($("#content"));
+Suite.liveRegion($("#updated"));
+Suite.liveRegion($("#pickErr"));
+
+/* ---------- load ---------- */
+async function loadStation(st){
+  station=st;
+  Suite.store.set("suite.normals.station", st);
+  $("#stName").textContent=st.n||("Station "+st.id);
+  $("#stMeta").textContent=(st.s?st.s+" · ":"")+st.id;
+  setStatus("stale");
+  $("#content").innerHTML=`<div class="card"><div class="msg">Loading normals and today's conditions…</div></div>`;
+
+  let normals=null, srcNote="";
+  try{
+    normals=await fetchNCEINormals(st);
+    srcNote="Data: NOAA NCEI Climate Normals 1991–2020 · ncei.noaa.gov · today's temperature from Open-Meteo.";
+  }catch(e){
+    // fallback to Open-Meteo archive climatology
+    let lat=st.lat, lon=st.lon;
+    if (lat==null||lon==null){ setStatus("err");
+      $("#content").innerHTML=`<div class="card"><div class="msg"><div class="big">Couldn't load NCEI normals for ${esc(st.id)}</div>
+        ${esc(e.message||String(e))}<br><br>This station ID may not have 1991–2020 normals, or NCEI is unreachable.
+        Try a station from the list, or one with known coordinates.</div></div>`; return; }
+    try{
+      const fbKey="archive."+lat.toFixed(2)+","+lon.toFixed(2);
+      const cached=cacheGet(fbKey);
+      if (cached && cached.v && Date.now()-cached.t < 90*86400000){ normals=cached.v; }
+      else { normals=await fetchArchiveNormals(lat,lon); cacheSet(fbKey, normals); }
+      srcNote="Data: Open-Meteo archive (ERA5 reanalysis), normals computed here from 1991–2020 daily data — NCEI was unreachable. These differ slightly from official NOAA normals.";
+    }catch(e2){
+      setStatus("err");
+      $("#content").innerHTML=`<div class="card"><div class="msg"><div class="big">Couldn't load climate normals</div>
+        NCEI: ${esc(e.message||String(e))}<br>Fallback: ${esc(e2.message||String(e2))}<br><br>Check your connection and try again.</div></div>`;
+      return;
+    }
+  }
+
+  // resolve coords for "actual" fetch (prefer NCEI-reported, then embedded)
+  const alat = (normals.lat!=null?normals.lat:st.lat), alon=(normals.lon!=null?normals.lon:st.lon);
+  let actual={cur:null,hi:null,lo:null};
+  if (alat!=null && alon!=null){ try{ actual=await fetchActual(alat,alon); }catch(e){} }
+
+  const data={ station:{...st, name:normals.name||st.n, lat:alat, lon:alon}, normals, actual, srcNote, when:Date.now() };
+  lastRender=data; render(data);
+  if (normals.stale){
+    /* network failed; Suite.fetchJSON served the cached normals — say so */
+    setStatus("stale");
+    $("#updated").textContent="offline — cached from "+fmtWhen(normals.fetchedAt);
+  } else {
+    setStatus("ok");
+    $("#updated").textContent="updated "+fmtClock(new Date());
+  }
+  $("#footer").textContent = srcNote + " Normals are the 1991–2020 average, not record extremes.";
+}
+
+/* ---------- render ---------- */
+function render(data){
+  const now=new Date();
+  const key=mmdd(now);
+  const todayNorm = data.normals.byDate[key] || data.normals.byDate[nearestKey(data.normals.byDate,key)];
+  const nHi=todayNorm?todayNorm.hi:null, nLo=todayNorm?todayNorm.lo:null;
+  const a=data.actual;
+
+  // anomaly of today's forecast high vs normal high
+  let verdict="", vclass="norm", sub="";
+  if (a.hi!=null && nHi!=null){
+    const diff=a.hi-nHi;
+    const ad=Math.abs(diff);
+    if (ad<1.5){ verdict="About normal"; vclass="norm"; sub=`Today's high near the ${Math.round(nHi)}° normal for ${MON[now.getMonth()]} ${now.getDate()}.`; }
+    else if (diff>0){ verdict=`${ad.toFixed(0)}° warmer than normal`; vclass="warm"; sub=`Forecast high ${Math.round(a.hi)}° vs the ${Math.round(nHi)}° normal high.`; }
+    else { verdict=`${ad.toFixed(0)}° cooler than normal`; vclass="cool"; sub=`Forecast high ${Math.round(a.hi)}° vs the ${Math.round(nHi)}° normal high.`; }
+  } else if (a.cur!=null && nHi!=null){
+    verdict = a.cur>=nHi ? "Above the normal high" : "Below the normal high"; sub=`Right now ${Math.round(a.cur)}°, normal high ${Math.round(nHi)}°.`;
+  } else { verdict="Normals loaded"; sub="Today's temperature couldn't be fetched."; }
+
+  const cmp = `
+    <div class="compare">
+      <div class="cmp"><div class="cl">Right now</div><div class="cv">${esc(a.cur!=null?Math.round(a.cur)+"°":"—")}</div><div class="cx">observed</div></div>
+      <div class="cmp high"><div class="cl">Today's high</div><div class="cv">${esc(a.hi!=null?Math.round(a.hi)+"°":"—")}</div><div class="cx">forecast</div></div>
+      <div class="cmp high"><div class="cl">Normal high</div><div class="cv" style="color:var(--normal)">${esc(nHi!=null?Math.round(nHi)+"°":"—")}</div><div class="cx">1991–2020</div></div>
+      <div class="cmp low"><div class="cl">Today's low</div><div class="cv">${esc(a.lo!=null?Math.round(a.lo)+"°":"—")}</div><div class="cx">forecast</div></div>
+      <div class="cmp low"><div class="cl">Normal low</div><div class="cv" style="color:var(--normal)">${esc(nLo!=null?Math.round(nLo)+"°":"—")}</div><div class="cx">1991–2020</div></div>
+    </div>`;
+
+  $("#content").innerHTML = `
+    <div class="card">
+      <div class="verdict"><div class="headline ${vclass}">${esc(verdict)}</div><div class="sub">${esc(sub)}</div></div>
+      ${cmp}
+    </div>
+    <div class="card">
+      <h2>Normal high &amp; low across the year</h2>
+      <svg id="yearChart" viewBox="0 0 680 260" preserveAspectRatio="none" role="img" aria-label="Yearly normals"></svg>
+      <div class="legend">
+        <span><i style="background:var(--high)"></i>Normal high</span>
+        <span><i style="background:var(--low)"></i>Normal low</span>
+        <span><i style="background:var(--accent)"></i>Today</span>
+      </div>
+    </div>`;
+
+  drawYearChart(data.normals.byDate, now, a);
+}
+function nearestKey(byDate,key){ // in case exact MM-DD (e.g., 02-29) missing
+  if (byDate[key]) return key;
+  const keys=Object.keys(byDate); if (!keys.length) return key;
+  return keys[0];
+}
+
+function drawYearChart(byDate, today, actual){
+  const svg=$("#yearChart"); if (!svg) return;
+  const W=680,H=260,pad={l:32,r:12,t:14,b:22};
+  const css=getComputedStyle(document.documentElement);
+  const high=(css.getPropertyValue("--high")||"#c65f3f").trim();
+  const low=(css.getPropertyValue("--low")||"#3a6ea8").trim();
+  const accent=(css.getPropertyValue("--accent")||"#2f6f6a").trim();
+  const line=(css.getPropertyValue("--line")||"#e4e0d6").trim();
+  const muted=(css.getPropertyValue("--muted")||"#6b7280").trim();
+
+  // ordered daily series
+  const keys=Object.keys(byDate).sort();
+  const pts=keys.map(k=>{ const [m,d]=k.split("-").map(Number); const doy=dayOfYear(new Date(2010,m-1,d));
+    return {doy, hi:byDate[k].hi, lo:byDate[k].lo}; }).filter(p=>p.hi!=null&&p.lo!=null).sort((a,b)=>a.doy-b.doy);
+  if (!pts.length){ svg.innerHTML=`<text x="20" y="30" fill="${muted}" font-size="12">No data</text>`; return; }
+
+  const his=pts.map(p=>p.hi), los=pts.map(p=>p.lo);
+  let vmax=Math.max(...his), vmin=Math.min(...los);
+  if (actual.hi!=null) vmax=Math.max(vmax,actual.hi); if (actual.lo!=null) vmin=Math.min(vmin,actual.lo);
+  const padV=(vmax-vmin)*0.08||2; vmax+=padV; vmin-=padV;
+  const X=doy=>pad.l+(doy-1)/365*(W-pad.l-pad.r);
+  const Y=v=>pad.t+(1-(v-vmin)/(vmax-vmin))*(H-pad.t-pad.b);
+
+  let s="";
+  // temp gridlines
+  const step = (vmax-vmin)>60?20:10;
+  for (let v=Math.ceil(vmin/step)*step; v<vmax; v+=step){ const y=Y(v);
+    s+=`<line x1="${pad.l}" y1="${y.toFixed(1)}" x2="${W-pad.r}" y2="${y.toFixed(1)}" stroke="${line}"/>`;
+    s+=`<text x="${pad.l-4}" y="${(y+3).toFixed(1)}" text-anchor="end" font-size="10" fill="${muted}">${v}°</text>`; }
+  // month labels
+  for (let m=0;m<12;m++){ const doy=dayOfYear(new Date(2010,m,1)); const x=X(doy);
+    s+=`<text x="${(x+2).toFixed(1)}" y="${H-pad.b+14}" font-size="10" fill="${muted}">${MON[m][0]}</text>`; }
+
+  // band between hi and lo
+  let up="", down="";
+  pts.forEach((p,i)=>{ up+=(i===0?"M":"L")+X(p.doy).toFixed(1)+" "+Y(p.hi).toFixed(1)+" "; });
+  for (let i=pts.length-1;i>=0;i--){ down+="L"+X(pts[i].doy).toFixed(1)+" "+Y(pts[i].lo).toFixed(1)+" "; }
+  s+=`<path d="${up}${down}Z" fill="${accent}" opacity="0.08"/>`;
+  // hi line
+  let dHi=""; pts.forEach((p,i)=>{ dHi+=(i===0?"M":"L")+X(p.doy).toFixed(1)+" "+Y(p.hi).toFixed(1)+" "; });
+  s+=`<path d="${dHi}" fill="none" stroke="${high}" stroke-width="2"/>`;
+  let dLo=""; pts.forEach((p,i)=>{ dLo+=(i===0?"M":"L")+X(p.doy).toFixed(1)+" "+Y(p.lo).toFixed(1)+" "; });
+  s+=`<path d="${dLo}" fill="none" stroke="${low}" stroke-width="2"/>`;
+
+  // today marker
+  const tdoy=dayOfYear(today); const tx=X(tdoy);
+  s+=`<line x1="${tx.toFixed(1)}" y1="${pad.t}" x2="${tx.toFixed(1)}" y2="${H-pad.b}" stroke="${accent}" stroke-width="1.5" stroke-dasharray="3 3"/>`;
+  if (actual.hi!=null) s+=`<circle cx="${tx.toFixed(1)}" cy="${Y(actual.hi).toFixed(1)}" r="4" fill="${accent}" stroke="var(--card)" stroke-width="1.5"/>`;
+  if (actual.lo!=null) s+=`<circle cx="${tx.toFixed(1)}" cy="${Y(actual.lo).toFixed(1)}" r="4" fill="${accent}" stroke="var(--card)" stroke-width="1.5"/>`;
+  svg.innerHTML=s;
+}
+
+/* ---------- picker ---------- */
+const backdrop=$("#backdrop");
+function openPicker(){
+  const loc=getLoc();
+  const nearWrap=$("#nearWrap"), nearList=$("#nearList"), allList=$("#allList");
+  if (loc){
+    const ranked=STATIONS.map(s=>({s,d:haversine(loc.lat,loc.lon,s.lat,s.lon)})).sort((a,b)=>a.d-b.d);
+    nearList.innerHTML=ranked.slice(0,4).map(r=>stRow(r.s,r.d)).join(""); nearWrap.classList.remove("hidden");
+  } else nearWrap.classList.add("hidden");
+  const sorted=[...STATIONS].sort((a,b)=> a.s===b.s?a.n.localeCompare(b.n):a.s.localeCompare(b.s));
+  allList.innerHTML=sorted.map(s=>stRow(s,null)).join("");
+  bindRows(); $("#pickErr").textContent=""; backdrop.classList.add("open");
+  $("#idIn").focus();
+}
+function stRow(s,dist){ return `<div class="st" role="button" tabindex="0" data-id="${s.id}"><span class="sn">${esc(s.n)} <span class="sd">${s.s}</span></span><span class="sd">${dist!=null?Math.round(dist)+" mi":s.id}</span></div>`; }
+function bindRows(){ document.querySelectorAll(".st").forEach(el=>{
+  const pick=()=>{ const st=STATIONS.find(x=>x.id===el.dataset.id); if (st){ closePicker(); loadStation(st); } };
+  el.addEventListener("click", pick);
+  el.addEventListener("keydown", e=>{ if (e.key==="Enter"||e.key===" "){ e.preventDefault(); pick(); } });
+}); }
+function closePicker(){ backdrop.classList.remove("open"); }
+$("#changeStation").addEventListener("click", openPicker);
+$("#closePicker").addEventListener("click", closePicker);
+backdrop.addEventListener("click", e=>{ if (e.target===backdrop) closePicker(); });
+document.addEventListener("keydown", e=>{ if (e.key==="Escape") closePicker(); });
+$("#idBtn").addEventListener("click", ()=>{ const id=$("#idIn").value.trim().toUpperCase(); const err=$("#pickErr");
+  if (!/^[A-Z]{2,4}\w{6,}$/.test(id) && !/^\w{8,}$/.test(id)){ err.textContent="Enter a GHCND station ID (e.g. USW00023188)."; return; }
+  const known=STATIONS.find(x=>x.id===id); closePicker(); loadStation(known||{id, n:"Station "+id, s:"", lat:null, lon:null}); });
+$("#idIn").addEventListener("keydown",e=>{ if (e.key==="Enter") $("#idBtn").click(); });
+
+/* ---------- boot ---------- */
+(function boot(){
+  const saved=Suite.store.get("suite.normals.station");
+  if (saved && typeof saved==="object" && saved.id){ loadStation(saved); return; }
+  const loc=getLoc();
+  if (loc){ const nearest=STATIONS.map(s=>({s,d:haversine(loc.lat,loc.lon,s.lat,s.lon)})).sort((a,b)=>a.d-b.d)[0];
+    if (nearest){ loadStation(nearest.s); return; } }
+  openPicker();
+})();
+</script>
+</body>
+</html>

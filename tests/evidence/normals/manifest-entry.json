@@ -1,0 +1,15 @@
+{
+  "id": "normals",
+  "file": "normals.html",
+  "name": "Climate Normals Comparator",
+  "cat": "sky",
+  "cx": "L",
+  "desc": "Today vs. 30-year normals and records: is this month actually unusual?",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": ["https://www.ncei.noaa.gov", "https://api.open-meteo.com", "https://archive-api.open-meteo.com"],
+  "storage": ["suite.location", "suite.normals.station", "suite.cache.normals.*"],
+  "cacheTtlMin": 10080,
+  "since": "v1",
+  "flags": []
+}

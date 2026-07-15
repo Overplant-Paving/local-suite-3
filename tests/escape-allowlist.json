@@ -173,5 +173,10 @@
     "favList.length": "local-only expression, recorded verified-clean with reasoning in tests/evidence/rivers/report.md",
     "cards": "local-only expression, recorded verified-clean with reasoning in tests/evidence/rivers/report.md",
     "lastNear.length": "local-only expression, recorded verified-clean with reasoning in tests/evidence/rivers/report.md"
+  },
+  "normals.html": {
+    "vclass": "local-only expression, recorded verified-clean with reasoning in tests/evidence/normals/report.md",
+    "cmp": "local-only expression, recorded verified-clean with reasoning in tests/evidence/normals/report.md",
+    "muted": "local-only expression, recorded verified-clean with reasoning in tests/evidence/normals/report.md"
   }
 }
