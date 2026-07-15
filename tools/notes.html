@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notepad That Stays · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accent: code-block background (3-layer, same pattern as core) */
+  :root { --code-bg: #efece4; }
+  @media (prefers-color-scheme: dark) {
+    :root { --code-bg: #262a31; }
+  }
+  :root[data-theme="light"] { --code-bg: #efece4; }
+  :root[data-theme="dark"] { --code-bg: #262a31; }
+
+  html, body { height: 100%; }
+  body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+  header {
+    display: flex; align-items: center; gap: .7rem; flex-wrap: wrap;
+    padding: .7rem 1rem; border-bottom: 1px solid var(--line); background: var(--card);
+  }
+  /* v1 styles .back/.theme-btn as pill buttons in a flex header — override core's
+     link-style .back and floated .theme-btn */
+  .back, .theme-btn, .tbtn {
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    border-radius: 999px; padding: .35rem .8rem; cursor: pointer; font-size: .85rem;
+    text-decoration: none; white-space: nowrap; float: none;
+  }
+  .back:hover, .theme-btn:hover, .tbtn:hover { border-color: var(--accent); text-decoration: none; }
+  header h1 { font-size: 1.1rem; letter-spacing: -.01em; }
+  .spacer { flex: 1; }
+  .saved { font-size: .8rem; color: var(--muted); min-width: 6rem; text-align: right; }
+  .saved.dirty { color: var(--warn, #b0752a); }
+  .main { display: flex; flex: 1; min-height: 0; }
+  /* sidebar */
+  .sidebar {
+    width: 230px; border-right: 1px solid var(--line); background: var(--card);
+    display: flex; flex-direction: column; min-height: 0;
+  }
+  .sidebar .side-top { padding: .6rem; border-bottom: 1px solid var(--line); display: flex; gap: .4rem; }
+  .sidebar .side-top button {
+    flex: 1; border: 1px solid var(--line); background: var(--accent-soft); color: var(--accent);
+    border-radius: 8px; padding: .45rem; cursor: pointer; font-size: .85rem; font-weight: 600;
+  }
+  .note-list { list-style: none; margin: 0; padding: .4rem; overflow-y: auto; flex: 1; }
+  .note-list li {
+    padding: .5rem .6rem; border-radius: 8px; cursor: pointer; margin-bottom: .2rem;
+    display: flex; align-items: center; gap: .4rem;
+  }
+  .note-list li:hover { background: var(--chip); }
+  .note-list li.on { background: var(--accent-soft); }
+  .note-list li .nm { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .92rem; }
+  .note-list li.on .nm { color: var(--accent); font-weight: 600; }
+  .note-list li .wc { font-size: .7rem; color: var(--muted); }
+  /* editor area */
+  .editor-wrap { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .editor-bar { display: flex; align-items: center; gap: .5rem; padding: .5rem .8rem; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .editor-bar input.title {
+    flex: 1; min-width: 8rem; font-size: 1rem; font-weight: 600; color: var(--ink);
+    border: 1px solid transparent; border-radius: 8px; padding: .35rem .5rem; background: transparent;
+  }
+  .editor-bar input.title:focus { outline: none; border-color: var(--line); background: var(--bg); }
+  .editor-bar .count { font-size: .78rem; color: var(--muted); white-space: nowrap; }
+  .split { display: flex; flex: 1; min-height: 0; }
+  textarea#editor {
+    flex: 1; border: none; resize: none; outline: none; padding: 1rem 1.1rem;
+    background: var(--bg); color: var(--ink); min-width: 0;
+    font: 15px/1.65 ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  .preview {
+    flex: 1; overflow-y: auto; padding: 1rem 1.3rem; border-left: 1px solid var(--line);
+    min-width: 0; word-wrap: break-word;
+  }
+  .preview h1, .preview h2, .preview h3 { line-height: 1.25; margin: 1rem 0 .5rem; letter-spacing: -.01em; }
+  .preview h1 { font-size: 1.6rem; } .preview h2 { font-size: 1.3rem; } .preview h3 { font-size: 1.1rem; }
+  .preview p { margin: .6rem 0; }
+  .preview ul, .preview ol { margin: .6rem 0 .6rem 1.4rem; }
+  .preview li { margin: .2rem 0; }
+  .preview code {
+    font: .85em ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+    background: var(--code-bg); padding: .08em .35em; border-radius: 5px;
+  }
+  .preview pre {
+    background: var(--code-bg); padding: .8rem 1rem; border-radius: 10px; overflow-x: auto; margin: .7rem 0;
+  }
+  .preview pre code { background: none; padding: 0; }
+  .preview blockquote {
+    border-left: 3px solid var(--accent); margin: .7rem 0; padding: .2rem 0 .2rem 1rem; color: var(--muted);
+  }
+  .preview a { color: var(--accent); }
+  .preview hr { border: none; border-top: 1px solid var(--line); margin: 1.2rem 0; }
+  .empty-note { color: var(--muted); text-align: center; margin-top: 3rem; }
+  @media (max-width: 700px) {
+    .preview { display: none; }
+    .sidebar { width: 160px; }
+  }
+  .del { border: none; background: none; color: var(--muted); cursor: pointer; font-size: 1rem; padding: 0 .2rem; opacity: 0; }
+  .note-list li:hover .del { opacity: 1; }
+  /* a11y: reveal the delete button on keyboard focus too, not just hover */
+  .note-list li:focus-within .del, .del:focus-visible { opacity: 1; }
+  .del:hover { color: #b5544a; }
+  footer {
+    margin-top: 0; padding: .4rem 1rem; border-top: 1px solid var(--line);
+    background: var(--card); color: var(--muted); font-size: .78rem; text-align: center;
+  }
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← suite</a>
+  <h1>Notepad That Stays</h1>
+  <div class="spacer"></div>
+  <button class="tbtn" id="togglePreview" title="Show/hide preview" aria-pressed="true">👁 preview</button>
+  <button class="tbtn" id="exportMd">export .md</button>
+  <button class="tbtn" id="exportAll">export all</button>
+  <button class="tbtn" id="importBtn">import</button>
+  <span class="saved" id="saved">saved</span>
+  <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  <input type="file" id="importFile" accept="application/json,.json" hidden aria-label="Import notes JSON file">
+</header>
+
+<div class="main">
+  <aside class="sidebar">
+    <div class="side-top">
+      <button id="newNote">+ New note</button>
+    </div>
+    <ul class="note-list" id="noteList"></ul>
+  </aside>
+  <div class="editor-wrap">
+    <div class="editor-bar">
+      <input class="title" id="noteTitle" placeholder="Untitled note" spellcheck="false" aria-label="Note title">
+      <span class="count" id="wordCount">0 words</span>
+    </div>
+    <div class="split">
+      <textarea id="editor" placeholder="Write here. Markdown-ish: # heading, **bold**, *italic*, - list, > quote, `code`, [link](url)." spellcheck="true" aria-label="Note text"></textarea>
+      <div class="preview" id="preview"></div>
+    </div>
+  </div>
+</div>
+<footer>No network — your notes live only in this browser's localStorage. Export to back them up.</footer>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---- storage ---- */
+const STORE = "suite.notes";
+let notes = [];      // {id, title, body, updated}
+let currentId = null;
+
+function load() {
+  const v = Suite.store.get(STORE); // reads v1's JSON array unchanged
+  notes = Array.isArray(v) ? v : [];
+  if (!notes.length) {
+    notes = [{ id: uid(), title: "Welcome", body: welcomeText(), updated: Date.now() }];
+  }
+  currentId = notes[0].id;
+}
+function save() {
+  const json = JSON.stringify(notes);
+  Suite.store.set(STORE, notes); // writes the same JSON array under the same key
+  /* Suite.store.set swallows quota errors, so read back to keep v1's
+     "storage full" warning working */
+  try {
+    if (localStorage.getItem(STORE) !== json) flag("⚠ storage full");
+  } catch (e) { flag("⚠ storage full"); }
+}
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+function current() { return notes.find(n => n.id === currentId); }
+function welcomeText() {
+  return "# Welcome\n\nThis is your notepad. Everything you type is **saved automatically** to this browser — nothing is sent anywhere.\n\n## Markdown you can use\n\n- **bold**, *italic*, `inline code`\n- Headings with `#`, `##`, `###`\n- Lists (like this one) and numbered lists\n- > Block quotes\n- [Links](https://example.com)\n\n```\nfenced code blocks too\n```\n\nMake a new note with **+ New note** on the left.";
+}
+
+/* ---- safe markdown renderer (no raw innerHTML of user input) ---- */
+const esc = Suite.esc;
+// inline: escape first, then apply markup on the ESCAPED string with safe replacements.
+function inlineMd(s) {
+  let t = esc(s);
+  // inline code first — protect its contents from further formatting
+  // (placeholders are wrapped in U+E000, a private-use char that can't occur via esc())
+  const codes = [];
+  t = t.replace(/`([^`]+)`/g, (m, c) => { codes.push(c); return "" + (codes.length - 1) + ""; });
+  // links [text](url) — only allow http(s)/mailto, url already escaped
+  t = t.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, txt, url) => {
+    const safe = /^(https?:|mailto:)/i.test(url.replace(/&amp;/g, "&"));
+    if (!safe) return m;
+    return '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + txt + '</a>';
+  });
+  t = t.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  t = t.replace(/(^|[^*])\*([^*]+)\*/g, "$1<em>$2</em>");
+  t = t.replace(/__([^_]+)__/g, "<strong>$1</strong>");
+  // restore code
+  t = t.replace(/(\d+)/g, (m, i) => "<code>" + codes[+i] + "</code>");
+  return t;
+}
+function renderMd(src) {
+  const lines = src.replace(/\r\n?/g, "\n").split("\n");
+  let html = "", i = 0;
+  while (i < lines.length) {
+    let line = lines[i];
+    // fenced code
+    if (/^```/.test(line)) {
+      const buf = [];
+      i++;
+      while (i < lines.length && !/^```/.test(lines[i])) { buf.push(lines[i]); i++; }
+      i++; // skip closing fence
+      html += "<pre><code>" + esc(buf.join("\n")) + "</code></pre>";
+      continue;
+    }
+    // heading
+    let h = line.match(/^(#{1,3})\s+(.*)$/);
+    if (h) { const n = h[1].length; html += "<h" + n + ">" + inlineMd(h[2]) + "</h" + n + ">"; i++; continue; }
+    // hr
+    if (/^(\*\*\*+|---+|___+)\s*$/.test(line)) { html += "<hr>"; i++; continue; }
+    // blockquote (consecutive)
+    if (/^>\s?/.test(line)) {
+      const buf = [];
+      while (i < lines.length && /^>\s?/.test(lines[i])) { buf.push(lines[i].replace(/^>\s?/, "")); i++; }
+      html += "<blockquote>" + inlineMd(buf.join(" ")) + "</blockquote>";
+      continue;
+    }
+    // unordered list
+    if (/^\s*[-*+]\s+/.test(line)) {
+      html += "<ul>";
+      while (i < lines.length && /^\s*[-*+]\s+/.test(lines[i])) {
+        html += "<li>" + inlineMd(lines[i].replace(/^\s*[-*+]\s+/, "")) + "</li>"; i++;
+      }
+      html += "</ul>";
+      continue;
+    }
+    // ordered list
+    if (/^\s*\d+[.)]\s+/.test(line)) {
+      html += "<ol>";
+      while (i < lines.length && /^\s*\d+[.)]\s+/.test(lines[i])) {
+        html += "<li>" + inlineMd(lines[i].replace(/^\s*\d+[.)]\s+/, "")) + "</li>"; i++;
+      }
+      html += "</ol>";
+      continue;
+    }
+    // blank
+    if (/^\s*$/.test(line)) { i++; continue; }
+    // paragraph (gather until blank)
+    const buf = [];
+    while (i < lines.length && !/^\s*$/.test(lines[i]) &&
+           !/^(#{1,3}\s|>|\s*[-*+]\s|\s*\d+[.)]\s|```)/.test(lines[i])) {
+      buf.push(lines[i]); i++;
+    }
+    html += "<p>" + inlineMd(buf.join("\n")).replace(/\n/g, "<br>") + "</p>";
+  }
+  return html;
+}
+
+/* ---- DOM ---- */
+const noteList = document.getElementById("noteList");
+const editor = document.getElementById("editor");
+const noteTitle = document.getElementById("noteTitle");
+const preview = document.getElementById("preview");
+const wordCount = document.getElementById("wordCount");
+const savedEl = Suite.liveRegion(document.getElementById("saved"));
+
+function renderList() {
+  noteList.textContent = "";
+  const sorted = notes.slice().sort((a, b) => b.updated - a.updated);
+  for (const n of sorted) {
+    const li = document.createElement("li");
+    li.className = n.id === currentId ? "on" : "";
+    li.tabIndex = 0; // a11y: keyboard path to note selection
+    const nm = document.createElement("span");
+    nm.className = "nm"; nm.textContent = n.title || "Untitled note";
+    const wc = document.createElement("span");
+    wc.className = "wc"; wc.textContent = countWords(n.body);
+    const del = document.createElement("button");
+    del.className = "del"; del.textContent = "×"; del.title = "Delete note";
+    del.setAttribute("aria-label", 'Delete note "' + (n.title || "Untitled note") + '"');
+    del.addEventListener("click", (e) => { e.stopPropagation(); deleteNote(n.id); });
+    li.append(nm, wc, del);
+    li.addEventListener("click", () => selectNote(n.id));
+    li.addEventListener("keydown", (e) => {
+      if ((e.key === "Enter" || e.key === " ") && e.target === li) { e.preventDefault(); selectNote(n.id); }
+    });
+    noteList.append(li);
+  }
+}
+function countWords(s) {
+  const w = (s.trim().match(/\S+/g) || []).length;
+  return w;
+}
+function selectNote(id) {
+  flushSave();
+  currentId = id;
+  const n = current();
+  editor.value = n.body;
+  noteTitle.value = n.title;
+  updateView();
+  renderList();
+  editor.focus();
+}
+function updateView() {
+  const n = current();
+  if (!n) return;
+  preview.innerHTML = renderMd(editor.value);
+  wordCount.textContent = countWords(editor.value) + " words · " + editor.value.length + " chars";
+}
+function deleteNote(id) {
+  const n = notes.find(x => x.id === id);
+  if (!confirm('Delete "' + (n.title || "Untitled note") + '"? This cannot be undone.')) return;
+  notes = notes.filter(x => x.id !== id);
+  if (!notes.length) notes = [{ id: uid(), title: "Untitled note", body: "", updated: Date.now() }];
+  if (currentId === id) currentId = notes[0].id;
+  save();
+  const c = current();
+  editor.value = c.body; noteTitle.value = c.title;
+  updateView(); renderList();
+}
+
+/* ---- autosave (debounced) ---- */
+let saveTimer = null, dirty = false;
+function flag(txt) { savedEl.textContent = txt; }
+function markDirty() {
+  dirty = true;
+  savedEl.textContent = "editing…"; savedEl.classList.add("dirty");
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(flushSave, 600);
+}
+function flushSave() {
+  if (!dirty) return;
+  const n = current();
+  if (n) {
+    n.body = editor.value;
+    n.title = noteTitle.value.trim() || firstLineTitle(editor.value);
+    noteTitle.placeholder = n.title;
+    n.updated = Date.now();
+  }
+  save();
+  dirty = false;
+  savedEl.textContent = "saved ✓"; savedEl.classList.remove("dirty");
+  renderList();
+}
+function firstLineTitle(body) {
+  const first = (body.split("\n").find(l => l.trim()) || "").replace(/^#+\s*/, "").trim();
+  return first ? first.slice(0, 40) : "Untitled note";
+}
+
+editor.addEventListener("input", () => { updateView(); markDirty(); });
+noteTitle.addEventListener("input", markDirty);
+window.addEventListener("beforeunload", flushSave);
+
+/* ---- toolbar actions ---- */
+document.getElementById("newNote").addEventListener("click", () => {
+  flushSave();
+  const n = { id: uid(), title: "Untitled note", body: "", updated: Date.now() };
+  notes.push(n); currentId = n.id;
+  editor.value = ""; noteTitle.value = "";
+  save(); updateView(); renderList(); editor.focus();
+});
+function download(name, text, type) {
+  const blob = new Blob([text], { type: type || "text/plain" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+document.getElementById("exportMd").addEventListener("click", () => {
+  flushSave();
+  const n = current();
+  const safe = (n.title || "note").replace(/[^\w \-]+/g, "").trim() || "note";
+  download(safe + ".md", n.body, "text/markdown");
+});
+document.getElementById("exportAll").addEventListener("click", () => {
+  flushSave();
+  download("notes-" + new Date().toISOString().slice(0, 10) + ".json",
+    JSON.stringify(notes, null, 2), "application/json");
+});
+document.getElementById("importBtn").addEventListener("click", () => document.getElementById("importFile").click());
+document.getElementById("importFile").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.addEventListener("load", () => {
+    try {
+      const data = JSON.parse(reader.result);
+      let imported = [];
+      if (Array.isArray(data)) imported = data;
+      else if (data && typeof data === "object" && "body" in data) imported = [data];
+      else throw new Error("unrecognized");
+      let added = 0;
+      for (const it of imported) {
+        if (it && typeof it.body === "string") {
+          notes.push({
+            id: uid(),
+            title: (typeof it.title === "string" ? it.title : "") || firstLineTitle(it.body),
+            body: it.body,
+            updated: typeof it.updated === "number" ? it.updated : Date.now(),
+          });
+          added++;
+        }
+      }
+      if (!added) { alert("No notes found in that file."); return; }
+      save(); renderList();
+      alert("Imported " + added + " note" + (added === 1 ? "" : "s") + ".");
+    } catch (err) {
+      alert("Could not read that file as notes JSON.");
+    }
+    e.target.value = "";
+  });
+  reader.readAsText(file);
+});
+
+/* preview toggle */
+let previewOn = true;
+document.getElementById("togglePreview").addEventListener("click", (e) => {
+  previewOn = !previewOn;
+  preview.style.display = previewOn ? "" : "none";
+  e.currentTarget.setAttribute("aria-pressed", String(previewOn));
+});
+
+/* keyboard: Ctrl/Cmd+S saves now */
+document.addEventListener("keydown", (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") { e.preventDefault(); flushSave(); }
+});
+
+/* ---- init ---- */
+load();
+editor.value = current().body;
+noteTitle.value = current().title;
+updateView();
+renderList();
+savedEl.textContent = "saved ✓";
+</script>
+</body>
+</html>

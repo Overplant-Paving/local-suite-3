@@ -1,0 +1,20 @@
+initial note list: ["Welcome"]
+initial saved indicator: "saved ✓"
+saved indicator after 900ms: "saved ✓"
+word count: "31 words · 174 chars"
+preview html (330 chars): <h1>Heading one</h1><p>Some <strong>bold</strong>, <em>italic</em> and <code>inline code</code> plus plain digits 123 456.</p><ul><li>list item A</li><li>list item B</li></ul><blockquote>a quote</blockquote><p><a href="https://example.com" target="_blank" rel="noopener noreferrer">a link</a></p><pre...
+localStorage suite.notes length after autosave: 757
+note list after reload: ["Migration test note","Welcome"]
+editor content after reload matches typed body: true (174 chars)
+title input after reload: "Migration test note"
+export .md: suggested="Migration test note.md", 174 bytes, content matches editor: true
+export all: suggested="notes-2026-07-15.json", 2 notes, titles=["Welcome","Migration test note"]
+note list after import: ["Migration test note","Welcome","Imported fixture note"]
+note list after delete: ["Migration test note","Welcome"]
+keyboard-selected note title: "Welcome"
+preview display after toggle off: "none", aria-pressed=false
+preview display after toggle on: "block", aria-pressed=true
+saved indicator after Ctrl+S: "saved ✓"
+dialogs seen: ["alert: Imported 1 note.","confirm: Delete \"Imported fixture note\"? This cannot be undone."]
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)
