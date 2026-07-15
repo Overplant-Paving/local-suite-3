@@ -503,7 +503,7 @@ The short version of everything above. **CORS ✓** = documented/community-confi
 | Open-Meteo (weather/air/marine/geocoding/archive) | `*.open-meteo.com` (in use: `api.`, `marine-api.`, `air-quality-api.`, `geocoding-api.`, `archive-api.open-meteo.com` — v2, Jul 2026) | none (10k/day) | ✓ |
 | USGS earthquakes | `earthquake.usgs.gov` | none | ✓ |
 | USGS water (new) | `api.waterdata.usgs.gov` | optional | ✓ (OGC API; verified Jul 2026) |
-| USGS elevation (EPQS) | `epqs.nationalmap.gov` | none | verify |
+| USGS elevation (EPQS) | `epqs.nationalmap.gov` | none | ✓ (v2 live browser fetch, Jul 2026) |
 | USGS volcanoes (HANS) | `volcanoes.usgs.gov/hans-public` | none | ✓ (verified Jul 2026) |
 | NIFC/WFIGS wildfires | `services3.arcgis.com/T4QMspbfLg3qTGWY` | none | ✓ (ArcGIS) |
 | NASA FIRMS hotspots | `firms.modaps.eosdis.nasa.gov` | free MAP_KEY | verify |
@@ -523,7 +523,7 @@ The short version of everything above. **CORS ✓** = documented/community-confi
 | sunrise-sunset.org | `api.sunrise-sunset.org` | none | ✓ (community) |
 | Federal Register | `federalregister.gov/api/v1` | none | ✓ (community) |
 | Congress.gov | `api.congress.gov/v3` | free key (5k/hr) | verify |
-| Treasury FiscalData | `api.fiscaldata.treasury.gov` | none | verify |
+| Treasury FiscalData | `api.fiscaldata.treasury.gov` | none | ✓ (v2 verified Jul 2026; note: their WAF 500s HeadlessChrome UAs) |
 | BLS (CPI/jobs) | `api.bls.gov/publicAPI` | none (v1) / free (v2) | ✗ |
 | FRED | `api.stlouisfed.org` | free key | ✗ |
 | EIA (energy) | `api.eia.gov/v2` | free key | verify |

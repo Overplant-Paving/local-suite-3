@@ -1,0 +1,30 @@
+fresh open: locbar hidden = true, latA = ""
+locbar after seeding LA: "Saved location: Los Angeles, CA fill into Point A"
+Point A prefilled from suite.location: lat=34.052200, lon=-118.243700
+live point elevation (LA 34.0522,-118.2437): 284 ft (= 86.7 m) — source badge "USGS"
+cache entry: suite.cache.elevation.34.05220,-118.24370 = {"t":1784147615012,"v":86.707595825,"src":"USGS"}
+after meters toggle: 86.7 m, aria-pressed(m)=true
+profile hint: "25.68 km (15.95 mi) great-circle, 60 samples."
+profile stat: 284 ft MIN
+profile stat: 5,627 ft MAX
+profile stat: +6,192 ft TOTAL CLIMB
+profile stat: −850 ft TOTAL DESCENT
+profile stat: 5,342 ft RELIEF
+chart: profline paths = 1, area = 1, gridlines = 5, axis labels = 10
+per-point cache entries after point + profile: 60 (60 unique — A coincides with sample 0)
+hover readout mid-chart: "12.19 km from A · elevation 843 ft"
+keyboard readout after focus + 2×ArrowRight: "0.44 km from A · elevation 312 ft"
+profile min stat after meters toggle: 87 m MIN
+after swap: A=(34.2257, -118.0596) B=(34.052200, -118.243700)
+validation with empty B: "Enter a valid Point B to draw a profile."
+offline stale point: 284 ft — badge "USGS · cached"
+offline stale point note: "Offline — cached from 7/7/2026, 3:33:46 PM."
+offline stale profile hint: "25.68 km (15.95 mi) great-circle, 60 samples."
+offline stale profile note: "Offline — cached from 7/7/2026, 3:33:46 PM."
+offline uncached point -> error card: "Couldn't fetch elevation"
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

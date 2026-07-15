@@ -1124,6 +1124,28 @@
       ]
     },
     {
+      "id": "elevation",
+      "file": "elevation.html",
+      "name": "Elevation Profiler",
+      "cat": "local",
+      "cx": "S",
+      "desc": "Elevation for any point; profile between two points.",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://epqs.nationalmap.gov",
+        "https://api.open-elevation.com"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.location",
+        "suite.cache.elevation.*"
+      ],
+      "cacheTtlMin": 10080,
+      "since": "v1",
+      "flags": []
+    },
+    {
       "id": "network",
       "file": "network.html",
       "name": "What's My Network",
