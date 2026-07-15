@@ -145,7 +145,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 47 | foodrecalls.html | health | cors | — | B | | ⬜ |
 | 48 | dictionary.html | ref | cors | — | B | EA | ⬜ |
 | 49 | wiki.html | ref | cors | — | B | EA | ⬜ |
-| 50 | zip.html | ref | cors | — | B | | ⬜ |
+| 50 | zip.html | ref | cors | — | B | | ✅ `tests/evidence/zip/` |
 | 51 | factbook.html | ref | cors | — | B | EA | ⬜ |
 | 52 | books.html | ref | cors | — | B | inline `onerror=` → listener | ⬜ |
 | 53 | art.html | ref | cors | — | B | EA · inline `onerror=` → listener | ⬜ |

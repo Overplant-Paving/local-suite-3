@@ -1,0 +1,25 @@
+ZIP 90012 (live fetch, Enter-submitted): expected "Los Angeles, CA"
+  observed .big  = "Los Angeles, CA"
+  observed .sub  = "ZIP 90012 · California"
+  observed facts = Latitude=34.0614 | Longitude=-118.2385 | State=CA
+  maplink href   = "https://www.openstreetmap.org/?mlat=34.0614&mlon=-118.2385#map=12/34.0614/-118.2385"
+save location: button now "✓ Saved — other suite tools will use it", disabled=true
+  suite.location = {"lat":34.0614,"lon":-118.2385,"label":"Los Angeles, CA"}
+  cache envelope keys for z90012: t,v
+city tab: cityCard hidden=false, zipCard hidden=true
+city CA/Beverly Hills (live fetch, Enter-submitted):
+  observed .big = "Beverly Hills, CA"
+  observed .sub = "5 ZIP codes"
+  observed zchips = [90209, 90210, 90211, 90212, 90213]
+zchip "90209" clicked: zip tab shown=true, #zipIn="90209", result .big="Beverly Hills, CA"
+area code 213 (offline, embedded table): expected 213 / Los Angeles (downtown) / California
+  observed .big = "213"
+  observed .ac-region = "Los Angeles (downtown)"
+  observed .sub = "California"
+area code 999 (not a US geographic code): observed = "Area code 999 isn't a recognized US geographic code (it may be a non-geographic, Canadian, or Caribbean NANP code)."
+offline + 8-day-old cache, ZIP 90012 again:
+  observed .big  = "Los Angeles, CA"
+  observed stale note = "Offline — showing cached result from 7/7/2026, 12:26:01 PM."
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED

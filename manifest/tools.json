@@ -436,6 +436,27 @@
       "flags": [
         "xp"
       ]
+    },
+    {
+      "id": "zip",
+      "file": "zip.html",
+      "name": "ZIP & Area Code Lookup",
+      "cat": "ref",
+      "cx": "S",
+      "desc": "ZIP ↔ city/coordinates; area code → region.",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://api.zippopotam.us"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.location",
+        "suite.cache.zip.*"
+      ],
+      "cacheTtlMin": 10080,
+      "since": "v1",
+      "flags": []
     }
   ]
 }
