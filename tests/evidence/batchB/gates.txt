@@ -1,0 +1,79 @@
+== Batch B completion gates (2026-07-15) ==
+
+$ python build.py --check
+GATE manifest-files-sync  pass
+GATE markers              pass
+GATE dist-staleness       pass
+GATE no-inline-handlers   pass
+GATE csp                  pass
+GATE escaping-heuristic   pass
+GATE catalog-crosscheck   pass
+GATE key-hygiene          pass
+NEGATIVE TESTS          pass (all fatal gates seen to fail on fixtures)
+
+migrated: 56/71 tools (+hub)  by network: {'offline': 23, 'cors-open': 33}  flagged: 10
+
+--check: all fatal gates green
+exit: 0
+
+$ node smoke.mjs (tier 2, all dist files; network-noise console class forgiven — see smoke.mjs comment)
+ok   air.html
+ok   alerts.html
+ok   almanac.html
+ok   art.html
+ok   asteroids.html
+ok   books.html
+ok   color.html
+ok   convert.html
+ok   currency.html
+ok   dataviewer.html
+ok   dates.html
+ok   daylight.html
+ok   dictionary.html
+ok   drought.html
+ok   elevation.html
+ok   emergency.html
+ok   factbook.html
+ok   fedregister.html
+ok   flashcards.html
+ok   focus.html
+ok   foodrecalls.html
+ok   geo.html
+ok   holidays.html
+ok   illness.html
+ok   index.html
+ok   iss.html
+ok   loan.html
+ok   marine.html
+ok   medicine.html
+ok   network.html
+ok   normals.html
+ok   notes.html
+ok   paper.html
+ok   printables.html
+ok   qr.html
+ok   quakes.html
+ok   radar.html
+ok   random.html
+ok   recalls.html
+ok   rivers.html
+ok   snow.html
+ok   sound.html
+ok   spaceweather.html
+ok   text.html
+ok   tides.html
+ok   timers.html
+ok   treasury.html
+ok   tripcost.html
+ok   volcano.html
+ok   voting.html
+ok   weather.html
+ok   wiki.html
+ok   wildfire.html
+ok   wildlife.html
+ok   worldclock.html
+ok   yields.html
+ok   zip.html
+
+smoke: 57/57 green
+exit: 0

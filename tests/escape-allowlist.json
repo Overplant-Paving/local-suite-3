@@ -125,7 +125,8 @@
     "relTime(nextEvent.t,now)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tides/report.md",
     "Math.round(tempStr)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tides/report.md",
     "fmtClock(tempWhen)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tides/report.md",
-    "nextEvent?`<div class=\"now-item\"><div class=\"lbl\">Next ${nextEvent.type===\"H\"?\"high\":\"low\"}</div><div class=\"val\" style=\"font-size:1.1rem\">${relTime(nextEvent.t,now)}</div></div>`:\"\"": "literal markup; type gates two literals, relTime() is a local formatter over a numeric timestamp"
+    "nextEvent?`<div class=\"now-item\"><div class=\"lbl\">Next ${nextEvent.type===\"H\"?\"high\":\"low\"}</div><div class=\"val\" style=\"font-size:1.1rem\">${relTime(nextEvent.t,now)}</div></div>`:\"\"": "literal markup; type gates two literals, relTime() is a local formatter over a numeric timestamp",
+    "tempStr!=null\n            ? `<div class=\"watertemp\"><div class=\"big\">${Math.round(tempStr)}°F</div><div class=\"lbl\">as of ${fmtClock(tempWhen)}, station sensor</div></div>`\n            : `<div class=\"msg\" style=\"padding:.8rem\">This station doesn't report water temperature.</div>`": "Math.round'd numeric water temp + local fmtClock output, or a literal fallback message"
   },
   "radar.html": {
     "opts": "local-only expression, recorded verified-clean with reasoning in tests/evidence/radar/report.md",

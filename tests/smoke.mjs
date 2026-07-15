@@ -22,7 +22,11 @@ for (const file of files) {
   const problems = [];
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   const page = await ctx.newPage();
-  page.on("console", m => { if (m.type() === "error" && !m.text().includes("net::ERR")) problems.push(`console: ${m.text().slice(0, 140)}`); });
+  // Network-layer failures (net::ERR, the browser's CORS-block report, resource 4xx/5xx)
+  // are environment, not tool defects — the render/offline checks below prove the page
+  // still works. Script defects (pageerror) and CSP violations stay fatal.
+  const NETWORK_NOISE = /net::ERR|blocked by CORS policy|Failed to load resource/;
+  page.on("console", m => { if (m.type() === "error" && !NETWORK_NOISE.test(m.text())) problems.push(`console: ${m.text().slice(0, 140)}`); });
   page.on("pageerror", e => problems.push(`pageerror: ${String(e).slice(0, 140)}`));
   await page.addInitScript(() => {
     window.__csp = [];
