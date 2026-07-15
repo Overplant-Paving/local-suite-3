@@ -1,0 +1,14 @@
+{
+  "v1": {
+    "suite.cache.medicine.ibuprofen": "{\"t\":1784147475677,\"v\":{\"label\":{\"spl_product_data_elements\":[\"Ibuprofen Dye Free Ibuprofen IBUPROFEN IBUPROFEN SILICON DIOXIDE STARCH, CORN HYPROMELL…(24102 chars)",
+    "suite.medicine.history": "[\"ibuprofen\"]",
+    "suite.theme": "dark"
+  },
+  "v2": {
+    "suite.cache.medicine.ibuprofen": "{\"t\":1784147474017,\"v\":{\"label\":{\"spl_product_data_elements\":[\"Ibuprofen Dye Free Ibuprofen IBUPROFEN IBUPROFEN SILICON DIOXIDE STARCH, CORN HYPROMELL…(24102 chars)",
+    "suite.medicine.history": "[\"ibuprofen\"]",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}

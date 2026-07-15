@@ -1,0 +1,21 @@
+{
+  "id": "medicine",
+  "file": "medicine.html",
+  "name": "Medicine Cabinet Lookup",
+  "cat": "health",
+  "cx": "M",
+  "desc": "Drug label info in plain language: uses, warnings, recalls.",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": [
+    "https://api.fda.gov"
+  ],
+  "storage": [
+    "suite.theme",
+    "suite.medicine.history",
+    "suite.cache.medicine.*"
+  ],
+  "cacheTtlMin": 1440,
+  "since": "v1",
+  "flags": []
+}

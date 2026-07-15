@@ -141,7 +141,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 43 | yields.html | money | cors | — | B | | ⬜ |
 | 44 | currency.html | money | cors | — | B | | ✅ `tests/evidence/currency/` |
 | 45 | illness.html | health | cors | — | B | | ✅ `tests/evidence/illness/` |
-| 46 | medicine.html | health | cors | — | B | | ⬜ |
+| 46 | medicine.html | health | cors | — | B | | ✅ `tests/evidence/medicine/` |
 | 47 | foodrecalls.html | health | cors | — | B | | ✅ `tests/evidence/foodrecalls/` |
 | 48 | dictionary.html | ref | cors | — | B | EA | ⬜ |
 | 49 | wiki.html | ref | cors | — | B | EA | ⬜ |

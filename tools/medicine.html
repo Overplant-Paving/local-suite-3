@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Medicine Cabinet Lookup · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents: recall/warning palette (3-layer, same pattern as core) */
+  :root { --warn: #b0752a; --bad: #c0492d; --warn-soft: #f4ead6; }
+  @media (prefers-color-scheme: dark) {
+    :root { --warn: #d3a25a; --bad: #e0765a; --warn-soft: #33291a; }
+  }
+  :root[data-theme="light"] { --warn: #b0752a; --bad: #c0492d; --warn-soft: #f4ead6; }
+  :root[data-theme="dark"] { --warn: #d3a25a; --bad: #e0765a; --warn-soft: #33291a; }
+
+  body { padding: 1.5rem 1.25rem 4rem; line-height: 1.6; }
+  .wrap { max-width: 780px; margin: 0 auto; }
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .topbar .theme-btn { float: none; } /* v1: button sits in the flex topbar, no float */
+  header h1 { font-size: 1.75rem; letter-spacing: -.02em; }
+  header .tag { color: var(--muted); margin-top: .3rem; }
+  form { display: flex; gap: .5rem; margin: 1.3rem 0 .3rem; }
+  input[type=search] {
+    flex: 1; padding: .7rem 1rem; font-size: 1rem; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 12px; background: var(--card);
+    box-shadow: var(--shadow); outline: none;
+  }
+  input[type=search]:focus { border-color: var(--accent); }
+  button.go {
+    border: none; background: var(--accent); color: #fff; border-radius: 12px;
+    padding: 0 1.2rem; font-size: 1rem; cursor: pointer;
+  }
+  .history { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .1rem; min-height: 1.4rem; }
+  .history button {
+    border: 1px solid var(--line); background: var(--card); color: var(--muted);
+    border-radius: 999px; padding: .2rem .7rem; font-size: .8rem; cursor: pointer;
+  }
+  .history button:hover { color: var(--accent); border-color: var(--accent); }
+  .disclaimer {
+    background: var(--warn-soft); border: 1px solid color-mix(in srgb, var(--warn) 40%, var(--line));
+    border-radius: 12px; padding: .7rem .9rem; margin: 1.1rem 0; font-size: .9rem;
+  }
+  .disclaimer b { color: var(--warn); }
+  /* v1 card differs from the core .card (block layout, roomier padding, top margin) */
+  .card { display: block; flex-direction: row; gap: normal; padding: 1.1rem 1.2rem; margin-top: 1rem; }
+  .drughead h2 { font-size: 1.4rem; }
+  .drughead .gen { color: var(--muted); font-size: .95rem; margin-top: .1rem; }
+  .pills { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .6rem; }
+  .pill { font-size: .76rem; padding: .2rem .6rem; border-radius: 999px; background: var(--chip); color: var(--muted); }
+  details.sec { border-top: 1px solid var(--line); padding: .6rem 0 .2rem; }
+  details.sec:first-of-type { border-top: none; }
+  details.sec > summary {
+    cursor: pointer; font-weight: 600; font-size: 1rem; list-style: none;
+    display: flex; align-items: center; gap: .5rem; padding: .3rem 0;
+  }
+  details.sec > summary::-webkit-details-marker { display: none; }
+  details.sec > summary::before { content: "▸"; color: var(--accent); transition: transform .15s; }
+  details.sec[open] > summary::before { transform: rotate(90deg); }
+  details.sec .content { font-size: .92rem; color: var(--ink); padding: .2rem 0 .6rem 1.1rem; }
+  details.sec .content p { margin: .35rem 0; white-space: pre-wrap; }
+  details.sec.danger > summary { color: var(--bad); }
+  .recalls .r {
+    border: 1px solid var(--line); border-left: 4px solid var(--warn); border-radius: 10px;
+    padding: .6rem .8rem; margin-top: .6rem;
+  }
+  .recalls .r.c1 { border-left-color: var(--bad); }
+  .recalls .r.c3 { border-left-color: var(--muted); }
+  .recalls .cls { font-size: .74rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+  .recalls .c1 .cls { color: var(--bad); } .recalls .c2 .cls { color: var(--warn); } .recalls .c3 .cls { color: var(--muted); }
+  .recalls .rdesc { font-weight: 600; margin: .15rem 0; }
+  .recalls .rmeta { font-size: .82rem; color: var(--muted); }
+  .stamp { font-size: .78rem; color: var(--muted); margin-top: .8rem; }
+  .empty, .err { color: var(--muted); }
+  .err b { color: var(--bad); }
+  footer { margin-top: 2.5rem; font-size: .82rem; padding-top: 1rem; }
+  .spin { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Medicine Cabinet Lookup</h1>
+    <p class="tag">Type a brand or generic drug name for its FDA label in plain sections — uses, warnings,
+      interactions, dosage — plus any recent recalls.</p>
+  </header>
+
+  <form id="form">
+    <input type="search" id="q" placeholder="e.g. Tylenol, ibuprofen, Lipitor, amoxicillin…"
+      autocomplete="off" autofocus aria-label="Drug brand or generic name">
+    <button class="go" type="submit">Look up</button>
+  </form>
+  <div class="history" id="history"></div>
+
+  <div class="disclaimer">
+    <b>Not medical advice.</b> This shows official FDA drug-label text for general information only. It is
+    not a substitute for your doctor or pharmacist. In an emergency call 911; for poisoning call
+    Poison Control at 1-800-222-1222.
+  </div>
+
+  <div id="results"></div>
+
+  <footer>Data: openFDA · api.fda.gov — drug labels &amp; enforcement (recalls). Cached locally, no account.</footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---------- helpers ---------- */
+/* Suite.fetchJSON for transport (timeout / abort / accept header). No per-URL cacheKey:
+   this tool keeps its v1 combined per-term cache envelope, suite.cache.medicine.<term>
+   = {t, v: {label, recalls}}, so v1 caches keep working byte-identically.
+   v1 semantics preserved: HTTP 404 from openFDA means "no results", not an error. */
+async function fdaGet(url) {
+  try {
+    return (await Suite.fetchJSON(url, { fallbackToCache: false })).v;
+  } catch (e) {
+    if (e && /HTTP 404/.test(e.message || "")) return { __notfound: true };
+    throw e;
+  }
+}
+/* manifest cacheTtlMin: 1440 — label text and recall lists change on regulatory
+   timescales; within 24 h a repeat search serves from cache (API-AND-RELAY.md §2). */
+const TTL = 1440 * 60 * 1000;
+function cacheGet(key) {
+  const e = Suite.store.get("suite.cache.medicine." + key);
+  return (e && typeof e === "object" && "t" in e && "v" in e) ? e : null;
+}
+function cacheSet(key, v) { Suite.store.set("suite.cache.medicine." + key, { t: Date.now(), v }); }
+function ago(ms) {
+  const s = Math.round((Date.now() - ms) / 1000);
+  if (s < 90) return "just now";
+  const m = Math.round(s/60); if (m < 90) return m + " min ago";
+  const h = Math.round(m/60); if (h < 36) return h + " hr ago";
+  return Math.round(h/24) + " days ago";
+}
+function fmtFDADate(s) {
+  if (!s || s.length !== 8) return s || "";
+  const d = new Date(+s.slice(0,4), +s.slice(4,6)-1, +s.slice(6,8));
+  return isNaN(d) ? s : d.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"numeric" });
+}
+function titleCase(s) { return s.replace(/\w\S*/g, w => w[0].toUpperCase() + w.slice(1).toLowerCase()); }
+
+/* ---------- history ---------- */
+function getHistory() { return Suite.store.get("suite.medicine.history") || []; }
+function pushHistory(term) {
+  let h = getHistory().filter(x => x.toLowerCase() !== term.toLowerCase());
+  h.unshift(term); h = h.slice(0, 10);
+  Suite.store.set("suite.medicine.history", h);
+  renderHistory();
+}
+function renderHistory() {
+  const wrap = document.getElementById("history"); wrap.textContent = "";
+  const h = getHistory();
+  if (!h.length) return;
+  const lbl = document.createElement("span");
+  lbl.style.cssText = "font-size:.8rem;color:var(--muted);align-self:center";
+  lbl.textContent = "recent:";
+  wrap.append(lbl);
+  h.forEach(term => {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = term;
+    b.addEventListener("click", () => { document.getElementById("q").value = term; runSearch(term); });
+    wrap.append(b);
+  });
+}
+
+/* ---------- label section map (order + friendly titles) ---------- */
+const SECTIONS = [
+  ["indications_and_usage", "What it's used for", false, true],
+  ["dosage_and_administration", "Dosage & how to take it", false, true],
+  ["warnings", "Warnings", true, false],
+  ["boxed_warning", "Boxed warning", true, false],
+  ["do_not_use", "Do not use if", true, false],
+  ["drug_interactions", "Drug interactions", true, false],
+  ["when_using", "When using this product", false, false],
+  ["stop_use", "Stop use and ask a doctor if", true, false],
+  ["ask_doctor", "Ask a doctor before use if", false, false],
+  ["ask_doctor_or_pharmacist", "Ask a doctor or pharmacist before use if", false, false],
+  ["pregnancy_or_breast_feeding", "If pregnant or breast-feeding", false, false],
+  ["keep_out_of_reach_of_children", "Keep out of reach of children", false, false],
+  ["active_ingredient", "Active ingredient", false, false],
+  ["purpose", "Purpose", false, false],
+  ["inactive_ingredient", "Inactive ingredients", false, false],
+  ["warnings_and_cautions", "Warnings & cautions", true, false],
+  ["contraindications", "Contraindications", true, false],
+  ["adverse_reactions", "Adverse reactions", false, false]
+];
+
+/* ---------- render ---------- */
+const resultsEl = Suite.liveRegion(document.getElementById("results"));
+
+function el(tag, cls, txt) { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+
+function renderLabel(rec, stampMs, fresh) {
+  const card = el("div", "card");
+  const of = rec.openfda || {};
+  const head = el("div", "drughead");
+  const brand = (of.brand_name && of.brand_name[0]) ? of.brand_name[0] : (of.generic_name && of.generic_name[0]) ? titleCase(of.generic_name[0]) : "Drug label";
+  head.append(el("h2", null, brand));
+  const genNames = of.generic_name ? [...new Set(of.generic_name.map(g => titleCase(g)))].join(", ") : "";
+  if (genNames) head.append(el("div", "gen", "Generic: " + genNames));
+  const pills = el("div", "pills");
+  if (of.route) [...new Set(of.route)].slice(0,3).forEach(r => pills.append(el("span","pill", titleCase(r))));
+  if (of.product_type) [...new Set(of.product_type)].slice(0,1).forEach(r => pills.append(el("span","pill", titleCase(r))));
+  if (of.manufacturer_name && of.manufacturer_name[0]) pills.append(el("span","pill", of.manufacturer_name[0]));
+  if (pills.children.length) head.append(pills);
+  card.append(head);
+
+  let sectionsShown = 0;
+  SECTIONS.forEach(([key, title, danger, openByDefault]) => {
+    const val = rec[key];
+    if (!val || !val.length) return;
+    sectionsShown++;
+    const det = el("details", "sec" + (danger ? " danger" : ""));
+    if (openByDefault && sectionsShown <= 2) det.open = true;
+    const sum = el("summary", null, title);
+    det.append(sum);
+    const content = el("div", "content");
+    (Array.isArray(val) ? val : [val]).forEach(txt => {
+      const clean = String(txt).replace(/\s+\n/g, "\n").trim();
+      content.append(el("p", null, clean));
+    });
+    det.append(content);
+    card.append(det);
+  });
+  if (!sectionsShown) {
+    card.append(el("p", "empty", "This label had no readable text sections."));
+  }
+
+  const stamp = el("div", "stamp", "FDA label" + (rec.effective_time ? " · effective " + fmtFDADate(rec.effective_time) : "") + " · data " + ago(stampMs) + (fresh ? "" : " (cached)"));
+  card.append(stamp);
+  return card;
+}
+
+function renderRecalls(recalls, term) {
+  const card = el("div", "card recalls");
+  card.append(el("h2", "drughead", "Recent recalls"));
+  if (!recalls || !recalls.length) {
+    card.append(el("p", "empty", "No recalls found for “" + term + "” in the FDA enforcement database. That's good news."));
+    return card;
+  }
+  const clsNum = c => /I{3}|3/.test(c) ? 3 : /II|2/.test(c) ? 2 : 1;
+  recalls.forEach(r => {
+    const n = clsNum(r.classification || "");
+    const row = el("div", "r c" + n);
+    row.append(el("div", "cls", (r.classification || "Recall") + (n===1?" · most serious":n===3?" · least serious":"")));
+    row.append(el("div", "rdesc", (r.product_description || "").slice(0, 240)));
+    if (r.reason_for_recall) row.append(el("div", "rmeta", "Reason: " + r.reason_for_recall.slice(0, 260)));
+    const meta = [];
+    if (r.recalling_firm) meta.push(r.recalling_firm);
+    if (r.recall_initiation_date) meta.push("initiated " + fmtFDADate(r.recall_initiation_date));
+    if (r.status) meta.push(r.status);
+    if (meta.length) row.append(el("div", "rmeta", meta.join(" · ")));
+    card.append(row);
+  });
+  return card;
+}
+
+function showError(msg) {
+  resultsEl.textContent = "";
+  const card = el("div", "card err");
+  const p = el("p"); p.innerHTML = "<b>Couldn't complete the search.</b> ";
+  p.append(document.createTextNode(msg));
+  card.append(p);
+  card.append(el("p", "stamp", "Check your connection and try again — openFDA may also be briefly rate-limited."));
+  resultsEl.append(card);
+}
+
+/* ---------- search flow ---------- */
+async function runSearch(rawTerm) {
+  const term = rawTerm.trim();
+  if (!term) return;
+  const cacheKey = term.toLowerCase();
+  const cached = cacheGet(cacheKey);
+
+  /* policy-mandated good-citizen TTL: a repeat search within 24 h serves the cached
+     pair without a refetch (v1 refetched on every search) */
+  if (cached && Date.now() - cached.t < TTL) {
+    pushHistory(term);
+    renderPair(cached.v.label, cached.v.recalls, term, cached.t, false);
+    return;
+  }
+
+  resultsEl.innerHTML = '<p class="spin card">Searching openFDA…</p>';
+  const q = encodeURIComponent('"' + term.replace(/"/g, "") + '"');
+  const labelUrl = "https://api.fda.gov/drug/label.json?search="
+    + "openfda.brand_name:" + q + "+OR+openfda.generic_name:" + q + "+OR+openfda.substance_name:" + q
+    + "&limit=1";
+  const encTerm = encodeURIComponent(term.replace(/"/g,""));
+  const recallUrl = "https://api.fda.gov/drug/enforcement.json?search="
+    + 'product_description:"' + encTerm + '"+OR+openfda.brand_name:' + q + "+OR+openfda.generic_name:" + q
+    + "&sort=recall_initiation_date:desc&limit=8";
+
+  if (cached) {
+    renderPair(cached.v.label, cached.v.recalls, term, cached.t, false);
+  }
+
+  try {
+    const [labelRes, recallRes] = await Promise.all([
+      fdaGet(labelUrl).catch(e => ({ __err: e })),
+      fdaGet(recallUrl).catch(() => ({ __notfound: true }))
+    ]);
+    if (labelRes && labelRes.__err) throw labelRes.__err;
+    const label = (labelRes && labelRes.results && labelRes.results[0]) || null;
+    const recalls = (recallRes && recallRes.results) || [];
+    if (!label && !recalls.length && !cached) {
+      resultsEl.textContent = "";
+      const card = el("div", "card");
+      card.append(el("h2", "drughead", "No match"));
+      card.append(el("p", "empty", "No FDA label or recall found for “" + term + "”. Try the other name (brand vs. generic), or check spelling."));
+      resultsEl.append(card);
+      return;
+    }
+    cacheSet(cacheKey, { label, recalls });
+    pushHistory(term);
+    renderPair(label, recalls, term, Date.now(), true);
+  } catch (e) {
+    if (!cached) showError(e && e.message ? e.message : "Network error.");
+  }
+}
+
+function renderPair(label, recalls, term, stampMs, fresh) {
+  resultsEl.textContent = "";
+  if (label) resultsEl.append(renderLabel(label, stampMs, fresh));
+  else {
+    const c = el("div", "card");
+    c.append(el("h2","drughead","No label found"));
+    c.append(el("p","empty","No FDA drug label matched “" + term + "”, but recall results (if any) are below."));
+    resultsEl.append(c);
+  }
+  resultsEl.append(renderRecalls(recalls, term));
+}
+
+document.getElementById("form").addEventListener("submit", e => {
+  e.preventDefault();
+  runSearch(document.getElementById("q").value);
+});
+
+renderHistory();
+</script>
+</body>
+</html>

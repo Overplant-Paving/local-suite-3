@@ -1,0 +1,28 @@
+live "ibuprofen" brand/title: "Ibuprofen Dye Free"
+live "ibuprofen" generic line: "Generic: Ibuprofen"
+live "ibuprofen" pills: [Oral | Human Otc Drug | CVS Pharmacy]
+live "ibuprofen" label sections (13): [What it's used for | Dosage & how to take it | Warnings | Do not use if | When using this product | Stop use and ask a doctor if | Ask a doctor before use if | Ask a doctor or pharmacist before use if | If pregnant or breast-feeding | Keep out of reach of children | Active ingredient | Purpose | Inactive ingredients]
+live "ibuprofen" uses snippet: "Uses temporarily relieves minor aches and pains due to: headache toothache backache menstrual cramps the common cold muscular aches minor pain of arthritis temporarily reduces feve"
+live "ibuprofen" warnings snippet: "Warnings :: Warnings Allergy alert: Ibuprofen may cause a severe allergic reaction, especially in people allergic to aspirin. Symptoms may include: rash facial swelling asthma (whe"
+live "ibuprofen" stamp: "FDA label · effective Apr 29, 2026 · data just now"
+live "ibuprofen" recalls: 8 row(s) rendered
+live "ibuprofen"   recall[0] Class II — Children's Ibuprofen Oral Suspension, USP, 100 mg per 5mL, 4 FL OZ (120 mL) bottle, Manufactured for: Taro Pharmaceuticals U.S.A., Inc., Haw
+live "ibuprofen"   recall[1] Class II — Acetaminophen and Ibuprofen (NSAID) Tablets, 250 mg/125 mg a). 144-count packets (NDC# 72657-157-74), b). 216-count packets( 72657-157-76),D
+live "ibuprofen"   recall[2] Class III · least serious — IBU (ibuprofen) 600 mg tablets, 500-count bottle, Rx Only, Distributor: Dr. Reddy's Laboratories Inc., Princeton, NJ 08540, Made in India, N
+cache envelope written: suite.cache.medicine.ibuprofen {t:1784147472743, label:true, recalls:8}
+nonsense "zzxqblorptan" title: "No match"
+nonsense body: "No FDA label or recall found for “zzxqblorptan”. Try the other name (brand vs. generic), or check spelling."
+nonsense cached: false (v1 never caches no-match)
+history chips: [ibuprofen] (nonsense term absent, as in v1)
+history-chip re-run: api.fda.gov requests=0 (TTL-fresh serve), stamp="FDA label · effective Apr 29, 2026 · data just now (cached)"
+offline stale brand: "Ibuprofen Dye Free"
+offline stale stamp: "FDA label · effective Apr 29, 2026 · data 24 hr ago (cached)"
+offline stale recalls: 8 row(s) rendered
+offline stale   recall[0] Class II — Children's Ibuprofen Oral Suspension, USP, 100 mg per 5mL, 4 FL OZ (120 mL) bottle, Manufactured for: Taro Pharmaceuticals U.S.A., Inc., Haw
+offline stale   recall[1] Class II — Acetaminophen and Ibuprofen (NSAID) Tablets, 250 mg/125 mg a). 144-count packets (NDC# 72657-157-74), b). 216-count packets( 72657-157-76),D
+offline stale   recall[2] Class III · least serious — IBU (ibuprofen) 600 mg tablets, 500-count bottle, Rx Only, Distributor: Dr. Reddy's Laboratories Inc., Princeton, NJ 08540, Made in India, N
+restored (from fresh cache, no refetch): stamp="FDA label · effective Apr 29, 2026 · data just now (cached)"
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
