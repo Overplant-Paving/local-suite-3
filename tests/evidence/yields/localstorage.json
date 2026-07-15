@@ -1,0 +1,14 @@
+{
+  "v1": {
+    "suite.cache.yields.auctions": "{\"t\":1784147630838,\"v\":[{\"type\":\"Bill\",\"term\":\"4-Week\",\"auction\":\"2026-07-09\",\"rate\":3.691,\"rateKind\":\"inv. rate\",\"btc\":2.64},{\"type\":\"Bill\",\"term\":\"6…(2383 chars)",
+    "suite.theme": "dark",
+    "suite.cache.yields.compare": "{\"t\":1784147630827,\"v\":{\"series\":[{\"sec\":\"Treasury Bills\",\"now\":3.706,\"m3\":3.702,\"y1\":4.306},{\"sec\":\"Treasury Notes\",\"now\":3.283,\"m3\":3.212,\"y1\":3.048…(438 chars)"
+  },
+  "v2": {
+    "suite.cache.yields.auctions": "{\"t\":1784147629931,\"v\":[{\"type\":\"Bill\",\"term\":\"4-Week\",\"auction\":\"2026-07-09\",\"rate\":3.691,\"rateKind\":\"inv. rate\",\"btc\":2.64},{\"type\":\"Bill\",\"term\":\"6…(2383 chars)",
+    "suite.theme": "dark",
+    "suite.cache.yields.compare": "{\"t\":1784147629931,\"v\":{\"series\":[{\"sec\":\"Treasury Bills\",\"now\":3.706,\"m3\":3.702,\"y1\":4.306},{\"sec\":\"Treasury Notes\",\"now\":3.283,\"m3\":3.212,\"y1\":3.048…(438 chars)"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}

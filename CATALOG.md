@@ -349,7 +349,7 @@ Search books, see covers/editions, keep a "read next" list; ISBN lookup.
 
 ### 7.8 Museum Postcard
 A daily artwork from an open-access collection, with title/artist/date — like APOD for art.
-- **Data:** ⚠️ the Met's JSON API (`https://collectionapi.metmuseum.org/public/collection/v1/objects/{id}`) is keyless but **CORS-disabled** — its *images* load fine via `<img>`, so either embed a curated list of a few hundred object IDs + image URLs (refresh the list occasionally), or use a relay. Alternatives with browser-open APIs: Art Institute of Chicago `https://api.artic.edu/api/v1/artworks` (keyless, CORS ✓ — verify), Library of Congress `https://www.loc.gov/search/?q={q}&fo=json` (keyless; handle 429s).
+- **Data:** ⚠️ the Met's JSON API (`https://collectionapi.metmuseum.org/public/collection/v1/objects/{id}`) is keyless but **CORS-disabled** — its *images* load fine via `<img>`, so either embed a curated list of a few hundred object IDs + image URLs (refresh the list occasionally), or use a relay. Alternatives with browser-open APIs: Art Institute of Chicago `https://api.artic.edu/api/v1/artworks` — AIC images from `www.artic.edu` (iiif), Met images from `images.metmuseum.org` (both img-src; v2, Jul 2026) `` (keyless, CORS ✓ — verify), Library of Congress `https://www.loc.gov/search/?q={q}&fo=json` (keyless; handle 429s).
 - **Key:** none · **Local:** file:// ✅ (AIC/embedded list) / relay ❌ (Met JSON) · **Complexity:** S
 - **Suggested file:** `art.html`
 

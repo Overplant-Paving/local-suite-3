@@ -187,5 +187,11 @@
     "compass": "local-only expression, recorded verified-clean with reasoning in tests/evidence/geo/report.md",
     "(km*1000).toLocaleString(undefined,{maximumFractionDigits:0})": "local-only expression, recorded verified-clean with reasoning in tests/evidence/geo/report.md",
     "(mi*5280).toLocaleString(undefined,{maximumFractionDigits:0})": "local-only expression, recorded verified-clean with reasoning in tests/evidence/geo/report.md"
+  },
+  "yields.html": {
+    "blurb": "local-only expression, recorded verified-clean with reasoning in tests/evidence/yields/report.md",
+    "bar(s.now, \"var(--s-now)\")": "local-only expression, recorded verified-clean with reasoning in tests/evidence/yields/report.md",
+    "bar(s.m3, \"var(--s-3mo)\")": "local-only expression, recorded verified-clean with reasoning in tests/evidence/yields/report.md",
+    "bar(s.y1, \"var(--s-1yr)\")": "local-only expression, recorded verified-clean with reasoning in tests/evidence/yields/report.md"
   }
 }

@@ -854,6 +854,27 @@
       "flags": []
     },
     {
+      "id": "yields",
+      "file": "yields.html",
+      "name": "Treasury Yields & Savings",
+      "cat": "money",
+      "cx": "M",
+      "desc": "The yield curve today vs. last quarter — the “move my savings?” glance.",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://api.fiscaldata.treasury.gov"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.cache.yields.auctions",
+        "suite.cache.yields.compare"
+      ],
+      "cacheTtlMin": 1440,
+      "since": "v1",
+      "flags": []
+    },
+    {
       "id": "currency",
       "file": "currency.html",
       "name": "Exchange Rate Board",

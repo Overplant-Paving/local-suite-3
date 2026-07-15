@@ -138,7 +138,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 40 | fedregister.html | civic | cors | — | B | | ✅ `tests/evidence/fedregister/` |
 | 41 | recalls.html | civic | cors | — | B | 3 sources | ✅ `tests/evidence/recalls/` |
 | 42 | treasury.html | civic | cors | — | B | | ⬜ |
-| 43 | yields.html | money | cors | — | B | | ⬜ |
+| 43 | yields.html | money | cors | — | B | | ✅ `tests/evidence/yields/` |
 | 44 | currency.html | money | cors | — | B | | ✅ `tests/evidence/currency/` |
 | 45 | illness.html | health | cors | — | B | | ✅ `tests/evidence/illness/` |
 | 46 | medicine.html | health | cors | — | B | | ✅ `tests/evidence/medicine/` |
