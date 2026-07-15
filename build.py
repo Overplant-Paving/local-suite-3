@@ -101,7 +101,8 @@ def render_tool(name, source, core_css, core_js, manifest_tools):
 
     entry = next((t for t in manifest_tools if t["file"] == name), None)
     endpoints = entry["endpoints"] if entry else []
-    csp = build_csp(html, endpoints)  # hashes computed on final script contents
+    script_endpoints = entry.get("scriptEndpoints", []) if entry else []
+    csp = build_csp(html, endpoints, script_endpoints)  # hashes computed on final script contents
     if not VIEWPORT_RE.search(html):
         raise SystemExit(f"{name}: no viewport meta to anchor the CSP tag on")
     html = VIEWPORT_RE.sub(lambda m: m.group(0) + "\n" + csp, html, count=1)

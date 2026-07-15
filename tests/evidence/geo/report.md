@@ -71,3 +71,9 @@ All three hosts appear in CATALOG.md; no CATALOG update needed.
 4. **Bearing "expected ~324°" in the task sheet is not what the math gives** — the forward azimuth for 34.0522,-118.2437 → 37.7749,-122.4194 is 318.96°; v1 and v2 both render 319.0° (identical formula). Distance 559.12 km matches the sheet's ~559.
 5. **Per-query cache growth** — each distinct query writes one `suite.cache.geo.*` key (~0.7–3.5 KB observed). No eviction beyond TTL-overwrite; typical personal use is dozens of keys. settings.html's per-tool cache purge (Phase 4) covers cleanup. Flagging, not fixing — no v1 behavior existed here to preserve.
 6. **`suite.location` values diverge at end of interaction** (v2 saved Denver via the save button; v1 kept the seeded LA) — key *sets* are the parity criterion and they match; the divergence is the exercised feature itself.
+
+## orchestrator addendum — dist CSP verification (2026-07-15)
+
+scriptEndpoints wired through build.py (the first build omitted the host — caller fix). Direct
+test on dist/geo.html from file://: injected the Census JSONP script under the built CSP —
+callback fired with "1600 PENNSYLVANIA AVE NW, WASHINGTON, DC, 20500", zero CSP violations.
