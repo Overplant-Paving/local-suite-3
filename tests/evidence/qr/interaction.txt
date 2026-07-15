@@ -1,0 +1,26 @@
+meta on load: Version 2 · 25×25 modules · EC M · mask 2
+canvas on load: 264x264px, dark pixels = 20992
+meta after typing text: Version 3 · 29×29 modules · EC M · mask 2
+canvas after typing: 296x296px, dark pixels = 27968
+meta after EC=Q: Version 4 · 33×33 modules · EC Q · mask 2
+scale label after slider=12: 12
+canvas after scale=12: 492x492px, dark pixels = 77040
+error for 1200-char payload: Too much data — shorten the text or lower the error-correction level.
+meta during error: —
+wifi group visible: true, meta with empty SSID: Enter something to encode.
+meta for WiFi payload: Version 4 · 33×33 modules · EC M · mask 2
+canvas for WiFi: 328x328px, dark pixels = 35392
+password disabled when security=None: true
+password re-enabled on WPA: true
+meta for tel payload: Version 2 · 25×25 modules · EC M · mask 1
+meta for mailto payload: Version 4 · 33×33 modules · EC M · mask 2
+download triggered, suggested filename: qr-code.png
+toast after add: Added to sheet
+sheet count label: (2), visible sheet items: 2, print-area items: 2
+empty hint hidden with items: true
+print-media screenshot with populated sheet: v2-print-sheet.png
+sheet items after removing one: 1
+sheet items after clear: 0, empty hint visible again: true
+final state: one code re-added to sheet, count label = (1)
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)

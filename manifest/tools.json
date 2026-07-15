@@ -210,6 +210,23 @@
       "flags": [
         "print-css"
       ]
+    },
+    {
+      "id": "qr",
+      "file": "qr.html",
+      "name": "QR Code Maker",
+      "cat": "util",
+      "cx": "S",
+      "desc": "Text, URL, or wifi credentials → QR on canvas. Print a sheet.",
+      "network": "offline",
+      "key": null,
+      "endpoints": [],
+      "storage": [
+        "suite.theme"
+      ],
+      "cacheTtlMin": null,
+      "since": "v1",
+      "flags": []
     }
   ]
 }

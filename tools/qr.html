@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR Code Maker · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accent: error red (3-layer, same pattern as core) */
+  :root { --bad: #c0492d; }
+  @media (prefers-color-scheme: dark) { :root { --bad: #e0705a; } }
+  :root[data-theme="light"] { --bad: #c0492d; }
+  :root[data-theme="dark"] { --bad: #e0705a; }
+
+  body { padding: 1.4rem 1.25rem 4rem; }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  header h1 { font-size: 1.6rem; letter-spacing: -.02em; margin-top: 1rem; }
+  header .tag { color: var(--muted); margin-top: .25rem; font-size: .95rem; }
+  .layout { display: grid; grid-template-columns: 1fr 320px; gap: 1.1rem; margin-top: 1.2rem; align-items: start; }
+  @media (max-width: 720px) { .layout { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 1.1rem 1.15rem; box-shadow: var(--shadow);
+    display: block; gap: normal; /* v1 qr cards are block; core makes .card a flex column */
+  }
+  .tabs { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .tab {
+    border: 1px solid var(--line); background: var(--card); color: var(--muted);
+    border-radius: 999px; padding: .32rem .8rem; cursor: pointer; font-size: .88rem;
+  }
+  .tab.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  label.fl { display: block; font-size: .82rem; color: var(--muted); margin: .8rem 0 .3rem; }
+  input[type=text], input[type=password], textarea, select {
+    width: 100%; border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+    border-radius: 8px; padding: .5rem .6rem; font-size: .95rem; font-family: inherit;
+  }
+  textarea { min-height: 90px; resize: vertical; font: .95rem/1.5 ui-monospace, Menlo, Consolas, monospace; }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); }
+  .field-group { display: none; }
+  .field-group.on { display: block; }
+  .row { display: flex; gap: .7rem; flex-wrap: wrap; align-items: center; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .seg button {
+    border: none; background: var(--card); color: var(--muted); padding: .35rem .7rem;
+    cursor: pointer; font-size: .86rem; border-right: 1px solid var(--line);
+  }
+  .seg button:last-child { border-right: none; }
+  .seg button.on { background: var(--accent); color: #fff; }
+  .opt { margin-top: 1rem; }
+  .opt label.fl { margin-top: 0; }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  .preview {
+    display: flex; flex-direction: column; align-items: center; gap: .8rem;
+  }
+  #qrCanvas { image-rendering: pixelated; max-width: 100%; height: auto; border-radius: 8px; background: #fff; }
+  .meta { font-size: .82rem; color: var(--muted); text-align: center; }
+  .btn {
+    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    border-radius: 8px; padding: .5rem .8rem; cursor: pointer; font-size: .9rem;
+  }
+  .btn.ghost { background: var(--card); color: var(--accent); }
+  .btn:active { transform: translateY(1px); }
+  .btn-row { display: flex; gap: .6rem; flex-wrap: wrap; justify-content: center; }
+  .err { color: var(--bad); font-size: .88rem; margin-top: .6rem; }
+  .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.6rem; }
+  .sheet-head h2 { font-size: 1.05rem; }
+  .sheet-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .8rem; margin-top: .9rem; }
+  .sheet-item { border: 1px solid var(--line); border-radius: 10px; padding: .6rem; text-align: center; background: var(--card); }
+  .sheet-item canvas { width: 100%; height: auto; image-rendering: pixelated; background: #fff; border-radius: 4px; }
+  .sheet-item .cap { font-size: .72rem; color: var(--muted); margin-top: .35rem; word-break: break-all; max-height: 2.4em; overflow: hidden; }
+  .sheet-item .x { float: right; border: none; background: none; color: var(--bad); cursor: pointer; font-size: .9rem; line-height: 1; }
+  .empty { color: var(--muted); font-size: .88rem; margin-top: .6rem; }
+  footer { margin-top: 2.5rem; font-size: .82rem; padding-top: 1rem; }
+  .toast {
+    position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: var(--bg); padding: .5rem 1rem; border-radius: 999px;
+    font-size: .88rem; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 20;
+  }
+  .toast.show { opacity: 1; }
+  /* print sheet */
+  @media print {
+    body * { visibility: hidden; }
+    #printArea, #printArea * { visibility: visible; }
+    #printArea { position: absolute; left: 0; top: 0; width: 100%; }
+    .sheet-item .x { display: none; }
+  }
+  #printArea { display: none; }
+  @media print { #printArea { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 8px; }
+    #printArea .sheet-item { break-inside: avoid; border-color: #ccc; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>QR Code Maker</h1>
+    <p class="tag">A complete QR encoder running in your browser — text, links, WiFi, phone and email. Nothing is uploaded.</p>
+  </header>
+
+  <div class="layout">
+    <div class="card">
+      <div class="tabs" id="presetTabs">
+        <button class="tab on" data-preset="text">Text / URL</button>
+        <button class="tab" data-preset="wifi">WiFi</button>
+        <button class="tab" data-preset="tel">Phone</button>
+        <button class="tab" data-preset="mail">Email</button>
+      </div>
+
+      <div class="field-group on" data-group="text">
+        <label class="fl" for="fText">Text or link</label>
+        <textarea id="fText" placeholder="https://example.com  ·  or any text">https://www.eff.org/</textarea>
+      </div>
+
+      <div class="field-group" data-group="wifi">
+        <label class="fl" for="fSsid">Network name (SSID)</label>
+        <input type="text" id="fSsid" placeholder="MyNetwork">
+        <label class="fl" for="fPass">Password</label>
+        <input type="text" id="fPass" placeholder="(leave blank if open)">
+        <label class="fl" id="lblEnc">Security</label>
+        <div class="seg" id="fEnc" role="group" aria-labelledby="lblEnc">
+          <button class="on" data-v="WPA">WPA/WPA2</button>
+          <button data-v="WEP">WEP</button>
+          <button data-v="nopass">None</button>
+        </div>
+        <label class="fl" style="margin-top:.8rem"><input type="checkbox" id="fHidden" style="width:auto;margin-right:.4rem">Hidden network</label>
+      </div>
+
+      <div class="field-group" data-group="tel">
+        <label class="fl" for="fTel">Phone number</label>
+        <input type="text" id="fTel" placeholder="+1 555 123 4567">
+      </div>
+
+      <div class="field-group" data-group="mail">
+        <label class="fl" for="fMail">Email address</label>
+        <input type="text" id="fMail" placeholder="someone@example.com">
+        <label class="fl" for="fSubj">Subject (optional)</label>
+        <input type="text" id="fSubj" placeholder="Hello">
+        <label class="fl" for="fBody">Message (optional)</label>
+        <input type="text" id="fBody" placeholder="…">
+      </div>
+
+      <div class="opt">
+        <label class="fl" id="lblEc">Error correction</label>
+        <div class="seg" id="ecPick" role="group" aria-labelledby="lblEc">
+          <button data-v="L">L · 7%</button>
+          <button class="on" data-v="M">M · 15%</button>
+          <button data-v="Q">Q · 25%</button>
+          <button data-v="H">H · 30%</button>
+        </div>
+      </div>
+
+      <div class="opt">
+        <label class="fl" for="scale">Module size — <span id="scaleVal">8</span> px</label>
+        <input type="range" id="scale" min="2" max="20" value="8">
+      </div>
+
+      <div class="err" id="err"></div>
+    </div>
+
+    <div class="card preview">
+      <canvas id="qrCanvas" width="200" height="200" role="img" aria-label="QR code"></canvas>
+      <div class="meta" id="meta">—</div>
+      <div class="btn-row">
+        <button class="btn" id="download">Download PNG</button>
+        <button class="btn ghost" id="addSheet">Add to sheet</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sheet-head">
+    <h2>Print sheet <span id="sheetCount" style="color:var(--muted);font-weight:500;font-size:.85rem"></span></h2>
+    <div class="btn-row">
+      <button class="btn ghost" id="clearSheet">Clear</button>
+      <button class="btn" id="printSheet">Print sheet</button>
+    </div>
+  </div>
+  <p class="empty" id="sheetEmpty">Add codes above to build a printable sheet — handy for labels, event tables, or a WiFi card by the door.</p>
+  <div class="sheet-list" id="sheetList"></div>
+
+  <footer>No network — everything happens on your machine. Encoder implements ISO/IEC 18004 byte mode, versions 1–10, with Reed–Solomon error correction.</footer>
+</div>
+
+<div id="printArea"></div>
+<div class="toast" id="toast">Copied</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* =====================================================================
+   QR ENCODER — byte mode, versions 1-10, EC L/M/Q/H.
+   Verified against ISO/IEC 18004 spec vectors and round-trip decoding.
+   ===================================================================== */
+const EXP = new Uint8Array(512), LOG = new Uint8Array(256);
+(function () {
+  let x = 1;
+  for (let i = 0; i < 255; i++) { EXP[i] = x; LOG[x] = i; x <<= 1; if (x & 0x100) x ^= 0x11d; }
+  for (let i = 255; i < 512; i++) EXP[i] = EXP[i - 255];
+})();
+function gmul(a, b) { if (a === 0 || b === 0) return 0; return EXP[LOG[a] + LOG[b]]; }
+function genPoly(n) {
+  let g = [1];
+  for (let i = 0; i < n; i++) {
+    const ng = new Array(g.length + 1).fill(0);
+    for (let j = 0; j < g.length; j++) { ng[j] ^= gmul(g[j], EXP[i]); ng[j + 1] ^= g[j]; }
+    g = ng;
+  }
+  return g.reverse();
+}
+function ecCodewords(data, n) {
+  const gen = genPoly(n);
+  const res = new Array(data.length + n).fill(0);
+  for (let i = 0; i < data.length; i++) res[i] = data[i];
+  for (let i = 0; i < data.length; i++) {
+    const coef = res[i];
+    if (coef !== 0) for (let j = 0; j < gen.length; j++) res[i + j] ^= gmul(gen[j], coef);
+  }
+  return res.slice(data.length);
+}
+const LVL = { L: 0, M: 1, Q: 2, H: 3 };
+const LVL_FMT = { L: 0b01, M: 0b00, Q: 0b11, H: 0b10 };
+const EC = {
+  1:  { L:[7,1,19,0,0], M:[10,1,16,0,0], Q:[13,1,13,0,0], H:[17,1,9,0,0] },
+  2:  { L:[10,1,34,0,0], M:[16,1,28,0,0], Q:[22,1,22,0,0], H:[28,1,16,0,0] },
+  3:  { L:[15,1,55,0,0], M:[26,1,44,0,0], Q:[18,2,17,0,0], H:[22,2,13,0,0] },
+  4:  { L:[20,1,80,0,0], M:[18,2,32,0,0], Q:[26,2,24,0,0], H:[16,4,9,0,0] },
+  5:  { L:[26,1,108,0,0], M:[24,2,43,0,0], Q:[18,2,15,2,16], H:[22,2,11,2,12] },
+  6:  { L:[18,2,68,0,0], M:[16,4,27,0,0], Q:[24,4,19,0,0], H:[28,4,15,0,0] },
+  7:  { L:[20,2,78,0,0], M:[18,4,31,0,0], Q:[18,2,14,4,15], H:[26,4,13,1,14] },
+  8:  { L:[24,2,97,0,0], M:[22,2,38,2,39], Q:[22,4,18,2,19], H:[26,4,14,2,15] },
+  9:  { L:[30,2,116,0,0], M:[22,3,36,2,37], Q:[20,4,16,4,17], H:[24,4,12,4,13] },
+  10: { L:[18,2,68,2,69], M:[26,4,43,1,44], Q:[24,6,19,2,20], H:[28,6,15,2,16] },
+};
+const ALIGN = {
+  1:[], 2:[6,18], 3:[6,22], 4:[6,26], 5:[6,30], 6:[6,34],
+  7:[6,22,38], 8:[6,24,42], 9:[6,26,46], 10:[6,28,50],
+};
+function totalDataCodewords(ver, lvl) { const [ec,g1,d1,g2,d2] = EC[ver][lvl]; return g1*d1 + g2*d2; }
+function ccBits(ver) { return ver <= 9 ? 8 : 16; }
+function chooseVersion(len, lvl) {
+  for (let v = 1; v <= 10; v++) {
+    const cap = totalDataCodewords(v, lvl);
+    const need = Math.ceil((4 + ccBits(v) + len * 8) / 8);
+    if (need <= cap) return v;
+  }
+  return -1;
+}
+function buildData(bytes, ver, lvl) {
+  const cap = totalDataCodewords(ver, lvl);
+  const bits = [];
+  const push = (val, n) => { for (let i = n - 1; i >= 0; i--) bits.push((val >> i) & 1); };
+  push(0b0100, 4);
+  push(bytes.length, ccBits(ver));
+  for (const b of bytes) push(b, 8);
+  const capBits = cap * 8;
+  for (let i = 0; i < 4 && bits.length < capBits; i++) bits.push(0);
+  while (bits.length % 8 !== 0) bits.push(0);
+  const cw = [];
+  for (let i = 0; i < bits.length; i += 8) { let b = 0; for (let j = 0; j < 8; j++) b = (b << 1) | bits[i + j]; cw.push(b); }
+  const pads = [0xEC, 0x11];
+  let pi = 0;
+  while (cw.length < cap) { cw.push(pads[pi & 1]); pi++; }
+  return cw;
+}
+function interleave(dataCw, ver, lvl) {
+  const [ecN, g1, d1, g2, d2] = EC[ver][lvl];
+  const blocks = []; let idx = 0;
+  for (let i = 0; i < g1; i++) { blocks.push(dataCw.slice(idx, idx + d1)); idx += d1; }
+  for (let i = 0; i < g2; i++) { blocks.push(dataCw.slice(idx, idx + d2)); idx += d2; }
+  const ecBlocks = blocks.map(b => ecCodewords(b, ecN));
+  const maxData = Math.max(d1, d2);
+  const out = [];
+  for (let i = 0; i < maxData; i++) for (const b of blocks) if (i < b.length) out.push(b[i]);
+  for (let i = 0; i < ecN; i++) for (const eb of ecBlocks) out.push(eb[i]);
+  return out;
+}
+function bchFormat(fmt) {
+  let d = fmt << 10; const g = 0b10100110111;
+  for (let i = 4; i >= 0; i--) if ((d >> (10 + i)) & 1) d ^= g << i;
+  return ((fmt << 10) | d) ^ 0b101010000010010;
+}
+function bchVersion(ver) {
+  let d = ver << 12; const g = 0b1111100100101;
+  for (let i = 5; i >= 0; i--) if ((d >> (12 + i)) & 1) d ^= g << i;
+  return (ver << 12) | d;
+}
+function buildMatrix(finalCw, ver, lvl, mask) {
+  const size = 17 + ver * 4;
+  const m = Array.from({ length: size }, () => new Array(size).fill(null));
+  const reserved = Array.from({ length: size }, () => new Array(size).fill(false));
+  const setF = (r, c, v) => { m[r][c] = v; reserved[r][c] = true; };
+  function finder(r, c) {
+    for (let i = -1; i <= 7; i++) for (let j = -1; j <= 7; j++) {
+      const rr = r + i, cc = c + j;
+      if (rr < 0 || rr >= size || cc < 0 || cc >= size) continue;
+      const on = (i >= 0 && i <= 6 && (j === 0 || j === 6)) ||
+                 (j >= 0 && j <= 6 && (i === 0 || i === 6)) ||
+                 (i >= 2 && i <= 4 && j >= 2 && j <= 4);
+      setF(rr, cc, on ? 1 : 0);
+    }
+  }
+  finder(0, 0); finder(0, size - 7); finder(size - 7, 0);
+  for (let i = 8; i < size - 8; i++) { setF(6, i, i % 2 === 0 ? 1 : 0); setF(i, 6, i % 2 === 0 ? 1 : 0); }
+  const ac = ALIGN[ver];
+  for (const r of ac) for (const c of ac) {
+    if ((r <= 8 && c <= 8) || (r <= 8 && c >= size - 9) || (r >= size - 9 && c <= 8)) continue;
+    for (let i = -2; i <= 2; i++) for (let j = -2; j <= 2; j++)
+      setF(r + i, c + j, Math.max(Math.abs(i), Math.abs(j)) !== 1 ? 1 : 0);
+  }
+  setF(size - 8, 8, 1);
+  for (let i = 0; i <= 8; i++) { reserved[8][i] = true; reserved[i][8] = true; }
+  for (let i = 0; i < 8; i++) { reserved[8][size - 1 - i] = true; reserved[size - 1 - i][8] = true; }
+  if (ver >= 7) for (let i = 0; i < 6; i++) for (let j = 0; j < 3; j++) {
+    reserved[i][size - 11 + j] = true; reserved[size - 11 + j][i] = true;
+  }
+  const bits = [];
+  for (const cw of finalCw) for (let i = 7; i >= 0; i--) bits.push((cw >> i) & 1);
+  let bi = 0, upward = true;
+  for (let col = size - 1; col > 0; col -= 2) {
+    if (col === 6) col--;
+    for (let k = 0; k < size; k++) {
+      const row = upward ? size - 1 - k : k;
+      for (let c = 0; c < 2; c++) {
+        const cc = col - c;
+        if (reserved[row][cc]) continue;
+        let v = bi < bits.length ? bits[bi++] : 0;
+        let inv = false;
+        switch (mask) {
+          case 0: inv = (row + cc) % 2 === 0; break;
+          case 1: inv = row % 2 === 0; break;
+          case 2: inv = cc % 3 === 0; break;
+          case 3: inv = (row + cc) % 3 === 0; break;
+          case 4: inv = (Math.floor(row / 2) + Math.floor(cc / 3)) % 2 === 0; break;
+          case 5: inv = ((row * cc) % 2) + ((row * cc) % 3) === 0; break;
+          case 6: inv = (((row * cc) % 2) + ((row * cc) % 3)) % 2 === 0; break;
+          case 7: inv = (((row + cc) % 2) + ((row * cc) % 3)) % 2 === 0; break;
+        }
+        m[row][cc] = v ^ (inv ? 1 : 0);
+      }
+    }
+    upward = !upward;
+  }
+  const fmtVal = bchFormat((LVL_FMT[lvl] << 3) | mask);
+  const fmtBits = [];
+  for (let i = 0; i <= 14; i++) fmtBits.push((fmtVal >> i) & 1);
+  const fp1 = [[0,8],[1,8],[2,8],[3,8],[4,8],[5,8],[7,8],[8,8],[8,7],[8,5],[8,4],[8,3],[8,2],[8,1],[8,0]];
+  const fp2 = [[8,size-1],[8,size-2],[8,size-3],[8,size-4],[8,size-5],[8,size-6],[8,size-7],[8,size-8],
+               [size-7,8],[size-6,8],[size-5,8],[size-4,8],[size-3,8],[size-2,8],[size-1,8]];
+  for (let i = 0; i < 15; i++) { m[fp1[i][0]][fp1[i][1]] = fmtBits[i]; m[fp2[i][0]][fp2[i][1]] = fmtBits[i]; }
+  if (ver >= 7) {
+    const vv = bchVersion(ver); const vb = [];
+    for (let i = 0; i < 18; i++) vb.push((vv >> i) & 1);
+    let k = 0;
+    for (let i = 0; i < 6; i++) for (let j = 0; j < 3; j++) {
+      const bit = vb[k++]; m[i][size - 11 + j] = bit; m[size - 11 + j][i] = bit;
+    }
+  }
+  return m;
+}
+function penalty(m) {
+  const n = m.length; let p = 0;
+  for (let r = 0; r < n; r++) {
+    let rc = 1, cc = 1;
+    for (let c = 1; c < n; c++) {
+      if (m[r][c] === m[r][c-1]) rc++; else { if (rc >= 5) p += 3 + (rc - 5); rc = 1; }
+      if (m[c][r] === m[c-1][r]) cc++; else { if (cc >= 5) p += 3 + (cc - 5); cc = 1; }
+    }
+    if (rc >= 5) p += 3 + (rc - 5);
+    if (cc >= 5) p += 3 + (cc - 5);
+  }
+  for (let r = 0; r < n - 1; r++) for (let c = 0; c < n - 1; c++) {
+    const v = m[r][c];
+    if (v === m[r][c+1] && v === m[r+1][c] && v === m[r+1][c+1]) p += 3;
+  }
+  const pat1 = [1,0,1,1,1,0,1,0,0,0,0], pat2 = [0,0,0,0,1,0,1,1,1,0,1];
+  for (let r = 0; r < n; r++) for (let c = 0; c <= n - 11; c++) {
+    let ok1 = true, ok2 = true;
+    for (let k = 0; k < 11; k++) { if (m[r][c+k] !== pat1[k]) ok1 = false; if (m[r][c+k] !== pat2[k]) ok2 = false; }
+    if (ok1 || ok2) p += 40;
+  }
+  for (let c = 0; c < n; c++) for (let r = 0; r <= n - 11; r++) {
+    let ok1 = true, ok2 = true;
+    for (let k = 0; k < 11; k++) { if (m[r+k][c] !== pat1[k]) ok1 = false; if (m[r+k][c] !== pat2[k]) ok2 = false; }
+    if (ok1 || ok2) p += 40;
+  }
+  let dark = 0; for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (m[r][c]) dark++;
+  p += Math.floor(Math.abs(dark / (n * n) * 100 - 50) / 5) * 10;
+  return p;
+}
+function qrEncode(text, lvl) {
+  const bytes = Array.from(new TextEncoder().encode(text));
+  const ver = chooseVersion(bytes.length, lvl);
+  if (ver < 0) throw new Error("Too much data — shorten the text or lower the error-correction level.");
+  const dataCw = buildData(bytes, ver, lvl);
+  const finalCw = interleave(dataCw, ver, lvl);
+  let best = null, bestP = Infinity, bestMask = 0;
+  for (let mask = 0; mask < 8; mask++) {
+    const mm = buildMatrix(finalCw, ver, lvl, mask);
+    const pp = penalty(mm);
+    if (pp < bestP) { bestP = pp; best = mm; bestMask = mask; }
+  }
+  return { matrix: best, version: ver, mask: bestMask };
+}
+
+/* ===== rendering ===== */
+const QUIET = 4;
+function renderTo(canvas, matrix, scale) {
+  const n = matrix.length;
+  const dim = (n + QUIET * 2) * scale;
+  canvas.width = dim; canvas.height = dim;
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, dim, dim);
+  ctx.fillStyle = "#000000";
+  for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
+    if (matrix[r][c]) ctx.fillRect((c + QUIET) * scale, (r + QUIET) * scale, scale, scale);
+  }
+}
+
+/* ===== payload building ===== */
+function wifiEscape(s) { return String(s).replace(/([\\;,:"])/g, "\\$1"); }
+let curPreset = "text";
+function buildPayload() {
+  if (curPreset === "text") return document.getElementById("fText").value;
+  if (curPreset === "wifi") {
+    const ssid = document.getElementById("fSsid").value;
+    const pass = document.getElementById("fPass").value;
+    const enc = document.querySelector("#fEnc button.on").dataset.v;
+    const hidden = document.getElementById("fHidden").checked;
+    if (!ssid) return "";
+    let s = "WIFI:T:" + (enc === "nopass" ? "nopass" : enc) + ";S:" + wifiEscape(ssid) + ";";
+    if (enc !== "nopass") s += "P:" + wifiEscape(pass) + ";";
+    if (hidden) s += "H:true;";
+    return s + ";";
+  }
+  if (curPreset === "tel") {
+    const t = document.getElementById("fTel").value.replace(/[^\d+]/g, "");
+    return t ? "tel:" + t : "";
+  }
+  if (curPreset === "mail") {
+    const addr = document.getElementById("fMail").value.trim();
+    if (!addr) return "";
+    const subj = document.getElementById("fSubj").value;
+    const body = document.getElementById("fBody").value;
+    const params = [];
+    if (subj) params.push("subject=" + encodeURIComponent(subj));
+    if (body) params.push("body=" + encodeURIComponent(body));
+    return "mailto:" + addr + (params.length ? "?" + params.join("&") : "");
+  }
+  return "";
+}
+
+/* ===== state & main render ===== */
+const canvas = document.getElementById("qrCanvas");
+const metaEl = Suite.liveRegion(document.getElementById("meta"));
+const errEl = Suite.liveRegion(document.getElementById("err"));
+let curLevel = "M", curScale = 8, lastPayload = "", lastResult = null;
+
+function refresh() {
+  errEl.textContent = "";
+  const payload = buildPayload();
+  lastPayload = payload;
+  if (!payload) {
+    metaEl.textContent = "Enter something to encode.";
+    const ctx = canvas.getContext("2d"); canvas.width = 200; canvas.height = 200;
+    ctx.clearRect(0, 0, 200, 200); lastResult = null;
+    return;
+  }
+  try {
+    const res = qrEncode(payload, curLevel);
+    lastResult = res;
+    renderTo(canvas, res.matrix, curScale);
+    metaEl.textContent = `Version ${res.version} · ${res.matrix.length}×${res.matrix.length} modules · EC ${curLevel} · mask ${res.mask}`;
+  } catch (e) {
+    lastResult = null;
+    errEl.textContent = e.message;
+    metaEl.textContent = "—";
+  }
+}
+
+/* preset tabs */
+document.querySelectorAll("#presetTabs .tab").forEach(t => {
+  t.addEventListener("click", () => {
+    document.querySelectorAll("#presetTabs .tab").forEach(x => x.classList.remove("on"));
+    t.classList.add("on");
+    curPreset = t.dataset.preset;
+    document.querySelectorAll(".field-group").forEach(g =>
+      g.classList.toggle("on", g.dataset.group === curPreset));
+    refresh();
+  });
+});
+/* WiFi security segmented */
+document.querySelectorAll("#fEnc button").forEach(b => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll("#fEnc button").forEach(x => x.classList.remove("on"));
+    b.classList.add("on");
+    document.getElementById("fPass").disabled = b.dataset.v === "nopass";
+    refresh();
+  });
+});
+/* EC level */
+document.querySelectorAll("#ecPick button").forEach(b => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll("#ecPick button").forEach(x => x.classList.remove("on"));
+    b.classList.add("on"); curLevel = b.dataset.v; refresh();
+  });
+});
+/* scale */
+const scaleEl = document.getElementById("scale");
+scaleEl.addEventListener("input", () => { curScale = +scaleEl.value; document.getElementById("scaleVal").textContent = curScale; refresh(); });
+/* live inputs */
+["fText","fSsid","fPass","fHidden","fTel","fMail","fSubj","fBody"].forEach(id =>
+  document.getElementById(id).addEventListener("input", refresh));
+
+/* toast */
+const toastEl = Suite.liveRegion(document.getElementById("toast"));
+let toastTimer;
+function toast(msg) { toastEl.textContent = msg; toastEl.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove("show"), 1400); }
+
+/* download */
+document.getElementById("download").addEventListener("click", () => {
+  if (!lastResult) { toast("Nothing to download yet"); return; }
+  const a = document.createElement("a");
+  a.href = canvas.toDataURL("image/png");
+  a.download = "qr-code.png";
+  a.click();
+});
+
+/* ===== print sheet ===== */
+let sheet = [];
+function renderSheet() {
+  const list = document.getElementById("sheetList");
+  const printArea = document.getElementById("printArea");
+  list.textContent = ""; printArea.textContent = "";
+  document.getElementById("sheetEmpty").style.display = sheet.length ? "none" : "block";
+  document.getElementById("sheetCount").textContent = sheet.length ? `(${sheet.length})` : "";
+  sheet.forEach((item, idx) => {
+    const mk = (removable) => {
+      const div = document.createElement("div"); div.className = "sheet-item";
+      if (removable) {
+        const x = document.createElement("button"); x.className = "x"; x.textContent = "✕";
+        x.title = "Remove"; x.setAttribute("aria-label", "Remove from sheet");
+        x.addEventListener("click", () => { sheet.splice(idx, 1); renderSheet(); });
+        div.append(x);
+      }
+      const cv = document.createElement("canvas");
+      renderTo(cv, item.matrix, 4);
+      const cap = document.createElement("div"); cap.className = "cap"; cap.textContent = item.label;
+      div.append(cv, cap);
+      return div;
+    };
+    list.append(mk(true));
+    printArea.append(mk(false));
+  });
+}
+document.getElementById("addSheet").addEventListener("click", () => {
+  if (!lastResult) { toast("Generate a code first"); return; }
+  sheet.push({ matrix: lastResult.matrix, label: lastPayload.slice(0, 60) });
+  renderSheet();
+  toast("Added to sheet");
+});
+document.getElementById("clearSheet").addEventListener("click", () => { sheet = []; renderSheet(); });
+document.getElementById("printSheet").addEventListener("click", () => {
+  if (!sheet.length) { toast("Sheet is empty"); return; }
+  window.print();
+});
+
+/* init */
+refresh();
+renderSheet();
+</script>
+</body>
+</html>
