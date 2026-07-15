@@ -124,7 +124,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 26 | air.html | sky | cors | — | B | | ✅ `tests/evidence/air/` |
 | 27 | spaceweather.html | sky | cors | — | B | grid flag was a planning artifact — v1 uses a local Kp/lat table; SWPC fetches cached 10 min | ✅ `tests/evidence/spaceweather/` |
 | 28 | tides.html | sky | cors | — | B | add `application=` param | ✅ `tests/evidence/tides/` |
-| 29 | marine.html | sky | cors | — | B | NDBC path stays descoped (no CORS) | ⬜ |
+| 29 | marine.html | sky | cors | — | B | NDBC path stays descoped (no CORS) | ✅ `tests/evidence/marine/` |
 | 30 | normals.html | sky | cors | — | B | NCEI gotchas in CATALOG | ⬜ |
 | 31 | quakes.html | earth | cors | — | B | | ✅ `tests/evidence/quakes/` |
 | 32 | rivers.html | earth | cors | — | B | legacy NWIS API sunsets ~Q1 2027 — confirm new API | ✅ `tests/evidence/rivers/` |

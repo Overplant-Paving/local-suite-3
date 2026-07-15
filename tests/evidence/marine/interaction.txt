@@ -1,0 +1,25 @@
+first-run visible on clean boot: true · app hidden: true
+invalid ZIP "12" -> error line: "Enter a 5-digit US ZIP code."
+location label: "Los Angeles, CA 90012"
+suite.location: {"lat":34.0614,"lon":-118.2385,"label":"Los Angeles, CA 90012"}
+status dot class: "statusdot ok" · updated: "updated 3:16 PM"
+tile[0]: "Wave height 2.1 ft Slight"
+tile[1]: "Wave period · direction 10 s ↑ from WSW (240°)"
+tile[2]: "Primary swell 1.4 ft 5 s · from W"
+tile[3]: "Wind 8 kn ↑ from SW · gust 9"
+tile[4]: "Sea-surface temp 72°F modeled SST"
+wave chart svg contents: {"paths":2,"lines":8,"texts":7} (expect 2 paths = area+line, gridlines/dividers/now, axis+day labels)
+NDBC link-out card: "🛟 Santa Monica Basin · #46025 ~52 mi away Open live buoy page →"
+NDBC link href: https://www.ndbc.noaa.gov/station_page.php?station=46025 target=_blank
+cache keys written: ["suite.cache.marine.34.061,-118.239.marine","suite.cache.marine.34.061,-118.239.wx","suite.cache.marine.zip.90012"]
+after "change": first-run visible true, app hidden true
+reload with saved location: app restored, updated: "updated 3:16 PM" (fresh-cache read, no new fetch)
+OFFLINE reload — status dot class: "statusdot stale" (expect "statusdot stale")
+OFFLINE reload — updated text: "cached 3:16 PM" (expect "cached <~24h-ago time>")
+OFFLINE reload — hero tiles still rendered from cache: 5
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

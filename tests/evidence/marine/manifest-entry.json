@@ -1,0 +1,23 @@
+{
+  "id": "marine",
+  "file": "marine.html",
+  "name": "Buoy & Marine Conditions",
+  "cat": "sky",
+  "cx": "M",
+  "desc": "Wave height, period, wind and water temp near you.",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": [
+    "https://marine-api.open-meteo.com",
+    "https://api.open-meteo.com",
+    "https://api.zippopotam.us"
+  ],
+  "storage": [
+    "suite.theme",
+    "suite.location",
+    "suite.cache.marine.*"
+  ],
+  "cacheTtlMin": 30,
+  "since": "v1",
+  "flags": []
+}

@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buoy &amp; Marine Conditions · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents (3-layer, same pattern as core) */
+  :root{ --wave:#3a86a8; --swell:#2f6f6a; --wind:#7a6cc4; --temp:#c07a3a; }
+  @media (prefers-color-scheme: dark){
+    :root{ --wave:#6bb6d6; --swell:#6fb5ae; --wind:#a99ce0; --temp:#d99a5a; }
+  }
+  :root[data-theme="light"]{ --wave:#3a86a8; --swell:#2f6f6a; --wind:#7a6cc4; --temp:#c07a3a; }
+  :root[data-theme="dark"]{ --wave:#6bb6d6; --swell:#6fb5ae; --wind:#a99ce0; --temp:#d99a5a; }
+
+  body{ padding:1.4rem 1.25rem 4rem; }
+  .wrap{ max-width:960px; margin:0 auto; }
+  .topbar{ display:flex; align-items:center; gap:.8rem; margin-bottom:1rem; }
+  /* v1's back link is a muted pill, not core's plain accent link */
+  .back{ text-decoration:none; color:var(--muted); font-size:.9rem; border:1px solid var(--line);
+    background:var(--card); border-radius:999px; padding:.3rem .8rem; white-space:nowrap; }
+  .back:hover{ color:var(--accent); border-color:var(--accent); text-decoration:none; }
+  .spacer{ flex:1; }
+  .theme-btn{ float:none; } /* v1 positions it with the flex .topbar, not core's float */
+  header h1{ font-size:1.7rem; letter-spacing:-.02em; }
+  header .tag{ color:var(--muted); margin-top:.25rem; font-size:.95rem; }
+  .statusdot{ display:inline-block; width:.5rem; height:.5rem; border-radius:50%; background:var(--line); margin-right:.35rem; }
+  .statusdot.ok{ background:var(--built); } .statusdot.stale{ background:var(--temp); } .statusdot.err{ background:#c0523b; }
+  .locbar{ display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; margin:1rem 0 .3rem; }
+  .locbar b{ font-weight:600; } .locbar .meta{ color:var(--muted); font-size:.85rem; }
+  .mini{ border:1px solid var(--line); background:var(--card); color:var(--accent);
+    border-radius:999px; padding:.2rem .7rem; cursor:pointer; font-size:.8rem; }
+  .hero{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.9rem; margin-top:1rem; }
+  .tile{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:1rem 1.1rem;
+    box-shadow:var(--shadow); }
+  .tile .k{ font-size:.72rem; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); }
+  .tile .v{ font-size:2rem; font-weight:600; line-height:1.05; margin-top:.25rem; }
+  .tile .v small{ font-size:.9rem; color:var(--muted); font-weight:400; }
+  .tile .x{ font-size:.85rem; color:var(--muted); margin-top:.15rem; }
+  .tile.wave .v{ color:var(--wave); } .tile.swell .v{ color:var(--swell); }
+  .tile.wind .v{ color:var(--wind); } .tile.temp .v{ color:var(--temp); }
+  .dir{ display:inline-block; transition:transform .3s; }
+  /* v1's card is a plain block with its own padding, not core's flex column */
+  .card{ padding:1.1rem 1.15rem; display:block; flex-direction:row; gap:normal; margin-top:.9rem; }
+  .card h2{ font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
+    font-weight:600; margin-bottom:.7rem; }
+  #waveChart{ width:100%; height:auto; display:block; }
+  .ndbc{ display:flex; align-items:center; gap:.8rem; flex-wrap:wrap; }
+  .ndbc .buoy{ font-weight:600; }
+  .ndbc .d{ color:var(--muted); font-size:.85rem; }
+  footer{ margin-top:2.5rem; font-size:.82rem; padding-top:1rem; } /* v1 is tighter than core's footer */
+  .msg{ padding:1.4rem; text-align:center; color:var(--muted); }
+  .msg .big{ font-size:1.05rem; color:var(--ink); margin-bottom:.4rem; }
+  .firstrun{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:1.4rem;
+    box-shadow:var(--shadow); max-width:460px; margin:1.5rem auto; }
+  .firstrun h2{ font-size:1.1rem; margin-bottom:.5rem; } .firstrun p{ color:var(--muted); font-size:.9rem; margin-bottom:1rem; }
+  .fld{ display:flex; gap:.5rem; margin-bottom:.7rem; }
+  .fld input{ flex:1; border:1px solid var(--line); background:var(--bg); color:var(--ink); border-radius:9px;
+    padding:.6rem .7rem; font-size:1rem; }
+  .btn{ border:none; border-radius:9px; padding:.6rem .9rem; cursor:pointer; font-weight:600; font-size:.9rem;
+    background:var(--accent); color:#fff; }
+  .btn.ghost{ background:transparent; border:1px solid var(--line); color:var(--ink); }
+  .err{ color:#b0472f; font-size:.85rem; margin-top:.3rem; min-height:1.1em; }
+  .hidden{ display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <div class="spacer"></div>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Buoy &amp; Marine Conditions</h1>
+    <p class="tag">Wave height, period and direction, plus wind and sea-surface temperature for your coast.</p>
+  </header>
+
+  <div id="firstrun" class="firstrun hidden">
+    <h2>Where are you?</h2>
+    <p>Enter a coastal US ZIP code, or use your device location. Marine data is modeled offshore of your point.</p>
+    <div class="fld"><input id="zipIn" inputmode="numeric" placeholder="ZIP code (e.g. 92101)" maxlength="5" aria-label="US ZIP code"><button class="btn" id="zipBtn">Set</button></div>
+    <button class="btn ghost" id="geoBtn">Use my location</button>
+    <div class="err" id="frErr"></div>
+  </div>
+
+  <div id="app" class="hidden">
+    <div class="locbar">
+      <span><span class="statusdot" id="statusDot" aria-hidden="true"></span>📍 <b id="locLabel">—</b></span>
+      <button class="mini" id="changeLoc">change</button>
+      <span class="spacer"></span>
+      <span class="meta" id="updated"></span>
+    </div>
+    <div id="content">
+      <div class="card"><div class="msg">Loading marine conditions…</div></div>
+    </div>
+  </div>
+
+  <footer id="footer">
+    Data: Open-Meteo Marine &amp; Weather APIs (keyless). Wave data is model output, not a live buoy reading.
+    NDBC's real-time buoy feeds block browser access, so this tool links out to the nearest buoy's page instead.
+  </footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* the chart bakes computed CSS-var colors into inline SVG, so re-render on theme flip
+   (v1 did this inside its own theme-toggle handler; core owns the toggle now) */
+document.getElementById("themeBtn").addEventListener("click", () => { if (lastData) render(lastData); });
+
+/* ---------- location (shared suite.location) ---------- */
+function getLoc(){ return Suite.location.get(); }
+function setLoc(o){ Suite.location.set(o); }
+let loc=getLoc();
+
+/* ---------- NDBC buoys (validated vs activestations.xml, Jul 2026) — for link-out only ----------
+   NDBC's realtime2 .txt feeds send no CORS headers, so a browser page can't fetch them
+   (API-AND-RELAY.md §1: NDBC stays descoped — Open-Meteo covers marine). This table only
+   powers the nearest-buoy link-out card below. */
+const BUOYS=[
+  {id:"46042",n:"Monterey",lat:36.787,lon:-122.408},{id:"46026",n:"San Francisco",lat:37.75,lon:-122.838},
+  {id:"46012",n:"Half Moon Bay",lat:37.356,lon:-122.881},{id:"46232",n:"Point Loma South",lat:32.517,lon:-117.425},
+  {id:"46086",n:"San Clemente Basin",lat:32.504,lon:-118.029},{id:"46025",n:"Santa Monica Basin",lat:33.765,lon:-119.077},
+  {id:"46047",n:"Tanner Bank",lat:32.418,lon:-119.535},{id:"46050",n:"Stonewall Bank (Newport)",lat:44.679,lon:-124.535},
+  {id:"46029",n:"Columbia River Bar",lat:46.148,lon:-124.508},{id:"46041",n:"Cape Elizabeth",lat:47.352,lon:-124.739},
+  {id:"51201",n:"Waimea Bay",lat:21.671,lon:-158.118},{id:"51211",n:"Pearl Harbor Entrance",lat:21.297,lon:-157.959},
+  {id:"44013",n:"Boston",lat:42.346,lon:-70.651},{id:"44025",n:"Long Island (Islip)",lat:40.258,lon:-73.175},
+  {id:"44065",n:"New York Harbor Entrance",lat:40.368,lon:-73.701},{id:"44009",n:"Delaware Bay",lat:38.46,lon:-74.692},
+  {id:"44014",n:"Virginia Beach",lat:36.603,lon:-74.837},{id:"41002",n:"South Hatteras",lat:31.743,lon:-74.955},
+  {id:"41008",n:"Grays Reef (Savannah)",lat:31.4,lon:-80.866},{id:"41009",n:"Canaveral",lat:28.508,lon:-80.185},
+  {id:"41114",n:"Fort Pierce",lat:27.552,lon:-80.216},{id:"42036",n:"West Tampa",lat:28.5,lon:-84.505},
+  {id:"42039",n:"Pensacola",lat:28.768,lon:-86.024},{id:"42040",n:"Mobile South",lat:29.207,lon:-88.237},
+  {id:"42035",n:"Galveston",lat:29.235,lon:-94.41},{id:"42020",n:"Corpus Christi",lat:26.97,lon:-96.679},
+  {id:"45007",n:"South Michigan",lat:42.674,lon:-87.026},{id:"45002",n:"North Michigan",lat:45.344,lon:-86.411},
+];
+
+/* ---------- helpers ---------- */
+function haversine(a,b,c,d){ const R=3959,rad=Math.PI/180; const dLat=(c-a)*rad,dLon=(d-b)*rad;
+  const s=Math.sin(dLat/2)**2 + Math.cos(a*rad)*Math.cos(c*rad)*Math.sin(dLon/2)**2; return 2*R*Math.asin(Math.sqrt(s)); }
+function compass(deg){ if (deg==null||isNaN(deg)) return "—";
+  const dirs=["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"]; return dirs[Math.round(deg/22.5)%16]; }
+const esc = Suite.esc;
+function fmtClock(d){ return d.toLocaleTimeString([], {hour:"numeric", minute:"2-digit"}); }
+function seaState(ft){ // Douglas-ish descriptor by significant wave height (feet)
+  if (ft==null) return ""; if (ft<0.3) return "Calm (glassy)"; if (ft<1.6) return "Smooth";
+  if (ft<4) return "Slight"; if (ft<8) return "Moderate"; if (ft<13) return "Rough";
+  if (ft<20) return "Very rough"; if (ft<30) return "High"; return "Very high"; }
+
+/* ---------- load ---------- */
+const TTL = 30 * 60 * 1000; // manifest cacheTtlMin: 30 — the wave model updates only a few times a day;
+                            // current wind (15-min model steps) is the fastest-moving datum on the page
+let lastData=null;
+const $=s=>document.querySelector(s);
+function setStatus(s){ $("#statusDot").className="statusdot "+s; }
+
+async function load(){
+  if (!loc) return;
+  $("#locLabel").textContent = loc.label || `${loc.lat.toFixed(3)}, ${loc.lon.toFixed(3)}`;
+  setStatus("stale");
+  $("#content").innerHTML = `<div class="card"><div class="msg">Loading marine conditions…</div></div>`;
+  const la=loc.lat.toFixed(3), lo=loc.lon.toFixed(3);
+  /* sea_surface_temperature moved to the marine request: the forecast API now returns all-null
+     for it (verified Jul 2026), which left v1's water-temp tile permanently "not modeled here".
+     The marine API serves real SST for the same snapped ocean cell as the waves. */
+  const marineURL=`https://marine-api.open-meteo.com/v1/marine?latitude=${la}&longitude=${lo}`
+    +`&hourly=wave_height,wave_period,wave_direction,swell_wave_height,swell_wave_period,swell_wave_direction,wind_wave_height,sea_surface_temperature`
+    +`&timezone=auto&length_unit=imperial&temperature_unit=fahrenheit&forecast_days=3`;
+  const wxURL=`https://api.open-meteo.com/v1/forecast?latitude=${la}&longitude=${lo}`
+    +`&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m`
+    +`&wind_speed_unit=kn&timezone=auto`;
+  const key=la+","+lo;
+  // policy-mandated TTL cache per request (Suite.fetchJSON handles the {t,v} envelope and stale fallback)
+  const get=(k,url)=>Suite.fetchJSON(url,{cacheKey:`marine.${key}.${k}`,ttl:TTL,tries:2});
+  try{
+    const [mR,wR]=await Promise.allSettled([ get("marine",marineURL), get("wx",wxURL) ]);
+    const data={ loc:{lat:loc.lat,lon:loc.lon,label:loc.label} };
+    let anyStale=false, oldestT=null;
+    const note=r=>{ if (r.value.stale) anyStale=true; oldestT=oldestT==null?r.value.t:Math.min(oldestT,r.value.t); return r.value.v; };
+    if (mR.status==="fulfilled") data.marine=note(mR); else if (mR.reason) data.marineErr=String(mR.reason.message||mR.reason);
+    if (wR.status==="fulfilled") data.wx=note(wR);
+    if (!data.marine && !data.wx) throw (mR.reason || new Error("Both marine and weather requests failed."));
+    data.when=oldestT||Date.now();
+    lastData=data; render(data);
+    if (anyStale){ setStatus("stale");
+      $("#updated").textContent="cached "+new Date(oldestT).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"}); }
+    else { setStatus("ok"); $("#updated").textContent="updated "+fmtClock(new Date(oldestT||Date.now())); }
+  }catch(e){
+    setStatus("err"); $("#updated").textContent="";
+    $("#content").innerHTML=`<div class="card"><div class="msg"><div class="big">Couldn't load marine data</div>${esc(e.message||String(e))}<br><br>Check your connection and try again.</div></div>`;
+  }
+}
+
+/* find hourly index nearest to now */
+function nearestHourIdx(times){
+  const now=Date.now(); let best=0, bd=Infinity;
+  for (let i=0;i<times.length;i++){ const d=Math.abs(new Date(times[i]).getTime()-now); if (d<bd){ bd=d; best=i; } }
+  return best;
+}
+
+function render(data){
+  const m=data.marine, wx=data.wx;
+  let waveH=null,waveP=null,waveD=null,swH=null,swP=null,swD=null, waveTimes=null, waveSeries=null, idx=0;
+  if (m && m.hourly && m.hourly.time){
+    idx=nearestHourIdx(m.hourly.time); waveTimes=m.hourly.time;
+    const h=m.hourly;
+    waveH=val(h.wave_height,idx); waveP=val(h.wave_period,idx); waveD=val(h.wave_direction,idx);
+    swH=val(h.swell_wave_height,idx); swP=val(h.swell_wave_period,idx); swD=val(h.swell_wave_direction,idx);
+    waveSeries=h.wave_height;
+  }
+  let windS=null,windD=null,gust=null;
+  if (wx && wx.current){ windS=val([wx.current.wind_speed_10m],0); windD=val([wx.current.wind_direction_10m],0); gust=val([wx.current.wind_gusts_10m],0); }
+  let sst=null;
+  if (m && m.hourly && m.hourly.sea_surface_temperature){ sst=val(m.hourly.sea_surface_temperature,idx); }
+  else if (wx && wx.hourly && wx.hourly.sea_surface_temperature){ const wi=nearestHourIdx(wx.hourly.time); sst=val(wx.hourly.sea_surface_temperature,wi); }
+
+  const inland = (waveH==null && swH==null);
+
+  // nearest buoy
+  const buoy=BUOYS.map(b=>({b,d:haversine(data.loc.lat,data.loc.lon,b.lat,b.lon)})).sort((x,y)=>x.d-y.d)[0];
+
+  /* every dynamic value below is either null-checked numeric output (toFixed / Math.round on
+     val()-coerced finite numbers), a fixed local string (seaState / compass tables), or esc()'d */
+  const hero = `
+    <div class="hero">
+      <div class="tile wave"><div class="k">Wave height</div>
+        <div class="v">${waveH!=null?waveH.toFixed(1):"—"} <small>ft</small></div>
+        <div class="x">${waveH!=null?seaState(waveH):(inland?"inland — no waves":"unavailable")}</div></div>
+      <div class="tile wave"><div class="k">Wave period · direction</div>
+        <div class="v" style="font-size:1.6rem">${waveP!=null?waveP.toFixed(0)+" s":"—"}</div>
+        <div class="x">${waveD!=null?`<span class="dir" aria-hidden="true" style="transform:rotate(${waveD}deg)">↑</span> from ${compass(waveD)} (${Math.round(waveD)}°)`:""}</div></div>
+      <div class="tile swell"><div class="k">Primary swell</div>
+        <div class="v" style="font-size:1.6rem">${swH!=null?swH.toFixed(1)+" ft":"—"}</div>
+        <div class="x">${swP!=null?swP.toFixed(0)+" s":""}${swD!=null?` · from ${compass(swD)}`:""}</div></div>
+      <div class="tile wind"><div class="k">Wind</div>
+        <div class="v" style="font-size:1.6rem">${windS!=null?Math.round(windS)+" kn":"—"}</div>
+        <div class="x">${windD!=null?`<span class="dir" aria-hidden="true" style="transform:rotate(${windD}deg)">↑</span> from ${compass(windD)}`:""}${gust!=null?` · gust ${Math.round(gust)}`:""}</div></div>
+      <div class="tile temp"><div class="k">Sea-surface temp</div>
+        <div class="v">${sst!=null?Math.round(sst)+"°":"—"}<small>${sst!=null?"F":""}</small></div>
+        <div class="x">${sst!=null?"modeled SST":"not modeled here"}</div></div>
+    </div>`;
+
+  const chartCard = (waveSeries && waveTimes && !inland) ? `
+    <div class="card">
+      <h2>Wave height — next 3 days (ft)</h2>
+      <svg id="waveChart" viewBox="0 0 660 200" preserveAspectRatio="none" role="img" aria-label="Wave height forecast"></svg>
+    </div>` : (inland ? `
+    <div class="card"><div class="msg">
+      <div class="big">This looks like an inland location</div>
+      Open-Meteo's wave model returns no data here. Set a coastal location to see surf and swell.</div></div>` : "");
+
+  const ndbcCard = `
+    <div class="card">
+      <h2>Nearest NDBC buoy</h2>
+      <div class="ndbc">
+        <span class="buoy">🛟 ${esc(buoy.b.n)} · #${esc(buoy.b.id)}</span>
+        <span class="d">~${Math.round(buoy.d)} mi away</span>
+        <a href="https://www.ndbc.noaa.gov/station_page.php?station=${encodeURIComponent(buoy.b.id)}" target="_blank" rel="noopener">Open live buoy page →</a>
+      </div>
+      <p style="color:var(--muted);font-size:.83rem;margin-top:.6rem">
+        Real-time buoy observations (actual measured waves, wind, and water temp) live on NDBC's site.
+        Their data feed can't be read directly by a browser, so this opens the official page in a new tab.</p>
+    </div>`;
+
+  $("#content").innerHTML = hero + chartCard + ndbcCard +
+    (data.marineErr && !inland ? `<div class="card"><div class="msg" style="padding:.7rem">Wave model note: ${esc(data.marineErr)}</div></div>` : "");
+
+  if (waveSeries && waveTimes && !inland) drawWaveChart(waveTimes, waveSeries);
+}
+/* coerce to a finite Number so every downstream toFixed/Math.round/interpolation is provably numeric */
+function val(arr,i){ if (!arr || arr[i]==null) return null; const n=Number(arr[i]); return isFinite(n)?n:null; }
+
+function drawWaveChart(times, series){
+  const svg=$("#waveChart"); if (!svg) return;
+  const W=660,H=200,pad={l:30,r:10,t:14,b:22};
+  const css=getComputedStyle(document.documentElement);
+  const wave=(css.getPropertyValue("--wave")||"#3a86a8").trim();
+  const line=(css.getPropertyValue("--line")||"#e4e0d6").trim();
+  const muted=(css.getPropertyValue("--muted")||"#6b7280").trim();
+  const pts=[]; for (let i=0;i<times.length;i++){ const v=val(series,i); if (v!=null) pts.push({t:new Date(times[i]).getTime(), v}); }
+  if (!pts.length){ svg.innerHTML=""; return; }
+  let vmax=Math.max(...pts.map(p=>p.v)); vmax=Math.max(vmax*1.15, 1);
+  const t0=pts[0].t, t1=pts[pts.length-1].t;
+  const X=t=>pad.l+(t-t0)/(t1-t0)*(W-pad.l-pad.r);
+  const Y=v=>pad.t+(1-v/vmax)*(H-pad.t-pad.b);
+  let s="";
+  const rows=3;
+  for (let i=0;i<=rows;i++){ const v=vmax*i/rows, y=Y(v);
+    s+=`<line x1="${pad.l}" y1="${y.toFixed(1)}" x2="${W-pad.r}" y2="${y.toFixed(1)}" stroke="${line}"/>`;
+    s+=`<text x="${pad.l-4}" y="${(y+3).toFixed(1)}" text-anchor="end" font-size="10" fill="${muted}">${v.toFixed(0)}</text>`; }
+  // day dividers + labels
+  for (const p of pts){ const d=new Date(p.t); if (d.getHours()===0){ const x=X(p.t);
+    s+=`<line x1="${x.toFixed(1)}" y1="${pad.t}" x2="${x.toFixed(1)}" y2="${H-pad.b}" stroke="${line}" stroke-dasharray="2 4"/>`;
+    s+=`<text x="${(x+4).toFixed(1)}" y="${H-pad.b+14}" font-size="10" fill="${muted}">${d.toLocaleDateString([], {weekday:"short"})}</text>`; } }
+  let dLine="",dArea="";
+  pts.forEach((p,i)=>{ const x=X(p.t).toFixed(1), y=Y(p.v).toFixed(1); dLine+=(i===0?"M":"L")+x+" "+y+" "; });
+  dArea=dLine+`L ${X(t1).toFixed(1)} ${H-pad.b} L ${X(t0).toFixed(1)} ${H-pad.b} Z`;
+  s+=`<path d="${dArea}" fill="${wave}" opacity="0.13"/>`;
+  s+=`<path d="${dLine}" fill="none" stroke="${wave}" stroke-width="2.2" stroke-linejoin="round"/>`;
+  // now line
+  const now=Date.now(); if (now>=t0&&now<=t1){ const x=X(now); s+=`<line x1="${x.toFixed(1)}" y1="${pad.t}" x2="${x.toFixed(1)}" y2="${H-pad.b}" stroke="${wave}" stroke-width="1.5"/>`; }
+  svg.innerHTML=s;
+}
+
+/* ---------- first-run + location ---------- */
+const firstrun=$("#firstrun"), appEl=$("#app");
+function showApp(){ firstrun.classList.add("hidden"); appEl.classList.remove("hidden"); load(); }
+function showFirstRun(){ appEl.classList.add("hidden"); firstrun.classList.remove("hidden"); $("#frErr").textContent=""; }
+
+async function zipLookup(zip){
+  // cached per policy (API-AND-RELAY.md §2) — v1 fetched this uncached
+  const r=await Suite.fetchJSON(`https://api.zippopotam.us/us/${zip}`,{cacheKey:"marine.zip."+zip,ttl:TTL,accept:"application/json"});
+  const p=r.v.places&&r.v.places[0]; if (!p) throw new Error("ZIP not found");
+  return { lat:parseFloat(p.latitude), lon:parseFloat(p.longitude), label:`${p["place name"]}, ${p["state abbreviation"]} ${zip}` };
+}
+$("#zipBtn").addEventListener("click", async()=>{ const zip=$("#zipIn").value.trim(); const err=$("#frErr");
+  if (!/^\d{5}$/.test(zip)){ err.textContent="Enter a 5-digit US ZIP code."; return; }
+  err.textContent="Looking up…";
+  try{ loc=await zipLookup(zip); setLoc(loc); err.textContent=""; showApp(); }
+  catch(e){ err.textContent="Couldn't find that ZIP."; } });
+$("#zipIn").addEventListener("keydown",e=>{ if (e.key==="Enter") $("#zipBtn").click(); });
+$("#geoBtn").addEventListener("click", ()=>{ const err=$("#frErr");
+  if (!navigator.geolocation){ err.textContent="Geolocation unavailable — use a ZIP."; return; }
+  err.textContent="Locating…";
+  navigator.geolocation.getCurrentPosition(
+    pos=>{ loc={lat:pos.coords.latitude,lon:pos.coords.longitude,label:`${pos.coords.latitude.toFixed(3)}, ${pos.coords.longitude.toFixed(3)}`}; setLoc(loc); err.textContent=""; showApp(); },
+    e=>{ err.textContent="Couldn't get location ("+e.message+"). Try a ZIP — geolocation may need http://localhost."; }); });
+$("#changeLoc").addEventListener("click", showFirstRun);
+
+/* refresh on focus (gentle) */
+document.addEventListener("visibilitychange",()=>{ if (!document.hidden && loc && lastData && Date.now()-lastData.when>10*60*1000) load(); });
+
+/* ---------- boot ---------- */
+Suite.liveRegion($("#content"));
+Suite.liveRegion($("#updated"));
+Suite.liveRegion($("#frErr"));
+if (loc) showApp(); else showFirstRun();
+</script>
+</body>
+</html>
