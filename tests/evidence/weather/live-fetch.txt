@@ -1,0 +1,19 @@
+== live NWS fetch record ==
+station line: Los Angeles, CA · LOX 155,45 · 34.052, -118.244 change
+updated line: updated 11:41 AM
+obs station: FHMC1
+current:  80°F — Feels like 81°F WindSSE 2 mphHumidity54%Dew point62°FPressure—Visibility—Gusts— 
+hourly cells: 12
+daily rows: 7
+sun strip: sunrise=7:53 AM sunset=10:06 PM
+status dot class: dot
+cache keys written: suite.cache.weather.obs_FHMC1_34.052_-118.244, suite.cache.weather.stations_34.052_-118.244, suite.cache.weather.points_34.052_-118.244, suite.cache.weather.hourly_34.052_-118.244, suite.cache.weather.forecast_34.052_-118.244, suite.cache.weather.alerts_34.052_-118.244
+
+== https responses ==
+200 https://api.weather.gov/points/34.0522,-118.2437
+200 https://radar.weather.gov/ridge/standard/KSOX_loop.gif
+200 https://api.weather.gov/gridpoints/LOX/155,45/forecast
+200 https://api.weather.gov/gridpoints/LOX/155,45/stations
+200 https://api.weather.gov/gridpoints/LOX/155,45/forecast/hourly
+200 https://api.weather.gov/alerts/active?point=34.0522,-118.2437
+200 https://api.weather.gov/stations/FHMC1/observations/latest

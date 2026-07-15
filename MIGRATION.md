@@ -96,7 +96,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | # | File | Category | Net | Key | Batch | Flags | Done |
 |---|---|---|---|---|---|---|---|
 | 1 | focus.html | time | off | — | Pilot | XP added here (was missing — data-loss fix) | ✅ `tests/evidence/focus/` |
-| 2 | weather.html | sky | cors | — | Pilot | | ⬜ |
+| 2 | weather.html | sky | cors | — | Pilot | | ✅ `tests/evidence/weather/` |
 | — | index.html (hub) | — | off | — | Pilot | generated from manifest | ⬜ |
 | 3 | almanac.html | sky | off | — | A | | ⬜ |
 | 4 | holidays.html | civic | off | — | A | | ⬜ |

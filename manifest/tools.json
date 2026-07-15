@@ -21,6 +21,30 @@
       "flags": [
         "xp"
       ]
+    },
+    {
+      "id": "weather",
+      "file": "weather.html",
+      "name": "Weather Station",
+      "cat": "sky",
+      "cx": "M",
+      "desc": "Current conditions, forecast and details for your saved location. The original.",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://api.weather.gov",
+        "https://api.zippopotam.us",
+        "https://radar.weather.gov"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.location",
+        "suite.units",
+        "suite.cache.weather.*"
+      ],
+      "cacheTtlMin": 10,
+      "since": "v1",
+      "flags": []
     }
   ]
 }

@@ -1,0 +1,4 @@
+== network blocked, reload ==
+updated line: offline — data from 10:42 AM
+status dot class: dot stale
+current rendered from cache:  80°F — Feels like 81°F WindSSE 2 mphHumidity54%Dew point62°FPressure—Visibility—Gusts— 

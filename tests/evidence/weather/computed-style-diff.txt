@@ -1,0 +1,6 @@
+== computed-style diff, light theme (0 differing property values) ==
+(none)
+
+== computed-style diff, dark theme (0 differing property values) ==
+(none)
+

@@ -1,0 +1,26 @@
+{
+  "v1": {
+    "suite.cache.weather.obs_FHMC1_34.052_-118.244": "{\"t\":1784133729060,\"v\":{\"@context\":[\"https://geojson.org/geojson-ld/geojson-context.jsonld\",{\"@version\":\"1.1\",\"wx\":\"http…(2407 chars)",
+    "suite.cache.weather.stations_34.052_-118.244": "{\"t\":1784133728902,\"v\":{\"@context\":[\"https://geojson.org/geojson-ld/geojson-context.jsonld\",{\"@version\":\"1.1\",\"wx\":\"http…(48483 chars)",
+    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
+    "suite.units": "F",
+    "suite.cache.weather.points_34.052_-118.244": "{\"t\":1784133728840,\"v\":{\"@context\":[\"https://geojson.org/geojson-ld/geojson-context.jsonld\",{\"@version\":\"1.1\",\"wx\":\"http…(2492 chars)",
+    "suite.cache.weather.hourly_34.052_-118.244": "{\"t\":1784133728902,\"v\":{\"@context\":[\"https://geojson.org/geojson-ld/geojson-context.jsonld\",{\"@version\":\"1.1\",\"wx\":\"http…(84065 chars)",
+    "suite.cache.weather.forecast_34.052_-118.244": "{\"t\":1784133728900,\"v\":{\"@context\":[\"https://geojson.org/geojson-ld/geojson-context.jsonld\",{\"@version\":\"1.1\",\"wx\":\"http…(7422 chars)",
+    "suite.cache.weather.alerts_34.052_-118.244": "{\"t\":1784133728990,\"v\":{\"@context\":[\"https://geojson.org/geojson-ld/geojson-context.jsonld\",{\"@version\":\"1.1\",\"wx\":\"http…(4458 chars)",
+    "suite.theme": "light"
+  },
+  "v2": {
+    "suite.cache.weather.obs_FHMC1_34.052_-118.244": "{\"t\":1784133719609,\"v\":{\"@context\":[\"https://geojson.org/geojson-ld/geojson-context.jsonld\",{\"@version\":\"1.1\",\"wx\":\"http…(2407 chars)",
+    "suite.cache.weather.stations_34.052_-118.244": "{\"t\":1784133719493,\"v\":{\"@context\":[\"https://geojson.org/geojson-ld/geojson-context.jsonld\",{\"@version\":\"1.1\",\"wx\":\"http…(48483 chars)",
+    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
+    "suite.units": "F",
+    "suite.cache.weather.points_34.052_-118.244": "{\"t\":1784133719438,\"v\":{\"@context\":[\"https://geojson.org/geojson-ld/geojson-context.jsonld\",{\"@version\":\"1.1\",\"wx\":\"http…(2492 chars)",
+    "suite.cache.weather.hourly_34.052_-118.244": "{\"t\":1784133719498,\"v\":{\"@context\":[\"https://geojson.org/geojson-ld/geojson-context.jsonld\",{\"@version\":\"1.1\",\"wx\":\"http…(84065 chars)",
+    "suite.cache.weather.forecast_34.052_-118.244": "{\"t\":1784133719490,\"v\":{\"@context\":[\"https://geojson.org/geojson-ld/geojson-context.jsonld\",{\"@version\":\"1.1\",\"wx\":\"http…(7422 chars)",
+    "suite.cache.weather.alerts_34.052_-118.244": "{\"t\":1784133719580,\"v\":{\"@context\":[\"https://geojson.org/geojson-ld/geojson-context.jsonld\",{\"@version\":\"1.1\",\"wx\":\"http…(4458 chars)",
+    "suite.theme": "light"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}
