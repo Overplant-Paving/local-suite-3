@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Food Recall Alerts · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents: recall classification scale (3-layer, same pattern as core) */
+  :root {
+    --c1: #c0492d; --c2: #b0752a; --c3: #6b7280;
+    --c1-soft: #f6e2dc; --c2-soft: #f4ead6; --c3-soft: #eceae4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c1: #e0765a; --c2: #d3a25a; --c3: #9aa0a8;
+      --c1-soft: #3a231c; --c2-soft: #33291a; --c3-soft: #262a31;
+    }
+  }
+  :root[data-theme="light"] {
+    --c1: #c0492d; --c2: #b0752a; --c3: #6b7280;
+    --c1-soft: #f6e2dc; --c2-soft: #f4ead6; --c3-soft: #eceae4;
+  }
+  :root[data-theme="dark"] {
+    --c1: #e0765a; --c2: #d3a25a; --c3: #9aa0a8;
+    --c1-soft: #3a231c; --c2-soft: #33291a; --c3-soft: #262a31;
+  }
+  body { padding: 1.5rem 1.25rem 4rem; }
+  .wrap { max-width: 820px; margin: 0 auto; }
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  /* v1: button sits in the flex topbar, no float */
+  .topbar .theme-btn { float: none; }
+  header h1 { font-size: 1.75rem; letter-spacing: -.02em; }
+  header .tag { color: var(--muted); margin-top: .3rem; max-width: 44rem; }
+  .controls { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; margin: 1.2rem 0 .3rem; }
+  .controls select {
+    font: inherit; color: var(--ink); background: var(--card);
+    border: 1px solid var(--line); border-radius: 10px; padding: .4rem .6rem;
+  }
+  .filters { display: flex; gap: .4rem; flex-wrap: wrap; }
+  .filters button {
+    border: 1px solid var(--line); background: var(--card); color: var(--muted);
+    border-radius: 999px; padding: .25rem .7rem; font-size: .82rem; cursor: pointer;
+  }
+  .filters button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .summary { color: var(--muted); font-size: .88rem; margin: .3rem 0 .2rem; }
+  .r {
+    background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--c3);
+    border-radius: 12px; box-shadow: var(--shadow); padding: .85rem 1rem; margin-top: .8rem;
+  }
+  .r.c1 { border-left-color: var(--c1); }
+  .r.c2 { border-left-color: var(--c2); }
+  .r .top { display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; flex-wrap: wrap; }
+  .badge {
+    font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+    padding: .18rem .55rem; border-radius: 999px; white-space: nowrap;
+  }
+  .badge.c1 { background: var(--c1-soft); color: var(--c1); }
+  .badge.c2 { background: var(--c2-soft); color: var(--c2); }
+  .badge.c3 { background: var(--c3-soft); color: var(--c3); }
+  .r .date { font-size: .82rem; color: var(--muted); }
+  .r .desc { font-weight: 600; margin: .35rem 0 .15rem; }
+  .r .reason { font-size: .92rem; }
+  .r .reason b { color: var(--muted); font-weight: 600; }
+  .r details { margin-top: .4rem; font-size: .86rem; }
+  .r details summary { cursor: pointer; color: var(--accent); }
+  .r .kv { font-size: .84rem; color: var(--muted); margin-top: .3rem; }
+  .stamp { font-size: .78rem; color: var(--muted); margin-top: 1rem; }
+  .msg { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1.2rem; box-shadow: var(--shadow); color: var(--muted); margin-top: 1rem; }
+  .msg.err { border-color: color-mix(in srgb, var(--c1) 40%, var(--line)); }
+  .msg.err b { color: var(--c1); }
+  .legend { font-size: .8rem; color: var(--muted); margin-top: .6rem; line-height: 1.5; }
+  footer { margin-top: 2.5rem; font-size: .82rem; padding-top: 1rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Food Recall Alerts</h1>
+    <p class="tag">FDA food recalls that reach your state — including nationwide ones — newest first,
+      color-coded by how serious the hazard is.</p>
+  </header>
+
+  <div class="controls">
+    <label>State: <select id="stateSel"></select></label>
+    <div class="filters" id="filters" role="group" aria-label="Filter by recall class">
+      <button data-c="all" class="on" aria-pressed="true">All</button>
+      <button data-c="1" aria-pressed="false">Class I</button>
+      <button data-c="2" aria-pressed="false">Class II</button>
+      <button data-c="3" aria-pressed="false">Class III</button>
+    </div>
+  </div>
+  <p class="summary" id="summary"></p>
+
+  <div id="list"></div>
+
+  <p class="legend"><b>Class I</b> — reasonable chance of serious harm or death. <b>Class II</b> — temporary
+    or reversible harm. <b>Class III</b> — unlikely to cause harm. "Nationwide" recalls are included for your state.</p>
+
+  <footer>Data: openFDA · api.fda.gov/food/enforcement — FDA recall enforcement reports. Cached locally, no account.</footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---------- states ---------- */
+const STATES = [
+  ["AL","Alabama"],["AK","Alaska"],["AZ","Arizona"],["AR","Arkansas"],["CA","California"],
+  ["CO","Colorado"],["CT","Connecticut"],["DE","Delaware"],["DC","District of Columbia"],
+  ["FL","Florida"],["GA","Georgia"],["HI","Hawaii"],["ID","Idaho"],["IL","Illinois"],
+  ["IN","Indiana"],["IA","Iowa"],["KS","Kansas"],["KY","Kentucky"],["LA","Louisiana"],
+  ["ME","Maine"],["MD","Maryland"],["MA","Massachusetts"],["MI","Michigan"],["MN","Minnesota"],
+  ["MS","Mississippi"],["MO","Missouri"],["MT","Montana"],["NE","Nebraska"],["NV","Nevada"],
+  ["NH","New Hampshire"],["NJ","New Jersey"],["NM","New Mexico"],["NY","New York"],
+  ["NC","North Carolina"],["ND","North Dakota"],["OH","Ohio"],["OK","Oklahoma"],["OR","Oregon"],
+  ["PA","Pennsylvania"],["RI","Rhode Island"],["SC","South Carolina"],["SD","South Dakota"],
+  ["TN","Tennessee"],["TX","Texas"],["UT","Utah"],["VT","Vermont"],["VA","Virginia"],
+  ["WA","Washington"],["WV","West Virginia"],["WI","Wisconsin"],["WY","Wyoming"],["PR","Puerto Rico"]
+];
+const NAME_BY_ABBR = Object.fromEntries(STATES.map(s => [s[0], s[1]]));
+const stateSel = document.getElementById("stateSel");
+STATES.forEach(([ab, nm]) => { const o = document.createElement("option"); o.value = ab; o.textContent = nm; stateSel.append(o); });
+
+/* suite.state is a bare string ("CA") — Suite.store reads it raw and writes it bare */
+let curState = Suite.store.get("suite.state") || "";
+if (!curState) {
+  const loc = Suite.store.get("suite.location");
+  if (loc && loc.label) { const m = String(loc.label).match(/,\s*([A-Z]{2})\b/); if (m && NAME_BY_ABBR[m[1]]) curState = m[1]; }
+}
+if (!curState) curState = "CA";
+stateSel.value = curState;
+Suite.store.set("suite.state", curState);
+stateSel.addEventListener("change", () => { curState = stateSel.value; Suite.store.set("suite.state", curState); load(); });
+
+let filter = "all";
+document.getElementById("filters").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  filter = b.dataset.c;
+  [...document.querySelectorAll("#filters button")].forEach(x => {
+    x.classList.toggle("on", x === b);
+    x.setAttribute("aria-pressed", String(x === b));
+  });
+  render();
+});
+
+/* ---------- helpers ---------- */
+function ago(ms){
+  const s = Math.round((Date.now()-ms)/1000);
+  if (s<90) return "just now";
+  const m=Math.round(s/60); if(m<90) return m+" min ago";
+  const h=Math.round(m/60); if(h<36) return h+" hr ago";
+  return Math.round(h/24)+" days ago";
+}
+function fmtFDADate(s){
+  if (!s || s.length !== 8) return s || "";
+  const d = new Date(+s.slice(0,4), +s.slice(4,6)-1, +s.slice(6,8));
+  return isNaN(d) ? s : d.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"numeric" });
+}
+function el(tag, cls, txt){ const e=document.createElement(tag); if(cls)e.className=cls; if(txt!=null)e.textContent=txt; return e; }
+function clsNum(c){ c = c||""; if (/III|3/.test(c)) return 3; if (/II|2/.test(c)) return 2; return 1; }
+function titleCase(s){ return String(s).toLowerCase().replace(/\b\w/g, m => m.toUpperCase()); }
+
+/* v1 cached the raw results array at suite.cache.foodrecalls.<ST>; Suite.fetchJSON
+   caches the full response object. Read both shapes so a v1 user's cache still renders. */
+function readCache(state){
+  const e = Suite.store.get("suite.cache.foodrecalls." + state);
+  if (!e || typeof e !== "object" || !("t" in e) || !("v" in e)) return null;
+  const results = Array.isArray(e.v) ? e.v : (e.v && Array.isArray(e.v.results) ? e.v.results : []);
+  return { t: e.t, results };
+}
+
+/* ---------- data ---------- */
+const TTL = 720 * 60 * 1000; // manifest cacheTtlMin: 720 — openFDA enforcement data updates ~weekly
+
+let allRecalls = [];
+let stampMs = 0, fromCache = false, offline = false;
+
+async function load(){
+  const listEl = document.getElementById("list");
+  const name = NAME_BY_ABBR[curState];
+  const cached = readCache(curState);
+  if (cached) { allRecalls = cached.results; stampMs = cached.t; fromCache = true; offline = false; render(); }
+  else { listEl.textContent = ""; listEl.append(el("div", "msg", "Loading recalls for " + name + "…")); }
+
+  const q = encodeURIComponent(name);
+  const url = "https://api.fda.gov/food/enforcement.json?search="
+    + "(distribution_pattern:" + q + "+OR+distribution_pattern:%22nationwide%22)"
+    + "&sort=recall_initiation_date:desc&limit=50";
+  try {
+    /* fallbackToCache: false — openFDA answers 404 for "no matches", which must stay
+       distinguishable from a network failure (v1's {__empty:true}); both fallbacks are
+       handled explicitly in the catch below. */
+    const r = await Suite.fetchJSON(url, { cacheKey: "foodrecalls." + curState, ttl: TTL, fallbackToCache: false });
+    allRecalls = (r.v && r.v.results) || [];
+    stampMs = r.t; fromCache = r.fromCache; offline = false;
+    render();
+  } catch (e) {
+    if (e && /^HTTP 404$/.test(e.message || "")) {
+      /* no matches for this state — a fresh, empty answer; cache it like v1 did */
+      allRecalls = []; stampMs = Date.now(); fromCache = false; offline = false;
+      Suite.store.set("suite.cache.foodrecalls." + curState, { t: stampMs, v: [] });
+      render();
+    } else if (cached) {
+      /* network failed but the cached render above stands — label it offline */
+      offline = true;
+      render();
+    } else {
+      listEl.textContent = "";
+      const m = el("div","msg err");
+      const p = el("p"); p.innerHTML = "<b>Couldn't load recalls.</b> ";
+      p.append(document.createTextNode(e && e.message ? e.message : "Network error."));
+      m.append(p, el("p","stamp","openFDA may be briefly unavailable or rate-limited. Try again shortly."));
+      listEl.append(m);
+    }
+  }
+}
+
+function render(){
+  const listEl = document.getElementById("list");
+  listEl.textContent = "";
+  const name = NAME_BY_ABBR[curState];
+  let rows = allRecalls.slice();
+  if (filter !== "all") rows = rows.filter(r => clsNum(r.classification) === +filter);
+
+  document.getElementById("summary").textContent =
+    allRecalls.length
+      ? rows.length + " of " + allRecalls.length + " recent recall" + (allRecalls.length===1?"":"s") + " affecting " + name + (filter!=="all" ? " (Class " + "I".repeat(+filter) + ")" : "")
+      : "";
+
+  if (!allRecalls.length) {
+    listEl.append(el("div","msg","No recent food recalls found for " + name + ". That's good news — check back later."));
+    return;
+  }
+  if (!rows.length) {
+    listEl.append(el("div","msg","No recalls in this class for " + name + " right now."));
+  }
+
+  rows.forEach(r => {
+    const n = clsNum(r.classification);
+    const card = el("div", "r c" + n);
+    const top = el("div", "top");
+    top.append(el("span", "badge c" + n, (r.classification || "Recall")));
+    top.append(el("span", "date", r.recall_initiation_date ? "Initiated " + fmtFDADate(r.recall_initiation_date) : ""));
+    card.append(top);
+    card.append(el("div", "desc", (r.product_description || "Unnamed product").slice(0, 300)));
+    if (r.reason_for_recall) {
+      const reason = el("div", "reason");
+      reason.append(el("b", null, "Reason: "));
+      reason.append(document.createTextNode(r.reason_for_recall.slice(0, 400)));
+      card.append(reason);
+    }
+    const kv = [];
+    if (r.recalling_firm) kv.push(r.recalling_firm);
+    if (r.status) kv.push(r.status);
+    if (r.distribution_pattern && /nationwide/i.test(r.distribution_pattern)) kv.push("nationwide distribution");
+    if (kv.length) card.append(el("div", "kv", kv.join(" · ")));
+
+    const det = el("details");
+    det.append(el("summary", null, "More detail"));
+    const dl = el("div", "kv");
+    const parts = [];
+    if (r.product_quantity) parts.push("Quantity: " + r.product_quantity);
+    if (r.distribution_pattern) parts.push("Distribution: " + r.distribution_pattern);
+    if (r.code_info) parts.push("Codes: " + r.code_info.slice(0, 300));
+    if (r.city || r.state) parts.push("Firm location: " + [r.city, r.state].filter(Boolean).map(titleCase).join(", "));
+    if (r.voluntary_mandated) parts.push(titleCase(r.voluntary_mandated));
+    if (r.recall_number) parts.push("Recall #: " + r.recall_number);
+    dl.textContent = parts.join(" · ");
+    det.append(dl);
+    card.append(det);
+
+    listEl.append(card);
+  });
+
+  const stamp = el("div", "stamp", "Showing up to 50 most recent · " +
+    (offline ? "offline — data " + ago(stampMs) + " (cached)"
+             : "data " + ago(stampMs) + (fromCache ? " (cached)" : "")));
+  listEl.append(stamp);
+}
+
+Suite.liveRegion(document.getElementById("summary"));
+Suite.liveRegion(document.getElementById("list"));
+
+load();
+</script>
+</body>
+</html>

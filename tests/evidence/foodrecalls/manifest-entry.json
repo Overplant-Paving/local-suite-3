@@ -1,0 +1,15 @@
+{
+  "id": "foodrecalls",
+  "file": "foodrecalls.html",
+  "name": "Food Recall Alerts",
+  "cat": "health",
+  "cx": "S",
+  "desc": "Slim food-only recall board filtered to your state.",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": ["https://api.fda.gov"],
+  "storage": ["suite.location", "suite.state", "suite.cache.foodrecalls.*"],
+  "cacheTtlMin": 720,
+  "since": "v1",
+  "flags": []
+}
