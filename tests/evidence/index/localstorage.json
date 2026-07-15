@@ -1,0 +1,7 @@
+{
+  "v2": {
+    "suite.meta.schemaVersion": "0",
+    "suite.theme": "light"
+  },
+  "note": "v1 hub writes only suite.theme; suite.meta.schemaVersion is new-in-v2 by design (ARCHITECTURE.md §6)"
+}

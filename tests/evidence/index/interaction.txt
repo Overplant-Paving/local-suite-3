@@ -1,0 +1,8 @@
+cards rendered: 2 (manifest has 2 tools)
+stats: 2tools1fully offline2no key needed
+sections: ☀️ Weather & Sky 1 tool | 🕰️ Time & Planning 1 tool
+search "pomodoro": 1 card(s): Focus Timer
+offline filter: 1 card(s)
+schemaVersion after boot: 0
+clicked Focus Timer card -> focus.html loaded, clock=25:00
+"/" focuses search: q

@@ -1,0 +1,12 @@
+== CSP verdict: hash-based per-file CSP, opened from file:// ==
+Chrome + Edge: real installed browsers via Playwright channels. Firefox: Playwright's Gecko build (CSP enforcement is engine-level).
+
+chrome · focus.html: scriptsRan=true themeFlip=unset->dark liveFetchRendered=n/a cspViolations=none consoleIssues=none
+chrome · weather.html: scriptsRan=true themeFlip=unset->dark liveFetchRendered=true cspViolations=none consoleIssues=none
+chrome · index.html: scriptsRan=true themeFlip=unset->dark liveFetchRendered=n/a cspViolations=none consoleIssues=none
+msedge · focus.html: scriptsRan=true themeFlip=unset->dark liveFetchRendered=n/a cspViolations=none consoleIssues=none
+msedge · weather.html: scriptsRan=true themeFlip=unset->dark liveFetchRendered=true cspViolations=none consoleIssues=none
+msedge · index.html: scriptsRan=true themeFlip=unset->dark liveFetchRendered=n/a cspViolations=none consoleIssues=none
+firefox · focus.html: scriptsRan=true themeFlip=unset->dark liveFetchRendered=n/a cspViolations=none consoleIssues=none
+firefox · weather.html: scriptsRan=true themeFlip=unset->dark liveFetchRendered=true cspViolations=none consoleIssues=none
+firefox · index.html: scriptsRan=true themeFlip=unset->dark liveFetchRendered=n/a cspViolations=none consoleIssues=none

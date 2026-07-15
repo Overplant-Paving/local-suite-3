@@ -1,0 +1,48 @@
+== computed-style diff, light theme (22 differing property values) ==
+body { block-size: v1=6364.73px | v2=1018.8px }
+body { height: v1=6364.73px | v2=1018.8px }
+body { perspective-origin: v1=640px 3182.36px | v2=640px 509.391px }
+body { transform-origin: v1=640px 3182.37px | v2=640px 509.398px }
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.search { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.pill { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card { block-size: v1=178.859px | v2=199.203px }
+.card { height: v1=178.859px | v2=199.203px }
+.card { perspective-origin: v1=171.859px 89.4219px | v2=171.859px 99.5938px }
+.card { transform-origin: v1=171.867px 89.4297px | v2=171.867px 99.6016px }
+.card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.chip { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.stat b { inline-size: v1=100.5px | v2=42.0781px }
+.stat b { perspective-origin: v1=50.25px 13.7969px | v2=21.0312px 13.7969px }
+.stat b { transform-origin: v1=50.25px 13.7969px | v2=21.0391px 13.7969px }
+.stat b { width: v1=100.5px | v2=42.0781px }
+.stat b { -webkit-font-smoothing: v1=auto | v2=antialiased }
+section h2 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+
+== computed-style diff, dark theme (22 differing property values) ==
+body { block-size: v1=6364.73px | v2=1018.8px }
+body { height: v1=6364.73px | v2=1018.8px }
+body { perspective-origin: v1=640px 3182.36px | v2=640px 509.391px }
+body { transform-origin: v1=640px 3182.37px | v2=640px 509.398px }
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.search { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.pill { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card { block-size: v1=178.859px | v2=199.203px }
+.card { height: v1=178.859px | v2=199.203px }
+.card { perspective-origin: v1=171.859px 89.4219px | v2=171.859px 99.5938px }
+.card { transform-origin: v1=171.867px 89.4297px | v2=171.867px 99.6016px }
+.card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.chip { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.stat b { inline-size: v1=100.5px | v2=42.0781px }
+.stat b { perspective-origin: v1=50.25px 13.7969px | v2=21.0312px 13.7969px }
+.stat b { transform-origin: v1=50.25px 13.7969px | v2=21.0391px 13.7969px }
+.stat b { width: v1=100.5px | v2=42.0781px }
+.stat b { -webkit-font-smoothing: v1=auto | v2=antialiased }
+section h2 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+

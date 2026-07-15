@@ -211,6 +211,14 @@ Plus: theme, location editor, storage usage viewer, per-tool cache purge.
 | D8 | Testing = **static gates in `--check` (with negative tests) + mandatory Playwright smoke suite over all dist files + per-tool verification evidence** | unit tests everywhere; CI server; no automated tests | the failure modes that matter are drift, broken chrome, console errors, and silent regressions — the gate/smoke/evidence stack catches exactly those. Playwright is the one npm concession, isolated in `tests/`, never required to build, always required to ship. No CI server: the executing agent runs the gates and archives outputs; a release with red or unrun gates does not happen |
 | D9 | **`dist/` committed**, staleness-checked | dist gitignored | clone-and-double-click for consumers; deterministic build keeps diffs meaningful |
 
+**D6 addendum — CSP verdict (Phase 1, 2026-07-15).** The generated hash-based CSP was tested on
+all three pilots (focus, weather, hub) opened from `file://` in Chrome 138+, Edge 138+ (real
+installed browsers) and Firefox (Gecko 151): scripts execute under the sha256 hashes, live
+`connect-src` fetches succeed, `img-src` radar imagery loads, **zero CSP violations, zero console
+errors** across all 9 browser×file combinations (evidence:
+`tests/evidence/phase1/csp-verdict.txt`). **Verdict: full hash-based CSP ships suite-wide in
+Phase 2; the per-file `unsafe-inline` fallback remains documented but was not needed.**
+
 ## 9. Risks & mitigations
 
 | Risk | Mitigation |
