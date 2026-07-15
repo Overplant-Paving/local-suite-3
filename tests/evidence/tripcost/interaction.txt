@@ -1,0 +1,23 @@
+core math A: 400 mi / 25 mpg x $3.50/gal -> expected round trip $112.00, one way $56.00, 32.00 gal round
+  observed #veh0cost = "$112.00"
+  observed #veh0res  = "$112.00 round trip · 32.00 gal One way$56.00 Per person (÷2)$56.00 Fuel one way16.00 gal"
+core math B: 400 mi / 45 mpg x $3.50/gal -> expected round trip $62.22
+  observed #veh1cost = "$62.22"
+winner: expected "Vehicle B is cheaper by $49.78 round trip (44% less)."
+  observed = "Vehicle B is cheaper by $49.78 round trip (44% less)."
+km conversion: 100 km (=62.14 mi) / 25 mpg x $3.50 -> expected round trip $17.40; observed #veh0cost = "$17.40"
+litre price: $1.00/L (=$3.785/gal), 400 mi / 25 mpg -> expected round trip $121.13; observed #veh0cost = "$121.13"
+L/100km: 8 L/100km over 400 mi (643.74 km = 51.50 L = 13.60 gal) x $3.50 -> expected round trip $95.23; observed #veh1cost = "$95.23"
+km/L: 15 km/L over 400 mi (643.74 km = 42.92 L = 11.34 gal) x $3.50 -> expected round trip $79.36; observed #veh1cost = "$79.36"
+haversine LA->SF: great-circle 347.4 mi x 1.25 -> expected ~434.3 mi; observed #ptsMsg = "≈ 434.3 mi road estimate", #dist = "434.3"
+Enter in #p2 (LA->Vegas): observed #ptsMsg = "≈ 285.5 mi road estimate"
+OSRM blocked: expected "Routing failed (Failed to fetch). Try the offline estimate."; observed #ptsMsg = "Routing failed (Failed to fetch). Try the offline estimate."
+EIA no key: expected "Paste a key first."; observed #eiaMsg = "Paste a key first."
+EIA blocked: expected "Request blocked/failed. Enter the price manually."; observed #eiaMsg = "Request blocked/failed. Enter the price manually."
+saved chip after "Save this vehicle": expected "Sedan · 25 MPG ×"; observed = "Sedan · 25 MPG×"
+chip load: expected #veh0name back to "Sedan"; observed = "Sedan"
+final winner line: "Vehicle B is cheaper by $49.78 round trip (44% less)."
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

@@ -1,0 +1,16 @@
+{
+  "v1": {
+    "suite.key.eia": "TESTKEY-NOT-REAL",
+    "suite.tripcost.vehicles": "[{\"name\":\"Sedan\",\"eff\":\"25\",\"effUnit\":\"mpg\"}]",
+    "suite.tripcost.current": "[{\"name\":\"Sedan\",\"eff\":\"25\",\"effUnit\":\"mpg\"},{\"name\":\"Vehicle B\",\"eff\":45,\"effUnit\":\"mpg\"}]",
+    "suite.theme": "dark"
+  },
+  "v2": {
+    "suite.key.eia": "TESTKEY-NOT-REAL",
+    "suite.tripcost.vehicles": "[{\"name\":\"Sedan\",\"eff\":\"25\",\"effUnit\":\"mpg\"}]",
+    "suite.tripcost.current": "[{\"name\":\"Sedan\",\"eff\":\"25\",\"effUnit\":\"mpg\"},{\"name\":\"Vehicle B\",\"eff\":\"45\",\"effUnit\":\"mpg\"}]",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}

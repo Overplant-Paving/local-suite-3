@@ -37,5 +37,19 @@
     "dfmt": "local-only expression, recorded verified-clean with reasoning in tests/evidence/voting/report.md",
     "abbr.toLowerCase()": "local-only expression, recorded verified-clean with reasoning in tests/evidence/voting/report.md",
     "name": "local-only expression, recorded verified-clean with reasoning in tests/evidence/voting/report.md"
+  },
+  "tripcost.html": {
+    "i+1": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tripcost/report.md",
+    "i": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tripcost/report.md",
+    "distMi == null ? \"Enter a one-way distance. \" : \"\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tripcost/report.md",
+    "ppg == null ? \"Enter a gas price.\" : \"\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tripcost/report.md",
+    "money(round)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tripcost/report.md",
+    "(galOne*2).toFixed(2)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tripcost/report.md",
+    "money(oneWay)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tripcost/report.md",
+    "people": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tripcost/report.md",
+    "money(perPerson)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tripcost/report.md",
+    "galOne.toFixed(2)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tripcost/report.md",
+    "money(diff)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tripcost/report.md",
+    "pct.toFixed(0)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tripcost/report.md"
   }
 }

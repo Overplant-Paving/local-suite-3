@@ -107,7 +107,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 9 | dates.html | time | off | — | A | | ✅ `tests/evidence/dates/` |
 | 10 | daylight.html | time | off | — | A | | ✅ `tests/evidence/daylight/` |
 | 11 | printables.html | time | off | — | A | print CSS | ✅ `tests/evidence/printables/` |
-| 12 | tripcost.html | local | off | (eia opt.) | A | optional gas-price fetch | ⬜ |
+| 12 | tripcost.html | local | off | (eia opt.) | A | optional gas-price fetch | ✅ `tests/evidence/tripcost/` |
 | 13 | qr.html | util | off | — | A | | ✅ `tests/evidence/qr/` |
 | 14 | text.html | util | off | — | A | | ✅ `tests/evidence/text/` |
 | 15 | color.html | util | off | — | A | | ✅ `tests/evidence/color/` |

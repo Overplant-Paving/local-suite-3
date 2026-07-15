@@ -1,0 +1,27 @@
+{
+  "id": "tripcost",
+  "file": "tripcost.html",
+  "name": "Trip Cost Estimator",
+  "cat": "local",
+  "cx": "S",
+  "desc": "Distance + MPG + gas price = what the road trip costs.",
+  "network": "offline",
+  "key": {
+    "name": "eia",
+    "signup": "https://www.eia.gov/opendata/register.php",
+    "demo": false
+  },
+  "endpoints": [
+    "https://api.eia.gov",
+    "https://router.project-osrm.org"
+  ],
+  "storage": [
+    "suite.theme",
+    "suite.tripcost.current",
+    "suite.tripcost.vehicles",
+    "suite.key.eia"
+  ],
+  "cacheTtlMin": null,
+  "since": "v1",
+  "flags": []
+}
