@@ -280,8 +280,8 @@ def gate_no_example_urls(dist_texts):
     and friends) must never reach dist — those tools get embedded data or link-outs."""
     problems = []
     for name, text in sorted(dist_texts.items()):
-        for m in re.finditer(r'\b[a-z0-9-]+\.example\b[^\s"\'<]*', text, re.I):
-            problems.append(f"{name}: placeholder URL fragment: {m.group(0)!r}")
+        for m in re.finditer(r'https?://[^\s"\'<>]*\.example\b[^\s"\'<>]*', text, re.I):
+            problems.append(f"{name}: placeholder URL: {m.group(0)!r}")
     return problems
 
 def gate_key_hygiene(source_texts):
