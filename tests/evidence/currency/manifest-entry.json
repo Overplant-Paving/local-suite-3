@@ -1,0 +1,22 @@
+{
+  "id": "currency",
+  "file": "currency.html",
+  "name": "Exchange Rate Board",
+  "cat": "money",
+  "cx": "S",
+  "desc": "Currency board and converter with 30-day trend.",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": [
+    "https://api.frankfurter.dev",
+    "https://open.er-api.com"
+  ],
+  "storage": [
+    "suite.theme",
+    "suite.cache.currency.latest",
+    "suite.cache.currency.trend.*"
+  ],
+  "cacheTtlMin": 1440,
+  "since": "v1",
+  "flags": []
+}

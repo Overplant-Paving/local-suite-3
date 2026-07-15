@@ -1,0 +1,22 @@
+status line: "Rates as of 2026-07-15 · European Central Bank via Frankfurter"
+board rate EUR: 0.8767 per 1 USD
+board rate GBP: 0.7460 per 1 USD
+board rate JPY: 162.39 per 1 USD
+cached envelope: source=frankfurter date=2026-07-15 rates.EUR=0.87673
+converter: 250 USD -> EUR, expected 250 x 0.87673 = 219.18 EUR
+  observed #convResult = "250 USD = 219.18 EUR 1 USD = 0.8767 EUR"
+swap: 250 EUR -> USD, expected 250 / 0.87673 = 285.15 USD
+  observed #convResult = "250 EUR = 285.15 USD 1 EUR = 1.141 USD"
+trend (EUR, initial): title="EUR · 30-day trend" note="0.8616 → 0.8767 per USD · +1.76% over the period"
+trend (GBP, after board click): title="GBP · 30-day trend" note="0.7451 → 0.7460 per USD · +0.13% over the period"
+  chart svg children: 2 paths, 5 gridlines, 12 text labels
+  GBP card selected: aria-pressed=true
+offline stale status: "Offline — cached from 12:27 PM Jul 14 · Rates as of 2026-07-15 · European Central Bank via Frankfurter"
+offline stale board EUR: "0.8767" per 1 USD
+offline stale trend note: "Offline — trend cached from 12:27 PM Jul 14."
+restored (from fresh cache, no refetch): status="Rates as of 2026-07-15 · European Central Bank via Frankfurter"
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

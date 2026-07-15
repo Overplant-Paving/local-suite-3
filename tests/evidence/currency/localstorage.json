@@ -1,0 +1,17 @@
+{
+  "v1": {
+    "suite.cache.currency.latest": "{\"t\":1784136466923,\"v\":{\"rates\":{\"AUD\":1.4321,\"BRL\":5.081,\"CAD\":1.4074,\"CHF\":0.8115,\"CNY\":6.7743,\"CZK\":21.246,\"DKK\":6.5539,\"EUR\":0.87673,\"GBP\":0.74604…(463 chars)",
+    "suite.theme": "dark"
+  },
+  "v2": {
+    "suite.cache.currency.latest": "{\"t\":1784136466459,\"v\":{\"rates\":{\"AUD\":1.4321,\"BRL\":5.081,\"CAD\":1.4074,\"CHF\":0.8115,\"CNY\":6.7743,\"CZK\":21.246,\"DKK\":6.5539,\"EUR\":0.87673,\"GBP\":0.74604…(463 chars)",
+    "suite.cache.currency.trend.EUR": "{\"t\":1784136466459,\"v\":{\"amount\":1,\"base\":\"USD\",\"start_date\":\"2026-06-15\",\"end_date\":\"2026-07-15\",\"rates\":{\"2026-06-15\":{\"EUR\":0.86155},\"2026-06-16\":{…(775 chars)",
+    "suite.cache.currency.trend.GBP": "{\"t\":1784136466459,\"v\":{\"amount\":1,\"base\":\"USD\",\"start_date\":\"2026-06-15\",\"end_date\":\"2026-07-15\",\"rates\":{\"2026-06-15\":{\"GBP\":0.74509},\"2026-06-16\":{…(776 chars)",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": [
+    "suite.cache.currency.trend.EUR",
+    "suite.cache.currency.trend.GBP"
+  ]
+}

@@ -102,5 +102,6 @@
     "uvb.col": "local-only expression, recorded verified-clean with reasoning in tests/evidence/air/report.md",
     "aqiOutlook || '<div class=\"card-msg\">No forecast.</div>'": "local-only expression, recorded verified-clean with reasoning in tests/evidence/air/report.md",
     "uvOutlook": "local-only expression, recorded verified-clean with reasoning in tests/evidence/air/report.md"
-  }
+  },
+  "currency.html": {}
 }

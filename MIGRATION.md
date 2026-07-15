@@ -139,7 +139,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 41 | recalls.html | civic | cors | — | B | 3 sources | ⬜ |
 | 42 | treasury.html | civic | cors | — | B | | ⬜ |
 | 43 | yields.html | money | cors | — | B | | ⬜ |
-| 44 | currency.html | money | cors | — | B | | ⬜ |
+| 44 | currency.html | money | cors | — | B | | ✅ `tests/evidence/currency/` |
 | 45 | illness.html | health | cors | — | B | | ⬜ |
 | 46 | medicine.html | health | cors | — | B | | ⬜ |
 | 47 | foodrecalls.html | health | cors | — | B | | ⬜ |
