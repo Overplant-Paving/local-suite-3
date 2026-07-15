@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Museum Postcard · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  body{ padding:1.4rem 1.25rem 4rem; }
+  .wrap{max-width:820px;margin:0 auto}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.1rem}
+  .suite-link{text-decoration:none;font-size:.9rem;color:var(--muted);border:1px solid var(--line);
+    background:var(--card);border-radius:999px;padding:.35rem .8rem}
+  .suite-link:hover{color:var(--accent);border-color:var(--accent)}
+  .topbar .theme-btn{float:none} /* v1: button sits in the flex topbar, no float */
+  header h1{font-size:1.7rem;letter-spacing:-.02em}
+  header .tag{color:var(--muted);margin-top:.25rem;font-size:.93rem;max-width:44rem}
+  .tabs{display:flex;gap:.45rem;margin:1.2rem 0 .3rem;flex-wrap:wrap}
+  .tab{border:1px solid var(--line);background:var(--card);color:var(--muted);
+    border-radius:999px;padding:.4rem 1rem;font-size:.9rem;cursor:pointer}
+  .tab.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .searchrow{margin-top:.8rem;display:none}
+  .searchrow.show{display:block}
+  .postcard{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    box-shadow:var(--shadow);margin-top:1.2rem;overflow:hidden}
+  .frame{background:var(--chip);display:flex;align-items:center;justify-content:center;min-height:220px;position:relative}
+  .frame img{width:100%;max-height:62vh;object-fit:contain;display:block}
+  .frame .loading,.frame .broken{color:var(--muted);padding:3rem 1rem;text-align:center;font-size:.95rem}
+  .caption{padding:1.2rem 1.4rem}
+  .caption .label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+  .caption h2{font-size:1.35rem;line-height:1.25;margin:.3rem 0 .1rem}
+  .caption .artist{color:var(--accent);font-weight:600}
+  .caption .meta{color:var(--muted);font-size:.92rem;margin-top:.35rem}
+  .caption .src{color:var(--muted);font-size:.8rem;margin-top:.7rem}
+  .row{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.2rem}
+  button.act{border:1px solid var(--line);background:var(--card);color:var(--ink);
+    border-radius:10px;padding:.55rem 1.1rem;cursor:pointer;font-size:.92rem}
+  button.act:hover{border-color:var(--accent);color:var(--accent)}
+  button.act.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  button.act.fav.on{color:#c0552d;border-color:#c0552d}
+  section.favs{margin-top:2.4rem}
+  section.favs h2{font-size:1.05rem;display:flex;align-items:baseline;gap:.5rem}
+  section.favs h2 .n{color:var(--muted);font-weight:500;font-size:.82rem}
+  .fav-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.7rem;margin-top:.9rem}
+  .fav-item{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card);cursor:pointer;position:relative}
+  .fav-item img{width:100%;height:120px;object-fit:cover;display:block;background:var(--chip)}
+  .fav-item .cap{padding:.4rem .5rem;font-size:.75rem;line-height:1.25}
+  .fav-item .cap b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .fav-item .cap span{color:var(--muted)}
+  .fav-item .rm{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.55);color:#fff;border:none;
+    border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:.8rem;line-height:1}
+  .fav-empty{color:var(--muted);font-size:.9rem}
+  footer{margin-top:2.6rem;font-size:.83rem;padding-top:1rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="suite-link" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Museum Postcard</h1>
+    <p class="tag">A public-domain artwork for today — like APOD, but for art. Browse the Art Institute of
+      Chicago live, or a hand-picked set from The Met that works offline. Keep favorites on this machine.</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab on" id="tabAic" aria-pressed="true">Art Institute (live)</button>
+    <button class="tab" id="tabMet" aria-pressed="false">The Met (offline)</button>
+  </div>
+  <div class="searchrow" id="searchRow">
+    <input class="search" id="q" type="search" placeholder="Search the Art Institute — “sunflowers”, “Hokusai”, “horses”…" autocomplete="off" aria-label="Search the Art Institute">
+  </div>
+
+  <div class="postcard" id="postcard">
+    <div class="frame"><div class="loading">Loading today's artwork…</div></div>
+  </div>
+
+  <section class="favs">
+    <h2>Favorites <span class="n" id="favCount"></span></h2>
+    <div class="fav-grid" id="favGrid"></div>
+    <p class="fav-empty" id="favEmpty">Star an artwork and it will be kept here on this machine.</p>
+  </section>
+
+  <footer>Data: Art Institute of Chicago (api.artic.edu, CC0) · The Met Collection (embedded public-domain set,
+    images via images.metmuseum.org). Images are in the public domain.</footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+const esc = Suite.esc;
+
+/* ---------- embedded Met public-domain set (harvested from the Met Collection API) ---------- */
+const MET = [{"id":10150,"title":"Merced River, Yosemite Valley","artist":"Albert Bierstadt","date":"1866","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ad/web-large/DT2961.jpg"},{"id":10154,"title":"The Rocky Mountains, Lander's Peak","artist":"Albert Bierstadt","date":"1863","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ad/web-large/DT82.jpg"},{"id":10480,"title":"The Aegean Sea","artist":"Frederic Edwin Church","date":"ca. 1877","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ad/web-large/ap02.23.jpg"},{"id":10481,"title":"Heart of the Andes","artist":"Frederic Edwin Church","date":"1859","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ad/web-large/DT78.jpg"},{"id":11122,"title":"The Gulf Stream","artist":"Winslow Homer","date":"1899; reworked by 1906","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ad/web-large/DP-20821-001.jpg"},{"id":11125,"title":"Inside the Bar","artist":"Winslow Homer","date":"1883","medium":"Watercolor and graphite on off-white wove paper","img":"https://images.metmuseum.org/CRDImages/ad/web-large/ap54.183.jpg"},{"id":12116,"title":"In the Generalife","artist":"John Singer Sargent","date":"1912","medium":"Watercolor, wax crayon, and graphite on white wove paper","img":"https://images.metmuseum.org/CRDImages/ad/web-large/DP323590.jpg"},{"id":12127,"title":"Madame X (Virginie Am\u00e9lie Avegno Gautreau)","artist":"John Singer Sargent","date":"1883\u201384","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ad/web-large/DP-29006-001.jpg"},{"id":13223,"title":"Cremorne Gardens, No. 2","artist":"James McNeill Whistler","date":"ca. 1870\u201380","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ad/web-large/DT2780.jpg"},{"id":13877,"title":"Quilt, Album pattern","artist":"Brown and Turner families","date":"begun 1846","medium":"Cotton","img":"https://images.metmuseum.org/CRDImages/ad/web-large/DP332444.jpg"},{"id":37031,"title":"\u014ctsu, from the series The Fifty-Three Stations of the T\u014dkaid\u014d Road (T\u014dkaid\u014d goj\u016bsan tsugi,","artist":"Utagawa Hiroshige","date":"1841\u201344","medium":"Woodblock print (nishiki-e); ink and color on paper","img":"https://images.metmuseum.org/CRDImages/as/web-large/DP122761.jpg"},{"id":39799,"title":"Under the Wave off Kanagawa (Kanagawa oki nami ura), or The Great Wave, from the series Th","artist":"Katsushika Hokusai","date":"ca. 1830\u201332","medium":"Woodblock print; ink and color on paper","img":"https://images.metmuseum.org/CRDImages/as/web-large/DP141042.jpg"},{"id":53449,"title":"Six Jewel Rivers from Various Provinces","artist":"Utagawa Hiroshige","date":"1857","medium":"Six woodblock prints; ink and color on paper","img":"https://images.metmuseum.org/CRDImages/as/web-large/DP-13180-023.jpg"},{"id":54871,"title":"Kiyomizu Komachi, from the series Futabagusa nana Komachi","artist":"Kitagawa Utamaro","date":"1790s","medium":"Woodblock print (nishiki-e); ink and color on paper","img":"https://images.metmuseum.org/CRDImages/as/web-large/DP135607.jpg"},{"id":57111,"title":"Printer's woodblock for a Kitagawa Utamaro print (recut?)","artist":"Unknown","date":"early 19th century","medium":"Wood","img":"https://images.metmuseum.org/CRDImages/as/web-large/33_76_1_O1_sf.jpg"},{"id":57833,"title":"Random Sketches by Hokusai","artist":"Katsushika Hokusai","date":"probably 1834","medium":"Eight volumes of woodblock printed books; ink and color on p","img":"https://images.metmuseum.org/CRDImages/as/web-large/LC-JIB_142_a_h_a_004_crd.jpg"},{"id":338696,"title":"Summer (Aestas), from \"The Seasons\"","artist":"Pieter van der Heyden","date":"1570","medium":"Engraving; first state of two","img":"https://images.metmuseum.org/CRDImages/dp/web-large/DP818325.jpg"},{"id":361524,"title":"Raphael","artist":"Wenceslaus Hollar","date":"1651","medium":"Etching, second state of two (NH)","img":"https://images.metmuseum.org/CRDImages/dp/web-large/DP823579.jpg"},{"id":435729,"title":"Three Miracles of Saint Zenobius","artist":"Botticelli (Alessandro di Mariano Filipepi)","date":"ca. 1500","medium":"Tempera on wood","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP-18875-001.jpg"},{"id":435809,"title":"The Harvesters","artist":"Pieter Bruegel the Elder","date":"1565","medium":"Oil on oak","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP119115.jpg"},{"id":435844,"title":"The Musicians","artist":"Caravaggio (Michelangelo Merisi)","date":"1597","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP-687-001.jpg"},{"id":435885,"title":"View of the Domaine Saint-Joseph","artist":"Paul C\u00e9zanne","date":"late 1880s","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DT1937.jpg"},{"id":435922,"title":"Salisbury Cathedral from the Bishop's Grounds","artist":"John Constable","date":"ca. 1825","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP164837.jpg"},{"id":435923,"title":"Stoke-by-Nayland","artist":"John Constable","date":"ca. 1810\u201311","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP164805.jpg"},{"id":436135,"title":"Dancer with a Fan","artist":"Edgar Degas","date":"ca. 1880","medium":"Pastel on gray-green laid paper","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP-43276-001.jpg"},{"id":436155,"title":"The Rehearsal of the Ballet Onstage","artist":"Edgar Degas","date":"ca. 1874","medium":"Oil colors freely mixed with turpentine, with traces of wate","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DT1565.jpg"},{"id":436175,"title":"Basket of Flowers","artist":"Eug\u00e8ne Delacroix","date":"1848\u201349","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP-14347-001.jpg"},{"id":436533,"title":"Shoes","artist":"Vincent van Gogh","date":"1888","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DT1947.jpg"},{"id":436544,"title":"Tiburcio P\u00e9rez y Cuervo (1785/86\u20131841), the Architect","artist":"Goya (Francisco de Goya y Lucientes)","date":"1820","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP295718.jpg"},{"id":436551,"title":"Ferdinand VII (1784\u20131833), When Prince of Asturias","artist":"Goya","date":"ca. 1800","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP-22708-001.jpg"},{"id":436570,"title":"The Adoration of the Shepherds","artist":"El Greco (Domenikos Theotokopoulos)","date":"ca. 1605\u201310","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP123919.jpg"},{"id":436575,"title":"View of Toledo","artist":"El Greco (Domenikos Theotokopoulos)","date":"ca. 1599\u20131600","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP349564.jpg"},{"id":436703,"title":"Madame Jacques-Louis Leblanc (Fran\u00e7oise Poncelle, 1788\u20131839)","artist":"Jean Auguste Dominique Ingres","date":"1823","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DT1926.jpg"},{"id":436708,"title":"Odalisque in Grisaille","artist":"Jean Auguste Dominique Ingres","date":"ca. 1824\u201334","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP-13728-001.jpg"},{"id":436819,"title":"M\u00e4da Primavesi (1903\u20132000)","artist":"Gustav Klimt","date":"1912\u201313","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP243354.jpg"},{"id":436820,"title":"Serena Pulitzer Lederer (1867\u20131943)","artist":"Gustav Klimt","date":"1899","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP-18885-001.jpg"},{"id":436964,"title":"Young Lady in 1866","artist":"Edouard Manet","date":"1866","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP273977.jpg"},{"id":437299,"title":"Jalais Hill, Pontoise","artist":"Camille Pissarro","date":"1867","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DT1859.jpg"},{"id":437326,"title":"Blind Orion Searching for the Rising Sun","artist":"Nicolas Poussin","date":"1658","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP148490.jpg"},{"id":437329,"title":"The Abduction of the Sabine Women","artist":"Nicolas Poussin","date":"probably 1633\u201334","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP-29324-001.jpg"},{"id":437373,"title":"Giuliano de' Medici (1479\u20131516), Duke of Nemours","artist":"Raphael","date":"","medium":"Tempera and oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP265692.jpg"},{"id":437392,"title":"Herman Doomer (ca. 1595\u20131650)","artist":"Rembrandt (Rembrandt van Rijn)","date":"1640","medium":"Oil on wood","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP145921.jpg"},{"id":437430,"title":"By the Seashore","artist":"Auguste Renoir","date":"1883","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP-14936-039.jpg"},{"id":437654,"title":"Circus Sideshow (Parade de cirque)","artist":"Georges Seurat","date":"1887\u201388","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP375450_cropped.jpg"},{"id":437658,"title":"Study for \"A Sunday on La Grande Jatte\"","artist":"Georges Seurat","date":"1884","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP259921.jpg"},{"id":437824,"title":"Madonna and Child","artist":"Titian (Tiziano Vecellio)","date":"ca. 1508","medium":"Oil on wood","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP-17398-001.jpg"},{"id":437827,"title":"Venus and the Lute Player","artist":"Titian","date":"ca. 1565\u201370","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP-28918-001.jpg"},{"id":437835,"title":"The Englishman (William Tom Warrener, 1861\u20131934) at the Moulin Rouge","artist":"Henri de Toulouse-Lautrec","date":"1892","medium":"Oil on cardboard","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DT1500.jpg"},{"id":437837,"title":"The Sofa","artist":"Henri de Toulouse-Lautrec","date":"ca. 1894\u201396","medium":"Oil on cardboard","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DT1924.jpg"},{"id":437854,"title":"Whalers","artist":"Joseph Mallord William Turner","date":"ca. 1845","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP-13360-001.jpg"},{"id":437879,"title":"Study of a Young Woman","artist":"Johannes Vermeer","date":"ca. 1665\u201367","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP353256.jpg"},{"id":437881,"title":"Young Woman with a Water Pitcher","artist":"Johannes Vermeer","date":"ca. 1662","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP353257.jpg"},{"id":437986,"title":"The Denial of Saint Peter","artist":"Caravaggio (Michelangelo Merisi)","date":"1610","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP-12413-001.jpg"},{"id":437999,"title":"Still Life with Teapot and Fruit","artist":"Paul Gauguin","date":"1896","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DT1027.jpg"},{"id":438002,"title":"Madame Manet (Suzanne Leenhoff, 1829\u20131906) at Bellevue","artist":"Edouard Manet","date":"1880","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DT4224.jpg"},{"id":438814,"title":"The Abduction of Rebecca","artist":"Eug\u00e8ne Delacroix","date":"1846","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DP-14344-001.jpg"},{"id":438821,"title":"Ia Orana Maria (Hail Mary)","artist":"Paul Gauguin","date":"1891","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/ep/web-large/DT1025.jpg"},{"id":459016,"title":"The Annunciation","artist":"Botticelli (Alessandro di Mariano Filipepi)","date":"ca. 1490","medium":"Tempera and gold on wood","img":"https://images.metmuseum.org/CRDImages/rl/web-large/DP267397.jpg"},{"id":459082,"title":"Portrait of Gerard de Lairesse","artist":"Rembrandt (Rembrandt van Rijn)","date":"1665\u201367","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/rl/web-large/DP121332.jpg"},{"id":459092,"title":"Trees and Houses Near the Jas de Bouffan","artist":"Paul C\u00e9zanne","date":"1885\u201386","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/rl/web-large/DP-34470-001.jpg"},{"id":459108,"title":"The Harvest, Pontoise (La R\u00e9colte, Pontoise)","artist":"Camille Pissarro","date":"1881","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/rl/web-large/DP-34499-001.jpg"},{"id":459112,"title":"Two Young Girls at the Piano","artist":"Auguste Renoir","date":"1892","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/rl/web-large/DP-34501-001.jpg"},{"id":459123,"title":"Madame Roulin and Her Baby","artist":"Vincent van Gogh","date":"1888","medium":"Oil on canvas","img":"https://images.metmuseum.org/CRDImages/rl/web-large/DT3154.jpg"},{"id":760942,"title":"The Yellow Room","artist":"James McNeill Whistler","date":"ca. 1883\u201384","medium":"Watercolor and gouache on paperboard","img":"https://images.metmuseum.org/CRDImages/ad/web-large/DP-15482-013.jpg"}];
+
+/* ---------- deterministic day helpers ---------- */
+function hashStr(s){ let h=2166136261; for (let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
+function dayKey(){ const d=new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
+function weekKey(){ const d=new Date(); const oneJan=new Date(d.getFullYear(),0,1); const wk=Math.floor((((d-oneJan)/86400000)+oneJan.getDay()+1)/7); return d.getFullYear()+"-w"+wk; }
+
+/* ---------- fetch policy: daily artwork cadence (manifest cacheTtlMin: 1440) ---------- */
+const TTL = 1440 * 60 * 1000;
+function fmtWhen(t){ return new Date(t).toLocaleString([], {month:"short", day:"numeric", hour:"numeric", minute:"2-digit"}); }
+
+/* ---------- normalize records to a common shape ----------
+   {source, id, title, artist, date, medium, img} */
+function metToWork(o){
+  return { source:"met", id:"met:"+o.id, title:o.title, artist:o.artist, date:o.date, medium:o.medium, img:o.img };
+}
+function aicToWork(d){
+  return {
+    source:"aic", id:"aic:"+d.id,
+    title:d.title || "Untitled",
+    artist:(d.artist_display || "Unknown").split("\n")[0],
+    date:d.date_display || "",
+    medium:d.medium_display || "",
+    img: d.image_id ? "https://www.artic.edu/iiif/2/"+d.image_id+"/full/843,/0/default.jpg" : null
+  };
+}
+
+/* ---------- render one postcard ---------- */
+const postcard = Suite.liveRegion(document.getElementById("postcard"));
+let current = null;
+function renderWork(w, note){
+  current = w;
+  if (!w){ postcard.innerHTML = '<div class="frame"><div class="broken">No artwork to show.</div></div>'; return; }
+  const isFav = getFavs().some(function(x){ return x.id === w.id; });
+  const srcName = w.source === "aic" ? "Art Institute of Chicago" : "The Metropolitan Museum of Art";
+  postcard.innerHTML =
+    '<div class="frame"><div class="loading">Loading image…</div>' +
+      (w.img ? '<img alt="' + esc(w.title) + '" style="display:none">' : '<div class="broken">No image available for this work.</div>') +
+    '</div>' +
+    '<div class="caption">' +
+      '<div class="label">' + (note || "Artwork of the day") + '</div>' +
+      '<h2>' + esc(w.title) + '</h2>' +
+      '<div class="artist">' + esc(w.artist || "Unknown artist") + '</div>' +
+      '<div class="meta">' + [esc(w.date), esc(w.medium)].filter(Boolean).join(" · ") + '</div>' +
+      '<div class="src">Collection: ' + esc(srcName) + '</div>' +
+      '<div class="row">' +
+        '<button class="act primary" id="anotherBtn">Another</button>' +
+        '<button class="act" id="todayBtn">Today\'s pick</button>' +
+        '<button class="act fav' + (isFav ? ' on' : '') + '" id="favBtn">' + (isFav ? '★ Favorited' : '☆ Favorite') + '</button>' +
+      '</div>' +
+    '</div>';
+  const frame = postcard.querySelector(".frame");
+  const img = postcard.querySelector("img");
+  if (img && w.img){
+    img.addEventListener("load", function(){ frame.querySelector(".loading").remove(); img.style.display = "block"; });
+    img.addEventListener("error", function(){ frame.innerHTML = '<div class="broken">This image couldn\'t be loaded' +
+      (w.source === "aic" ? ' (the museum\'s image server declined the request). Try “Another”, or switch to the offline Met set.' : '.') + '</div>'; });
+    img.src = w.img;
+  }
+  document.getElementById("anotherBtn").addEventListener("click", another);
+  document.getElementById("todayBtn").addEventListener("click", showToday);
+  document.getElementById("favBtn").addEventListener("click", function(){ toggleFav(w); });
+}
+
+/* ---------- source state ---------- */
+let source = "met";     // start on the guaranteed-offline set so the page always shows art
+let aicPool = [];       // current live AIC pool
+let aicStale = null;    // epoch ms of the cache entry when the pool is a stale offline fallback
+
+function showToday(){
+  if (source === "met"){
+    renderWork(metToWork(MET[ hashStr(dayKey()) % MET.length ]));
+  } else {
+    if (!aicPool.length){ return; }
+    renderWork(aicToWork(aicPool[ hashStr(dayKey()) % aicPool.length ]),
+      aicStale ? "Offline — cached from " + fmtWhen(aicStale) : undefined);
+  }
+}
+function another(){
+  if (source === "met"){
+    let i = Math.floor(Math.random()*MET.length);
+    renderWork(metToWork(MET[i]), "From the Met set");
+  } else {
+    if (!aicPool.length){ return; }
+    let i = Math.floor(Math.random()*aicPool.length);
+    renderWork(aicToWork(aicPool[i]),
+      aicStale ? "From the Art Institute · offline, cached from " + fmtWhen(aicStale) : "From the Art Institute");
+  }
+}
+
+/* ---------- AIC live pool ---------- */
+async function loadAicPool(){
+  const wkey = "pool:" + weekKey();
+  // rotate the page weekly for variety, deterministically
+  const page = 1 + (hashStr(weekKey()) % 40);
+  try{
+    const url = "https://api.artic.edu/api/v1/artworks?fields=id,title,artist_display,date_display,medium_display,image_id,is_public_domain" +
+      "&limit=100&page=" + page;
+    const r = await Suite.fetchJSON(url, { cacheKey: "art." + wkey, ttl: TTL });
+    // v1 cached the filtered pool under this same key; Suite.fetchJSON caches the raw
+    // response — accept both shapes so an existing v1 cache keeps working
+    const rows = Array.isArray(r.v) ? r.v : ((r.v && r.v.data) || []);
+    const pool = rows.filter(function(d){ return d.is_public_domain && d.image_id; });
+    if (!pool.length) throw new Error("no public-domain images on this page");
+    aicPool = pool;
+    aicStale = r.stale ? r.t : null;
+    return true;
+  }catch(e){
+    aicPool = [];
+    aicStale = null;
+    return false;
+  }
+}
+
+async function aicSearch(term){
+  postcard.innerHTML = '<div class="frame"><div class="loading">Searching the Art Institute…</div></div>';
+  try{
+    const url = "https://api.artic.edu/api/v1/artworks/search?q=" + encodeURIComponent(term) +
+      "&query[term][is_public_domain]=true" +
+      "&fields=id,title,artist_display,date_display,medium_display,image_id,is_public_domain&limit=25";
+    const r = await Suite.fetchJSON(url, { cacheKey: "art.search:" + term.toLowerCase(), ttl: TTL });
+    const hits = ((r.v && r.v.data) || []).filter(function(d){ return d.image_id; });
+    if (!hits.length){ postcard.innerHTML = '<div class="frame"><div class="broken">No public-domain works found for “' + esc(term) + '”.</div></div>'; return; }
+    aicPool = hits;   // let "another" browse the search results
+    aicStale = r.stale ? r.t : null;
+    renderWork(aicToWork(hits[0]), 'Search: “' + esc(term) + '”' +
+      (r.stale ? " · offline, cached from " + fmtWhen(r.t) : ""));
+  }catch(e){
+    postcard.innerHTML = '<div class="frame"><div class="broken">Couldn\'t reach the Art Institute. Switch to the offline Met set, or try again.</div></div>';
+  }
+}
+
+/* ---------- tabs ---------- */
+const tabAic = document.getElementById("tabAic");
+const tabMet = document.getElementById("tabMet");
+const searchRow = document.getElementById("searchRow");
+const qEl = document.getElementById("q");
+
+function paintTabs(){
+  tabAic.classList.toggle("on", source === "aic");
+  tabMet.classList.toggle("on", source === "met");
+  tabAic.setAttribute("aria-pressed", String(source === "aic"));
+  tabMet.setAttribute("aria-pressed", String(source === "met"));
+}
+tabMet.addEventListener("click", function(){
+  source = "met"; paintTabs();
+  searchRow.classList.remove("show");
+  showToday();
+});
+tabAic.addEventListener("click", async function(){
+  source = "aic"; paintTabs();
+  searchRow.classList.add("show");
+  postcard.innerHTML = '<div class="frame"><div class="loading">Loading from the Art Institute…</div></div>';
+  const ok = await loadAicPool();
+  if (ok) showToday();
+  else postcard.innerHTML = '<div class="frame"><div class="broken">Couldn\'t reach the Art Institute right now. The offline Met set still works — tap “The Met”.</div></div>';
+});
+
+let searchTimer = null;
+qEl.addEventListener("input", function(){
+  const term = qEl.value.trim();
+  clearTimeout(searchTimer);
+  if (!term){ if (aicPool.length) showToday(); return; }
+  searchTimer = setTimeout(function(){ aicSearch(term); }, 500);
+});
+qEl.addEventListener("keydown", function(e){
+  if (e.key === "Enter"){
+    e.preventDefault();
+    clearTimeout(searchTimer);
+    const term = qEl.value.trim();
+    if (term) aicSearch(term);
+  }
+});
+
+/* ---------- favorites ---------- */
+const FAV_KEY = "suite.art.favorites";
+function getFavs(){ const v = Suite.store.get(FAV_KEY); return Array.isArray(v) ? v : []; }
+function setFavs(list){ Suite.store.set(FAV_KEY, list); renderFavs(); }
+function toggleFav(w){
+  let list = getFavs();
+  if (list.some(function(x){ return x.id === w.id; })){ list = list.filter(function(x){ return x.id !== w.id; }); }
+  else { list.unshift({ id:w.id, source:w.source, title:w.title, artist:w.artist, date:w.date, medium:w.medium, img:w.img }); }
+  setFavs(list);
+  if (current && current.id === w.id){
+    const btn = document.getElementById("favBtn");
+    const on = getFavs().some(function(x){ return x.id === w.id; });
+    btn.classList.toggle("on", on);
+    btn.textContent = on ? "★ Favorited" : "☆ Favorite";
+  }
+}
+function renderFavs(){
+  const list = getFavs();
+  const grid = document.getElementById("favGrid");
+  const empty = document.getElementById("favEmpty");
+  document.getElementById("favCount").textContent = list.length ? "· " + list.length : "";
+  if (!list.length){ grid.innerHTML = ""; empty.style.display = "block"; return; }
+  empty.style.display = "none";
+  grid.innerHTML = "";
+  list.forEach(function(w){
+    const el = document.createElement("div");
+    el.className = "fav-item";
+    el.innerHTML =
+      (w.img ? '<img alt="" loading="lazy" src="' + esc(w.img) + '">' : '<div style="height:120px"></div>') +
+      '<div class="cap"><b>' + esc(w.title) + '</b><span>' + esc(w.artist || "") + '</span></div>' +
+      '<button class="rm" title="Remove" aria-label="Remove from favorites">✕</button>';
+    const im = el.querySelector("img");
+    if (im) im.addEventListener("error", function(){ im.style.visibility = "hidden"; });
+    el.querySelector(".rm").addEventListener("click", function(e){ e.stopPropagation(); setFavs(getFavs().filter(function(x){ return x.id !== w.id; })); });
+    const openFav = function(){ renderWork(w, "From your favorites"); window.scrollTo({top:0,behavior:"smooth"}); };
+    el.addEventListener("click", openFav);
+    el.tabIndex = 0;
+    el.setAttribute("role", "button");
+    el.setAttribute("aria-label", "Show favorite: " + (w.title || "artwork"));
+    el.addEventListener("keydown", function(e){ if (e.key === "Enter" || e.key === " "){ e.preventDefault(); openFav(); } });
+    grid.append(el);
+  });
+}
+
+/* ---------- boot ---------- */
+Suite.liveRegion(document.getElementById("favCount"));
+renderFavs();
+showToday();   // Met set, guaranteed to render something
+</script>
+</body>
+</html>

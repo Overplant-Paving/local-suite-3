@@ -1,0 +1,17 @@
+{
+  "v1": {
+    "suite.cache.art.pool:2026-w28": "{\"t\":1784147711695,\"v\":[{\"id\":14591,\"title\":\"Woman Reading\",\"date_display\":\"1880–82\",\"artist_display\":\"Édouard Manet (French, 1832–1883)\",\"medium_disp…(21721 chars)",
+    "suite.theme": "dark",
+    "suite.art.favorites": "[{\"id\":\"met:13223\",\"source\":\"met\",\"title\":\"Cremorne Gardens, No. 2\",\"artist\":\"James McNeill Whistler\",\"date\":\"ca. 1870–80\",\"medium\":\"Oil on canvas\",\"i…(220 chars)"
+  },
+  "v2": {
+    "suite.art.favorites": "[{\"id\":\"met:13223\",\"source\":\"met\",\"title\":\"Cremorne Gardens, No. 2\",\"artist\":\"James McNeill Whistler\",\"date\":\"ca. 1870–80\",\"medium\":\"Oil on canvas\",\"i…(220 chars)",
+    "suite.cache.art.search:sunflowers": "{\"t\":1784061309351,\"v\":{\"preference\":null,\"pagination\":{\"total\":61659,\"limit\":25,\"offset\":0,\"total_pages\":2467,\"current_page\":1},\"data\":[{\"_score\":52.…(7986 chars)",
+    "suite.cache.art.pool:2026-w28": "{\"t\":1784061309351,\"v\":{\"pagination\":{\"total\":132135,\"limit\":100,\"offset\":1300,\"total_pages\":1322,\"current_page\":14,\"prev_url\":\"https://api.artic.edu/…(30007 chars)",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": [
+    "suite.cache.art.search:sunflowers"
+  ]
+}

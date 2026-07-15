@@ -1073,6 +1073,32 @@
       "flags": []
     },
     {
+      "id": "art",
+      "file": "art.html",
+      "name": "Museum Postcard",
+      "cat": "ref",
+      "cx": "S",
+      "desc": "A daily open-access artwork. APOD for art. (Met JSON blocks fetch — images don't.)",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://api.artic.edu",
+        "https://www.artic.edu",
+        "https://images.metmuseum.org"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.art.favorites",
+        "suite.cache.art.pool:*",
+        "suite.cache.art.search:*"
+      ],
+      "cacheTtlMin": 1440,
+      "since": "v1",
+      "flags": [
+        "ea"
+      ]
+    },
+    {
       "id": "geo",
       "file": "geo.html",
       "name": "Geocoder & Coordinate Toolbox",
