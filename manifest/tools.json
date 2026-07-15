@@ -244,6 +244,24 @@
       "cacheTtlMin": null,
       "since": "v1",
       "flags": []
+    },
+    {
+      "id": "color",
+      "file": "color.html",
+      "name": "Color Studio",
+      "cat": "util",
+      "cx": "M",
+      "desc": "Picker, palettes, WCAG contrast, colors from a photo.",
+      "network": "offline",
+      "key": null,
+      "endpoints": [],
+      "storage": [
+        "suite.theme",
+        "suite.color.palettes"
+      ],
+      "cacheTtlMin": null,
+      "since": "v1",
+      "flags": []
     }
   ]
 }

@@ -1,0 +1,28 @@
+== computed-style diff, light (12 differing values) ==
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tab.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+input[type=color] { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.fmt { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sw { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sw .chip { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sw .lab { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.ratio { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.drop { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+
+== computed-style diff, dark (12 differing values) ==
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tab.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+input[type=color] { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.fmt { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sw { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sw .chip { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sw .lab { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.ratio { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.drop { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+

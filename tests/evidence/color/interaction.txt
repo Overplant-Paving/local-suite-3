@@ -1,0 +1,20 @@
+picker set to #ff8800; format rows: HEX = #ff8800 | RGB = rgb(255, 136, 0) | HSL = hsl(32, 100%, 50%) | OKLCH = oklch(0.744 0.181 56.5)
+HSL sliders after set: H=32 S=100 L=50 (outputs: 32° 100% 50%)
+lightness slider moved to 25 -> HEX now: #804400
+generated palettes:
+  Complementary [#804400, #003b80]
+  Analogous [#800400, #804400, #7b8000]
+  Triadic [#804400, #008044, #440080]
+  Shades [#4d2900, #a65800, #ff8800, #ffb259, #ffdbb3]
+clicked Save on first palette; toast: Saved “Complementary”
+clicked HEX row; toast: Copied #804400
+contrast #000000 on #ffffff -> ratio: 21.00 : 1; badges: PASS AA · normal text | PASS AA · large text | PASS AAA · normal text | PASS AAA · large text
+contrast preview inline styles: background=rgb(255, 255, 255) color=rgb(0, 0, 0)
+contrast #777777 on #ffffff -> ratio: 4.48 : 1; badges: FAIL AA · normal text | PASS AA · large text | FAIL AAA · normal text | FAIL AAA · large text
+photo (red/green/blue/white quadrants) dominant colors: #0000ff, #0000ff, #0000ff, #ff0000, #00ff00, #ffffff (dataset.hexes=["#0000ff","#0000ff","#0000ff","#ff0000","#00ff00","#ffffff"]; canvas display=block)
+saved photo palette; toast: Saved “From photo”
+saved tab items: From photo · 7/15/2026 | Complementary · 7/15/2026
+after deleting first item, saved tab items: Complementary · 7/15/2026
+keyboard Enter on focused swatch; toast: Copied #804400
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)

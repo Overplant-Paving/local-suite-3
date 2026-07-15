@@ -110,7 +110,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 12 | tripcost.html | local | off | (eia opt.) | A | optional gas-price fetch | ⬜ |
 | 13 | qr.html | util | off | — | A | | ✅ `tests/evidence/qr/` |
 | 14 | text.html | util | off | — | A | | ✅ `tests/evidence/text/` |
-| 15 | color.html | util | off | — | A | | ⬜ |
+| 15 | color.html | util | off | — | A | | ✅ `tests/evidence/color/` |
 | 16 | random.html | util | off | — | A | | ⬜ |
 | 17 | notes.html | util | off | — | A | XP (keep) | ⬜ |
 | 18 | dataviewer.html | util | off | — | A | | ⬜ |
