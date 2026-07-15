@@ -178,5 +178,14 @@
     "vclass": "local-only expression, recorded verified-clean with reasoning in tests/evidence/normals/report.md",
     "cmp": "local-only expression, recorded verified-clean with reasoning in tests/evidence/normals/report.md",
     "muted": "local-only expression, recorded verified-clean with reasoning in tests/evidence/normals/report.md"
+  },
+  "geo.html": {
+    "src === \"census\" ? \"Census only covers US street addresses.\" : \"Try another source.\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/geo/report.md",
+    "km.toFixed(2)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/geo/report.md",
+    "mi.toFixed(2)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/geo/report.md",
+    "brng.toFixed(1)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/geo/report.md",
+    "compass": "local-only expression, recorded verified-clean with reasoning in tests/evidence/geo/report.md",
+    "(km*1000).toLocaleString(undefined,{maximumFractionDigits:0})": "local-only expression, recorded verified-clean with reasoning in tests/evidence/geo/report.md",
+    "(mi*5280).toLocaleString(undefined,{maximumFractionDigits:0})": "local-only expression, recorded verified-clean with reasoning in tests/evidence/geo/report.md"
   }
 }

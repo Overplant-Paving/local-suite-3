@@ -149,7 +149,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 51 | factbook.html | ref | off | — | B | EA — shipped v1 is zero-network (embedded data, emoji flags); the cors label was a planning artifact | ✅ `tests/evidence/factbook/` |
 | 52 | books.html | ref | cors | — | B | inline `onerror=` → listener | ✅ `tests/evidence/books/` |
 | 53 | art.html | ref | cors | — | B | EA · inline `onerror=` → listener | ⬜ |
-| 54 | geo.html | local | cors | — | B | Census JSONP path; Nominatim 1 req/s | ⬜ |
+| 54 | geo.html | local | cors | — | B | Census JSONP path; Nominatim 1 req/s | ✅ `tests/evidence/geo/` |
 | 55 | elevation.html | local | cors | — | B | | ⬜ |
 | 56 | network.html | local | cors | — | B | ipapi.co 1k/day | ✅ `tests/evidence/network/` |
 | 57 | apod.html | space | key | nasa (demo) | C | RL (DEMO_KEY 30/hr) | ⬜ |

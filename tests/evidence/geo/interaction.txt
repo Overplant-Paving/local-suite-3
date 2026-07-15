@@ -1,0 +1,26 @@
+loc bar after seeding suite.location: "Suite location: Los Angeles, CA (34.0522, -118.2437)"
+DMS conversion: 38.8977, -77.0365 -> lat "38° 53' 51.72" N" lon "77° 2' 11.40" W"
+  (expected 38° 53' 51.72" N / 77° 2' 11.40" W)
+DMS round-trip back to decimal: lat "38.897700" lon "-77.036500"
+  conv-out: "38.897700, -77.036500"
+distance/bearing LA->SF: "559.12 km · 347.42 mi Initial bearing 319.0° (NW) · 559,121 m · 1,834,387 ft"
+  (expected 559.12 km / 347.4 mi; initial forward azimuth 318.96° ~ 319.0° NW by hand calculation)
+Open-Meteo live geocode "Denver": name="Denver" sub="Colorado, United States · pop 729,019" coords=39.739150, -104.984700 tag=open-meteo
+"use in tools": decLat=39.739150 decLon=-104.984700 ptA="39.739150, -104.984700"
+"save as suite location": suite.location = {"lat":39.73915,"lon":-104.9847,"label":"Denver"}
+  loc bar now: "Suite location: Denver (39.7392, -104.9847)"
+Census plain-fetch CORS probe (from a file:// page): fetch FAILED: Failed to fetch
+Census JSONP live geocode: name="1600 PENNSYLVANIA AVE NW, WASHINGTON, DC, 20500" coords=38.898699, -77.035188 tag=census
+Nominatim live reverse geocode 38.8977,-77.0365: name="White House" coords=38.897639, -77.036552 tag=nominatim
+  sub="White House, 1600, Pennsylvania Avenue Northwest, Ward 2, Washington, District of Columbia, 20500, United States"
+offline stale Open-Meteo "Denver": name="Denver" coords=39.739150, -104.984700
+  stale note: "Offline — showing cached results from 7/7/2026, 3:31:05 PM."
+offline stale Nominatim reverse: name="White House" coords=38.897639, -77.036552
+  stale note: "Offline — showing cached results from 7/7/2026, 3:31:05 PM."
+offline stale Census JSONP: name="1600 PENNSYLVANIA AVE NW, WASHINGTON, DC, 20500" coords=38.898699, -77.035188
+  stale note: "Offline — showing cached results from 7/7/2026, 3:31:05 PM."
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
