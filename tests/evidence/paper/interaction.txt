@@ -1,0 +1,33 @@
+default graph/letter/portrait/5mm: svg 215.9mmx279.4mm viewBox="0 0 215.9 279.4" lines=92 circles=0 texts=0 rects=2 stroke=#7089a8 stroke-width=0.324
+graph spacing=10mm: svg 215.9mmx279.4mm viewBox="0 0 215.9 279.4" lines=46 circles=0 texts=0 rects=2 stroke=#7089a8 stroke-width=0.324
+graph spacing=0.5in (12.7mm): svg 215.9mmx279.4mm viewBox="0 0 215.9 279.4" lines=37 circles=0 texts=0 rects=2 stroke=#7089a8 stroke-width=0.324
+graph heavy=0: svg 215.9mmx279.4mm viewBox="0 0 215.9 279.4" lines=37 circles=0 texts=0 rects=2 stroke=#7089a8 stroke-width=0.18
+type=dot: controls visible -> spacing=true heavy=false ruled=false
+type=dot: svg 215.9mmx279.4mm viewBox="0 0 215.9 279.4" lines=0 circles=336 texts=0 rects=2 stroke=null stroke-width=null
+type=lined: controls visible -> spacing=true heavy=false ruled=true
+type=lined: svg 215.9mmx279.4mm viewBox="0 0 215.9 279.4" lines=38 circles=0 texts=0 rects=2 stroke=#7089a8 stroke-width=0.18
+type=iso: controls visible -> spacing=true heavy=true ruled=false
+type=iso: svg 215.9mmx279.4mm viewBox="0 0 215.9 279.4" lines=47 circles=0 texts=0 rects=2 stroke=#7089a8 stroke-width=0.18
+type=music: controls visible -> spacing=false heavy=false ruled=false
+type=music: svg 215.9mmx279.4mm viewBox="0 0 215.9 279.4" lines=75 circles=0 texts=0 rects=2 stroke=#7089a8 stroke-width=0.234
+type=hand: controls visible -> spacing=false heavy=false ruled=false
+type=hand: svg 215.9mmx279.4mm viewBox="0 0 215.9 279.4" lines=51 circles=0 texts=0 rects=2 stroke=#7089a8 stroke-width=0.18
+type=battleship: controls visible -> spacing=false heavy=false ruled=false
+type=battleship: svg 215.9mmx279.4mm viewBox="0 0 215.9 279.4" lines=44 circles=0 texts=42 rects=2 stroke=#7089a8 stroke-width=0.216
+lined wide-ruled 8.7mm: svg 215.9mmx279.4mm viewBox="0 0 215.9 279.4" lines=31 circles=0 texts=0 rects=2 stroke=#7089a8 stroke-width=0.18
+lined wide-ruled, margin line off: svg 215.9mmx279.4mm viewBox="0 0 215.9 279.4" lines=30 circles=0 texts=0 rects=2 stroke=#7089a8 stroke-width=0.18
+margin-line toggle removed 1 line (expect 1, the red margin rule)
+graph A4 portrait: svg 210mmx297mm viewBox="0 0 210 297" lines=37 circles=0 texts=0 rects=2 stroke=#7089a8 stroke-width=0.324
+graph A4 landscape: svg 297mmx210mm viewBox="0 0 297 210" lines=37 circles=0 texts=0 rects=2 stroke=#7089a8 stroke-width=0.324
+marginBleed button -> #margin value now "0" (expect "0")
+graph A4 full bleed: svg 210mmx297mm viewBox="0 0 210 297" lines=41 circles=0 texts=0 rects=2 stroke=#7089a8 stroke-width=0.324
+ink swatch #c05a5a: svg 210mmx297mm viewBox="0 0 210 297" lines=37 circles=0 texts=0 rects=2 stroke=#c05a5a stroke-width=0.324
+swatch click -> #color input="#c05a5a", rendered stroke="#c05a5a"
+minor weight 0.4mm: svg 210mmx297mm viewBox="0 0 210 297" lines=37 circles=0 texts=0 rects=2 stroke=#c05a5a stroke-width=0.72
+weight change -> first line stroke-width now 0.72
+border box on: svg 210mmx297mm viewBox="0 0 210 297" lines=37 circles=0 texts=0 rects=3 stroke=#c05a5a stroke-width=0.72
+border checkbox -> rects=3 (expect 3: clipPath rect + white sheet + border box)
+Download SVG -> suggested filename "paper-graph-a4.svg"
+preview role=img aria-label="Preview: Graph / grid paper, A4 — 210 × 297 mm, portrait" aria-live=polite
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)

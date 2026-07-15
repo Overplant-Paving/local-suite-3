@@ -344,6 +344,25 @@
       "cacheTtlMin": null,
       "since": "v1",
       "flags": []
+    },
+    {
+      "id": "paper",
+      "file": "paper.html",
+      "name": "Paper Generator",
+      "cat": "util",
+      "cx": "S",
+      "desc": "Print-perfect graph, lined, dot-grid, and staff paper.",
+      "network": "offline",
+      "key": null,
+      "endpoints": [],
+      "storage": [
+        "suite.theme"
+      ],
+      "cacheTtlMin": null,
+      "since": "v1",
+      "flags": [
+        "print-css"
+      ]
     }
   ]
 }
