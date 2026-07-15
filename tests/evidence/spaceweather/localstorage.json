@@ -1,0 +1,23 @@
+{
+  "v1": {
+    "suite.cache.spaceweather": "{\"t\":1784146435188,\"v\":{\"kp\":2.33,\"kpWhen\":\"3-hr period to Jul 15, 10 AM\",\"kpHistory\":[2.33,2.67,2,2,1.67,1.33,2,2.33,2,3.67,2,1.67,2,2,1.33,1.67,2,2.…(431 chars)",
+    "suite.theme": "dark",
+    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}"
+  },
+  "v2": {
+    "suite.cache.spaceweather.windspeed": "{\"t\":1784060033933,\"v\":[{\"proton_speed\":437,\"time_tag\":\"2026-07-15T20:08:00Z\"}]}",
+    "suite.location": "{\"lat\":34.0614,\"lon\":-118.2385,\"label\":\"Los Angeles, CA 90012\"}",
+    "suite.cache.spaceweather.windmag": "{\"t\":1784060033933,\"v\":[{\"bt\":7,\"bz_gsm\":-2,\"time_tag\":\"2026-07-15T20:09:00Z\"}]}",
+    "suite.cache.spaceweather.kp": "{\"t\":1784060033933,\"v\":[{\"time_tag\":\"2026-07-08T00:00:00\",\"Kp\":2.67,\"a_running\":12,\"station_count\":7},{\"time_tag\":\"2026-07-08T03:00:00\",\"Kp\":3.33,\"a_r…(4774 chars)",
+    "suite.cache.spaceweather.scales": "{\"t\":1784060033933,\"v\":{\"0\":{\"DateStamp\":\"2026-07-15\",\"TimeStamp\":\"20:13:00\",\"R\":{\"Scale\":\"0\",\"Text\":\"none\",\"MinorProb\":null,\"MajorProb\":null},\"S\":{\"S…(994 chars)",
+    "suite.cache.spaceweather": "{\"t\":1784060033933,\"v\":{\"kp\":2.33,\"kpWhen\":\"3-hr period to Jul 15, 10 AM\",\"kpHistory\":[2.33,2.67,2,2,1.67,1.33,2,2.33,2,3.67,2,1.67,2,2,1.33,1.67,2,2.…(431 chars)",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": [
+    "suite.cache.spaceweather.windspeed",
+    "suite.cache.spaceweather.windmag",
+    "suite.cache.spaceweather.kp",
+    "suite.cache.spaceweather.scales"
+  ]
+}

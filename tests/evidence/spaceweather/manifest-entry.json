@@ -1,0 +1,23 @@
+{
+  "id": "spaceweather",
+  "file": "spaceweather.html",
+  "name": "Space Weather & Aurora",
+  "cat": "sky",
+  "cx": "M",
+  "desc": "Kp index, solar wind, flares, and “can I see the aurora tonight?”",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": [
+    "https://services.swpc.noaa.gov",
+    "https://api.zippopotam.us"
+  ],
+  "storage": [
+    "suite.theme",
+    "suite.location",
+    "suite.cache.spaceweather",
+    "suite.cache.spaceweather.*"
+  ],
+  "cacheTtlMin": 10,
+  "since": "v1",
+  "flags": []
+}

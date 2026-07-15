@@ -1,0 +1,26 @@
+first-run card (no suite.location): "Set your location"
+LIVE noaa-planetary-k-index.json: 62 numeric rows; latest = Kp 2.33 @ 2026-07-15T15:00:00
+LIVE noaa-scales.json (current "0"): R=0/none S=0/none G=0/none
+LIVE solar-wind-speed.json: {"proton_speed":437,"time_tag":"2026-07-15T20:08:00Z"}
+LIVE solar-wind-mag-field.json: {"bt":7,"bz_gsm":-2,"time_tag":"2026-07-15T20:09:00Z"}
+LIVE Kp readout: rendered "2.33 / 9 Kp" (expected to start with 2.33) -> MATCH; as of 3-hr period to Jul 15, 10 AM
+G-level label: rendered "Quiet / unsettled", expected "Quiet / unsettled" -> MATCH
+Kp color band: expected var(--quiet)=#4caf50; readout color rgb(76, 175, 80) -> MATCH; gauge arc stroke="var(--quiet)"
+sparkline: 24 points (expected 24) -> MATCH; label "Last 24 readings (3-day) · dashed line = storm threshold Kp5"
+LIVE aurora answer (LA, lat 34.0522): "Aurora very unlikely here" — "At 34.1° you're too far from the poles for a typical storm to bring the aurora overhead."
+aurora verdict check: expected "Aurora very unlikely here" for Kp 2.33 -> MATCH
+LIVE solar wind cells: Speed=437 km/s · Bt (field)=7.0 nT · Bz (south = active)=-2.0 nT · Density=— p/cm³
+wind check: speed 437/437, bt 7.0/7.0, bz -2.0/-2.0 (rendered/expected) -> MATCH; density "—" by design (v1 never sources it)
+LIVE NOAA scales rendered: R0(none) S0(none) G0(none) — expected R0(none) S0(none) G0(none) -> MATCH
+updated line: "updated just now"
+v1 blob cache (suite.cache.spaceweather) read-back: OK — 431 bytes, model kp=2.33 (matches live Kp), 24 history points, wind={"speed":437,"bt":7,"bz":-2,"density":null}
+localStorage total footprint after live load: 6594 chars (~6.4 KB) — no ~1 MB aurora grid: v1 never fetches ovation_aurora_latest.json (see report.md)
+SECOND LOAD (within 10-min TTL): 0 requests to services.swpc.noaa.gov (expected 0 — served from suite.cache.spaceweather.* envelopes); rendered Kp "2.33 / 9 Kp", updated line "updated just now"
+LIVE zippopotam: ZIP 90012 -> locLabel "Los Angeles, CA 90012"; space-weather data re-rendered for the new latitude (SWPC still fresh in cache)
+STALE PATH (network blocked, caches aged 24h): rendered Kp "2.33 / 9 Kp" from stale cache; updated line: "offline · last data Jul 14, 3 PM"
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

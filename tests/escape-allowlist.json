@@ -157,5 +157,16 @@
     "axis": "local-only expression, recorded verified-clean with reasoning in tests/evidence/drought/report.md",
     "scale": "local-only expression, recorded verified-clean with reasoning in tests/evidence/drought/report.md",
     "c.dm>=0?`<span class=\"code\">${c.code}</span> · `:\"\"": "c is a row of the local CATS constant table; code is a D0-D4 literal"
+  },
+  "spaceweather.html": {
+    "av.verdict.startsWith(\"Aurora may\") ? kpColor(kp) : \"var(--line)\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/spaceweather/report.md",
+    "av.emoji": "local-only expression, recorded verified-clean with reasoning in tests/evidence/spaceweather/report.md",
+    "kpGauge(kp)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/spaceweather/report.md",
+    "kpColor(kp)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/spaceweather/report.md",
+    "sparkline(model.kpHistory)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/spaceweather/report.md",
+    "wind.bz != null && wind.bz < -5 ? \"var(--storm)\" : \"inherit\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/spaceweather/report.md",
+    "scaleCell(\"R\", \"Radio blackout\", scales.R)": "scaleCell builds markup from literal args + a numeric scale level (parseInt'd remote value rendered via esc inside the builder)",
+    "scaleCell(\"S\", \"Solar radiation\", scales.S)": "scaleCell builds markup from literal args + a numeric scale level (parseInt'd remote value rendered via esc inside the builder)",
+    "scaleCell(\"G\", \"Geomagnetic\", scales.G)": "scaleCell builds markup from literal args + a numeric scale level (parseInt'd remote value rendered via esc inside the builder)"
   }
 }

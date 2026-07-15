@@ -122,7 +122,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 24 | alerts.html | sky | cors | — | B | | ✅ `tests/evidence/alerts/` |
 | 25 | radar.html | sky | cors | — | B | image loops (no CORS issue) | ✅ `tests/evidence/radar/` |
 | 26 | air.html | sky | cors | — | B | | ✅ `tests/evidence/air/` |
-| 27 | spaceweather.html | sky | cors | — | B | ~1 MB aurora grid — cache | ⬜ |
+| 27 | spaceweather.html | sky | cors | — | B | grid flag was a planning artifact — v1 uses a local Kp/lat table; SWPC fetches cached 10 min | ✅ `tests/evidence/spaceweather/` |
 | 28 | tides.html | sky | cors | — | B | add `application=` param | ✅ `tests/evidence/tides/` |
 | 29 | marine.html | sky | cors | — | B | NDBC path stays descoped (no CORS) | ⬜ |
 | 30 | normals.html | sky | cors | — | B | NCEI gotchas in CATALOG | ⬜ |
