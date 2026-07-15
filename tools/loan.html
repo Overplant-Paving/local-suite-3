@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mortgage &amp; Loan Workbench · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents: chart palette (3-layer, same pattern as core) */
+  :root { --principal: #2f6f6a; --interest: #c07f2d; --extra: #7a5ea8; }
+  @media (prefers-color-scheme: dark) {
+    :root { --principal: #6fb5ae; --interest: #d9a153; --extra: #a891d0; }
+  }
+  :root[data-theme="light"] { --principal: #2f6f6a; --interest: #c07f2d; --extra: #7a5ea8; }
+  :root[data-theme="dark"] { --principal: #6fb5ae; --interest: #d9a153; --extra: #a891d0; }
+
+  body { padding: 1.5rem 1.25rem 4rem; }
+  .wrap { max-width: 1120px; margin: 0 auto; }
+  header { position: relative; margin-bottom: 1.4rem; }
+  .back { position: absolute; left: 0; top: .1rem; }
+  .theme-btn { position: absolute; right: 0; top: 0; float: none; }
+  header h1 { font-size: 1.7rem; letter-spacing: -.02em; padding-top: 1.6rem; }
+  header .tag { color: var(--muted); margin-top: .3rem; max-width: 48rem; font-size: .95rem; }
+
+  .tabs { display: flex; gap: .5rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+  .tab { border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 999px; padding: .4rem 1rem; cursor: pointer; font-size: .9rem; }
+  .tab.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* v1's .card is a plain block — neutralize the core flex-card layout */
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.1rem 1.2rem; box-shadow: var(--shadow); margin-bottom: 1.2rem; display: block; flex-direction: row; gap: normal; }
+  .card h2 { font-size: .82rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 1rem; }
+  .inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .9rem; }
+  .field label { display: block; font-size: .78rem; color: var(--muted); margin-bottom: .3rem; }
+  .field .in { display: flex; align-items: center; border: 1px solid var(--line); border-radius: 9px; background: var(--bg); overflow: hidden; }
+  .field .in span { padding: 0 .5rem; color: var(--muted); font-size: .9rem; }
+  .field input, .field select { flex: 1; width: 100%; padding: .5rem .6rem; font-size: .95rem; color: var(--ink); border: 0; background: transparent; outline: none; }
+  .field .in:focus-within { border-color: var(--accent); }
+  .field select { border: 1px solid var(--line); border-radius: 9px; background: var(--bg); }
+
+  .stats { display: flex; gap: 1.8rem; flex-wrap: wrap; margin: 1.2rem 0; }
+  .stat b { font-size: 1.55rem; display: block; line-height: 1.15; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .stat span { font-size: .76rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+
+  canvas { width: 100%; height: auto; display: block; }
+  .legend { display: flex; gap: 1.2rem; flex-wrap: wrap; margin-top: .7rem; font-size: .82rem; color: var(--muted); }
+  .legend i { display: inline-block; width: .8rem; height: .8rem; border-radius: 3px; margin-right: .35rem; vertical-align: -1px; }
+
+  .btn { border: 1px solid var(--accent); background: var(--accent); color: #fff; border-radius: 9px; padding: .5rem .9rem; cursor: pointer; font-size: .92rem; }
+  .btn.ghost { background: var(--card); color: var(--accent); }
+  .btn:hover { filter: brightness(1.05); }
+
+  .scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; max-height: 460px; overflow-y: auto; }
+  table.sched { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: .86rem; }
+  table.sched th, table.sched td { padding: .4rem .7rem; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  table.sched th { position: sticky; top: 0; background: var(--card); color: var(--muted); font-weight: 500; font-size: .74rem; text-transform: uppercase; letter-spacing: .04em; z-index: 1; }
+  table.sched td:first-child, table.sched th:first-child { text-align: left; }
+  table.sched tr.yearend td { background: var(--accent-soft); font-weight: 600; }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+  .kv { display: flex; justify-content: space-between; padding: .35rem 0; border-bottom: 1px dashed var(--line); font-size: .92rem; }
+  .kv b { font-variant-numeric: tabular-nums; }
+  .verdict { margin-top: 1rem; padding: .9rem 1.1rem; border-radius: 10px; background: var(--accent-soft); color: var(--accent); font-size: .95rem; }
+  .verdict.bad { background: color-mix(in srgb, var(--interest) 16%, transparent); color: var(--interest); }
+  .hidden { display: none; }
+  .savings { padding: .9rem 1.1rem; border-radius: 10px; background: var(--accent-soft); color: var(--accent); margin-top: 1rem; font-size: .95rem; }
+  .savings b { font-variant-numeric: tabular-nums; }
+  footer { font-size: .82rem; padding-top: 1rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+    <h1>Mortgage &amp; Loan Workbench</h1>
+    <p class="tag">Amortization, PITI, extra-payment what-ifs and a refinance break-even — all computed in this file. Your finances are nobody's telemetry.</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab on" data-view="loan">Loan &amp; schedule</button>
+    <button class="tab" data-view="extra">Extra payments</button>
+    <button class="tab" data-view="refi">Refinance compare</button>
+  </div>
+
+  <!-- LOAN INPUTS + SCHEDULE -->
+  <section id="view-loan">
+    <div class="card">
+      <h2>Loan terms</h2>
+      <div class="inputs">
+        <div class="field"><label for="principal">Loan amount</label><div class="in"><span>$</span><input type="number" id="principal" value="360000" min="0" step="1000"></div></div>
+        <div class="field"><label for="apr">Interest rate (APR)</label><div class="in"><input type="number" id="apr" value="6.5" min="0" step="0.01"><span>%</span></div></div>
+        <div class="field"><label for="term">Term</label><div class="in"><input type="number" id="term" value="30" min="1" step="1"><span>yrs</span></div></div>
+        <div class="field"><label for="start">Start date</label><input type="month" id="start"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Optional — for full PITI</h2>
+      <div class="inputs">
+        <div class="field"><label for="tax">Property tax / year</label><div class="in"><span>$</span><input type="number" id="tax" value="0" min="0" step="100"></div></div>
+        <div class="field"><label for="ins">Home insurance / year</label><div class="in"><span>$</span><input type="number" id="ins" value="0" min="0" step="50"></div></div>
+        <div class="field"><label for="hoa">HOA / month</label><div class="in"><span>$</span><input type="number" id="hoa" value="0" min="0" step="10"></div></div>
+        <div class="field"><label for="pmi">PMI / month</label><div class="in"><span>$</span><input type="number" id="pmi" value="0" min="0" step="10"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="stats" id="stats"></div>
+      <canvas id="chart" width="1000" height="320" role="img" aria-label="Chart of balance remaining, cumulative interest and cumulative principal over the loan term"></canvas>
+      <div class="legend">
+        <span><i style="background:var(--principal)"></i>Balance remaining</span>
+        <span><i style="background:var(--interest)"></i>Cumulative interest</span>
+        <span><i style="background:var(--extra)"></i>Cumulative principal</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6rem;margin-bottom:.8rem">
+        <h2 style="margin:0">Amortization schedule</h2>
+        <button class="btn ghost" id="csvBtn">Export CSV</button>
+      </div>
+      <div class="scroll"><table class="sched" id="sched"></table></div>
+    </div>
+  </section>
+
+  <!-- EXTRA PAYMENTS -->
+  <section id="view-extra" class="hidden">
+    <div class="card">
+      <h2>Pay it down faster</h2>
+      <p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem">Uses the loan terms from the first tab. See how much interest each strategy saves and how much sooner you're free.</p>
+      <div class="inputs">
+        <div class="field"><label for="exMonthly">Extra per month</label><div class="in"><span>$</span><input type="number" id="exMonthly" value="200" min="0" step="25"></div></div>
+        <div class="field"><label for="exLump">One-time lump sum</label><div class="in"><span>$</span><input type="number" id="exLump" value="0" min="0" step="500"></div></div>
+        <div class="field"><label for="exLumpAt">Lump applied at month #</label><div class="in"><input type="number" id="exLumpAt" value="12" min="1" step="1"></div></div>
+        <div class="field"><label for="exBiweekly">Biweekly (half-payment every 2 wks)</label>
+          <select id="exBiweekly"><option value="no">No</option><option value="yes">Yes</option></select></div>
+      </div>
+      <div class="savings" id="exSavings"></div>
+    </div>
+    <div class="card">
+      <div class="compare" id="exCompare"></div>
+    </div>
+  </section>
+
+  <!-- REFINANCE -->
+  <section id="view-refi" class="hidden">
+    <div class="card">
+      <h2>Refinance comparison</h2>
+      <div class="compare">
+        <div>
+          <div style="font-weight:600;margin-bottom:.6rem;color:var(--interest)">Current loan</div>
+          <div class="field"><label for="rCurBal">Balance remaining</label><div class="in"><span>$</span><input type="number" id="rCurBal" value="330000" min="0" step="1000"></div></div>
+          <div class="field" style="margin-top:.6rem"><label for="rCurApr">Rate (APR)</label><div class="in"><input type="number" id="rCurApr" value="6.5" min="0" step="0.01"><span>%</span></div></div>
+          <div class="field" style="margin-top:.6rem"><label for="rCurTerm">Years left</label><div class="in"><input type="number" id="rCurTerm" value="28" min="1" step="1"><span>yrs</span></div></div>
+        </div>
+        <div>
+          <div style="font-weight:600;margin-bottom:.6rem;color:var(--principal)">New loan</div>
+          <div class="field"><label for="rNewBal">New amount</label><div class="in"><span>$</span><input type="number" id="rNewBal" value="330000" min="0" step="1000"></div></div>
+          <div class="field" style="margin-top:.6rem"><label for="rNewApr">New rate (APR)</label><div class="in"><input type="number" id="rNewApr" value="5.25" min="0" step="0.01"><span>%</span></div></div>
+          <div class="field" style="margin-top:.6rem"><label for="rNewTerm">New term</label><div class="in"><input type="number" id="rNewTerm" value="30" min="1" step="1"><span>yrs</span></div></div>
+          <div class="field" style="margin-top:.6rem"><label for="rCosts">Closing costs</label><div class="in"><span>$</span><input type="number" id="rCosts" value="6000" min="0" step="500"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="compare" id="refiOut"></div>
+      <div class="verdict" id="refiVerdict"></div>
+    </div>
+  </section>
+
+  <footer>No network — everything happens on your machine. Estimates only; confirm figures with your lender.</footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+/* v1's toggle also redrew the chart so its cssVar() colors follow the theme;
+   Suite.theme.init registered its toggle first, so this fires after the flip. */
+document.getElementById("themeBtn").addEventListener("click", () => drawChart(lastSchedule));
+
+const $ = id => document.getElementById(id);
+const KEY = "suite.loan.v1";
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* ---- formatting ---- */
+const fmt$ = n => (n < 0 ? "-$" : "$") + Math.abs(Math.round(n)).toLocaleString("en-US");
+const fmt$2 = n => (n < 0 ? "-$" : "$") + Math.abs(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function monthLabel(startY, startM, offset) {
+  const total = startM + offset, y = startY + Math.floor(total / 12), m = ((total % 12) + 12) % 12;
+  return MONTHS[m] + " " + y;
+}
+function monthlyPayment(P, annualRate, nMonths) {
+  const r = annualRate / 100 / 12;
+  if (r === 0) return P / nMonths;
+  return P * r * Math.pow(1 + r, nMonths) / (Math.pow(1 + r, nMonths) - 1);
+}
+
+/* ---- build an amortization schedule; supports extra payments ---- */
+function buildSchedule(P, apr, years, opt) {
+  opt = opt || {};
+  const r = apr / 100 / 12, n = Math.round(years * 12);
+  let basePay = monthlyPayment(P, apr, n);
+  const biweekly = opt.biweekly;              // pay half every 2 weeks ≈ one extra monthly payment/year
+  const extraMonthly = opt.extraMonthly || 0;
+  const lump = opt.lump || 0, lumpAt = opt.lumpAt || 0;
+  const rows = [];
+  let bal = P, cumI = 0, cumP = 0, m = 0;
+  const maxM = n * 2 + 24;                      // safety cap
+  while (bal > 0.005 && m < maxM) {
+    m++;
+    const interest = bal * r;
+    let pay = basePay + extraMonthly;
+    if (biweekly) pay = basePay * 13 / 12 + extraMonthly;  // 26 half-payments/yr = 13 monthly/yr
+    let principal = pay - interest;
+    if (m === lumpAt && lump > 0) principal += lump;
+    if (principal > bal) { principal = bal; pay = principal + interest; }
+    bal -= principal; cumI += interest; cumP += principal;
+    rows.push({ m, pay, interest, principal, bal: Math.max(0, bal), cumI, cumP });
+  }
+  return { rows, basePay, months: rows.length, totalInterest: cumI, totalPaid: cumI + P };
+}
+
+/* ---- read inputs ---- */
+function readLoan() {
+  const P = +$("principal").value || 0, apr = +$("apr").value || 0, years = +$("term").value || 1;
+  const sv = $("start").value || "";
+  let sy, sm;
+  if (sv) { const [y, mo] = sv.split("-").map(Number); sy = y; sm = mo - 1; }
+  else { const d = new Date(); sy = d.getFullYear(); sm = d.getMonth(); }
+  return { P, apr, years, sy, sm,
+    tax: +$("tax").value || 0, ins: +$("ins").value || 0, hoa: +$("hoa").value || 0, pmi: +$("pmi").value || 0 };
+}
+
+let lastSchedule = null, lastLoan = null;
+
+function renderLoan() {
+  const L = readLoan(); lastLoan = L;
+  save();
+  const sch = buildSchedule(L.P, L.apr, L.years); lastSchedule = sch;
+
+  const escrow = L.tax/12 + L.ins/12 + L.hoa + L.pmi;
+  const piti = sch.basePay + escrow;
+  const payoff = monthLabel(L.sy, L.sm, sch.months - 1);
+
+  $("stats").innerHTML = `
+    <div class="stat"><b>${fmt$2(sch.basePay)}</b><span>Monthly P&amp;I</span></div>
+    ${escrow > 0 ? `<div class="stat"><b>${fmt$2(piti)}</b><span>Full PITI / mo</span></div>` : ""}
+    <div class="stat"><b>${fmt$(sch.totalInterest)}</b><span>Total interest</span></div>
+    <div class="stat"><b>${fmt$(sch.totalPaid)}</b><span>Total of payments</span></div>
+    <div class="stat"><b>${payoff}</b><span>Payoff</span></div>`;
+
+  // schedule table: show every month but tag year-ends
+  const head = `<thead><tr><th>Month</th><th>Date</th><th>Payment</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead>`;
+  let body = "<tbody>";
+  sch.rows.forEach(r => {
+    const ye = r.m % 12 === 0;
+    body += `<tr class="${ye ? "yearend" : ""}"><td>${r.m}</td><td>${monthLabel(L.sy, L.sm, r.m - 1)}</td>`
+      + `<td>${fmt$2(r.pay)}</td><td>${fmt$2(r.principal)}</td><td>${fmt$2(r.interest)}</td><td>${fmt$2(r.bal)}</td></tr>`;
+  });
+  body += "</tbody>";
+  $("sched").innerHTML = head + body;
+
+  drawChart(sch);
+  if (!$("view-extra").classList.contains("hidden")) renderExtra();
+}
+
+/* ---- canvas chart: balance + cumulative interest + cumulative principal ---- */
+function drawChart(sch) {
+  const cv = $("chart"), ctx = cv.getContext("2d");
+  const DPR = window.devicePixelRatio || 1;
+  const cssW = cv.clientWidth || 1000, cssH = 320;
+  cv.width = cssW * DPR; cv.height = cssH * DPR;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.clearRect(0, 0, cssW, cssH);
+  if (!sch || !sch.rows.length) return;
+
+  const padL = 64, padR = 16, padT = 14, padB = 28;
+  const W = cssW - padL - padR, H = cssH - padT - padB;
+  const rows = sch.rows, n = rows.length;
+  const maxBal = rows[0].bal || 1;
+  const maxCum = Math.max(sch.totalInterest, rows[n-1].cumP, 1);
+  const yMax = Math.max(maxBal, maxCum);
+  const x = i => padL + (n <= 1 ? 0 : i / (n - 1) * W);
+  const y = v => padT + H - (v / yMax) * H;
+
+  // grid + y labels
+  ctx.strokeStyle = cssVar("--line"); ctx.fillStyle = cssVar("--muted");
+  ctx.lineWidth = 1; ctx.font = "11px ui-sans-serif, system-ui, sans-serif"; ctx.textAlign = "right";
+  for (let g = 0; g <= 4; g++) {
+    const v = yMax * g / 4, yy = y(v);
+    ctx.globalAlpha = .5; ctx.beginPath(); ctx.moveTo(padL, yy); ctx.lineTo(padL + W, yy); ctx.stroke(); ctx.globalAlpha = 1;
+    ctx.fillText("$" + Math.round(v/1000) + "k", padL - 8, yy + 3);
+  }
+  // x labels (years)
+  ctx.textAlign = "center";
+  const yrs = Math.ceil(n / 12);
+  const step = yrs > 12 ? 5 : yrs > 6 ? 2 : 1;
+  for (let yr = 0; yr <= yrs; yr += step) {
+    const i = Math.min(yr * 12, n - 1);
+    ctx.fillText("yr " + yr, x(i), padT + H + 18);
+  }
+
+  const plot = (key, color, width) => {
+    ctx.strokeStyle = color; ctx.lineWidth = width; ctx.beginPath();
+    rows.forEach((r, i) => { const px = x(i), py = y(r[key]); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); });
+    ctx.stroke();
+  };
+  plot("cumI", cssVar("--interest"), 2);
+  plot("cumP", cssVar("--extra"), 2);
+  plot("bal", cssVar("--principal"), 2.4);
+}
+
+/* ---- CSV export ---- */
+$("csvBtn").addEventListener("click", () => {
+  if (!lastSchedule || !lastLoan) return;
+  const L = lastLoan;
+  let csv = "Month,Date,Payment,Principal,Interest,Balance,CumulativeInterest\n";
+  lastSchedule.rows.forEach(r => {
+    csv += `${r.m},${monthLabel(L.sy, L.sm, r.m-1)},${r.pay.toFixed(2)},${r.principal.toFixed(2)},${r.interest.toFixed(2)},${r.bal.toFixed(2)},${r.cumI.toFixed(2)}\n`;
+  });
+  const blob = new Blob([csv], { type: "text/csv" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = "amortization.csv"; a.click(); URL.revokeObjectURL(a.href);
+});
+
+/* ---- extra payments comparison ---- */
+function renderExtra() {
+  const L = lastLoan || readLoan();
+  const base = buildSchedule(L.P, L.apr, L.years);
+  const opt = {
+    extraMonthly: +$("exMonthly").value || 0,
+    lump: +$("exLump").value || 0,
+    lumpAt: +$("exLumpAt").value || 0,
+    biweekly: $("exBiweekly").value === "yes",
+  };
+  const accel = buildSchedule(L.P, L.apr, L.years, opt);
+  const intSaved = base.totalInterest - accel.totalInterest;
+  const monSaved = base.months - accel.months;
+  const yrs = Math.floor(monSaved / 12), mos = monSaved % 12;
+  const basePayoff = monthLabel(L.sy, L.sm, base.months - 1);
+  const newPayoff = monthLabel(L.sy, L.sm, accel.months - 1);
+
+  $("exSavings").innerHTML = monSaved > 0 || intSaved > 1
+    ? `You'd save <b>${fmt$(intSaved)}</b> in interest and be debt-free <b>${yrs ? yrs + " yr " : ""}${mos} mo</b> sooner — payoff moves from <b>${basePayoff}</b> to <b>${newPayoff}</b>.`
+    : "Add an extra monthly amount, a lump sum, or switch on biweekly to see the savings.";
+
+  $("exCompare").innerHTML = `
+    <div>
+      <div style="font-weight:600;margin-bottom:.5rem;color:var(--interest)">As scheduled</div>
+      <div class="kv"><span>Payoff</span><b>${basePayoff}</b></div>
+      <div class="kv"><span>Total interest</span><b>${fmt$(base.totalInterest)}</b></div>
+      <div class="kv"><span>Total paid</span><b>${fmt$(base.totalPaid)}</b></div>
+    </div>
+    <div>
+      <div style="font-weight:600;margin-bottom:.5rem;color:var(--principal)">With extra payments</div>
+      <div class="kv"><span>Payoff</span><b>${newPayoff}</b></div>
+      <div class="kv"><span>Total interest</span><b>${fmt$(accel.totalInterest)}</b></div>
+      <div class="kv"><span>Total paid</span><b>${fmt$(accel.totalPaid)}</b></div>
+    </div>`;
+}
+["exMonthly","exLump","exLumpAt","exBiweekly"].forEach(id => $(id).addEventListener("input", renderExtra));
+
+/* ---- refinance ---- */
+function renderRefi() {
+  const curBal = +$("rCurBal").value || 0, curApr = +$("rCurApr").value || 0, curTerm = +$("rCurTerm").value || 1;
+  const newBal = +$("rNewBal").value || 0, newApr = +$("rNewApr").value || 0, newTerm = +$("rNewTerm").value || 1;
+  const costs = +$("rCosts").value || 0;
+
+  const cur = buildSchedule(curBal, curApr, curTerm);
+  const nw = buildSchedule(newBal, newApr, newTerm);
+  const curPay = cur.basePay, newPay = nw.basePay;
+  const monthlySaved = curPay - newPay;
+  const breakeven = monthlySaved > 0 ? Math.ceil(costs / monthlySaved) : null;
+
+  $("refiOut").innerHTML = `
+    <div>
+      <div style="font-weight:600;margin-bottom:.5rem;color:var(--interest)">Current</div>
+      <div class="kv"><span>Monthly P&amp;I</span><b>${fmt$2(curPay)}</b></div>
+      <div class="kv"><span>Interest left</span><b>${fmt$(cur.totalInterest)}</b></div>
+      <div class="kv"><span>Payments left</span><b>${cur.months} mo</b></div>
+    </div>
+    <div>
+      <div style="font-weight:600;margin-bottom:.5rem;color:var(--principal)">New (refinanced)</div>
+      <div class="kv"><span>Monthly P&amp;I</span><b>${fmt$2(newPay)}</b></div>
+      <div class="kv"><span>Interest over life</span><b>${fmt$(nw.totalInterest)}</b></div>
+      <div class="kv"><span>Closing costs</span><b>${fmt$(costs)}</b></div>
+    </div>`;
+
+  const lifetimeDiff = cur.totalInterest - (nw.totalInterest + costs);
+  let v = "", bad = false;
+  if (monthlySaved <= 0) {
+    v = `The new loan's payment is <b>${fmt$2(-monthlySaved)}/mo higher</b>. It only makes sense if you're shortening the term or pulling cash out.`;
+    bad = true;
+  } else {
+    v = `You'd save <b>${fmt$2(monthlySaved)}/mo</b>. You recoup the ${fmt$(costs)} in closing costs after <b>${breakeven} month${breakeven === 1 ? "" : "s"}</b> (~${(breakeven/12).toFixed(1)} yr). `;
+    if (lifetimeDiff > 0) v += `Over the loans' lives you come out <b>${fmt$(lifetimeDiff)}</b> ahead including costs.`;
+    else { v += `But over the full terms you'd pay <b>${fmt$(-lifetimeDiff)}</b> more in total interest — watch the longer term.`; bad = true; }
+  }
+  const vd = $("refiVerdict"); vd.innerHTML = v; vd.classList.toggle("bad", bad);
+}
+["rCurBal","rCurApr","rCurTerm","rNewBal","rNewApr","rNewTerm","rCosts"].forEach(id => $(id).addEventListener("input", renderRefi));
+
+/* ---- persistence ---- */
+function save() {
+  const ids = ["principal","apr","term","start","tax","ins","hoa","pmi",
+    "exMonthly","exLump","exLumpAt","exBiweekly","rCurBal","rCurApr","rCurTerm","rNewBal","rNewApr","rNewTerm","rCosts"];
+  const o = {}; ids.forEach(id => o[id] = $(id).value);
+  Suite.store.set(KEY, o);
+}
+function loadState() {
+  const o = Suite.store.get(KEY);
+  if (o && typeof o === "object") Object.keys(o).forEach(id => { if ($(id) != null && o[id] !== "") $(id).value = o[id]; });
+  if (!$("start").value) { const d = new Date(); $("start").value = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0"); }
+}
+
+/* ---- a11y: announce recomputed results to screen readers ---- */
+Suite.liveRegion($("stats"));
+Suite.liveRegion($("exSavings"));
+Suite.liveRegion($("refiVerdict"));
+
+/* ---- inputs + tabs ---- */
+["principal","apr","term","start","tax","ins","hoa","pmi"].forEach(id => $(id).addEventListener("input", renderLoan));
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(t => t.classList.toggle("on", t === tab));
+    const v = tab.dataset.view;
+    ["loan","extra","refi"].forEach(name => $("view-" + name).classList.toggle("hidden", name !== v));
+    if (v === "extra") renderExtra();
+    if (v === "refi") renderRefi();
+    if (v === "loan") drawChart(lastSchedule);
+  });
+});
+window.addEventListener("resize", () => drawChart(lastSchedule));
+
+loadState();
+renderLoan();
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "v1": {
+    "suite.theme": "dark",
+    "suite.loan.v1": "{\"principal\":\"300000\",\"apr\":\"6.5\",\"term\":\"30\",\"start\":\"2026-01\",\"tax\":\"0\",\"ins\":\"0\",\"hoa\":\"0\",\"pmi\":\"0\",\"exMonthly\":\"200\",\"exLump\":\"0\",\"exLumpAt\":\"12\"…(288 chars)"
+  },
+  "v2": {
+    "suite.theme": "dark",
+    "suite.loan.v1": "{\"principal\":\"300000\",\"apr\":\"6.5\",\"term\":\"30\",\"start\":\"2026-01\",\"tax\":\"0\",\"ins\":\"0\",\"hoa\":\"0\",\"pmi\":\"0\",\"exMonthly\":\"200\",\"exLump\":\"0\",\"exLumpAt\":\"12\"…(288 chars)"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}

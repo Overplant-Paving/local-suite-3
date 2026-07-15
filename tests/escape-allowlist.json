@@ -55,5 +55,28 @@
   "timers.html": {
     "name": "local-only expression, recorded verified-clean with reasoning in tests/evidence/timers/report.md",
     "rows": "local-only expression, recorded verified-clean with reasoning in tests/evidence/timers/report.md"
+  },
+  "loan.html": {
+    "fmt$2(sch.basePay)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "fmt$2(piti)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "fmt$(sch.totalInterest)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "fmt$(sch.totalPaid)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "payoff": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "fmt$(intSaved)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "yrs ? yrs + \" yr \" : \"\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "mos": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "basePayoff": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "newPayoff": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "fmt$(base.totalInterest)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "fmt$(base.totalPaid)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "fmt$(accel.totalInterest)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "fmt$(accel.totalPaid)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "fmt$2(curPay)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "fmt$(cur.totalInterest)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "cur.months": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "fmt$2(newPay)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "fmt$(nw.totalInterest)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "fmt$(costs)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
+    "escrow > 0 ? `<div class=\"stat\"><b>${fmt$2(piti)}</b><span>Full PITI / mo</span></div>` : \"\"": "literal markup + fmt$2() currency formatter over computed number (escrow/piti are parsed numeric inputs)"
   }
 }

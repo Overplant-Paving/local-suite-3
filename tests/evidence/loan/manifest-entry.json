@@ -1,0 +1,18 @@
+{
+  "id": "loan",
+  "file": "loan.html",
+  "name": "Mortgage & Loan Workbench",
+  "cat": "util",
+  "cx": "M",
+  "desc": "Amortization, extra-payment what-ifs, refinance compare — all local.",
+  "network": "offline",
+  "key": null,
+  "endpoints": [],
+  "storage": [
+    "suite.theme",
+    "suite.loan.v1"
+  ],
+  "cacheTtlMin": null,
+  "since": "v1",
+  "flags": []
+}

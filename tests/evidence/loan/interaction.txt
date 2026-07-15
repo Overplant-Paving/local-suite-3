@@ -1,0 +1,21 @@
+stats after $300,000 @ 6.5% / 30 yr, start 2026-01:
+  Monthly P&I = $1,896.20
+  Total interest = $382,633
+  Total of payments = $682,633
+  Payoff = Dec 2055
+monthly P&I expected ~$1,896.20 | actual $1,896.20
+schedule rows: expected 360 | actual 360
+first row (expect interest $1,625.00, principal $271.20, bal $299,728.80): 1 | Jan 2026 | $1,896.20 | $271.20 | $1,625.00 | $299,728.80
+last row (expect month 360, Dec 2055, balance $0.00): 360 | Dec 2055 | $1,896.20 | $1,885.99 | $10.22 | $0.00
+CSV export: amortization.csv, 361 lines (header + 360 rows)
+CSV header: Month,Date,Payment,Principal,Interest,Balance,CumulativeInterest
+CSV row 1: 1,Jan 2026,1896.20,271.20,1625.00,299728.80,1625.00
+CSV last row: 360,Dec 2055,1896.20,1885.99,10.22,0.00,382633.47
+extra-payment what-if ($200/mo extra):
+  savings line: You'd save $103,449 in interest and be debt-free 6 yr 11 mo sooner — payoff moves from Dec 2055 to Jan 2049.
+  compare: Payoff = Dec 2055 ; Total interest = $382,633 ; Total paid = $682,633 ; Payoff = Jan 2049 ; Total interest = $279,185 ; Total paid = $579,185
+refinance compare (330k @6.5%/28yr -> 330k @5.25%/30yr, $6,000 costs):
+  Monthly P&I = $2,135.15 ; Interest left = $387,411 ; Payments left = 336 mo ; Monthly P&I = $1,822.27 ; Interest over life = $326,018 ; Closing costs = $6,000
+  verdict: You'd save $312.88/mo. You recoup the $6,000 in closing costs after 20 months (~1.7 yr). Over the loans' lives you come out $55,393 ahead including costs.
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)
