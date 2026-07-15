@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ISS Tracker · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents (3-layer, same pattern as core) */
+  :root { --iss: #d9534f; --land: #d9d3c4; --ocean: #eef2f0; --grid: #cfd6d3; --track: #2f6f6a; }
+  @media (prefers-color-scheme: dark) {
+    :root { --iss: #f07167; --land: #2c3340; --ocean: #171b22; --grid: #333a45; --track: #6fb5ae; }
+  }
+  :root[data-theme="light"] { --iss: #d9534f; --land: #d9d3c4; --ocean: #eef2f0; --grid: #cfd6d3; --track: #2f6f6a; }
+  :root[data-theme="dark"] { --iss: #f07167; --land: #2c3340; --ocean: #171b22; --grid: #333a45; --track: #6fb5ae; }
+
+  body { padding: 1.4rem 1.25rem 4rem; }
+  .wrap { max-width: 1000px; margin: 0 auto; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  /* v1 divergences from the core chrome */
+  .back { color: var(--muted); }
+  .back:hover { color: var(--accent); text-decoration: none; }
+  .theme-btn { float: none; }
+  header h1 { font-size: 1.7rem; letter-spacing: -.02em; margin-top: 1rem; }
+  header .tag { color: var(--muted); margin-top: .3rem; max-width: 46rem; font-size: .95rem; }
+  .locbar { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin-top: .9rem; font-size: .85rem; color: var(--muted); }
+  .locchip {
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    border-radius: 999px; padding: .28rem .7rem; cursor: pointer; font-size: .82rem;
+  }
+  .locform {
+    margin-top: .6rem; background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: .8rem .9rem; box-shadow: var(--shadow); display: none; gap: .55rem; flex-wrap: wrap; align-items: center;
+  }
+  .locform.open { display: flex; }
+  .locform input {
+    border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+    border-radius: 9px; padding: .5rem .65rem; font-size: .95rem; width: 8rem;
+  }
+  .btn {
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    border-radius: 9px; padding: .5rem .85rem; cursor: pointer; font-size: .9rem;
+  }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: .8rem; margin: 1.5rem 0; }
+  .stat {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: var(--shadow); padding: .9rem 1rem;
+  }
+  .stat b { font-size: 1.7rem; display: block; line-height: 1.05; letter-spacing: -.01em; }
+  .stat b small { font-size: .95rem; color: var(--muted); font-weight: 400; }
+  .stat span { font-size: .74rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .mapcard {
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    box-shadow: var(--shadow); padding: .7rem; overflow: hidden;
+  }
+  svg.map { display: block; width: 100%; height: auto; border-radius: 10px; background: var(--ocean); }
+  .maprow { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; margin-top: .6rem; padding: 0 .3rem; }
+  .legend { font-size: .78rem; color: var(--muted); display: flex; gap: 1rem; flex-wrap: wrap; }
+  .legend span { display: inline-flex; align-items: center; gap: .35rem; }
+  .dotk { width: .7rem; height: .7rem; border-radius: 50%; display: inline-block; }
+  .vis { font-size: .82rem; color: var(--muted); }
+  .vis b { color: var(--ink); }
+  .errbar { color: var(--iss); font-size: .85rem; margin-top: .6rem; min-height: 1.2em; }
+  footer { margin-top: 2.6rem; font-size: .82rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>ISS Tracker</h1>
+    <p class="tag">Where the International Space Station is right now — its position, speed, and altitude,
+      updated every few seconds, plotted with its recent ground track and the day/night line.</p>
+    <div class="locbar" id="locbar"></div>
+    <div class="locform" id="locform">
+      <input id="zipInput" inputmode="numeric" placeholder="US ZIP" maxlength="5" aria-label="US ZIP code">
+      <button class="btn" id="zipBtn">Look up ZIP</button>
+      <button class="btn" id="geoBtn">Use my location</button>
+      <span id="locErr" style="color:var(--iss);font-size:.82rem"></span>
+    </div>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="mapcard">
+    <svg class="map" id="map" viewBox="0 0 360 180" preserveAspectRatio="xMidYMid meet" role="img" aria-label="World map with ISS position"></svg>
+    <div class="maprow">
+      <div class="legend">
+        <span><i class="dotk" style="background:var(--iss)"></i> ISS now</span>
+        <span><i class="dotk" style="background:var(--track)"></i> ground track</span>
+        <span><i class="dotk" style="background:var(--accent)"></i> you</span>
+      </div>
+      <div class="vis" id="visInfo"></div>
+    </div>
+  </div>
+  <div class="errbar" id="errbar"></div>
+
+  <footer>
+    Data: wheretheiss.at · api.wheretheiss.at (satellite 25544). Ground track is drawn from positions
+    observed while this tab is open; polling pauses when the tab is hidden.
+  </footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+Suite.theme.init();
+
+const $ = (s, r = document) => r.querySelector(s);
+const SVGNS = "http://www.w3.org/2000/svg";
+const errbar = Suite.liveRegion($("#errbar"));
+const locErr = Suite.liveRegion($("#locErr"));
+
+/* ---------- helpers ---------- */
+function haversineMi(la1, lo1, la2, lo2) {
+  const R = 3958.8, r = Math.PI / 180;
+  const dLa = (la2 - la1) * r, dLo = (lo2 - lo1) * r;
+  const s = Math.sin(dLa / 2) ** 2 + Math.cos(la1 * r) * Math.cos(la2 * r) * Math.sin(dLo / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(s));
+}
+const KM_TO_MI = 0.621371;
+// projection: lon/lat -> equirectangular viewBox 0..360 x, 0..180 y
+const px = lon => lon + 180;
+const py = lat => 90 - lat;
+function fmtStamp(t) {
+  const d = new Date(t), sameDay = new Date().toDateString() === d.toDateString();
+  return d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) +
+    (sameDay ? "" : " " + d.toLocaleDateString([], { month: "short", day: "numeric" }));
+}
+
+/* ---------- coarse continent outlines (decorative, ~continent level) ---------- */
+const LAND = [
+  // North America
+  [[-165,68],[-160,71],[-140,70],[-125,70],[-95,68],[-82,62],[-80,52],[-64,52],[-60,47],[-66,45],[-70,43],[-75,37],[-81,31],[-80,25],[-97,16],[-105,20],[-112,25],[-117,33],[-124,40],[-124,48],[-133,54],[-150,59]],
+  // Greenland
+  [[-45,60],[-55,68],[-58,76],[-40,83],[-18,80],[-22,72],[-40,66]],
+  // South America
+  [[-81,8],[-70,11],[-60,10],[-50,0],[-40,-3],[-35,-7],[-40,-15],[-50,-25],[-58,-34],[-65,-45],[-70,-52],[-74,-50],[-72,-40],[-70,-30],[-72,-18],[-78,-8]],
+  // Africa
+  [[-16,20],[-10,28],[-2,36],[11,37],[24,33],[35,31],[43,11],[51,11],[42,-2],[40,-12],[32,-26],[20,-35],[13,-24],[9,-1],[3,6],[-8,5]],
+  // Europe
+  [[-10,37],[-9,44],[-1,49],[6,53],[11,58],[6,62],[18,68],[28,70],[40,66],[30,58],[38,48],[28,41],[20,40],[15,44],[19,45],[10,44],[3,43]],
+  // Asia
+  [[30,58],[40,66],[60,70],[78,73],[100,76],[125,73],[145,72],[160,68],[170,66],[160,60],[155,52],[142,48],[135,44],[128,42],[122,40],[121,31],[122,30],[121,23],[108,21],[106,10],[104,9],[100,8],[98,16],[92,21],[88,22],[80,13],[77,8],[73,18],[68,24],[61,25],[52,29],[48,30],[50,40],[45,42],[36,41],[28,44],[35,50],[40,52]],
+  // Australia
+  [[113,-22],[122,-18],[130,-12],[137,-12],[142,-11],[146,-19],[150,-25],[153,-28],[150,-38],[143,-39],[135,-35],[129,-32],[121,-34],[115,-34],[114,-22]],
+  // Antarctica (bottom band)
+  [[-180,-72],[-180,-85],[180,-85],[180,-72],[120,-70],[60,-70],[0,-72],[-60,-75],[-120,-73]]
+];
+
+function drawBaseMap() {
+  const svg = $("#map");
+  svg.textContent = "";
+  const cs = getComputedStyle(document.documentElement);
+  const landCol = cs.getPropertyValue("--land").trim();
+  const gridCol = cs.getPropertyValue("--grid").trim();
+
+  // land
+  for (const ring of LAND) {
+    const p = document.createElementNS(SVGNS, "path");
+    let d = "M";
+    ring.forEach((pt, i) => { d += (i ? "L" : "") + px(pt[0]).toFixed(1) + " " + py(pt[1]).toFixed(1) + " "; });
+    d += "Z";
+    p.setAttribute("d", d);
+    p.setAttribute("fill", landCol);
+    p.setAttribute("opacity", "0.9");
+    svg.append(p);
+  }
+  // graticule
+  for (let lon = -180; lon <= 180; lon += 30) {
+    const l = document.createElementNS(SVGNS, "line");
+    l.setAttribute("x1", px(lon)); l.setAttribute("y1", 0);
+    l.setAttribute("x2", px(lon)); l.setAttribute("y2", 180);
+    l.setAttribute("stroke", gridCol); l.setAttribute("stroke-width", "0.3"); l.setAttribute("opacity", "0.6");
+    svg.append(l);
+  }
+  for (let lat = -60; lat <= 60; lat += 30) {
+    const l = document.createElementNS(SVGNS, "line");
+    l.setAttribute("x1", 0); l.setAttribute("y1", py(lat));
+    l.setAttribute("x2", 360); l.setAttribute("y2", py(lat));
+    l.setAttribute("stroke", gridCol); l.setAttribute("stroke-width", "0.3"); l.setAttribute("opacity", "0.6");
+    svg.append(l);
+  }
+  // equator emphasis
+  const eq = document.createElementNS(SVGNS, "line");
+  eq.setAttribute("x1", 0); eq.setAttribute("y1", py(0)); eq.setAttribute("x2", 360); eq.setAttribute("y2", py(0));
+  eq.setAttribute("stroke", gridCol); eq.setAttribute("stroke-width", "0.5"); eq.setAttribute("opacity", "0.9");
+  svg.append(eq);
+
+  // overlay group for dynamic elements
+  const g = document.createElementNS(SVGNS, "g");
+  g.setAttribute("id", "overlay");
+  svg.append(g);
+}
+
+/* ---------- terminator (day/night) ---------- */
+function terminatorLat(lon, solLat, solLon) {
+  const r = Math.PI / 180;
+  const t = Math.tan(solLat * r);
+  if (Math.abs(t) < 1e-4) return 0;
+  let lat = Math.atan(-Math.cos((lon - solLon) * r) / t) / r;
+  return lat;
+}
+function drawTerminator(g, solLat, solLon) {
+  // night polygon: terminator curve + the pole opposite the sun
+  const pts = [];
+  for (let lon = -180; lon <= 180; lon += 2) pts.push([lon, terminatorLat(lon, solLat, solLon)]);
+  let d = "M" + px(-180) + " " + py(pts[0][1]);
+  for (const p of pts) d += "L" + px(p[0]).toFixed(1) + " " + py(p[1]).toFixed(1);
+  // close toward the dark pole
+  if (solLat >= 0) { d += "L" + px(180) + " " + py(-90) + "L" + px(-180) + " " + py(-90); }
+  else { d += "L" + px(180) + " " + py(90) + "L" + px(-180) + " " + py(90); }
+  d += "Z";
+  const night = document.createElementNS(SVGNS, "path");
+  night.setAttribute("d", d);
+  night.setAttribute("fill", "rgba(10,14,30,0.34)");
+  night.setAttribute("stroke", "none");
+  g.append(night);
+  // terminator line
+  let ld = "M" + px(pts[0][0]) + " " + py(pts[0][1]);
+  for (const p of pts) ld += "L" + px(p[0]).toFixed(1) + " " + py(p[1]).toFixed(1);
+  const line = document.createElementNS(SVGNS, "path");
+  line.setAttribute("d", ld);
+  line.setAttribute("fill", "none");
+  line.setAttribute("stroke", "#f2b134");
+  line.setAttribute("stroke-width", "0.5");
+  line.setAttribute("opacity", "0.8");
+  g.append(line);
+  // subsolar point
+  const sun = document.createElementNS(SVGNS, "circle");
+  sun.setAttribute("cx", px(solLon)); sun.setAttribute("cy", py(solLat)); sun.setAttribute("r", "2.2");
+  sun.setAttribute("fill", "#f2b134"); sun.setAttribute("opacity", "0.9");
+  g.append(sun);
+}
+
+/* ---------- location bar ---------- */
+const locform = $("#locform");
+function setFormOpen(open) {
+  locform.classList.toggle("open", open);
+  const chip = $("#locbar .locchip");
+  if (chip) chip.setAttribute("aria-expanded", String(open));
+}
+function renderLocBar() {
+  const bar = $("#locbar"); bar.textContent = "";
+  const loc = Suite.location.get();
+  const chip = document.createElement("button");
+  chip.className = "locchip";
+  chip.textContent = loc ? "📍 " + loc.label : "📍 Set location for distance";
+  chip.setAttribute("aria-expanded", String(locform.classList.contains("open")));
+  chip.addEventListener("click", () => setFormOpen(!locform.classList.contains("open")));
+  bar.append(chip);
+}
+async function lookupZip() {
+  const zip = $("#zipInput").value.trim(); locErr.textContent = "";
+  if (!/^\d{5}$/.test(zip)) { locErr.textContent = "Enter a 5-digit ZIP."; return; }
+  try {
+    const r = await Suite.fetchJSON("https://api.zippopotam.us/us/" + zip, { accept: "application/json" });
+    const p = r.v.places[0];
+    Suite.location.set({ lat: +p.latitude, lon: +p.longitude, label: p["place name"] + ", " + p["state abbreviation"] });
+    setFormOpen(false); renderLocBar(); if (last) paint(last);
+  } catch (e) { locErr.textContent = "ZIP not found."; }
+}
+$("#zipBtn").addEventListener("click", lookupZip);
+$("#zipInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); lookupZip(); } });
+$("#geoBtn").addEventListener("click", () => {
+  locErr.textContent = "";
+  if (!navigator.geolocation) { locErr.textContent = "Geolocation unavailable."; return; }
+  $("#geoBtn").textContent = "Locating…";
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      Suite.location.set({ lat: +pos.coords.latitude.toFixed(4), lon: +pos.coords.longitude.toFixed(4), label: "My location" });
+      $("#geoBtn").textContent = "Use my location"; setFormOpen(false); renderLocBar(); if (last) paint(last);
+    },
+    err => { $("#geoBtn").textContent = "Use my location"; locErr.textContent = "Couldn't get location (may need http://)."; }
+  );
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && locform.classList.contains("open")) setFormOpen(false);
+});
+
+/* ---------- data + render ---------- */
+let track = [];       // recent [lon,lat]
+let last = null;      // last payload
+
+async function tick() {
+  if (document.hidden) return;
+  try {
+    // ttl 0: position data is live — always fetch; the cacheKey exists purely
+    // for the stale offline fallback ("Offline — cached from <time>").
+    const r = await Suite.fetchJSON("https://api.wheretheiss.at/v1/satellites/25544",
+      { cacheKey: "iss.pos", ttl: 0 });
+    errbar.textContent = r.stale
+      ? "Offline — position cached from " + fmtStamp(r.t) + " — retrying…" : "";
+    const d = r.v;
+    last = d;
+    // append to track, cap length
+    const prev = track[track.length - 1];
+    if (!prev || prev[0] !== d.longitude || prev[1] !== d.latitude) track.push([d.longitude, d.latitude]);
+    if (track.length > 200) track = track.slice(-200);
+    paint(d);
+  } catch (e) {
+    errbar.textContent = "Couldn't reach the tracker — retrying…";
+  }
+}
+
+function statBlock(value, unit, label) {
+  const d = document.createElement("div"); d.className = "stat";
+  const b = document.createElement("b");
+  b.textContent = value;
+  if (unit) { const s = document.createElement("small"); s.textContent = " " + unit; b.append(s); }
+  const sp = document.createElement("span"); sp.textContent = label;
+  d.append(b, sp); return d;
+}
+
+function paint(d) {
+  // stats
+  const stats = $("#stats"); stats.textContent = "";
+  const latTxt = Math.abs(d.latitude).toFixed(2) + "°" + (d.latitude >= 0 ? "N" : "S");
+  const lonTxt = Math.abs(d.longitude).toFixed(2) + "°" + (d.longitude >= 0 ? "E" : "W");
+  stats.append(
+    statBlock(latTxt, "", "Latitude"),
+    statBlock(lonTxt, "", "Longitude"),
+    statBlock(Math.round(d.altitude).toLocaleString(), "km", "Altitude · " + Math.round(d.altitude * KM_TO_MI).toLocaleString() + " mi"),
+    statBlock(Math.round(d.velocity).toLocaleString(), "km/h", "Speed · " + Math.round(d.velocity * KM_TO_MI).toLocaleString() + " mph")
+  );
+  const loc = Suite.location.get();
+  if (loc) {
+    const dist = haversineMi(loc.lat, loc.lon, d.latitude, d.longitude);
+    stats.append(statBlock(Math.round(dist).toLocaleString(), "mi", "From " + (loc.label || "you")));
+  }
+
+  // visibility line
+  const vis = $("#visInfo");
+  const overhead = loc ? haversineMi(loc.lat, loc.lon, d.latitude, d.longitude) < (d.footprint / 2) * KM_TO_MI : false;
+  vis.textContent = "";
+  const vb = document.createElement("b");
+  vb.textContent = d.visibility === "daylight" ? "In daylight" : d.visibility === "eclipsed" ? "In Earth's shadow" : (d.visibility || "—");
+  vis.append(vb);
+  if (loc) vis.append(document.createTextNode(overhead ? " · above your horizon now" : " · below your horizon"));
+
+  // map overlay
+  drawBaseMap();
+  const g = $("#overlay");
+  if (isFinite(d.solar_lat) && isFinite(d.solar_lon)) drawTerminator(g, d.solar_lat, d.solar_lon);
+
+  // ground track (split when crossing antimeridian)
+  if (track.length > 1) {
+    let seg = "M" + px(track[0][0]).toFixed(1) + " " + py(track[0][1]).toFixed(1);
+    for (let i = 1; i < track.length; i++) {
+      const a = track[i - 1], b = track[i];
+      if (Math.abs(b[0] - a[0]) > 180) seg += "M" + px(b[0]).toFixed(1) + " " + py(b[1]).toFixed(1);
+      else seg += "L" + px(b[0]).toFixed(1) + " " + py(b[1]).toFixed(1);
+    }
+    const path = document.createElementNS(SVGNS, "path");
+    path.setAttribute("d", seg); path.setAttribute("fill", "none");
+    path.setAttribute("stroke", getComputedStyle(document.documentElement).getPropertyValue("--track").trim());
+    path.setAttribute("stroke-width", "0.8"); path.setAttribute("opacity", "0.85");
+    path.setAttribute("stroke-linejoin", "round"); path.setAttribute("stroke-linecap", "round");
+    g.append(path);
+  }
+
+  // footprint circle (visibility radius, approx in degrees)
+  const footRadDeg = (d.footprint / 2) / 111; // km -> deg lat approx
+  const foot = document.createElementNS(SVGNS, "ellipse");
+  foot.setAttribute("cx", px(d.longitude)); foot.setAttribute("cy", py(d.latitude));
+  foot.setAttribute("rx", (footRadDeg / Math.max(0.3, Math.cos(d.latitude * Math.PI / 180))).toFixed(1));
+  foot.setAttribute("ry", footRadDeg.toFixed(1));
+  foot.setAttribute("fill", "var(--iss)"); foot.setAttribute("opacity", "0.12");
+  foot.setAttribute("stroke", "var(--iss)"); foot.setAttribute("stroke-width", "0.3"); foot.setAttribute("stroke-opacity", "0.4");
+  g.append(foot);
+
+  // you marker
+  if (loc) {
+    const you = document.createElementNS(SVGNS, "circle");
+    you.setAttribute("cx", px(loc.lon)); you.setAttribute("cy", py(loc.lat)); you.setAttribute("r", "1.8");
+    you.setAttribute("fill", "var(--accent)"); you.setAttribute("stroke", "#fff"); you.setAttribute("stroke-width", "0.4");
+    g.append(you);
+  }
+
+  // ISS marker
+  const iss = document.createElementNS(SVGNS, "circle");
+  iss.setAttribute("cx", px(d.longitude)); iss.setAttribute("cy", py(d.latitude)); iss.setAttribute("r", "2.6");
+  iss.setAttribute("fill", "var(--iss)"); iss.setAttribute("stroke", "#fff"); iss.setAttribute("stroke-width", "0.6");
+  const title = document.createElementNS(SVGNS, "title");
+  title.textContent = "ISS · " + latTxt + " " + lonTxt;
+  iss.append(title);
+  g.append(iss);
+}
+
+/* ---------- boot + polling (pauses when hidden) ---------- */
+let timer = null;
+function startPolling() { if (timer) clearInterval(timer); tick(); timer = setInterval(tick, 5000); }
+function stopPolling() { if (timer) { clearInterval(timer); timer = null; } }
+document.addEventListener("visibilitychange", () => { if (document.hidden) stopPolling(); else startPolling(); });
+
+drawBaseMap();
+renderLocBar();
+startPolling();
+</script>
+</body>
+</html>

@@ -133,7 +133,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 35 | volcano.html | earth | cors | — | B | | ⬜ |
 | 36 | snow.html | earth | cors | — | B | | ⬜ |
 | 37 | wildlife.html | earth | cors | ebird opt. | B | eBird key onto `Suite.key()` | ⬜ |
-| 38 | iss.html | space | cors | — | B | | ⬜ |
+| 38 | iss.html | space | cors | — | B | | ✅ `tests/evidence/iss/` |
 | 39 | asteroids.html | space | cors | — | B | | ⬜ |
 | 40 | fedregister.html | civic | cors | — | B | | ⬜ |
 | 41 | recalls.html | civic | cors | — | B | 3 sources | ⬜ |

@@ -1,0 +1,28 @@
+== computed-style diff, light (12 differing values) ==
+body { --built: v1=undefined | v2=#3a7d44 }
+.back { --built: v1=undefined | v2=#3a7d44 }
+.theme-btn { --built: v1=undefined | v2=#3a7d44 }
+header h1 { --built: v1=undefined | v2=#3a7d44 }
+header .tag { --built: v1=undefined | v2=#3a7d44 }
+.locchip { --built: v1=undefined | v2=#3a7d44 }
+.locform input { --built: v1=undefined | v2=#3a7d44 }
+#zipBtn { --built: v1=undefined | v2=#3a7d44 }
+.mapcard { --built: v1=undefined | v2=#3a7d44 }
+svg.map { --built: v1=undefined | v2=#3a7d44 }
+.legend { --built: v1=undefined | v2=#3a7d44 }
+footer { --built: v1=undefined | v2=#3a7d44 }
+
+== computed-style diff, dark (12 differing values) ==
+body { --built: v1=undefined | v2=#7dc487 }
+.back { --built: v1=undefined | v2=#7dc487 }
+.theme-btn { --built: v1=undefined | v2=#7dc487 }
+header h1 { --built: v1=undefined | v2=#7dc487 }
+header .tag { --built: v1=undefined | v2=#7dc487 }
+.locchip { --built: v1=undefined | v2=#7dc487 }
+.locform input { --built: v1=undefined | v2=#7dc487 }
+#zipBtn { --built: v1=undefined | v2=#7dc487 }
+.mapcard { --built: v1=undefined | v2=#7dc487 }
+svg.map { --built: v1=undefined | v2=#7dc487 }
+.legend { --built: v1=undefined | v2=#7dc487 }
+footer { --built: v1=undefined | v2=#7dc487 }
+

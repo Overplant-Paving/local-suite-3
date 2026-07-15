@@ -1,0 +1,15 @@
+{
+  "id": "iss",
+  "file": "iss.html",
+  "name": "ISS Tracker",
+  "cat": "space",
+  "cx": "S",
+  "desc": "Where the Space Station is right now, and when it passes over you.",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": ["https://api.wheretheiss.at", "https://api.zippopotam.us"],
+  "storage": ["suite.location", "suite.cache.iss.*", "suite.theme"],
+  "cacheTtlMin": 0,
+  "since": "v1",
+  "flags": []
+}

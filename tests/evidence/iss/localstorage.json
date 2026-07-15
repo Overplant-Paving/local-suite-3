@@ -1,0 +1,15 @@
+{
+  "v1": {
+    "suite.theme": "dark",
+    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}"
+  },
+  "v2": {
+    "suite.location": "{\"lat\":34.0901,\"lon\":-118.4065,\"label\":\"Beverly Hills, CA\"}",
+    "suite.cache.iss.pos": "{\"t\":1784050087803,\"v\":{\"name\":\"iss\",\"id\":25544,\"latitude\":27.037751099213,\"longitude\":119.56052555859,\"altitude\":425.38192074476,\"velocity\":27566.489…(335 chars)",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": [
+    "suite.cache.iss.pos"
+  ]
+}
