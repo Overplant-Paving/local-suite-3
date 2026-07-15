@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unit &amp; Kitchen Converter · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  body { padding: 1.4rem 1.25rem 4rem; }
+  .wrap { max-width: 900px; margin: 0 auto; }
+  .topbar { display: flex; align-items: center; gap: .8rem; }
+  .spacer { flex: 1; }
+  .topbar .theme-btn { float: none; } /* v1: button sits in the flex topbar, no float */
+  header h1 { font-size: 1.7rem; letter-spacing: -.02em; margin-top: 1rem; }
+  header .tag { color: var(--muted); margin-top: .3rem; max-width: 46rem; font-size: .95rem; }
+  .pills { display: flex; flex-wrap: wrap; gap: .45rem; margin: 1.4rem 0 1.3rem; }
+  .pill {
+    border: 1px solid var(--line); background: var(--card); color: var(--muted);
+    border-radius: 999px; padding: .35rem .85rem; font-size: .85rem; cursor: pointer;
+  }
+  .pill.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .card {
+    /* core .card is a flex column; v1 convert cards are plain blocks */
+    display: block; flex-direction: row; gap: normal;
+    padding: 1.2rem 1.2rem 1.3rem; margin-bottom: 1.1rem;
+  }
+  .card[hidden] { display: none; } /* keep the hidden attribute working over the .card display */
+  label { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: .3rem; }
+  input, select, textarea {
+    width: 100%; padding: .6rem .7rem; font-size: 1rem; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 10px; background: var(--bg); outline: none;
+    font-family: inherit;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  .inrow { display: grid; grid-template-columns: 1.2fr 1fr; gap: .7rem; align-items: end; }
+  .inrow3 { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: .7rem; align-items: end; }
+  @media (max-width: 520px) { .inrow, .inrow3 { grid-template-columns: 1fr; } }
+  .results { margin-top: 1.1rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .55rem; }
+  .res {
+    border: 1px solid var(--line); border-radius: 10px; padding: .55rem .7rem; background: var(--bg);
+  }
+  .res b { font-size: 1.25rem; color: var(--accent); display: block; line-height: 1.2; word-break: break-word; }
+  .res span { font-size: .78rem; color: var(--muted); }
+  .res.hot b { color: var(--ink); }
+  .big { font-size: 2rem; color: var(--accent); font-weight: 600; }
+  textarea { min-height: 150px; resize: vertical; line-height: 1.6; }
+  .scalebtns { display: flex; flex-wrap: wrap; gap: .45rem; margin: .8rem 0; align-items: center; }
+  .sbtn { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 8px; padding: .4rem .8rem; cursor: pointer; font-size: .9rem; }
+  .sbtn.on { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+  .custom-scale { width: 5.5rem; }
+  .hint { font-size: .82rem; color: var(--muted); margin-top: .5rem; }
+  h2 { font-size: 1.05rem; margin-bottom: .2rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <div class="spacer"></div>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Unit &amp; Kitchen Converter</h1>
+    <p class="tag">Every conversion you actually reach for — lengths, weights, temperatures, fuel economy,
+      cooking volumes to weights with real ingredient densities, and a recipe scaler that understands ½ and ¾.
+      Nothing leaves your machine.</p>
+  </header>
+
+  <div class="pills" id="pills"></div>
+
+  <!-- generic converter -->
+  <div class="card" id="genCard">
+    <div class="inrow">
+      <div>
+        <label for="genValue">Amount</label>
+        <input id="genValue" type="text" inputmode="decimal" value="1" autocomplete="off">
+      </div>
+      <div>
+        <label for="genUnit">From unit</label>
+        <select id="genUnit"></select>
+      </div>
+    </div>
+    <div class="results" id="genResults"></div>
+  </div>
+
+  <!-- cooking converter -->
+  <div class="card" id="cookCard" hidden>
+    <h2>Ingredient converter</h2>
+    <p class="hint" style="margin-top:0;margin-bottom:.9rem">Volume ↔ weight for a specific ingredient, using its density. Great for
+      turning "2 cups flour" into grams for the scale.</p>
+    <div class="inrow3">
+      <div>
+        <label for="cookValue">Amount</label>
+        <input id="cookValue" type="text" inputmode="decimal" value="1" autocomplete="off">
+      </div>
+      <div>
+        <label for="cookUnit">Unit</label>
+        <select id="cookUnit"></select>
+      </div>
+      <div>
+        <label for="cookIng">Ingredient</label>
+        <select id="cookIng"></select>
+      </div>
+    </div>
+    <div class="results" id="cookResults"></div>
+    <p class="hint" id="cookDensity"></p>
+  </div>
+
+  <!-- recipe scaler -->
+  <div class="card" id="recipeCard" hidden>
+    <h2>Scale this recipe</h2>
+    <p class="hint" style="margin-top:0;margin-bottom:.7rem">Paste your ingredient lines. Each line's leading quantity is
+      rescaled — including mixed numbers like <code>1 ½</code> and unicode fractions.</p>
+    <textarea id="recipeIn" aria-label="Recipe ingredient lines" placeholder="2 cups all-purpose flour
+1 ½ tsp baking powder
+¾ cup sugar
+3 large eggs
+½ tsp salt"></textarea>
+    <div class="scalebtns" id="scaleBtns">
+      <button class="sbtn" data-f="0.5" aria-pressed="false">× ½</button>
+      <button class="sbtn on" data-f="1" aria-pressed="true">× 1</button>
+      <button class="sbtn" data-f="2" aria-pressed="false">× 2</button>
+      <button class="sbtn" data-f="3" aria-pressed="false">× 3</button>
+      <label for="customScale" style="margin:0 0 0 .4rem;text-transform:none;letter-spacing:0">custom ×</label>
+      <input class="custom-scale" id="customScale" type="text" inputmode="decimal" placeholder="1.5" autocomplete="off">
+    </div>
+    <label for="recipeOut">Scaled recipe</label>
+    <textarea id="recipeOut" readonly></textarea>
+  </div>
+
+  <footer id="footer">No network — everything happens on your machine. Densities are typical values; pack and grind vary.</footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---------- number helpers ---------- */
+const FRAC = { "½":.5,"⅓":1/3,"⅔":2/3,"¼":.25,"¾":.75,"⅕":.2,"⅖":.4,"⅗":.6,"⅘":.8,
+  "⅙":1/6,"⅚":5/6,"⅐":1/7,"⅛":.125,"⅜":.375,"⅝":.625,"⅞":.875,"⅑":1/9,"⅒":.1,"↉":0 };
+
+function parseNum(str) {
+  if (str == null) return NaN;
+  let s = String(str).trim().replace(/,/g, "");
+  if (!s) return NaN;
+  // unicode fraction possibly following a whole number: "1 ½" or "1½" or "½"
+  let total = 0, matched = false;
+  const uni = s.match(/^(\d+)?\s*([½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅐⅛⅜⅝⅞⅑⅒↉])(.*)$/);
+  if (uni) {
+    if (uni[1]) total += parseInt(uni[1], 10);
+    total += FRAC[uni[2]];
+    return uni[3].trim() ? (isFinite(total) ? total : NaN) : total;
+  }
+  // ascii fraction "1 1/2" or "3/4"
+  const asc = s.match(/^(\d+)\s+(\d+)\/(\d+)/);
+  if (asc) return parseInt(asc[1],10) + parseInt(asc[2],10)/parseInt(asc[3],10);
+  const asc2 = s.match(/^(\d+)\/(\d+)/);
+  if (asc2) return parseInt(asc2[1],10)/parseInt(asc2[2],10);
+  const f = parseFloat(s);
+  return isNaN(f) ? NaN : f;
+}
+
+function fmt(n) {
+  if (!isFinite(n)) return "—";
+  const a = Math.abs(n);
+  let s;
+  if (a !== 0 && (a < 1e-4 || a >= 1e9)) s = n.toExponential(4);
+  else if (a >= 1000) s = n.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  else s = (Math.round(n * 1e5) / 1e5).toString();
+  return s;
+}
+
+/* pretty-print a quantity as a fraction where it lands cleanly, else decimal */
+function fmtQty(n) {
+  if (!isFinite(n)) return "?";
+  const whole = Math.floor(n + 1e-9);
+  const frac = n - whole;
+  const denoms = [2,3,4,8,16,6];
+  for (const d of denoms) {
+    const num = Math.round(frac * d);
+    if (Math.abs(frac - num / d) < 0.02 && num > 0 && num < d) {
+      const g = gcd(num, d), nn = num/g, dd = d/g;
+      const fs = nn + "/" + dd;
+      return whole > 0 ? whole + " " + fs : fs;
+    }
+  }
+  if (frac < 0.02) return String(whole);
+  return String(Math.round(n * 100) / 100);
+}
+function gcd(a,b){ return b ? gcd(b, a % b) : a; }
+
+/* ---------- generic categories ---------- */
+const CATS = {
+  Length: { units: {
+    "km":1000,"m":1,"cm":0.01,"mm":0.001,"mi":1609.344,"yd":0.9144,"ft":0.3048,"in":0.0254,"nautical mi":1852
+  }},
+  Area: { units: {
+    "km²":1e6,"m²":1,"cm²":1e-4,"hectare":1e4,"mi²":2589988.110336,"acre":4046.8564224,"ft²":0.09290304,"in²":0.00064516
+  }},
+  Volume: { units: {
+    "liter":1,"mL":0.001,"m³":1000,"US gallon":3.785411784,"US quart":0.946352946,"US pint":0.473176473,
+    "US cup":0.2365882365,"US fl oz":0.0295735295625,"tablespoon":0.01478676478,"teaspoon":0.004928921594,
+    "UK gallon":4.54609,"cubic inch":0.016387064,"cubic foot":28.316846592
+  }},
+  Weight: { units: {
+    "kg":1000,"g":1,"mg":0.001,"metric ton":1e6,"pound":453.59237,"ounce":28.349523125,"stone":6350.29318,"US ton":907184.74
+  }},
+  Temperature: { custom: true, order: ["°C","°F","K"],
+    toBase: { "°C":x=>x, "°F":x=>(x-32)*5/9, "K":x=>x-273.15 },
+    fromBase: { "°C":b=>b, "°F":b=>b*9/5+32, "K":b=>b+273.15 } },
+  "Fuel economy": { custom: true, order: ["mpg (US)","mpg (UK)","L/100km","km/L"],
+    toBase: { "mpg (US)":x=>x>0?235.214583/x:Infinity, "mpg (UK)":x=>x>0?282.480936/x:Infinity,
+              "L/100km":x=>x, "km/L":x=>x>0?100/x:Infinity },
+    fromBase: { "mpg (US)":b=>b>0?235.214583/b:Infinity, "mpg (UK)":b=>b>0?282.480936/b:Infinity,
+                "L/100km":b=>b, "km/L":b=>b>0?100/b:Infinity } },
+};
+
+/* ---------- cooking densities (g per mL, typical) ---------- */
+const DENS = {
+  "Water":1.00, "Milk":1.03, "Heavy cream":1.00, "Yogurt":1.03,
+  "All-purpose flour":0.53, "Bread flour":0.55, "Cake flour":0.45, "Whole wheat flour":0.51,
+  "Granulated sugar":0.85, "Brown sugar (packed)":0.90, "Powdered sugar":0.56,
+  "Butter":0.96, "Vegetable oil":0.92, "Olive oil":0.918, "Honey":1.42, "Maple syrup":1.32, "Molasses":1.40,
+  "Table salt":1.22, "Baking soda":0.93, "Baking powder":0.81, "Cornstarch":0.54,
+  "White rice (uncooked)":0.80, "Rolled oats":0.40, "Cornmeal":0.65, "Semolina":0.60,
+  "Cocoa powder":0.42, "Ground coffee":0.40, "Peanut butter":1.08,
+  "Chocolate chips":0.72, "Raisins":0.80, "Chopped nuts":0.50, "Grated parmesan":0.38,
+};
+const VOL_ML = { "cup":236.5882365, "tbsp":14.78676478, "tsp":4.928921594, "fl oz":29.5735295625, "mL":1, "liter":1000 };
+const WT_G = { "g":1, "kg":1000, "oz":28.349523125, "lb":453.59237 };
+const COOK_UNITS = [...Object.keys(VOL_ML), ...Object.keys(WT_G)];
+
+/* ---------- state / tabs ---------- */
+const TABS = [...Object.keys(CATS), "Cooking", "Recipe scaler"];
+let curTab = "Length";
+const pillsEl = document.getElementById("pills");
+TABS.forEach(name => {
+  const b = document.createElement("button");
+  b.className = "pill" + (name === curTab ? " on" : "");
+  b.textContent = name;
+  b.setAttribute("aria-pressed", String(name === curTab));
+  b.addEventListener("click", () => { curTab = name; syncTabs(); });
+  pillsEl.append(b);
+});
+function syncTabs() {
+  [...pillsEl.children].forEach(b => {
+    const on = b.textContent === curTab;
+    b.classList.toggle("on", on);
+    b.setAttribute("aria-pressed", String(on));
+  });
+  document.getElementById("genCard").hidden = !CATS[curTab];
+  document.getElementById("cookCard").hidden = curTab !== "Cooking";
+  document.getElementById("recipeCard").hidden = curTab !== "Recipe scaler";
+  if (CATS[curTab]) { buildGenUnits(); renderGen(); }
+}
+
+/* ---------- generic converter ---------- */
+const genValue = document.getElementById("genValue");
+const genUnit = document.getElementById("genUnit");
+const genResults = Suite.liveRegion(document.getElementById("genResults"));
+function buildGenUnits() {
+  const cat = CATS[curTab];
+  const list = cat.custom ? cat.order : Object.keys(cat.units);
+  genUnit.innerHTML = "";
+  list.forEach(u => { const o = document.createElement("option"); o.value = u; o.textContent = u; genUnit.append(o); });
+}
+function renderGen() {
+  const cat = CATS[curTab];
+  const v = parseNum(genValue.value);
+  genResults.innerHTML = "";
+  const list = cat.custom ? cat.order : Object.keys(cat.units);
+  const from = genUnit.value || list[0];
+  let base;
+  if (cat.custom) base = isNaN(v) ? NaN : cat.toBase[from](v);
+  else base = isNaN(v) ? NaN : v * cat.units[from];
+  list.forEach(u => {
+    let out;
+    if (cat.custom) out = isNaN(base) ? NaN : cat.fromBase[u](base);
+    else out = isNaN(base) ? NaN : base / cat.units[u];
+    const d = document.createElement("div");
+    d.className = "res" + (u === from ? " hot" : "");
+    const b = document.createElement("b"); b.textContent = fmt(out);
+    const s = document.createElement("span"); s.textContent = u;
+    d.append(b, s); genResults.append(d);
+  });
+}
+genValue.addEventListener("input", renderGen);
+genUnit.addEventListener("change", renderGen);
+
+/* ---------- cooking converter ---------- */
+const cookValue = document.getElementById("cookValue");
+const cookUnit = document.getElementById("cookUnit");
+const cookIng = document.getElementById("cookIng");
+const cookResults = Suite.liveRegion(document.getElementById("cookResults"));
+const cookDensity = Suite.liveRegion(document.getElementById("cookDensity"));
+COOK_UNITS.forEach(u => { const o = document.createElement("option"); o.value = u; o.textContent = u; cookUnit.append(o); });
+cookUnit.value = "cup";
+Object.keys(DENS).forEach(i => { const o = document.createElement("option"); o.value = i; o.textContent = i; cookIng.append(o); });
+cookIng.value = "All-purpose flour";
+function renderCook() {
+  const v = parseNum(cookValue.value);
+  const ing = cookIng.value, dens = DENS[ing], u = cookUnit.value;
+  cookResults.innerHTML = "";
+  let grams;
+  if (u in VOL_ML) grams = isNaN(v) ? NaN : v * VOL_ML[u] * dens;
+  else grams = isNaN(v) ? NaN : v * WT_G[u];
+  const mL = grams / dens;
+  const out = [
+    ["g", grams], ["oz", grams / 28.349523125], ["lb", grams / 453.59237],
+    ["cups", mL / VOL_ML.cup], ["tbsp", mL / VOL_ML.tbsp], ["tsp", mL / VOL_ML.tsp], ["mL", mL],
+  ];
+  out.forEach(([lbl, val]) => {
+    const d = document.createElement("div"); d.className = "res";
+    const b = document.createElement("b"); b.textContent = fmt(val);
+    const s = document.createElement("span"); s.textContent = lbl;
+    d.append(b, s); cookResults.append(d);
+  });
+  cookDensity.textContent = "Density used: " + dens.toFixed(2) + " g/mL (1 cup ≈ " + Math.round(VOL_ML.cup * dens) + " g).";
+}
+cookValue.addEventListener("input", renderCook);
+cookUnit.addEventListener("change", renderCook);
+cookIng.addEventListener("change", renderCook);
+
+/* ---------- recipe scaler ---------- */
+const recipeIn = document.getElementById("recipeIn");
+const recipeOut = document.getElementById("recipeOut");
+const customScale = document.getElementById("customScale");
+let scaleFactor = 1;
+document.getElementById("scaleBtns").addEventListener("click", e => {
+  const b = e.target.closest(".sbtn"); if (!b) return;
+  scaleFactor = parseFloat(b.dataset.f);
+  customScale.value = "";
+  [...document.querySelectorAll(".sbtn")].forEach(x => {
+    const on = x === b;
+    x.classList.toggle("on", on);
+    x.setAttribute("aria-pressed", String(on));
+  });
+  renderRecipe();
+});
+customScale.addEventListener("input", () => {
+  const f = parseNum(customScale.value);
+  if (isFinite(f) && f > 0) {
+    scaleFactor = f;
+    [...document.querySelectorAll(".sbtn")].forEach(x => {
+      x.classList.remove("on");
+      x.setAttribute("aria-pressed", "false");
+    });
+  }
+  renderRecipe();
+});
+function scaleLine(line) {
+  // match a leading quantity: mixed number, unicode fraction, ascii fraction, decimal, or range a-b
+  const m = line.match(/^(\s*)((?:\d+\s+[½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅐⅛⅜⅝⅞⅑⅒↉])|(?:\d+\s+\d+\/\d+)|(?:\d+\/\d+)|[½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅐⅛⅜⅝⅞⅑⅒↉]|(?:\d+(?:\.\d+)?))/);
+  if (!m) return line;
+  const q = parseNum(m[2]);
+  if (!isFinite(q)) return line;
+  const scaled = q * scaleFactor;
+  return m[1] + fmtQty(scaled) + line.slice(m[0].length);
+}
+function renderRecipe() {
+  const lines = recipeIn.value.split("\n");
+  recipeOut.value = lines.map(l => l.trim() === "" ? "" : scaleLine(l)).join("\n");
+}
+recipeIn.addEventListener("input", renderRecipe);
+
+/* ---------- init ---------- */
+syncTabs();
+renderCook();
+recipeIn.value = "2 cups all-purpose flour\n1 ½ tsp baking powder\n¾ cup sugar\n3 large eggs\n½ tsp salt\n1 cup milk";
+renderRecipe();
+</script>
+</body>
+</html>

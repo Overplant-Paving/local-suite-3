@@ -1,0 +1,21 @@
+Length tab default: 1 km -> ft expected 3,280.84, actual 3,280.84; in expected 39,370.08, actual 39,370.08
+Volume: 2 US cup -> mL expected 473.17647 (473.1764730), actual 473.17647
+Volume: 2 US cup -> liter expected 0.47318, actual 0.47318
+Volume: 2 US cup -> tablespoon expected 32, actual 32
+Temperature: 350 °F -> °C expected 176.66667, actual 176.66667
+Temperature: 350 °F -> K expected 449.81667, actual 449.81667
+Weight: "1 ½" pound -> g expected 680.38856 (680.3885550), actual 680.38856; oz expected 24, actual 24
+Fuel economy: 30 mpg (US) -> L/100km expected 7.84049 (7.8404861), actual 7.84049
+Cooking tab: cookCard hidden=false, genCard hidden=true
+Cooking: 2 cup all-purpose flour -> g expected 250.78 (2*236.5882365*0.53=250.7835307), actual 250.78353
+Cooking: same -> oz expected 8.84613, actual 8.84613; cups round-trip expected 2, actual 2
+Density line: "Density used: 0.53 g/mL (1 cup ≈ 125 g)." (expected 0.53 g/mL, 1 cup ≈ 125 g)
+Cooking: 250 g granulated sugar -> cups expected 1.24316 (250/(0.85*236.5882365)=1.2431625), actual 1.24316
+Recipe input (default): "2 cups all-purpose flour\n1 ½ tsp baking powder\n¾ cup sugar\n3 large eggs\n½ tsp salt\n1 cup milk"
+Recipe x2 output: "4 cups all-purpose flour\n3 tsp baking powder\n1 1/2 cup sugar\n6 large eggs\n1 tsp salt\n2 cup milk"
+  expected line-by-line: "4 cups all-purpose flour" / "3 tsp baking powder" / "1 1/2 cup sugar" / "6 large eggs" / "1 tsp salt" / "2 cup milk"
+Recipe custom x1.5 output: "3 cups all-purpose flour\n2 1/4 tsp baking powder\n1 1/8 cup sugar\n4 1/2 large eggs\n3/4 tsp salt\n1 1/2 cup milk"
+  expected first line "3 cups all-purpose flour"; "¾ cup sugar" -> "1 1/8 cup sugar"; sbtn highlights cleared=true
+Recipe x0.5 first lines: ["1 cups all-purpose flour","3/4 tsp baking powder","3/8 cup sugar"] (expected "1 cups all-purpose flour", "3/4 tsp baking powder", "3/8 cup sugar")
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)

@@ -1,0 +1,15 @@
+{
+  "id": "convert",
+  "file": "convert.html",
+  "name": "Unit & Kitchen Converter",
+  "cat": "ref",
+  "cx": "S",
+  "desc": "Cooking volumes and weights, temperatures, \"half this recipe.\"",
+  "network": "offline",
+  "key": null,
+  "endpoints": [],
+  "storage": ["suite.theme"],
+  "cacheTtlMin": null,
+  "since": "v1",
+  "flags": []
+}
