@@ -193,5 +193,17 @@
     "bar(s.now, \"var(--s-now)\")": "local-only expression, recorded verified-clean with reasoning in tests/evidence/yields/report.md",
     "bar(s.m3, \"var(--s-3mo)\")": "local-only expression, recorded verified-clean with reasoning in tests/evidence/yields/report.md",
     "bar(s.y1, \"var(--s-1yr)\")": "local-only expression, recorded verified-clean with reasoning in tests/evidence/yields/report.md"
+  },
+  "treasury.html": {
+    "fmtUSD(total)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/treasury/report.md",
+    "sparkHtml": "local-only expression, recorded verified-clean with reasoning in tests/evidence/treasury/report.md",
+    "fmtUSD(perPerson)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/treasury/report.md",
+    "fmtUSD(perHousehold)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/treasury/report.md",
+    "US_POP.toLocaleString(\"en-US\")": "local-only expression, recorded verified-clean with reasoning in tests/evidence/treasury/report.md",
+    "US_HOUSEHOLDS.toLocaleString(\"en-US\")": "local-only expression, recorded verified-clean with reasoning in tests/evidence/treasury/report.md",
+    "rate.toFixed(3)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/treasury/report.md",
+    "rateLbl": "local-only expression, recorded verified-clean with reasoning in tests/evidence/treasury/report.md",
+    "Number.isFinite(r.btc) ? r.btc.toFixed(2) + \"×\" : \"—\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/treasury/report.md",
+    "Number.isFinite(r.offer) ? fmtAbbrev(r.offer) : \"—\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/treasury/report.md"
   }
 }

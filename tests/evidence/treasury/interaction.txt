@@ -1,0 +1,27 @@
+live debt figure rendered: $39,470,152,218,599 (as of Jul 14, 2026 · $39.47 trillion)
+live per-citizen figures: $116,089 per person · $299,016 per household
+live sparkline: 2 svg paths; meta: "Jul 14, 2025: $36.60 trillion Jul 14, 2026: $39.47 trillion ▲ $2.87 trillion (+7.8%) over 1 year"
+live hero stamp: "Data from Jul 15, 2026, 3:37 PM (just now)"
+live rates table: 9 rows; first: "Treasury Bills | Marketable | 3.706%"; last: "Total Interest-bearing Debt | Interest-bearing Debt | 3.409%"
+live rates stamp: "Latest month: Jun 30, 2026 · Data from Jul 15, 2026, 3:37 PM (just now)"
+live auctions table: 15 rows; first: "Jul 15, 2026 | Bill | 17-Week | 3.845% inv. rate | 3.35× | $72.00 billion"
+live auctions stamp: "Data from Jul 15, 2026, 3:37 PM (just now)"
+cache suite.cache.treasury.latest: shape=record_date,tot_pub_debt_out_amt sample={"record_date":"2026-07-14","tot_pub_debt_out_amt":"39470152218599.01"}
+cache suite.cache.treasury.series: shape=array[252] sample={"d":"2025-07-14","v":36598345542154.94}
+cache suite.cache.treasury.rates: shape=array[16] sample={"record_date":"2026-06-30","security_type_desc":"Marketable","security_desc":"Treasury Bills","avg_interest_rate_amt":"
+cache suite.cache.treasury.auctions: shape=array[15] sample={"type":"Bill","term":"17-Week","auction":"2026-07-15","yield":null,"inv":3.845,"disc":3.745,"btc":3.35,"offer":72000000
+offline-stale debt figure rendered: $39,470,152,218,599 (as of Jul 14, 2026 · $39.47 trillion)
+offline-stale per-citizen figures: $116,089 per person · $299,016 per household
+offline-stale sparkline: 2 svg paths; meta: "Jul 14, 2025: $36.60 trillion Jul 14, 2026: $39.47 trillion ▲ $2.87 trillion (+7.8%) over 1 year"
+offline-stale hero stamp: "Offline — showing cached data · Data from Jul 14, 2026, 3:37 PM (1 day(s) ago)"
+offline-stale rates table: 9 rows; first: "Treasury Bills | Marketable | 3.706%"; last: "Total Interest-bearing Debt | Interest-bearing Debt | 3.409%"
+offline-stale rates stamp: "Latest month: Jun 30, 2026 · Offline — showing cached data · Data from Jul 14, 2026, 3:37 PM (1 day(s) ago)"
+offline-stale auctions table: 15 rows; first: "Jul 15, 2026 | Bill | 17-Week | 3.845% inv. rate | 3.35× | $72.00 billion"
+offline-stale auctions stamp: "Offline — showing cached data · Data from Jul 14, 2026, 3:37 PM (1 day(s) ago)"
+restored (from fresh cache, no refetch): debt = $39,470,152,218,599
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

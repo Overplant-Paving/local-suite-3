@@ -1,0 +1,18 @@
+{
+  "v1": {
+    "suite.cache.treasury.rates": "{\"t\":1784147877038,\"v\":[{\"record_date\":\"2026-06-30\",\"security_type_desc\":\"Marketable\",\"security_desc\":\"Treasury Bills\",\"avg_interest_rate_amt\":\"3.706\"…(2315 chars)",
+    "suite.cache.treasury.auctions": "{\"t\":1784147877076,\"v\":[{\"type\":\"Bill\",\"term\":\"17-Week\",\"auction\":\"2026-07-15\",\"yield\":null,\"inv\":3.845,\"disc\":3.745,\"btc\":3.35,\"offer\":72000000000},{…(1899 chars)",
+    "suite.cache.treasury.latest": "{\"t\":1784147877071,\"v\":{\"record_date\":\"2026-07-14\",\"tot_pub_debt_out_amt\":\"39470152218599.01\"}}",
+    "suite.cache.treasury.series": "{\"t\":1784147877072,\"v\":[{\"d\":\"2025-07-14\",\"v\":36598345542154.94},{\"d\":\"2025-07-15\",\"v\":36651611116545.83},{\"d\":\"2025-07-16\",\"v\":36627854976862.7},{\"d\"…(10312 chars)",
+    "suite.theme": "dark"
+  },
+  "v2": {
+    "suite.cache.treasury.auctions": "{\"t\":1784147876224,\"v\":[{\"type\":\"Bill\",\"term\":\"17-Week\",\"auction\":\"2026-07-15\",\"yield\":null,\"inv\":3.845,\"disc\":3.745,\"btc\":3.35,\"offer\":72000000000},{…(1899 chars)",
+    "suite.theme": "dark",
+    "suite.cache.treasury.latest": "{\"t\":1784147876224,\"v\":{\"record_date\":\"2026-07-14\",\"tot_pub_debt_out_amt\":\"39470152218599.01\"}}",
+    "suite.cache.treasury.rates": "{\"t\":1784147876224,\"v\":[{\"record_date\":\"2026-06-30\",\"security_type_desc\":\"Marketable\",\"security_desc\":\"Treasury Bills\",\"avg_interest_rate_amt\":\"3.706\"…(2315 chars)",
+    "suite.cache.treasury.series": "{\"t\":1784147876224,\"v\":[{\"d\":\"2025-07-14\",\"v\":36598345542154.94},{\"d\":\"2025-07-15\",\"v\":36651611116545.83},{\"d\":\"2025-07-16\",\"v\":36627854976862.7},{\"d\"…(10312 chars)"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}
