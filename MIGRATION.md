@@ -132,7 +132,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 34 | drought.html | earth | cors | — | B | via Living Atlas (USDM direct is no-CORS) | ✅ `tests/evidence/drought/` |
 | 35 | volcano.html | earth | cors | — | B | | ✅ `tests/evidence/volcano/` |
 | 36 | snow.html | earth | cors | — | B | | ✅ `tests/evidence/snow/` |
-| 37 | wildlife.html | earth | cors | ebird opt. | B | eBird key onto `Suite.key()` | ⬜ |
+| 37 | wildlife.html | earth | cors | ebird opt. | B | eBird key onto `Suite.key()` | ✅ `tests/evidence/wildlife/` |
 | 38 | iss.html | space | cors | — | B | | ✅ `tests/evidence/iss/` |
 | 39 | asteroids.html | space | cors | — | B | | ⬜ |
 | 40 | fedregister.html | civic | cors | — | B | | ✅ `tests/evidence/fedregister/` |

@@ -1,0 +1,21 @@
+{
+  "id": "wildlife",
+  "file": "wildlife.html",
+  "name": "Wildlife Sightings Nearby",
+  "cat": "earth",
+  "cx": "S",
+  "desc": "Recent bird and wildlife observations around you.",
+  "network": "cors-open",
+  "key": { "name": "ebird", "signup": "https://ebird.org/api/keygen", "demo": false },
+  "endpoints": [
+    "https://api.inaturalist.org",
+    "https://inaturalist-open-data.s3.amazonaws.com",
+    "https://static.inaturalist.org",
+    "https://api.ebird.org",
+    "https://api.zippopotam.us"
+  ],
+  "storage": ["suite.location", "suite.key.ebird", "suite.cache.wildlife.*"],
+  "cacheTtlMin": 30,
+  "since": "v1",
+  "flags": []
+}
