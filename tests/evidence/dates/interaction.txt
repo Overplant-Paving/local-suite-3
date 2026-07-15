@@ -1,0 +1,21 @@
+clock fixed at 2026-07-15T17:00:00.000Z (local 2026-07-15)
+countdown card count after add: 1
+countdown [Launch] num: "163" (expected 163)
+countdown [Launch] when: "163 days to go · Friday, December 25, 2026"
+countdown cards: 2 after second add, 1 after removing "Temp"
+days-until big: "7" (expected 7)
+days-until sub: "7 days from now · Wednesday, July 22, 2026 · 1 weeks"
+days-since big: "14" (expected 14), sub: "14 days ago · Wednesday, July 1, 2026 · 2 weeks"
++3 business days from 2026-07-02: "Wednesday" / "Wednesday, July 8, 2026 +3 business days from 2026-07-02" (expected Wednesday, July 8, 2026 — skips observed July 4 + weekend)
+biz seg aria-pressed: cal=false biz=true
++3 calendar days from 2026-07-02: "Sunday" (expected Sunday, July 5, 2026)
+age parts [years, months, days]: [36, 1, 25] (expected [36, 1, 25])
+age sub: "13,205 days total · 1,886 weeks · 433.8 months" (expected 13,205 days total)
+between big: "30 days" (expected 30 days)
+between parts [business, weekend]: [21, 8] (expected [21, 8])
+Enter in name field adds a countdown: 2 cards now (expected 2)
+removed "EnterKey" again: 1 card(s) remain — "Launch" persists for the storage snapshot
+after reload: 1 saved countdown(s); name="Launch"
+localStorage["suite.dates.countdowns"] = [{"name":"Launch","date":"2026-12-25"}]
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)

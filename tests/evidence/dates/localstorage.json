@@ -1,0 +1,12 @@
+{
+  "v1": {
+    "suite.dates.countdowns": "[{\"name\":\"Launch\",\"date\":\"2026-12-25\"}]",
+    "suite.theme": "dark"
+  },
+  "v2": {
+    "suite.dates.countdowns": "[{\"name\":\"Launch\",\"date\":\"2026-12-25\"}]",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}

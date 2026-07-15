@@ -1,0 +1,18 @@
+{
+  "id": "dates",
+  "file": "dates.html",
+  "name": "Countdown & Date Calculator",
+  "cat": "time",
+  "cx": "S",
+  "desc": "Days until anything, business-day math, age calculator.",
+  "network": "offline",
+  "key": null,
+  "endpoints": [],
+  "storage": [
+    "suite.theme",
+    "suite.dates.countdowns"
+  ],
+  "cacheTtlMin": null,
+  "since": "v1",
+  "flags": []
+}
