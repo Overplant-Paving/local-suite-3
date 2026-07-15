@@ -1,0 +1,24 @@
+station line: "Santa Monica" · "CA · station 9410840"
+status dot class: "statusdot ok" · updated: "updated 3:06 PM"
+next high/low events rendered: 6
+  event[0]: "▼ Low tidenext 1.9 ft 4:25 PMToday · in 1h 18m"
+  event[1]: "▲ High tide 6.9 ft 10:35 PMToday · in 7h 28m"
+  event[2]: "▼ Low tide -1.2 ft 5:46 AMTomorrow · in 14h 39m"
+  event[3]: "▲ High tide 4.5 ft 12:15 PMTomorrow · in 21h 08m"
+now strip: "Now2.3 ft Trendfalling ↓ Next lowin 1h 18m"
+tide curve svg contents: {"paths":2,"circles":5,"texts":13} (expect 2 paths = area+line, hi/lo + now markers)
+water temperature card: "70°Fas of 12:54 PM, station sensor"
+cache keys written: ["suite.cache.tides.9410840.curve","suite.cache.tides.9410840.hilo","suite.cache.tides.9410840.temp"]
+picker "nearest to you" rows: ["Santa Monica CA 15 mi","Los Angeles (Outer Harbor) CA 23 mi","Santa Barbara CA 86 mi","La Jolla (Scripps) CA 100 mi"]
+picker closed via Esc: backdrop open = false
+OFFLINE reload — status dot class: "statusdot stale" (expect "statusdot stale")
+OFFLINE reload — updated text: "cached 3:06 PM" (expect "cached <~24h-ago time>")
+OFFLINE reload — events still rendered from cache: 6
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

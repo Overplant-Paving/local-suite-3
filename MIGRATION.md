@@ -123,7 +123,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 25 | radar.html | sky | cors | — | B | image loops (no CORS issue) | ⬜ |
 | 26 | air.html | sky | cors | — | B | | ✅ `tests/evidence/air/` |
 | 27 | spaceweather.html | sky | cors | — | B | ~1 MB aurora grid — cache | ⬜ |
-| 28 | tides.html | sky | cors | — | B | add `application=` param | ⬜ |
+| 28 | tides.html | sky | cors | — | B | add `application=` param | ✅ `tests/evidence/tides/` |
 | 29 | marine.html | sky | cors | — | B | NDBC path stays descoped (no CORS) | ⬜ |
 | 30 | normals.html | sky | cors | — | B | NCEI gotchas in CATALOG | ⬜ |
 | 31 | quakes.html | earth | cors | — | B | | ✅ `tests/evidence/quakes/` |

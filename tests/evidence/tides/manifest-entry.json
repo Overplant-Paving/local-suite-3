@@ -1,0 +1,22 @@
+{
+  "id": "tides",
+  "file": "tides.html",
+  "name": "Tides & Currents Board",
+  "cat": "sky",
+  "cx": "M",
+  "desc": "Next high/low tides, today's tide curve, and water temperature.",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": [
+    "https://api.tidesandcurrents.noaa.gov"
+  ],
+  "storage": [
+    "suite.theme",
+    "suite.location",
+    "suite.tides.station",
+    "suite.cache.tides.*"
+  ],
+  "cacheTtlMin": 60,
+  "since": "v1",
+  "flags": []
+}

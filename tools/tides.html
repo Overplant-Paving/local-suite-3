@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tides &amp; Currents Board · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents (3-layer, same pattern as core) */
+  :root{ --tide:#2f6f6a; --high:#2f6f6a; --low:#b0752a; --water:#3a86a8; }
+  @media (prefers-color-scheme: dark){
+    :root{ --tide:#6fb5ae; --high:#6fb5ae; --low:#d19a4e; --water:#6bb6d6; }
+  }
+  :root[data-theme="light"]{ --tide:#2f6f6a; --high:#2f6f6a; --low:#b0752a; --water:#3a86a8; }
+  :root[data-theme="dark"]{ --tide:#6fb5ae; --high:#6fb5ae; --low:#d19a4e; --water:#6bb6d6; }
+
+  body{ padding:1.4rem 1.25rem 4rem; }
+  .wrap{ max-width:960px; margin:0 auto; }
+  .topbar{ display:flex; align-items:center; gap:.8rem; margin-bottom:1rem; }
+  /* v1's back link is a muted pill, not core's plain accent link */
+  .back{ text-decoration:none; color:var(--muted); font-size:.9rem; border:1px solid var(--line);
+    background:var(--card); border-radius:999px; padding:.3rem .8rem; white-space:nowrap; }
+  .back:hover{ color:var(--accent); border-color:var(--accent); text-decoration:none; }
+  .spacer{ flex:1; }
+  .theme-btn{ float:none; } /* v1 positions it with the flex .topbar, not core's float */
+  header h1{ font-size:1.7rem; letter-spacing:-.02em; }
+  header .tag{ color:var(--muted); margin-top:.25rem; font-size:.95rem; }
+  .statusdot{ display:inline-block; width:.5rem; height:.5rem; border-radius:50%; background:var(--line); margin-right:.35rem; }
+  .statusdot.ok{ background:var(--built); } .statusdot.stale{ background:var(--low); } .statusdot.err{ background:#c0523b; }
+  .stationbar{ display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; margin:1rem 0 .3rem; }
+  .stationbar .name{ font-weight:600; font-size:1.05rem; }
+  .stationbar .meta{ color:var(--muted); font-size:.85rem; }
+  .mini{ border:1px solid var(--line); background:var(--card); color:var(--accent);
+    border-radius:999px; padding:.2rem .7rem; cursor:pointer; font-size:.8rem; }
+  .grid{ display:grid; grid-template-columns:1.4fr 1fr; gap:.9rem; margin-top:1rem; }
+  @media(max-width:720px){ .grid{ grid-template-columns:1fr; } }
+  /* v1's card is a plain block with its own padding, not core's flex column */
+  .card{ padding:1.1rem 1.15rem; display:block; flex-direction:row; gap:normal; }
+  .card h2{ font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
+    font-weight:600; margin-bottom:.7rem; display:flex; justify-content:space-between; align-items:baseline; }
+  #tideChart{ width:100%; height:auto; display:block; }
+  .now-strip{ display:flex; gap:1.4rem; margin-top:.4rem; flex-wrap:wrap; }
+  .now-item .lbl{ font-size:.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
+  .now-item .val{ font-size:1.35rem; font-weight:600; color:var(--tide); }
+  .now-item .val small{ font-size:.85rem; color:var(--muted); font-weight:400; }
+  .events{ display:flex; flex-direction:column; }
+  .event{ display:grid; grid-template-columns:auto 1fr auto; gap:.7rem; align-items:center;
+    padding:.55rem 0; border-bottom:1px solid var(--line); }
+  .event:last-child{ border-bottom:none; }
+  .event.next{ }
+  .arrow{ font-size:1.3rem; line-height:1; }
+  .arrow.H{ color:var(--high); } .arrow.L{ color:var(--low); }
+  .event .type{ font-weight:600; }
+  .event .type small{ display:block; font-weight:400; color:var(--muted); font-size:.78rem; }
+  .event .when{ text-align:right; font-variant-numeric:tabular-nums; }
+  .event .when b{ display:block; }
+  .event .when small{ color:var(--muted); font-size:.78rem; }
+  .badge{ font-size:.68rem; padding:.05rem .4rem; border-radius:999px; background:var(--accent-soft);
+    color:var(--accent); margin-left:.4rem; vertical-align:middle; }
+  .watertemp{ text-align:center; padding:.4rem 0; }
+  .watertemp .big{ font-size:2.6rem; font-weight:600; color:var(--water); line-height:1; }
+  .watertemp .lbl{ color:var(--muted); font-size:.85rem; margin-top:.2rem; }
+  footer{ margin-top:2.5rem; font-size:.82rem; padding-top:1rem; } /* v1 is tighter than core's footer */
+  .msg{ padding:1.4rem; text-align:center; color:var(--muted); }
+  .msg .big{ font-size:1.05rem; color:var(--ink); margin-bottom:.4rem; }
+  /* picker modal */
+  .backdrop{ position:fixed; inset:0; background:rgba(10,12,16,.55); display:none; place-items:center;
+    z-index:20; padding:1rem; }
+  .backdrop.open{ display:grid; }
+  .modal{ background:var(--card); border:1px solid var(--line); border-radius:16px; width:min(500px,100%);
+    max-height:86vh; overflow:auto; padding:1.4rem; box-shadow:var(--shadow); }
+  .modal h2{ font-size:1.15rem; margin-bottom:.3rem; }
+  .modal p{ color:var(--muted); font-size:.88rem; margin-bottom:.9rem; }
+  .fld{ display:flex; gap:.5rem; margin-bottom:.6rem; }
+  .fld input{ flex:1; border:1px solid var(--line); background:var(--bg); color:var(--ink);
+    border-radius:9px; padding:.55rem .7rem; font-size:1rem; }
+  .btn{ border:none; border-radius:9px; padding:.55rem .9rem; cursor:pointer; font-weight:600; font-size:.9rem;
+    background:var(--accent); color:#fff; }
+  .btn.ghost{ background:transparent; border:1px solid var(--line); color:var(--ink); }
+  .divider{ border:none; border-top:1px solid var(--line); margin:1rem 0 .8rem; }
+  .stationlist{ display:flex; flex-direction:column; gap:.15rem; }
+  .st{ display:flex; justify-content:space-between; gap:.6rem; padding:.5rem .6rem; border-radius:9px;
+    cursor:pointer; border:1px solid transparent; }
+  .st:hover{ background:var(--accent-soft); border-color:var(--line); }
+  .st .sn{ font-weight:500; } .st .sd{ color:var(--muted); font-size:.82rem; }
+  .st.near{ background:var(--accent-soft); }
+  .err{ color:#b0472f; font-size:.85rem; min-height:1.1em; margin-top:.3rem; }
+  .listlabel{ font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:.3rem 0; }
+  .hidden{ display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <div class="spacer"></div>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Tides &amp; Currents Board</h1>
+    <p class="tag">Next highs and lows, today's tide curve, and water temperature from your nearest NOAA station.</p>
+  </header>
+
+  <div class="stationbar">
+    <span><span class="statusdot" id="statusDot" aria-hidden="true"></span><span class="name" id="stName">Choose a station</span></span>
+    <span class="meta" id="stMeta"></span>
+    <button class="mini" id="changeStation">change station</button>
+    <span class="spacer"></span>
+    <span class="meta" id="updated"></span>
+  </div>
+
+  <div id="content">
+    <div class="card"><div class="msg"><div class="big">No station selected</div>Pick a NOAA tide station to see predictions.</div></div>
+  </div>
+
+  <footer>
+    Data: NOAA Tides &amp; Currents (CO-OPS) · api.tidesandcurrents.noaa.gov. Predictions are harmonic —
+    astronomical only, not adjusted for wind or pressure. Datum MLLW. Times in the station's local zone.
+  </footer>
+</div>
+
+<!-- station picker -->
+<div class="backdrop" id="backdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Choose a tide station">
+    <h2>Choose a tide station</h2>
+    <p>Enter any NOAA station ID, or pick from popular stations below. Your saved location highlights the nearest few.</p>
+    <div class="fld">
+      <input id="idIn" inputmode="numeric" placeholder="Station ID (e.g. 8454000)" aria-label="NOAA station ID">
+      <button class="btn" id="idBtn">Use ID</button>
+    </div>
+    <div class="err" id="pickErr"></div>
+    <hr class="divider">
+    <div id="nearWrap" class="hidden">
+      <div class="listlabel">Nearest to you</div>
+      <div class="stationlist" id="nearList"></div>
+      <div class="listlabel" style="margin-top:.8rem">All popular stations</div>
+    </div>
+    <div class="stationlist" id="allList"></div>
+    <hr class="divider">
+    <button class="btn ghost" id="closePicker">Cancel</button>
+  </div>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* the chart bakes computed CSS-var colors into inline SVG, so re-render on theme flip
+   (v1 did this inside its own theme-toggle handler; core owns the toggle now) */
+document.getElementById("themeBtn").addEventListener("click", () => { if (lastData) renderAll(lastData); });
+
+/* ---------- embedded popular NOAA tide stations (verified vs CO-OPS mdapi, Jul 2026) ---------- */
+const STATIONS = [
+  {id:"8443970",n:"Boston",s:"MA",lat:42.3539,lon:-71.0503},
+  {id:"8454000",n:"Providence",s:"RI",lat:41.8072,lon:-71.4007},
+  {id:"8461490",n:"New London",s:"CT",lat:41.3717,lon:-72.0956},
+  {id:"8518750",n:"New York (The Battery)",s:"NY",lat:40.7006,lon:-74.0142},
+  {id:"8531680",n:"Sandy Hook",s:"NJ",lat:40.4669,lon:-74.0094},
+  {id:"8534720",n:"Atlantic City",s:"NJ",lat:39.3567,lon:-74.4181},
+  {id:"8574680",n:"Baltimore (Fort McHenry)",s:"MD",lat:39.2667,lon:-76.5783},
+  {id:"8594900",n:"Washington, D.C.",s:"DC",lat:38.8733,lon:-77.0217},
+  {id:"8638610",n:"Sewells Point (Norfolk)",s:"VA",lat:36.9428,lon:-76.3286},
+  {id:"8656483",n:"Beaufort",s:"NC",lat:34.7173,lon:-76.6707},
+  {id:"8665530",n:"Charleston",s:"SC",lat:32.7808,lon:-79.9236},
+  {id:"8670870",n:"Fort Pulaski (Savannah)",s:"GA",lat:32.0347,lon:-80.9030},
+  {id:"8720218",n:"Mayport",s:"FL",lat:30.3982,lon:-81.4279},
+  {id:"8723214",n:"Virginia Key (Miami)",s:"FL",lat:25.7314,lon:-80.1618},
+  {id:"8724580",n:"Key West",s:"FL",lat:24.5557,lon:-81.8079},
+  {id:"8725110",n:"Naples",s:"FL",lat:26.1317,lon:-81.8075},
+  {id:"8726520",n:"St. Petersburg",s:"FL",lat:27.7606,lon:-82.6269},
+  {id:"8729108",n:"Panama City",s:"FL",lat:30.1497,lon:-85.6644},
+  {id:"8735180",n:"Dauphin Island",s:"AL",lat:30.2500,lon:-88.0750},
+  {id:"8761724",n:"Grand Isle",s:"LA",lat:29.2633,lon:-89.9567},
+  {id:"8770570",n:"Sabine Pass",s:"TX",lat:29.7284,lon:-93.8701},
+  {id:"8771450",n:"Galveston (Pier 21)",s:"TX",lat:29.3100,lon:-94.7933},
+  {id:"8775870",n:"Corpus Christi (Bob Hall Pier)",s:"TX",lat:27.5800,lon:-97.2167},
+  {id:"8779770",n:"Port Isabel",s:"TX",lat:26.0612,lon:-97.2155},
+  {id:"9410170",n:"San Diego",s:"CA",lat:32.7156,lon:-117.1767},
+  {id:"9410230",n:"La Jolla (Scripps)",s:"CA",lat:32.8669,lon:-117.2571},
+  {id:"9410660",n:"Los Angeles (Outer Harbor)",s:"CA",lat:33.7200,lon:-118.2720},
+  {id:"9410840",n:"Santa Monica",s:"CA",lat:34.0083,lon:-118.5000},
+  {id:"9411340",n:"Santa Barbara",s:"CA",lat:34.4046,lon:-119.6925},
+  {id:"9413450",n:"Monterey",s:"CA",lat:36.6089,lon:-121.8914},
+  {id:"9414290",n:"San Francisco (Golden Gate)",s:"CA",lat:37.8063,lon:-122.4659},
+  {id:"9414750",n:"Alameda",s:"CA",lat:37.7720,lon:-122.3003},
+  {id:"9415020",n:"Point Reyes",s:"CA",lat:37.9942,lon:-122.9736},
+  {id:"9418767",n:"Humboldt Bay (North Spit)",s:"CA",lat:40.7669,lon:-124.2173},
+  {id:"9431647",n:"Port Orford",s:"OR",lat:42.7390,lon:-124.4983},
+  {id:"9435380",n:"South Beach (Newport)",s:"OR",lat:44.6254,lon:-124.0449},
+  {id:"9439040",n:"Astoria",s:"OR",lat:46.2073,lon:-123.7683},
+  {id:"9444900",n:"Port Townsend",s:"WA",lat:48.1112,lon:-122.7597},
+  {id:"9447130",n:"Seattle",s:"WA",lat:47.6026,lon:-122.3393},
+  {id:"9449880",n:"Friday Harbor",s:"WA",lat:48.5453,lon:-123.0125},
+  {id:"9451600",n:"Sitka",s:"AK",lat:57.0517,lon:-135.3420},
+  {id:"9455920",n:"Anchorage",s:"AK",lat:61.2375,lon:-149.8904},
+  {id:"9457292",n:"Kodiak",s:"AK",lat:57.7317,lon:-152.5120},
+  {id:"1612340",n:"Honolulu",s:"HI",lat:21.3033,lon:-157.8645},
+  {id:"1617760",n:"Hilo",s:"HI",lat:19.7303,lon:-155.0556},
+];
+
+/* ---------- helpers ---------- */
+function getLoc(){ return Suite.location.get(); }
+function haversine(a,b,c,d){ const R=3959,rad=Math.PI/180; const dLat=(c-a)*rad,dLon=(d-b)*rad;
+  const s=Math.sin(dLat/2)**2 + Math.cos(a*rad)*Math.cos(c*rad)*Math.sin(dLon/2)**2; return 2*R*Math.asin(Math.sqrt(s)); }
+const esc = Suite.esc;
+
+// CO-OPS returns naive local station time "YYYY-MM-DD HH:MM"; parse as local-of-device for display math.
+function parseLST(t){ const [d,tm]=t.split(" "); const [Y,M,D]=d.split("-").map(Number); const [h,mi]=tm.split(":").map(Number);
+  return new Date(Y, M-1, D, h, mi); }
+function fmtClock(d){ return d.toLocaleTimeString([], {hour:"numeric", minute:"2-digit"}); }
+function fmtDayClock(d){ const today=new Date(); const isToday=d.toDateString()===today.toDateString();
+  const tmrw=new Date(today.getTime()+86400000); const isTmrw=d.toDateString()===tmrw.toDateString();
+  const day = isToday?"Today":isTmrw?"Tomorrow":d.toLocaleDateString([], {weekday:"short"});
+  return {day, time:fmtClock(d)}; }
+function relTime(d, now){ const ms=d-now; if (ms<0) return "passed";
+  const m=Math.round(ms/60000), h=Math.floor(m/60);
+  if (h>=1) return `in ${h}h ${String(m%60).padStart(2,"0")}m`; return `in ${m}m`; }
+
+/* ---------- state ---------- */
+const API = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter";
+const TTL = 60 * 60 * 1000; // manifest cacheTtlMin: 60 — harmonic predictions are stable for hours
+let station = null, lastData = null;
+const $ = s => document.querySelector(s);
+function setStatus(s){ $("#statusDot").className = "statusdot " + s; }
+function yyyymmdd(d){ return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`; }
+
+/* ---------- load ---------- */
+async function loadStation(st){
+  station = st;
+  Suite.store.set("suite.tides.station", st);
+  $("#stName").textContent = st.n;
+  $("#stMeta").textContent = `${st.s} · station ${st.id}`;
+  setStatus("stale");
+  $("#content").innerHTML = `<div class="card"><div class="msg">Loading predictions…</div></div>`;
+
+  const today = yyyymmdd(new Date());
+  // good-citizen identify-yourself rule (API-AND-RELAY.md §2): application=local-suite on every CO-OPS request
+  const base = `station=${encodeURIComponent(st.id)}&units=english&time_zone=lst_ldt&format=json&application=local-suite`;
+  const urls = {
+    hilo: `${API}?product=predictions&${base}&begin_date=${today}&range=48&datum=MLLW&interval=hilo`,
+    curve: `${API}?product=predictions&${base}&date=today&datum=MLLW&interval=6`,
+    temp: `${API}?product=water_temperature&${base}&date=today`,
+  };
+
+  // policy-mandated TTL cache per request (Suite.fetchJSON handles the {t,v} envelope and stale fallback)
+  const get = (key, url) => Suite.fetchJSON(url, { cacheKey: `tides.${st.id}.${key}`, ttl: TTL, tries: 2 });
+
+  try {
+    const [hiloR, curveR, tempR] = await Promise.allSettled([ get("hilo", urls.hilo), get("curve", urls.curve), get("temp", urls.temp) ]);
+    const data = { station: st, when: Date.now() };
+    let anyStale = false, oldestT = null;
+    const note = r => { if (r.value.stale) anyStale = true; oldestT = oldestT==null ? r.value.t : Math.min(oldestT, r.value.t); return r.value.v; };
+    if (hiloR.status==="fulfilled"){ const v = note(hiloR);
+      if (v.predictions) data.hilo = v.predictions;
+      else if (v.error) throw new Error(v.error.message); }
+    if (curveR.status==="fulfilled"){ const v = note(curveR); if (v.predictions) data.curve = v.predictions; }
+    if (tempR.status==="fulfilled"){ const v = note(tempR); if (v.data) data.temp = v.data; }
+
+    if (!data.hilo && !data.curve){
+      throw (hiloR.status==="rejected" ? hiloR.reason : new Error("No prediction data returned for this station."));
+    }
+    lastData = data;
+    renderAll(data);
+    if (anyStale){
+      setStatus("stale");
+      $("#updated").textContent = "cached " + new Date(oldestT).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
+    } else {
+      setStatus("ok");
+      $("#updated").textContent = "updated " + fmtClock(new Date(oldestT || Date.now()));
+    }
+  } catch(e){
+    setStatus("err");
+    $("#updated").textContent = "";
+    $("#content").innerHTML = `<div class="card"><div class="msg">
+      <div class="big">Couldn't load this station</div>
+      ${esc(e.message||String(e))}<br><br>
+      Try another station, or check your connection. If you opened this file directly and it never loads,
+      run <code>python -m http.server</code> in this folder and open via http://localhost.</div></div>`;
+  }
+}
+
+/* ---------- render ---------- */
+function renderAll(data){
+  const now = new Date();
+  const curve = (data.curve||[]).map(p=>({ t:parseLST(p.t), v:parseFloat(p.v) }));
+  const hilo = (data.hilo||[]).map(p=>({ t:parseLST(p.t), v:parseFloat(p.v), type:p.type }));
+
+  // current height: interpolate from curve
+  let curHeight = null;
+  if (curve.length){
+    for (let i=0;i<curve.length-1;i++){
+      if (now>=curve[i].t && now<=curve[i+1].t){
+        const f=(now-curve[i].t)/(curve[i+1].t-curve[i].t);
+        curHeight = curve[i].v + f*(curve[i+1].v-curve[i].v); break;
+      }
+    }
+    if (curHeight===null){ curHeight = now<curve[0].t ? curve[0].v : curve[curve.length-1].v; }
+  }
+
+  const upcoming = hilo.filter(e=>e.t>=now);
+  const nextEvent = upcoming[0] || null;
+  let trend = "";
+  if (nextEvent) trend = nextEvent.type==="H" ? "rising" : "falling";
+
+  // water temp latest
+  let tempStr = null, tempWhen = null;
+  if (data.temp && data.temp.length){
+    for (let i=data.temp.length-1;i>=0;i--){ if (data.temp[i].v!=="" && data.temp[i].v!=null && !isNaN(parseFloat(data.temp[i].v))){ tempStr=parseFloat(data.temp[i].v); tempWhen=parseLST(data.temp[i].t); break; } }
+  }
+
+  const chartHTML = curve.length ? `<svg id="tideChart" viewBox="0 0 640 240" preserveAspectRatio="none" role="img" aria-label="Today's tide curve"></svg>`
+    : `<div class="msg">Tide curve unavailable for this station.</div>`;
+
+  $("#content").innerHTML = `
+    <div class="grid">
+      <div>
+        <div class="card">
+          <h2><span>Today's tide curve</span><span style="text-transform:none;letter-spacing:0;color:var(--muted)">feet · MLLW</span></h2>
+          ${chartHTML}
+          <div class="now-strip">
+            <div class="now-item"><div class="lbl">Now</div><div class="val">${curHeight!=null?curHeight.toFixed(1):"—"} <small>ft</small></div></div>
+            <div class="now-item"><div class="lbl">Trend</div><div class="val" style="font-size:1.1rem;color:var(--muted)">${trend?trend+" "+(trend==="rising"?"↑":"↓"):"—"}</div></div>
+            ${nextEvent?`<div class="now-item"><div class="lbl">Next ${nextEvent.type==="H"?"high":"low"}</div><div class="val" style="font-size:1.1rem">${relTime(nextEvent.t,now)}</div></div>`:""}
+          </div>
+        </div>
+        <div class="card" style="margin-top:.9rem">
+          <h2>Water temperature</h2>
+          ${tempStr!=null
+            ? `<div class="watertemp"><div class="big">${Math.round(tempStr)}°F</div><div class="lbl">as of ${fmtClock(tempWhen)}, station sensor</div></div>`
+            : `<div class="msg" style="padding:.8rem">This station doesn't report water temperature.</div>`}
+        </div>
+      </div>
+      <div class="card">
+        <h2>Next highs &amp; lows</h2>
+        <div class="events" id="events"></div>
+      </div>
+    </div>`;
+
+  // event list
+  const evEl = $("#events");
+  if (upcoming.length){
+    evEl.innerHTML = upcoming.slice(0,8).map((e,idx)=>{
+      const isHigh = e.type === "H"; // normalized locally — remote e.type never hits the markup raw
+      const dc = fmtDayClock(e.t);
+      return `<div class="event">
+        <span class="arrow ${isHigh?"H":"L"}">${isHigh?"▲":"▼"}</span>
+        <span class="type">${isHigh?"High tide":"Low tide"}${idx===0?'<span class="badge">next</span>':''}
+          <small>${e.v.toFixed(1)} ft</small></span>
+        <span class="when"><b>${dc.time}</b><small>${dc.day} · ${relTime(e.t,now)}</small></span>
+      </div>`;
+    }).join("");
+  } else {
+    evEl.innerHTML = `<div class="msg" style="padding:.8rem">No upcoming high/low predictions.</div>`;
+  }
+
+  if (curve.length) drawChart(curve, hilo, now);
+}
+
+function drawChart(curve, hilo, now){
+  const svg = $("#tideChart"); if (!svg) return;
+  const W=640,H=240, pad={l:34,r:12,t:16,b:24};
+  const css=getComputedStyle(document.documentElement);
+  const tideCol=(css.getPropertyValue("--tide")||"#2f6f6a").trim();
+  const line=(css.getPropertyValue("--line")||"#e4e0d6").trim();
+  const muted=(css.getPropertyValue("--muted")||"#6b7280").trim();
+  const highCol=(css.getPropertyValue("--high")||"#2f6f6a").trim();
+  const lowCol=(css.getPropertyValue("--low")||"#b0752a").trim();
+  const softFill=tideCol;
+
+  const vs=curve.map(p=>p.v); let vmin=Math.min(...vs), vmax=Math.max(...vs);
+  const padV=(vmax-vmin)*0.12 || 0.5; vmin-=padV; vmax+=padV;
+  const t0=curve[0].t.getTime(), t1=curve[curve.length-1].t.getTime();
+  const X=t=>pad.l + (t-t0)/(t1-t0)*(W-pad.l-pad.r);
+  const Y=v=>pad.t + (1-(v-vmin)/(vmax-vmin))*(H-pad.t-pad.b);
+
+  let s="";
+  // horizontal gridlines
+  const ticks=4;
+  for (let i=0;i<=ticks;i++){
+    const v=vmin+(vmax-vmin)*i/ticks; const y=Y(v);
+    s+=`<line x1="${pad.l}" y1="${y.toFixed(1)}" x2="${W-pad.r}" y2="${y.toFixed(1)}" stroke="${line}" stroke-width="1"/>`;
+    s+=`<text x="${pad.l-5}" y="${(y+3).toFixed(1)}" text-anchor="end" font-size="10" fill="${muted}">${v.toFixed(1)}</text>`;
+  }
+  // hour labels along x
+  for (let h=0;h<=24;h+=6){
+    const tt=new Date(curve[0].t); tt.setHours(h,0,0,0);
+    if (tt.getTime()<t0||tt.getTime()>t1) continue;
+    const x=X(tt.getTime());
+    s+=`<line x1="${x.toFixed(1)}" y1="${pad.t}" x2="${x.toFixed(1)}" y2="${H-pad.b}" stroke="${line}" stroke-width="1" stroke-dasharray="2 4"/>`;
+    s+=`<text x="${x.toFixed(1)}" y="${H-pad.b+14}" text-anchor="middle" font-size="10" fill="${muted}">${h===0?"12a":h===12?"12p":h<12?h+"a":(h-12)+"p"}</text>`;
+  }
+  // area + line path
+  let dLine="", dArea="";
+  curve.forEach((p,i)=>{ const x=X(p.t.getTime()).toFixed(1), y=Y(p.v).toFixed(1);
+    dLine += (i===0?"M":"L")+x+" "+y+" "; });
+  dArea = dLine + `L ${X(t1).toFixed(1)} ${(H-pad.b)} L ${X(t0).toFixed(1)} ${(H-pad.b)} Z`;
+  s+=`<path d="${dArea}" fill="${softFill}" opacity="0.12"/>`;
+  s+=`<path d="${dLine}" fill="none" stroke="${tideCol}" stroke-width="2.5" stroke-linejoin="round"/>`;
+
+  // hi/lo markers within today's window
+  hilo.filter(e=>e.t.getTime()>=t0 && e.t.getTime()<=t1).forEach(e=>{
+    const x=X(e.t.getTime()), y=Y(e.v); const col=e.type==="H"?highCol:lowCol;
+    s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.5" fill="${col}"/>`;
+    s+=`<text x="${x.toFixed(1)}" y="${(e.type==="H"?y-8:y+15).toFixed(1)}" text-anchor="middle" font-size="10" fill="${col}">${fmtClock(e.t)}</text>`;
+  });
+  // now line
+  if (now.getTime()>=t0 && now.getTime()<=t1){
+    const x=X(now.getTime());
+    s+=`<line x1="${x.toFixed(1)}" y1="${pad.t}" x2="${x.toFixed(1)}" y2="${H-pad.b}" stroke="${highCol}" stroke-width="1.5"/>`;
+    s+=`<circle cx="${x.toFixed(1)}" cy="${pad.t}" r="3" fill="${highCol}"/>`;
+  }
+  svg.innerHTML=s;
+}
+
+/* ---------- station picker ---------- */
+const backdrop=$("#backdrop");
+function openPicker(){
+  const loc=getLoc();
+  const allList=$("#allList"); allList.innerHTML="";
+  const nearWrap=$("#nearWrap"), nearList=$("#nearList");
+  if (loc){
+    const ranked=STATIONS.map(s=>({s, d:haversine(loc.lat,loc.lon,s.lat,s.lon)})).sort((a,b)=>a.d-b.d);
+    nearList.innerHTML = ranked.slice(0,4).map(r=>stationRow(r.s, r.d)).join("");
+    nearWrap.classList.remove("hidden");
+  } else { nearWrap.classList.add("hidden"); }
+  const sorted=[...STATIONS].sort((a,b)=> a.s===b.s ? a.n.localeCompare(b.n) : a.s.localeCompare(b.s));
+  allList.innerHTML = sorted.map(s=>stationRow(s,null)).join("");
+  bindRows();
+  $("#pickErr").textContent="";
+  backdrop.classList.add("open");
+  $("#idIn").focus();
+}
+function stationRow(s,dist){
+  return `<div class="st" data-id="${esc(s.id)}" role="button" tabindex="0">
+    <span class="sn">${esc(s.n)} <span class="sd">${esc(s.s)}</span></span>
+    <span class="sd">${dist!=null?Math.round(dist)+" mi":"#"+esc(s.id)}</span></div>`;
+}
+function bindRows(){
+  document.querySelectorAll(".st").forEach(el=>{
+    const pick=()=>{ const id=el.dataset.id; const st=STATIONS.find(x=>x.id===id); if (st){ closePicker(); loadStation(st); } };
+    el.addEventListener("click", pick);
+    el.addEventListener("keydown", e=>{ if (e.key==="Enter"||e.key===" "){ e.preventDefault(); pick(); } });
+  });
+}
+function closePicker(){ backdrop.classList.remove("open"); }
+$("#changeStation").addEventListener("click", openPicker);
+$("#closePicker").addEventListener("click", closePicker);
+backdrop.addEventListener("click", e=>{ if (e.target===backdrop) closePicker(); });
+document.addEventListener("keydown",e=>{ if (e.key==="Escape") closePicker(); });
+
+$("#idBtn").addEventListener("click", ()=>{
+  const id=$("#idIn").value.trim();
+  const err=$("#pickErr");
+  if (!/^\d{6,8}$/.test(id)){ err.textContent="Enter a numeric NOAA station ID (6–8 digits)."; return; }
+  const known=STATIONS.find(x=>x.id===id);
+  const st = known || { id, n:"Station "+id, s:"", lat:null, lon:null };
+  closePicker(); loadStation(st);
+});
+$("#idIn").addEventListener("keydown",e=>{ if (e.key==="Enter") $("#idBtn").click(); });
+
+/* ---------- boot ---------- */
+Suite.liveRegion($("#content"));
+Suite.liveRegion($("#updated"));
+Suite.liveRegion($("#pickErr"));
+(function boot(){
+  const saved = Suite.store.get("suite.tides.station");
+  if (saved && saved.id){ loadStation(saved); return; }
+  const loc=getLoc();
+  if (loc){
+    const nearest=STATIONS.map(s=>({s,d:haversine(loc.lat,loc.lon,s.lat,s.lon)})).sort((a,b)=>a.d-b.d)[0];
+    if (nearest) { loadStation(nearest.s); return; }
+  }
+  openPicker();
+})();
+</script>
+</body>
+</html>

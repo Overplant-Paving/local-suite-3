@@ -116,5 +116,15 @@
     "H": "local-only expression, recorded verified-clean with reasoning in tests/evidence/quakes/report.md",
     "largest>-Infinity?\"M\"+largest.toFixed(1):\"—\"": "numeric max-magnitude via toFixed, or a literal em-dash",
     "loc&&shown.length&&shown.some(q=>q.dist!=null)?Math.round(Math.min(...shown.filter(q=>q.dist!=null).map(q=>q.dist)))+\" km\":\"—\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/quakes/report.md"
+  },
+  "tides.html": {
+    "chartHTML": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tides/report.md",
+    "curHeight!=null?curHeight.toFixed(1):\"—\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tides/report.md",
+    "trend?trend+\" \"+(trend===\"rising\"?\"↑\":\"↓\"):\"—\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tides/report.md",
+    "nextEvent.type===\"H\"?\"high\":\"low\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tides/report.md",
+    "relTime(nextEvent.t,now)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tides/report.md",
+    "Math.round(tempStr)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tides/report.md",
+    "fmtClock(tempWhen)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tides/report.md",
+    "nextEvent?`<div class=\"now-item\"><div class=\"lbl\">Next ${nextEvent.type===\"H\"?\"high\":\"low\"}</div><div class=\"val\" style=\"font-size:1.1rem\">${relTime(nextEvent.t,now)}</div></div>`:\"\"": "literal markup; type gates two literals, relTime() is a local formatter over a numeric timestamp"
   }
 }
