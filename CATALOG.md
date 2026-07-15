@@ -498,7 +498,7 @@ The short version of everything above. **CORS ✓** = documented/community-confi
 | NOAA SWPC space weather | `services.swpc.noaa.gov` | none | verify (widely used) |
 | NOAA CO-OPS tides | `api.tidesandcurrents.noaa.gov` | none | verify (widely used) |
 | NOAA NDBC buoys | `ndbc.noaa.gov/data/realtime2` | none | ✗ |
-| Open-Meteo (weather/air/marine/geocoding) | `*.open-meteo.com` | none (10k/day) | ✓ |
+| Open-Meteo (weather/air/marine/geocoding/archive) | `*.open-meteo.com` (in use: `api.`, `marine-api.`, `air-quality-api.`, `geocoding-api.`, `archive-api.open-meteo.com` — v2, Jul 2026) | none (10k/day) | ✓ |
 | USGS earthquakes | `earthquake.usgs.gov` | none | ✓ |
 | USGS water (new) | `api.waterdata.usgs.gov` | optional | ✓ (OGC API; verified Jul 2026) |
 | USGS elevation (EPQS) | `epqs.nationalmap.gov` | none | verify |
