@@ -240,7 +240,7 @@ def gate_escaping_heuristic(source_texts, allowlist):
                         continue
                     if e in allowed:
                         continue
-                    flags[f"{name}: unescaped interpolation into innerHTML: ${{{e[:70]}}}"] = True
+                    flags[f"{name}: unescaped interpolation into innerHTML: ${{{e}}}"] = True
     return list(flags)
 
 def gate_catalog_crosscheck(tools, catalog_text):
