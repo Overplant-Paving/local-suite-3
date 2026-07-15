@@ -119,7 +119,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 21 | timers.html | util | off | — | A | | ✅ `tests/evidence/timers/` |
 | 22 | loan.html | util | off | — | A | | ✅ `tests/evidence/loan/` |
 | 23 | flashcards.html | util | off | — | A | XP (keep) | ✅ `tests/evidence/flashcards/` |
-| 24 | alerts.html | sky | cors | — | B | | ⬜ |
+| 24 | alerts.html | sky | cors | — | B | | ✅ `tests/evidence/alerts/` |
 | 25 | radar.html | sky | cors | — | B | image loops (no CORS issue) | ⬜ |
 | 26 | air.html | sky | cors | — | B | | ⬜ |
 | 27 | spaceweather.html | sky | cors | — | B | ~1 MB aurora grid — cache | ⬜ |

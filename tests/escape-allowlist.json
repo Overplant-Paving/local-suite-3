@@ -92,5 +92,8 @@
     "due ? `<span class=\"due\">${due} due</span>` : `<span>none due</span>`": "literal markup; due is a numeric count from the scheduler filter",
     "due ? due + \" card(s) still due — take another pass?\" : \"Nothing left due in this deck. Nicely done.\"": "numeric count + literal strings",
     "due ? `<button class=\"btn\" id=\"againBtn\">Study remaining</button>` : \"\"": "pure literal markup ternary"
+  },
+  "alerts.html": {
+    "cards": "local-only expression, recorded verified-clean with reasoning in tests/evidence/alerts/report.md"
   }
 }

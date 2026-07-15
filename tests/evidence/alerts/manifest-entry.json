@@ -1,0 +1,15 @@
+{
+  "id": "alerts",
+  "file": "alerts.html",
+  "name": "Severe Weather Alert Board",
+  "cat": "sky",
+  "cx": "S",
+  "desc": "Watches and warnings for your area, sorted by severity — turns red when it matters.",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": ["https://api.weather.gov", "https://api.zippopotam.us"],
+  "storage": ["suite.location", "suite.cache.alerts", "suite.alerts.notify", "suite.alerts.seen"],
+  "cacheTtlMin": 5,
+  "since": "v1",
+  "flags": []
+}
