@@ -1,0 +1,18 @@
+{
+  "id": "worldclock",
+  "file": "worldclock.html",
+  "name": "World Clock & Meeting Planner",
+  "cat": "time",
+  "cx": "S",
+  "desc": "Your people's time zones as clocks, plus a civil-hour meeting slider.",
+  "network": "offline",
+  "key": null,
+  "endpoints": [],
+  "storage": [
+    "suite.theme",
+    "suite.worldclock.zones"
+  ],
+  "cacheTtlMin": null,
+  "since": "v1",
+  "flags": []
+}

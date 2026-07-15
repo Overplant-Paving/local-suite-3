@@ -1,0 +1,15 @@
+initial clocks: 1 (local zone default)
+local zone label: Chicago (local)
+after Add: clocks=2, Tokyo label="Tokyo, Japan", time="02:34:56", date="Thu 07/16 · GMT+9Tomorrow", sun="🌙"
+after free-zone Enter: clocks=3, Kolkata label="Kolkata", time="23:04:56", input cleared=""
+invalid zone alert: ""Not/A_Zone" is not a valid IANA time zone.", clocks still 3
+planner rows: 3, cells/row: 24
+slider Home: hourLabel="00:00 (12am) in Chicago (local)", selected cells=3
+slider at 9: hourLabel="09:00 (9am) in Chicago (local)"
+readout (3 zones): Chicago (local)09:00Wed 07/15 | Tokyo, Japan23:00Wed 07/15 | Kolkata19:30Wed 07/15
+reference -> Tokyo: hourLabel="09:00 (9am) in Tokyo, Japan"
+after remove Kolkata: clocks=2, planner rows=2
+localStorage["suite.worldclock.zones"] = [{"label":"Chicago (local)","zone":"America/Chicago"},{"label":"Tokyo, Japan","zone":"Asia/Tokyo"}]
+after reload: clocks=2, zones=[America/Chicago, Asia/Tokyo]
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)

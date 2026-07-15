@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Clock &amp; Meeting Planner · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents: day/night tints + status colors (3-layer, same pattern as core) */
+  :root {
+    --day: #f4ead0; --night: #232a3a;
+    --ok: #3a7d44; --warn: #b0752a; --bad: #b04a4a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --day: #33507a; --night: #10131c;
+      --ok: #7dc487; --warn: #d6a24a; --bad: #d67a7a;
+    }
+  }
+  :root[data-theme="light"] {
+    --day: #f4ead0; --night: #232a3a; --ok: #3a7d44; --warn: #b0752a; --bad: #b04a4a;
+  }
+  :root[data-theme="dark"] {
+    --day: #33507a; --night: #10131c; --ok: #7dc487; --warn: #d6a24a; --bad: #d67a7a;
+  }
+  body { padding: 1.6rem 1.25rem 4rem; }
+  .wrap { max-width: 1060px; margin: 0 auto; }
+  header { position: relative; }
+  header h1 { font-size: 1.7rem; letter-spacing: -.02em; margin-top: .5rem; }
+  header .tag { color: var(--muted); margin-top: .3rem; max-width: 46rem; }
+  h2 { font-size: 1.1rem; margin: 2rem 0 .8rem; }
+  .row { display: flex; flex-wrap: wrap; gap: .55rem; align-items: center; }
+  select, input[type="text"] {
+    padding: .55rem .7rem; font-size: .95rem; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 10px; background: var(--card);
+    outline: none; box-shadow: var(--shadow);
+  }
+  select:focus, input:focus { border-color: var(--accent); }
+  .btn {
+    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    border-radius: 10px; padding: .55rem .9rem; cursor: pointer; font-size: .9rem;
+  }
+  .btn.ghost { background: var(--card); color: var(--accent); }
+  .btn:hover { filter: brightness(1.05); }
+  .clocks { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .9rem; margin-top: .3rem; }
+  .clock {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 1rem 1.05rem; box-shadow: var(--shadow); position: relative; overflow: hidden;
+  }
+  .clock .tint { position: absolute; inset: 0; opacity: .16; pointer-events: none; }
+  .clock .top { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; position: relative; }
+  .clock .label { font-weight: 600; font-size: 1rem; }
+  .clock .zone { font-size: .72rem; color: var(--muted); }
+  .clock .time { font-size: 2.4rem; font-weight: 600; letter-spacing: -.01em; margin: .3rem 0 .1rem; position: relative;
+    font-variant-numeric: tabular-nums; }
+  .clock .time .sec { font-size: 1.1rem; color: var(--muted); font-weight: 500; }
+  .clock .date { font-size: .85rem; color: var(--muted); position: relative; }
+  .clock .badge {
+    display: inline-block; font-size: .68rem; padding: .1rem .45rem; border-radius: 999px;
+    background: var(--accent-soft); color: var(--accent); margin-left: .35rem; vertical-align: middle;
+  }
+  .clock .rm {
+    position: absolute; top: .5rem; right: .55rem; border: none; background: transparent;
+    color: var(--muted); cursor: pointer; font-size: 1rem; line-height: 1; padding: .2rem; border-radius: 6px;
+  }
+  .clock .rm:hover { color: var(--bad); background: var(--chip); }
+  .clock.night .sun { color: #b9c4e0; }
+  .clock .sun { position: absolute; bottom: .7rem; right: .8rem; font-size: 1.2rem; opacity: .8; }
+  .empty { color: var(--muted); padding: 1.2rem 0; }
+  /* planner */
+  .planner { margin-top: .5rem; }
+  .plan-ctl { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-bottom: .8rem; }
+  .plan-ctl label { font-size: .85rem; color: var(--muted); }
+  input[type="range"] { width: min(360px, 60vw); accent-color: var(--accent); }
+  .legend { display: flex; gap: .8rem; flex-wrap: wrap; font-size: .78rem; color: var(--muted); margin-bottom: .6rem; }
+  .legend i { display: inline-block; width: .8rem; height: .8rem; border-radius: 3px; vertical-align: middle; margin-right: .3rem; }
+  .gridwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--card); box-shadow: var(--shadow); }
+  table.grid { border-collapse: collapse; width: 100%; min-width: 720px; }
+  table.grid th, table.grid td { padding: 0; text-align: center; font-size: .72rem; }
+  table.grid .zh { text-align: left; padding: .45rem .6rem; white-space: nowrap; position: sticky; left: 0;
+    background: var(--card); border-right: 1px solid var(--line); z-index: 2; }
+  table.grid .zh small { display: block; color: var(--muted); font-weight: 400; }
+  table.grid thead th { padding: .4rem .1rem; color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--line); }
+  table.grid tbody td.cell { height: 2.1rem; border-left: 1px solid color-mix(in srgb, var(--line) 55%, transparent); color: #1c1c1c; font-weight: 500; }
+  table.grid td.cell.sel { outline: 2px solid var(--ink); outline-offset: -2px; }
+  table.grid th.selcol { color: var(--ink); font-weight: 700; }
+  .readout { margin-top: .9rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .6rem; }
+  .readout .r {
+    border: 1px solid var(--line); border-radius: 10px; padding: .55rem .7rem; background: var(--card); box-shadow: var(--shadow);
+  }
+  .readout .r .rl { font-size: .78rem; color: var(--muted); }
+  .readout .r .rt { font-size: 1.15rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .readout .r .rd { font-size: .74rem; color: var(--muted); }
+  .dot { width: .55rem; height: .55rem; border-radius: 50%; display: inline-block; margin-right: .35rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+    <h1>World Clock &amp; Meeting Planner</h1>
+    <p class="tag">Keep your people's time zones side by side, then slide across the day to find an hour
+      that's civil for everyone. Everything is computed from your browser's own time-zone database.</p>
+  </header>
+
+  <h2>Your clocks</h2>
+  <div class="row">
+    <select id="citySel" aria-label="Add a city"></select>
+    <button class="btn" id="addCity">Add</button>
+    <input type="text" id="freeZone" aria-label="IANA time zone name" placeholder="…or an IANA zone, e.g. Asia/Kolkata" style="min-width:16rem">
+    <button class="btn ghost" id="addFree">Add zone</button>
+  </div>
+  <div class="clocks" id="clocks"></div>
+  <p class="empty" id="clocksEmpty" style="display:none">No clocks yet — add a city or a zone above.
+    Your local zone (<span id="localZone"></span>) is shown first.</p>
+
+  <h2>Meeting planner</h2>
+  <div class="planner">
+    <div class="plan-ctl">
+      <label>Reference: <select id="refSel"></select></label>
+      <label style="display:flex;align-items:center;gap:.5rem">
+        Hour <input type="range" id="hourSlider" min="0" max="23" step="1">
+        <b id="hourLabel" style="font-variant-numeric:tabular-nums"></b>
+      </label>
+    </div>
+    <div class="legend">
+      <span><i style="background:#8fce9b"></i>Comfortable (9–17)</span>
+      <span><i style="background:#e6c96a"></i>Early / late (7–9, 17–21)</span>
+      <span><i style="background:#d98b8b"></i>Night (21–7)</span>
+      <span>Column outlined = selected hour · shaded header = now</span>
+    </div>
+    <div class="gridwrap">
+      <table class="grid" id="planGrid"></table>
+    </div>
+    <div class="readout" id="readout"></div>
+    <p class="empty" id="planEmpty" style="display:none">Add at least one clock to plan a meeting.</p>
+  </div>
+
+  <footer id="foot">No network — everything happens on your machine, using the browser's IANA time-zone data.</footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---------- persistence ---------- */
+const KEY = "suite.worldclock.zones";
+function loadZones(){
+  const v = Suite.store.get(KEY);
+  return Array.isArray(v) ? v : null;
+}
+function saveZones(){ Suite.store.set(KEY, zones); }
+
+/* ---------- embedded city → IANA zone list (~80 major cities) ---------- */
+const CITIES = [
+  ["Honolulu, USA","Pacific/Honolulu"],["Anchorage, USA","America/Anchorage"],
+  ["Los Angeles, USA","America/Los_Angeles"],["Vancouver, Canada","America/Vancouver"],
+  ["Denver, USA","America/Denver"],["Phoenix, USA","America/Phoenix"],
+  ["Mexico City, Mexico","America/Mexico_City"],["Chicago, USA","America/Chicago"],
+  ["New York, USA","America/New_York"],["Toronto, Canada","America/Toronto"],
+  ["Bogotá, Colombia","America/Bogota"],["Lima, Peru","America/Lima"],
+  ["Santiago, Chile","America/Santiago"],["Caracas, Venezuela","America/Caracas"],
+  ["São Paulo, Brazil","America/Sao_Paulo"],["Buenos Aires, Argentina","America/Argentina/Buenos_Aires"],
+  ["Halifax, Canada","America/Halifax"],["Reykjavík, Iceland","Atlantic/Reykjavik"],
+  ["London, UK","Europe/London"],["Dublin, Ireland","Europe/Dublin"],
+  ["Lisbon, Portugal","Europe/Lisbon"],["Madrid, Spain","Europe/Madrid"],
+  ["Paris, France","Europe/Paris"],["Amsterdam, Netherlands","Europe/Amsterdam"],
+  ["Brussels, Belgium","Europe/Brussels"],["Berlin, Germany","Europe/Berlin"],
+  ["Zürich, Switzerland","Europe/Zurich"],["Rome, Italy","Europe/Rome"],
+  ["Vienna, Austria","Europe/Vienna"],["Stockholm, Sweden","Europe/Stockholm"],
+  ["Oslo, Norway","Europe/Oslo"],["Copenhagen, Denmark","Europe/Copenhagen"],
+  ["Warsaw, Poland","Europe/Warsaw"],["Prague, Czechia","Europe/Prague"],
+  ["Athens, Greece","Europe/Athens"],["Helsinki, Finland","Europe/Helsinki"],
+  ["Bucharest, Romania","Europe/Bucharest"],["Kyiv, Ukraine","Europe/Kyiv"],
+  ["Istanbul, Türkiye","Europe/Istanbul"],["Moscow, Russia","Europe/Moscow"],
+  ["Cairo, Egypt","Africa/Cairo"],["Lagos, Nigeria","Africa/Lagos"],
+  ["Nairobi, Kenya","Africa/Nairobi"],["Johannesburg, South Africa","Africa/Johannesburg"],
+  ["Casablanca, Morocco","Africa/Casablanca"],["Tel Aviv, Israel","Asia/Jerusalem"],
+  ["Riyadh, Saudi Arabia","Asia/Riyadh"],["Dubai, UAE","Asia/Dubai"],
+  ["Tehran, Iran","Asia/Tehran"],["Karachi, Pakistan","Asia/Karachi"],
+  ["Kolkata / Mumbai, India","Asia/Kolkata"],["Kathmandu, Nepal","Asia/Kathmandu"],
+  ["Dhaka, Bangladesh","Asia/Dhaka"],["Bangkok, Thailand","Asia/Bangkok"],
+  ["Jakarta, Indonesia","Asia/Jakarta"],["Ho Chi Minh City, Vietnam","Asia/Ho_Chi_Minh"],
+  ["Singapore","Asia/Singapore"],["Kuala Lumpur, Malaysia","Asia/Kuala_Lumpur"],
+  ["Hong Kong","Asia/Hong_Kong"],["Beijing / Shanghai, China","Asia/Shanghai"],
+  ["Manila, Philippines","Asia/Manila"],["Taipei, Taiwan","Asia/Taipei"],
+  ["Seoul, South Korea","Asia/Seoul"],["Tokyo, Japan","Asia/Tokyo"],
+  ["Perth, Australia","Australia/Perth"],["Adelaide, Australia","Australia/Adelaide"],
+  ["Brisbane, Australia","Australia/Brisbane"],["Sydney, Australia","Australia/Sydney"],
+  ["Melbourne, Australia","Australia/Melbourne"],["Auckland, New Zealand","Pacific/Auckland"],
+  ["Fiji","Pacific/Fiji"],["Nouméa, New Caledonia","Pacific/Noumea"],
+  ["Guam","Pacific/Guam"],["Port Moresby, PNG","Pacific/Port_Moresby"],
+  ["Almaty, Kazakhstan","Asia/Almaty"],["Tashkent, Uzbekistan","Asia/Tashkent"],
+  ["Baku, Azerbaijan","Asia/Baku"],["Tbilisi, Georgia","Asia/Tbilisi"],
+  ["Yangon, Myanmar","Asia/Yangon"],["Colombo, Sri Lanka","Asia/Colombo"],
+  ["Accra, Ghana","Africa/Accra"],["Addis Ababa, Ethiopia","Africa/Addis_Ababa"]
+];
+
+/* local browser zone as a default label */
+const LOCAL_ZONE = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+function niceLabel(zone){ return zone.split("/").pop().replace(/_/g," "); }
+
+/* ---------- state ---------- */
+let zones = loadZones();
+if (!zones){ zones = [{ label: niceLabel(LOCAL_ZONE) + " (local)", zone: LOCAL_ZONE }]; saveZones(); }
+
+/* ---------- zone math ---------- */
+function zoneParts(date, zone){
+  const dtf = new Intl.DateTimeFormat("en-US", {
+    timeZone: zone, hourCycle: "h23",
+    year:"numeric", month:"2-digit", day:"2-digit",
+    hour:"2-digit", minute:"2-digit", second:"2-digit", weekday:"short"
+  });
+  const m = {};
+  dtf.formatToParts(date).forEach(p => { if (p.type !== "literal") m[p.type] = p.value; });
+  return m; // {year,month,day,hour,minute,second,weekday}
+}
+// minutes to add to UTC to get local wall time in the zone at this instant
+function zoneOffsetMin(date, zone){
+  const m = zoneParts(date, zone);
+  const asUTC = Date.UTC(+m.year, +m.month - 1, +m.day, +m.hour, +m.minute, +m.second);
+  return Math.round((asUTC - date.getTime()) / 60000);
+}
+function fmtOffset(min){
+  const sign = min < 0 ? "-" : "+";
+  const a = Math.abs(min), h = Math.floor(a/60), mm = a % 60;
+  return "GMT" + sign + h + (mm ? ":" + String(mm).padStart(2,"0") : "");
+}
+// build the UTC instant whose wall time in `zone` is the given Y/M/D h:m
+function wallToInstant(y, mo, d, h, mi, zone){
+  let guess = Date.UTC(y, mo - 1, d, h, mi);
+  let off = zoneOffsetMin(new Date(guess), zone);
+  let inst = Date.UTC(y, mo - 1, d, h, mi) - off * 60000;
+  const off2 = zoneOffsetMin(new Date(inst), zone);
+  if (off2 !== off) inst = Date.UTC(y, mo - 1, d, h, mi) - off2 * 60000;
+  return inst;
+}
+function dayNumber(m){ return Date.UTC(+m.year, +m.month - 1, +m.day) / 86400000; }
+
+/* ---------- render clocks ---------- */
+const clocksEl = document.getElementById("clocks");
+const clocksEmpty = document.getElementById("clocksEmpty");
+document.getElementById("localZone").textContent = LOCAL_ZONE;
+
+function buildClocks(){
+  clocksEl.textContent = "";
+  clocksEmpty.style.display = zones.length ? "none" : "block";
+  zones.forEach((z, idx) => {
+    const el = document.createElement("div");
+    el.className = "clock";
+    el.dataset.idx = idx;
+    el.innerHTML =
+      '<div class="tint"></div>' +
+      '<button class="rm" title="Remove">×</button>' +
+      '<div class="top"><span class="label"></span></div>' +
+      '<div class="zone"></div>' +
+      '<div class="time"></div>' +
+      '<div class="date"></div>' +
+      '<div class="sun"></div>';
+    const rm = el.querySelector(".rm");
+    rm.setAttribute("aria-label", "Remove clock: " + z.label);
+    rm.addEventListener("click", () => { zones.splice(idx, 1); saveZones(); fullRender(); });
+    el.querySelector(".label").textContent = z.label;
+    el.querySelector(".zone").textContent = z.zone;
+    clocksEl.append(el);
+  });
+  tick();
+}
+
+function tick(){
+  const now = new Date();
+  const localM = zoneParts(now, LOCAL_ZONE);
+  const localDay = dayNumber(localM);
+  clocksEl.querySelectorAll(".clock").forEach(el => {
+    const z = zones[+el.dataset.idx];
+    if (!z) return;
+    const m = zoneParts(now, z.zone);
+    const hour = +m.hour;
+    el.querySelector(".time").innerHTML =
+      m.hour + ":" + m.minute + '<span class="sec">:' + m.second + "</span>";
+    const off = fmtOffset(zoneOffsetMin(now, z.zone));
+    let badge = "";
+    const dd = dayNumber(m) - localDay;
+    if (dd >= 1) badge = '<span class="badge">Tomorrow</span>';
+    else if (dd <= -1) badge = '<span class="badge">Yesterday</span>';
+    el.querySelector(".date").innerHTML =
+      m.weekday + " " + m.month + "/" + m.day + " · " + off + badge;
+    const night = hour < 6 || hour >= 20;
+    const dusk = (hour >= 6 && hour < 8) || (hour >= 18 && hour < 20);
+    el.classList.toggle("night", night);
+    el.querySelector(".tint").style.background = night ? "var(--night)" : "var(--day)";
+    el.querySelector(".sun").textContent = night ? "🌙" : (dusk ? "🌆" : "☀️");
+  });
+}
+
+/* ---------- add controls ---------- */
+const citySel = document.getElementById("citySel");
+CITIES.slice().sort((a,b)=>a[0].localeCompare(b[0])).forEach(([name, zone]) => {
+  const o = document.createElement("option");
+  o.value = zone; o.textContent = name;
+  citySel.append(o);
+});
+document.getElementById("addCity").addEventListener("click", () => {
+  const opt = citySel.options[citySel.selectedIndex];
+  if (!opt) return;
+  zones.push({ label: opt.textContent, zone: opt.value });
+  saveZones(); fullRender();
+});
+document.getElementById("addFree").addEventListener("click", () => {
+  const raw = document.getElementById("freeZone").value.trim();
+  if (!raw) return;
+  try {
+    new Intl.DateTimeFormat("en-US", { timeZone: raw }); // throws if invalid
+    zones.push({ label: niceLabel(raw), zone: raw });
+    saveZones(); document.getElementById("freeZone").value = ""; fullRender();
+  } catch(e) {
+    alert('"' + raw + '" is not a valid IANA time zone.\nTry a name like "Asia/Kolkata" or "America/Denver".');
+  }
+});
+document.getElementById("freeZone").addEventListener("keydown", e => {
+  if (e.key === "Enter") document.getElementById("addFree").click();
+});
+
+/* ---------- meeting planner ---------- */
+const refSel = document.getElementById("refSel");
+const slider = document.getElementById("hourSlider");
+const hourLabel = Suite.liveRegion(document.getElementById("hourLabel"));
+const planGrid = document.getElementById("planGrid");
+const readoutEl = document.getElementById("readout");
+const planEmpty = document.getElementById("planEmpty");
+let refIdx = 0;
+
+function hourColor(h){
+  if (h >= 9 && h < 17) return "#8fce9b";
+  if ((h >= 7 && h < 9) || (h >= 17 && h < 21)) return "#e6c96a";
+  return "#d98b8b";
+}
+function h12(h){ const ap = h < 12 ? "am" : "pm"; let x = h % 12; if (x === 0) x = 12; return x + ap; }
+
+function buildRefSel(){
+  refSel.textContent = "";
+  zones.forEach((z, i) => {
+    const o = document.createElement("option");
+    o.value = i; o.textContent = z.label;
+    refSel.append(o);
+  });
+  if (refIdx >= zones.length) refIdx = 0;
+  refSel.value = refIdx;
+}
+refSel.addEventListener("change", () => { refIdx = +refSel.value; renderPlanner(); });
+slider.addEventListener("input", () => renderPlanner());
+
+function renderPlanner(){
+  const has = zones.length > 0;
+  planEmpty.style.display = has ? "none" : "block";
+  planGrid.style.display = has ? "" : "none";
+  readoutEl.style.display = has ? "" : "none";
+  if (!has) return;
+
+  const now = new Date();
+  const refZone = zones[refIdx].zone;
+  const refNow = zoneParts(now, refZone);
+  const refY = +refNow.year, refMo = +refNow.month, refD = +refNow.day;
+  const nowHour = +refNow.hour;
+  const selHour = +slider.value;
+  hourLabel.textContent = String(selHour).padStart(2,"0") + ":00 (" + h12(selHour) + ") in " + zones[refIdx].label;
+
+  // precompute the UTC instant for each reference hour today
+  const instants = [];
+  for (let h = 0; h < 24; h++) instants.push(new Date(wallToInstant(refY, refMo, refD, h, 0, refZone)));
+
+  // header
+  let thead = "<thead><tr><th class='zh'>Zone</th>";
+  for (let h = 0; h < 24; h++){
+    const cls = (h === selHour ? " selcol" : "") + (h === nowHour ? " nowcol" : "");
+    const st = h === nowHour ? " style='background:var(--accent-soft)'" : "";
+    thead += "<th class='" + cls.trim() + "'" + st + ">" + (h % 2 === 0 ? h : "") + "</th>";
+  }
+  thead += "</tr></thead>";
+
+  let tbody = "<tbody>";
+  zones.forEach(z => {
+    tbody += "<tr><td class='zh'>" + Suite.esc(z.label) +
+             "<small>" + Suite.esc(z.zone) + "</small></td>";
+    for (let h = 0; h < 24; h++){
+      const m = zoneParts(instants[h], z.zone);
+      const zh = +m.hour;
+      const col = hourColor(zh);
+      const sel = h === selHour ? " sel" : "";
+      tbody += "<td class='cell" + sel + "' style='background:" + col + "' title='" +
+               Suite.esc(z.label) + " " + m.hour + ":00'>" + m.hour + "</td>";
+    }
+    tbody += "</tr>";
+  });
+  tbody += "</tbody>";
+  planGrid.innerHTML = thead + tbody;
+
+  // readout for the selected hour
+  const selInstant = instants[selHour];
+  const refDayNum = dayNumber(zoneParts(selInstant, refZone));
+  readoutEl.textContent = "";
+  zones.forEach(z => {
+    const m = zoneParts(selInstant, z.zone);
+    const zh = +m.hour;
+    const dd = dayNumber(m) - refDayNum;
+    const dayTag = dd >= 1 ? " (+1d)" : dd <= -1 ? " (−1d)" : "";
+    const r = document.createElement("div");
+    r.className = "r";
+    r.innerHTML =
+      '<div class="rl"><span class="dot" style="background:' + hourColor(zh) + '"></span>' + Suite.esc(z.label) + "</div>" +
+      '<div class="rt">' + m.hour + ":" + m.minute + "</div>" +
+      '<div class="rd">' + m.weekday + " " + m.month + "/" + m.day + dayTag + "</div>";
+    readoutEl.append(r);
+  });
+}
+
+/* ---------- orchestration ---------- */
+function fullRender(){
+  buildClocks();
+  buildRefSel();
+  renderPlanner();
+}
+function initSlider(){
+  const now = new Date();
+  const refZone = zones[refIdx] ? zones[refIdx].zone : LOCAL_ZONE;
+  slider.value = +zoneParts(now, refZone).hour;
+}
+
+/* ---------- boot ---------- */
+initSlider();
+fullRender();
+setInterval(tick, 1000);
+// refresh the planner each minute so "now" column and grid stay honest across the day
+setInterval(renderPlanner, 60000);
+</script>
+</body>
+</html>

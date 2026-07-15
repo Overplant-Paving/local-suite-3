@@ -1,0 +1,12 @@
+{
+  "v1": {
+    "suite.worldclock.zones": "[{\"label\":\"Chicago (local)\",\"zone\":\"America/Chicago\"},{\"label\":\"Tokyo, Japan\",\"zone\":\"Asia/Tokyo\"}]",
+    "suite.theme": "dark"
+  },
+  "v2": {
+    "suite.worldclock.zones": "[{\"label\":\"Chicago (local)\",\"zone\":\"America/Chicago\"},{\"label\":\"Tokyo, Japan\",\"zone\":\"Asia/Tokyo\"}]",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}

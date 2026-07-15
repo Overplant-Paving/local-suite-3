@@ -103,7 +103,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 5 | voting.html | civic | off | — | A | curated static links, refresh each cycle | ✅ `tests/evidence/voting/` |
 | 6 | emergency.html | health | off | — | A | | ✅ `tests/evidence/emergency/` |
 | 7 | convert.html | ref | off | — | A | | ✅ `tests/evidence/convert/` |
-| 8 | worldclock.html | time | off | — | A | | ⬜ |
+| 8 | worldclock.html | time | off | — | A | | ✅ `tests/evidence/worldclock/` |
 | 9 | dates.html | time | off | — | A | | ⬜ |
 | 10 | daylight.html | time | off | — | A | | ⬜ |
 | 11 | printables.html | time | off | — | A | print CSS | ✅ `tests/evidence/printables/` |
