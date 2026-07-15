@@ -1,0 +1,9 @@
+genuine in-browser probe (no route fulfillment), 2026-07-15T20:30:14.705Z
+v2 (file:///C:/Users/henry/Developement/Local%20Suite%202/tools/asteroids.html):
+  error card: "Couldn't reach the JPL close-approach service Failed to fetch"
+  console.error: Access to fetch at 'https://ssd-api.jpl.nasa.gov/cad.api?date-min=2026-07-15&date-max=2026-07-22&sort=dist&fullname=true' from origin 'null' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+  console.error: Failed to load resource: net::ERR_FAILED
+v1 (file:///C:/Users/henry/Developement/Local%20Suite/asteroids.html):
+  error card: "Couldn't reach the JPL close-approach service Failed to fetch"
+  console.error: Access to fetch at 'https://ssd-api.jpl.nasa.gov/cad.api?date-min=2026-07-15&date-max=2026-07-22&sort=dist&fullname=true' from origin 'null' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+  console.error: Failed to load resource: net::ERR_FAILED

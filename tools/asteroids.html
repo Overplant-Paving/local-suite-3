@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Near-Earth Asteroid Watch · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents (3-layer, same pattern as core) */
+  :root { --near: #c0562b; --near-soft: color-mix(in srgb, #c0562b 15%, transparent); }
+  @media (prefers-color-scheme: dark) {
+    :root { --near: #e8895c; --near-soft: color-mix(in srgb, #e8895c 18%, transparent); }
+  }
+  :root[data-theme="light"] { --near: #c0562b; --near-soft: color-mix(in srgb, #c0562b 15%, transparent); }
+  :root[data-theme="dark"] { --near: #e8895c; --near-soft: color-mix(in srgb, #e8895c 18%, transparent); }
+
+  body { min-height: 100vh; }
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .9rem 1.25rem; gap: 1rem;
+    position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line);
+  }
+  /* v1 divergences from the core chrome */
+  .back { color: var(--muted); }
+  .back:hover { color: var(--accent); text-decoration: none; }
+  .theme-btn { float: none; }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; }
+  h1 { font-size: 1.5rem; letter-spacing: -.02em; }
+  .sub { color: var(--muted); margin-top: .2rem; font-size: .92rem; max-width: 54ch; }
+
+  .hero {
+    margin: 1.4rem 0; background: var(--card); border: 1px solid var(--line);
+    border-left: 4px solid var(--near); border-radius: 14px; box-shadow: var(--shadow);
+    padding: 1.3rem 1.4rem;
+  }
+  .hero .label { font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; color: var(--near); font-weight: 600; }
+  .hero .name { font-size: 1.7rem; letter-spacing: -.01em; margin: .3rem 0 .1rem; }
+  .hero .when { color: var(--muted); font-size: .92rem; }
+  .hero .big { display: flex; flex-wrap: wrap; gap: 1.6rem 2.4rem; margin-top: 1.1rem; }
+  .hero .big .num { font-size: 1.9rem; line-height: 1.1; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .hero .big .num small { font-size: .95rem; color: var(--muted); font-weight: 400; }
+  .hero .big .lbl { font-size: .76rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-top: .2rem; }
+
+  .barwrap { margin-top: 1.1rem; }
+  .bartrack { position: relative; height: 34px; background: var(--chip); border-radius: 8px; overflow: hidden; }
+  .earth, .moon, .rock {
+    position: absolute; top: 50%; transform: translate(-50%, -50%); font-size: 1.1rem;
+  }
+  .earth { left: 0; transform: translate(0, -50%); }
+  .moonline { position: absolute; top: 0; bottom: 0; border-left: 1px dashed var(--muted); opacity: .5; }
+  .moonlabel { position: absolute; top: 100%; font-size: .68rem; color: var(--muted); transform: translateX(-50%); margin-top: 2px; white-space: nowrap; }
+  .barcap { display: flex; justify-content: space-between; font-size: .72rem; color: var(--muted); margin-top: 1.3rem; }
+
+  .controls { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin: 1.2rem 0 .4rem; }
+  .controls .grow { flex: 1; }
+  .controls button, .controls select {
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    border-radius: 10px; padding: .45rem .75rem; font-size: .9rem; cursor: pointer; font-family: inherit;
+  }
+  .controls button:hover { border-color: var(--accent); }
+  h2 { font-size: 1.05rem; margin: 1.4rem 0 .3rem; }
+
+  table { width: 100%; border-collapse: collapse; margin-top: .6rem; }
+  .tablescroll { overflow-x: auto; }
+  th, td { text-align: left; padding: .6rem .6rem; border-bottom: 1px solid var(--line); font-size: .9rem; white-space: nowrap; }
+  th { color: var(--muted); font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.close td { background: var(--near-soft); }
+  .obj { font-weight: 600; }
+  .pha { display: inline-block; margin-left: .4rem; font-size: .68rem; padding: .05rem .4rem; border-radius: 999px;
+    background: var(--near-soft); color: var(--near); vertical-align: middle; }
+
+  .msg { background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow);
+    padding: 2.5rem 1.5rem; text-align: center; color: var(--muted); }
+  .msg.err { border-color: color-mix(in srgb, #c0392b 40%, var(--line)); }
+  .stamp { color: var(--muted); font-size: .8rem; margin-top: .8rem; }
+  .foot-note { color: var(--muted); font-size: .82rem; margin-top: 1rem; max-width: 62ch; }
+  footer { margin-top: 2.4rem; font-size: .84rem; }
+  .skeleton { animation: pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:.55} 50%{opacity:1} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="back" href="index.html">← suite</a>
+  <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+</div>
+
+<div class="wrap">
+  <h1>Near-Earth Asteroid Watch</h1>
+  <p class="sub">Close approaches over the next week — how big, how fast, and how close in <strong>lunar distances</strong> (one LD = the Earth–Moon gap). Perspective with breakfast.</p>
+
+  <div class="controls">
+    <label class="grow" style="display:flex;align-items:center;gap:.5rem;color:var(--muted);font-size:.9rem">
+      Window
+      <select id="window">
+        <option value="7">next 7 days</option>
+        <option value="3">next 3 days</option>
+        <option value="14">next 14 days</option>
+        <option value="30">next 30 days</option>
+      </select>
+    </label>
+    <button id="refreshBtn">↻ refresh</button>
+  </div>
+
+  <div id="view"></div>
+  <p class="stamp" id="stamp"></p>
+  <p class="foot-note">Diameter is <em>estimated</em> from absolute magnitude (H) assuming a typical albedo — real sizes vary with reflectivity, so we show a range. Distances and speeds are computed at the moment of closest approach. "Closer than the Moon" (&lt; 1 LD) rows are highlighted.</p>
+
+  <footer>Data: NASA/JPL Solar System Dynamics · Close Approach Data (ssd-api.jpl.nasa.gov)</footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---- constants ---- */
+const AU_KM = 149597870.7;
+const LD_KM = 384400;
+const AU_LD = AU_KM / LD_KM;          // ~389.17 lunar distances per AU
+const TTL = 1440 * 60 * 1000;          // manifest cacheTtlMin: 1440 — daily close-approach data
+const view = Suite.liveRegion(document.getElementById("view"));
+const stampEl = Suite.liveRegion(document.getElementById("stamp"));
+
+function dstr(d) {
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+function ago(t) {
+  const s = Math.round((Date.now() - t) / 1000);
+  if (s < 90) return "just now";
+  if (s < 5400) return Math.round(s / 60) + " min ago";
+  if (s < 172800) return Math.round(s / 3600) + " hr ago";
+  return Math.round(s / 86400) + " days ago";
+}
+
+/* diameter (km) from absolute magnitude H and geometric albedo p */
+function diamKm(H, p) { return (1329 / Math.sqrt(p)) * Math.pow(10, -0.2 * H); }
+function fmtSize(H) {
+  if (H == null || isNaN(H)) return "—";
+  const lo = diamKm(H, 0.25), hi = diamKm(H, 0.05);      // bright→small, dark→large
+  const f = v => v >= 1 ? v.toFixed(1) + " km" : Math.round(v * 1000) + " m";
+  return f(lo) + "–" + f(hi);
+}
+function fmtLD(au) {
+  const ld = au * AU_LD;
+  if (ld < 10) return ld.toFixed(2);
+  return ld.toFixed(1);
+}
+function parseCd(cd) {
+  // "2026-Jul-19 02:04" -> Date (UTC)
+  const m = cd.match(/(\d{4})-(\w{3})-(\d{2})\s+(\d{2}):(\d{2})/);
+  if (!m) return null;
+  const mo = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(m[2]);
+  return new Date(Date.UTC(+m[1], mo, +m[3], +m[4], +m[5]));
+}
+function fmtWhen(cd) {
+  const d = parseCd(cd);
+  if (!d) return cd;
+  const rel = (d - Date.now()) / 86400000;
+  const relStr = rel < 0 ? Math.abs(Math.round(rel * 24)) < 24 ? "" : "" :
+    (rel < 1 ? " · in " + Math.round(rel * 24) + " h" : " · in " + Math.round(rel) + " d");
+  return d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) + " UTC" + relStr;
+}
+
+/* ---- render ---- */
+function renderRows(rows, cachedAt, live) {
+  view.innerHTML = "";
+  if (!rows.length) {
+    const m = document.createElement("div");
+    m.className = "msg";
+    m.textContent = "No close approaches within the default distance for this window. The sky is quiet — reassuring, honestly.";
+    view.append(m);
+    return;
+  }
+
+  const top = rows[0];
+  const hero = document.createElement("div");
+  hero.className = "hero";
+  const ld = top.dist * AU_LD;
+  hero.innerHTML =
+    '<div class="label">Closest approach' + (top.pha ? ' · potentially hazardous' : '') + '</div>' +
+    '<div class="name"></div>' +
+    '<div class="when"></div>' +
+    '<div class="big">' +
+      '<div><div class="num" id="hLD"></div><div class="lbl">lunar distances</div></div>' +
+      '<div><div class="num" id="hKM"></div><div class="lbl">kilometres</div></div>' +
+      '<div><div class="num" id="hV"></div><div class="lbl">relative speed</div></div>' +
+      '<div><div class="num" id="hSize"></div><div class="lbl">est. diameter</div></div>' +
+    '</div>' +
+    '<div class="barwrap" aria-hidden="true"><div class="bartrack" id="bar"></div><div class="barcap"><span>🌍 Earth</span><span id="barmax"></span></div></div>';
+  view.append(hero);
+  hero.querySelector(".name").textContent = top.name;
+  hero.querySelector(".when").textContent = fmtWhen(top.cd);
+  document.getElementById("hLD").innerHTML = ld.toFixed(2) + " <small>LD</small>";
+  document.getElementById("hKM").innerHTML = Math.round(top.dist * AU_KM).toLocaleString() + " <small>km</small>";
+  document.getElementById("hV").innerHTML = top.v.toFixed(1) + " <small>km/s</small>";
+  document.getElementById("hSize").textContent = fmtSize(top.h);
+
+  // perspective bar: 0..max LD across the closest approach
+  const maxLD = Math.max(ld * 1.4, 1.2, Math.min(20, rows.reduce((a, r) => Math.max(a, r.dist * AU_LD), 0)));
+  document.getElementById("barmax").textContent = maxLD.toFixed(0) + " LD";
+  const bar = document.getElementById("bar");
+  // Moon marker at 1 LD
+  if (maxLD > 1) {
+    const ml = document.createElement("div"); ml.className = "moonline"; ml.style.left = (100 / maxLD) + "%";
+    const mlab = document.createElement("div"); mlab.className = "moonlabel"; mlab.style.left = (100 / maxLD) + "%"; mlab.textContent = "🌕 Moon";
+    bar.append(ml, mlab);
+  }
+  const e = document.createElement("div"); e.className = "earth"; e.textContent = "🌍"; bar.append(e);
+  rows.slice(0, 8).forEach(r => {
+    const rl = r.dist * AU_LD;
+    const dot = document.createElement("div"); dot.className = "rock"; dot.textContent = "•";
+    dot.style.left = Math.min(99, (rl / maxLD) * 100) + "%"; dot.style.color = "var(--near)";
+    dot.title = r.name + " · " + rl.toFixed(2) + " LD";
+    bar.append(dot);
+  });
+
+  const h2 = document.createElement("h2");
+  h2.textContent = "All " + rows.length + " approaches, closest first";
+  view.append(h2);
+
+  const scroll = document.createElement("div");
+  scroll.className = "tablescroll";
+  const t = document.createElement("table");
+  t.innerHTML = "<thead><tr><th>Object</th><th>Closest approach</th>" +
+    "<th style='text-align:right'>Distance (LD)</th><th style='text-align:right'>km</th>" +
+    "<th style='text-align:right'>Speed (km/s)</th><th style='text-align:right'>Est. size</th></tr></thead>";
+  const tb = document.createElement("tbody");
+  rows.forEach(r => {
+    const tr = document.createElement("tr");
+    if (r.dist * AU_LD < 1) tr.className = "close";
+    const nameCell = document.createElement("td");
+    const strong = document.createElement("span"); strong.className = "obj"; strong.textContent = r.name;
+    nameCell.append(strong);
+    if (r.pha) { const b = document.createElement("span"); b.className = "pha"; b.textContent = "PHA"; nameCell.append(b); }
+    const when = document.createElement("td"); when.textContent = fmtWhen(r.cd);
+    const ldc = document.createElement("td"); ldc.className = "num"; ldc.textContent = fmtLD(r.dist);
+    const kmc = document.createElement("td"); kmc.className = "num"; kmc.textContent = Math.round(r.dist * AU_KM).toLocaleString();
+    const vc = document.createElement("td"); vc.className = "num"; vc.textContent = r.v.toFixed(1);
+    const sc = document.createElement("td"); sc.className = "num"; sc.textContent = fmtSize(r.h);
+    tr.append(nameCell, when, ldc, kmc, vc, sc);
+    tb.append(tr);
+  });
+  t.append(tb); scroll.append(t); view.append(scroll);
+}
+
+/* ---- load ---- */
+function normalize(json) {
+  // v1 cached the already-normalized rows array under the same suite.cache key;
+  // tolerate that legacy shape so a v1 user's warm cache still renders offline.
+  if (Array.isArray(json)) return json.slice().sort((a, b) => a.dist - b.dist);
+  const idx = {};
+  json.fields.forEach((f, i) => idx[f] = i);
+  const rows = (json.data || []).map(d => ({
+    des: d[idx.des],
+    name: (d[idx.fullname] || d[idx.des] || "").trim(),
+    cd: d[idx.cd],
+    dist: parseFloat(d[idx.dist]),
+    v: parseFloat(d[idx.v_rel]),
+    h: d[idx.h] != null && d[idx.h] !== "" ? parseFloat(d[idx.h]) : null,
+    pha: false,
+  }));
+  rows.sort((a, b) => a.dist - b.dist);
+  return rows;
+}
+
+async function load(force) {
+  const days = document.getElementById("window").value;
+  const now = new Date();
+  const end = new Date(now.getTime() + days * 86400000);
+  const key = "d" + days;
+  stampEl.textContent = "";
+
+  const sk = document.createElement("div"); sk.className = "msg skeleton"; sk.textContent = "Scanning the neighbourhood…";
+  view.innerHTML = ""; view.append(sk);
+
+  const url = "https://ssd-api.jpl.nasa.gov/cad.api?date-min=" + dstr(now) +
+    "&date-max=" + dstr(end) + "&sort=dist&fullname=true";
+  try {
+    const r = await Suite.fetchJSON(url, { cacheKey: "asteroids." + key, ttl: force ? 0 : TTL });
+    const rows = normalize(r.v);
+    renderRows(rows, r.t, !r.fromCache);
+    if (r.stale) {
+      stampEl.textContent = "Live fetch failed — showing cached data from " + ago(r.t) + ".";
+    } else if (r.fromCache) {
+      stampEl.textContent = "Cached · updated " + ago(r.t) + ".";
+    } else {
+      stampEl.textContent = "Loaded just now · " + rows.length + " approaches in the next " + days + " days.";
+    }
+  } catch (err) {
+    view.innerHTML = "";
+    const m = document.createElement("div"); m.className = "msg err";
+    m.innerHTML = "<p style='color:var(--ink);font-weight:600;margin-bottom:.4rem'>Couldn't reach the JPL close-approach service</p>";
+    const p = document.createElement("p"); p.textContent = err.message || "Check your connection and try refresh.";
+    m.append(p); view.append(m);
+    stampEl.textContent = "";
+  }
+}
+
+document.getElementById("refreshBtn").addEventListener("click", () => load(true));
+document.getElementById("window").addEventListener("change", () => load(false));
+load(false);
+</script>
+</body>
+</html>

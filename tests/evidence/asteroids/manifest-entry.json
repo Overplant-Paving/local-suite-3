@@ -1,0 +1,20 @@
+{
+  "id": "asteroids",
+  "file": "asteroids.html",
+  "name": "Near-Earth Asteroid Watch",
+  "cat": "space",
+  "cx": "S",
+  "desc": "Today's close approaches in lunar distances. Perspective with breakfast.",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": [
+    "https://ssd-api.jpl.nasa.gov"
+  ],
+  "storage": [
+    "suite.theme",
+    "suite.cache.asteroids.*"
+  ],
+  "cacheTtlMin": 1440,
+  "since": "v1",
+  "flags": []
+}
