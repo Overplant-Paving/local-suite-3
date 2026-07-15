@@ -328,6 +328,8 @@ ZIP → city/state/coordinates; city → ZIPs; area code → region.
 - **Suggested file:** `zip.html`
 
 ### 7.5 Country & State Factbook
+> **As shipped (v1 + v2, verified Jul 2026):** the built tool is fully offline — ~190 countries + 50 states embedded as constants, flags as emoji codepoints. The restcountries/Census endpoints below were the plan, kept as the upgrade path.
+
 Pick a country: flag, capital, population, currency, languages. Pick a state: quick Census facts.
 - **Data:** `https://restcountries.com/v3.1/name/{name}?fields=name,capital,population,currencies,languages,flags` (keyless, CORS ✓; note `/v3.1/all` now returns 400 **unless** you pass `?fields=…`). US Census data API `https://api.census.gov/data/2023/acs/acs5?get=NAME,B01001_001E&for=state:*` (keyless up to 500 queries/day/IP).
 - **Key:** none · **Local:** file:// ✅ · **Complexity:** S

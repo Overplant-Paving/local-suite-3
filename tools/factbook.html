@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Country &amp; State Factbook · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  body{ padding:1.4rem 1.25rem 4rem; }
+  .wrap{max-width:920px;margin:0 auto}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.1rem}
+  .suite-link{text-decoration:none;font-size:.9rem;color:var(--muted);border:1px solid var(--line);
+    background:var(--card);border-radius:999px;padding:.35rem .8rem}
+  .suite-link:hover{color:var(--accent);border-color:var(--accent)}
+  .topbar .theme-btn{float:none} /* v1: button sits in the flex topbar, no float */
+  header h1{font-size:1.7rem;letter-spacing:-.02em}
+  header .tag{color:var(--muted);margin-top:.25rem;max-width:44rem;font-size:.95rem}
+  .tabs{display:flex;gap:.45rem;margin:1.3rem 0 1rem}
+  .tab{border:1px solid var(--line);background:var(--card);color:var(--muted);
+    border-radius:999px;padding:.4rem 1rem;font-size:.9rem;cursor:pointer}
+  .tab.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .searchbox{position:relative}
+  .search{padding:.75rem 1rem} /* v1 search is a touch taller than core's */
+  .suggest{position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--card);
+    border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);z-index:10;
+    max-height:280px;overflow-y:auto;display:none}
+  .suggest.open{display:block}
+  .suggest button{display:block;width:100%;text-align:left;border:none;background:none;color:var(--ink);
+    padding:.5rem .9rem;font-size:.95rem;cursor:pointer}
+  .suggest button:hover,.suggest button.active{background:var(--accent-soft);color:var(--accent)}
+  .card{padding:1.3rem 1.4rem;margin-top:1.1rem;
+    display:block;flex-direction:row;gap:normal} /* core .card is a flex column; v1 cards are plain blocks */
+  .flag{font-size:4.6rem;line-height:1}
+  .country-head{display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap}
+  .country-head h2{font-size:1.7rem;letter-spacing:-.01em}
+  .country-head .official{color:var(--muted);font-size:.9rem;margin-top:.1rem}
+  .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-top:1.3rem}
+  .fact .k{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+  .fact .v{font-size:1.15rem;font-weight:600;margin-top:.15rem}
+  .fact .v.big{font-size:1.7rem;color:var(--accent)}
+  .fact .v small{font-weight:400;color:var(--muted);font-size:.85rem}
+  .hint{color:var(--muted);font-size:.9rem;margin-top:.4rem}
+  .grid-states{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.7rem;margin-top:1rem}
+  .schip{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:.55rem .75rem;
+    cursor:pointer;font-size:.92rem;display:flex;justify-content:space-between;gap:.5rem}
+  .schip:hover{border-color:var(--accent);color:var(--accent)}
+  .schip .pop{color:var(--muted);font-size:.82rem}
+  footer{margin-top:2.6rem;font-size:.83rem;padding-top:1rem} /* v1 footer is a touch tighter than core's */
+  .msg{color:var(--muted);padding:1.5rem 0;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="suite-link" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Country &amp; State Factbook</h1>
+    <p class="tag">Flags, capitals, currencies and languages for every country, plus quick facts for
+      all 50 US states — a calm reference that works with or without a connection.</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab on" id="tabCountry" aria-pressed="true">Countries</button>
+    <button class="tab" id="tabState" aria-pressed="false">US States</button>
+  </div>
+
+  <!-- Countries panel -->
+  <div id="countryPanel">
+    <div class="searchbox">
+      <input class="search" id="q" type="search" placeholder="Search a country — “Japan”, “Brazil”, “Kenya”…" autocomplete="off" aria-label="Search a country">
+      <div class="suggest" id="suggest"></div>
+    </div>
+    <div id="countryCard"></div>
+  </div>
+
+  <!-- States panel -->
+  <div id="statePanel" style="display:none">
+    <div class="searchbox">
+      <input class="search" id="qs" type="search" placeholder="Search a state — “Texas”, “Ohio”…" autocomplete="off" aria-label="Search a US state">
+    </div>
+    <div id="stateCard"></div>
+    <div class="grid-states" id="stateGrid"></div>
+  </div>
+
+  <footer id="footer">Country data is an embedded reference set (approx. 2023). US population figures: 2020 US Census.</footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---------- embedded country dataset ----------
+   fields: ISO2 | name | capital | region | currency | languages | population(approx)
+   Populations are approximate (2023-era). Flags render from the ISO2 code as emoji. */
+const COUNTRY_RAW = `
+AF|Afghanistan|Kabul|Asia|AFN Afghan afghani|Dari, Pashto|41100000
+AL|Albania|Tirana|Europe|ALL Lek|Albanian|2800000
+DZ|Algeria|Algiers|Africa|DZD Algerian dinar|Arabic, Berber|44700000
+AD|Andorra|Andorra la Vella|Europe|EUR Euro|Catalan|80000
+AO|Angola|Luanda|Africa|AOA Kwanza|Portuguese|35600000
+AG|Antigua and Barbuda|Saint John's|Americas|XCD East Caribbean dollar|English|94000
+AR|Argentina|Buenos Aires|Americas|ARS Argentine peso|Spanish|46000000
+AM|Armenia|Yerevan|Asia|AMD Armenian dram|Armenian|2800000
+AU|Australia|Canberra|Oceania|AUD Australian dollar|English|26000000
+AT|Austria|Vienna|Europe|EUR Euro|German|9100000
+AZ|Azerbaijan|Baku|Asia|AZN Azerbaijani manat|Azerbaijani|10300000
+BS|Bahamas|Nassau|Americas|BSD Bahamian dollar|English|410000
+BH|Bahrain|Manama|Asia|BHD Bahraini dinar|Arabic|1500000
+BD|Bangladesh|Dhaka|Asia|BDT Bangladeshi taka|Bengali|171000000
+BB|Barbados|Bridgetown|Americas|BBD Barbadian dollar|English|280000
+BY|Belarus|Minsk|Europe|BYN Belarusian ruble|Belarusian, Russian|9400000
+BE|Belgium|Brussels|Europe|EUR Euro|Dutch, French, German|11700000
+BZ|Belize|Belmopan|Americas|BZD Belize dollar|English|410000
+BJ|Benin|Porto-Novo|Africa|XOF West African CFA franc|French|13000000
+BT|Bhutan|Thimphu|Asia|BTN Ngultrum|Dzongkha|780000
+BO|Bolivia|Sucre|Americas|BOB Boliviano|Spanish, Quechua, Aymara|12100000
+BA|Bosnia and Herzegovina|Sarajevo|Europe|BAM Convertible mark|Bosnian, Croatian, Serbian|3200000
+BW|Botswana|Gaborone|Africa|BWP Pula|English, Tswana|2600000
+BR|Brazil|Brasília|Americas|BRL Brazilian real|Portuguese|216000000
+BN|Brunei|Bandar Seri Begawan|Asia|BND Brunei dollar|Malay|450000
+BG|Bulgaria|Sofia|Europe|BGN Bulgarian lev|Bulgarian|6800000
+BF|Burkina Faso|Ouagadougou|Africa|XOF West African CFA franc|French|22700000
+BI|Burundi|Gitega|Africa|BIF Burundian franc|Kirundi, French|12600000
+KH|Cambodia|Phnom Penh|Asia|KHR Riel|Khmer|16900000
+CM|Cameroon|Yaoundé|Africa|XAF Central African CFA franc|French, English|27900000
+CA|Canada|Ottawa|Americas|CAD Canadian dollar|English, French|38900000
+CV|Cape Verde|Praia|Africa|CVE Cape Verdean escudo|Portuguese|590000
+CF|Central African Republic|Bangui|Africa|XAF Central African CFA franc|French, Sango|5500000
+TD|Chad|N'Djamena|Africa|XAF Central African CFA franc|French, Arabic|17700000
+CL|Chile|Santiago|Americas|CLP Chilean peso|Spanish|19600000
+CN|China|Beijing|Asia|CNY Renminbi|Standard Chinese|1412000000
+CO|Colombia|Bogotá|Americas|COP Colombian peso|Spanish|52000000
+KM|Comoros|Moroni|Africa|KMF Comorian franc|Comorian, Arabic, French|840000
+CG|Congo (Republic)|Brazzaville|Africa|XAF Central African CFA franc|French|5900000
+CD|Congo (DR)|Kinshasa|Africa|CDF Congolese franc|French|99000000
+CR|Costa Rica|San José|Americas|CRC Costa Rican colón|Spanish|5200000
+CI|Côte d'Ivoire|Yamoussoukro|Africa|XOF West African CFA franc|French|28200000
+HR|Croatia|Zagreb|Europe|EUR Euro|Croatian|3900000
+CU|Cuba|Havana|Americas|CUP Cuban peso|Spanish|11200000
+CY|Cyprus|Nicosia|Europe|EUR Euro|Greek, Turkish|1300000
+CZ|Czechia|Prague|Europe|CZK Czech koruna|Czech|10500000
+DK|Denmark|Copenhagen|Europe|DKK Danish krone|Danish|5900000
+DJ|Djibouti|Djibouti|Africa|DJF Djiboutian franc|French, Arabic|1100000
+DM|Dominica|Roseau|Americas|XCD East Caribbean dollar|English|73000
+DO|Dominican Republic|Santo Domingo|Americas|DOP Dominican peso|Spanish|11200000
+EC|Ecuador|Quito|Americas|USD US dollar|Spanish|18000000
+EG|Egypt|Cairo|Africa|EGP Egyptian pound|Arabic|111000000
+SV|El Salvador|San Salvador|Americas|USD US dollar|Spanish|6300000
+GQ|Equatorial Guinea|Malabo|Africa|XAF Central African CFA franc|Spanish, French|1700000
+ER|Eritrea|Asmara|Africa|ERN Nakfa|Tigrinya, Arabic, English|3600000
+EE|Estonia|Tallinn|Europe|EUR Euro|Estonian|1300000
+SZ|Eswatini|Mbabane|Africa|SZL Lilangeni|Swazi, English|1200000
+ET|Ethiopia|Addis Ababa|Africa|ETB Birr|Amharic|123000000
+FJ|Fiji|Suva|Oceania|FJD Fijian dollar|English, Fijian, Fiji Hindi|930000
+FI|Finland|Helsinki|Europe|EUR Euro|Finnish, Swedish|5600000
+FR|France|Paris|Europe|EUR Euro|French|68000000
+GA|Gabon|Libreville|Africa|XAF Central African CFA franc|French|2400000
+GM|Gambia|Banjul|Africa|GMD Dalasi|English|2700000
+GE|Georgia|Tbilisi|Asia|GEL Lari|Georgian|3700000
+DE|Germany|Berlin|Europe|EUR Euro|German|84000000
+GH|Ghana|Accra|Africa|GHS Ghanaian cedi|English|33500000
+GR|Greece|Athens|Europe|EUR Euro|Greek|10400000
+GD|Grenada|Saint George's|Americas|XCD East Caribbean dollar|English|120000
+GT|Guatemala|Guatemala City|Americas|GTQ Quetzal|Spanish|17600000
+GN|Guinea|Conakry|Africa|GNF Guinean franc|French|13500000
+GW|Guinea-Bissau|Bissau|Africa|XOF West African CFA franc|Portuguese|2100000
+GY|Guyana|Georgetown|Americas|GYD Guyanese dollar|English|810000
+HT|Haiti|Port-au-Prince|Americas|HTG Gourde|French, Haitian Creole|11600000
+HN|Honduras|Tegucigalpa|Americas|HNL Lempira|Spanish|10400000
+HU|Hungary|Budapest|Europe|HUF Forint|Hungarian|9600000
+IS|Iceland|Reykjavík|Europe|ISK Icelandic króna|Icelandic|380000
+IN|India|New Delhi|Asia|INR Indian rupee|Hindi, English|1428000000
+ID|Indonesia|Jakarta|Asia|IDR Rupiah|Indonesian|277000000
+IR|Iran|Tehran|Asia|IRR Iranian rial|Persian|89000000
+IQ|Iraq|Baghdad|Asia|IQD Iraqi dinar|Arabic, Kurdish|44500000
+IE|Ireland|Dublin|Europe|EUR Euro|English, Irish|5100000
+IL|Israel|Jerusalem|Asia|ILS Israeli new shekel|Hebrew, Arabic|9700000
+IT|Italy|Rome|Europe|EUR Euro|Italian|59000000
+JM|Jamaica|Kingston|Americas|JMD Jamaican dollar|English|2800000
+JP|Japan|Tokyo|Asia|JPY Japanese yen|Japanese|124000000
+JO|Jordan|Amman|Asia|JOD Jordanian dinar|Arabic|11300000
+KZ|Kazakhstan|Astana|Asia|KZT Tenge|Kazakh, Russian|19600000
+KE|Kenya|Nairobi|Africa|KES Kenyan shilling|Swahili, English|54000000
+KI|Kiribati|Tarawa|Oceania|AUD Australian dollar|English, Gilbertese|130000
+KP|North Korea|Pyongyang|Asia|KPW North Korean won|Korean|26100000
+KR|South Korea|Seoul|Asia|KRW South Korean won|Korean|51700000
+KW|Kuwait|Kuwait City|Asia|KWD Kuwaiti dinar|Arabic|4300000
+KG|Kyrgyzstan|Bishkek|Asia|KGS Som|Kyrgyz, Russian|6800000
+LA|Laos|Vientiane|Asia|LAK Lao kip|Lao|7500000
+LV|Latvia|Riga|Europe|EUR Euro|Latvian|1900000
+LB|Lebanon|Beirut|Asia|LBP Lebanese pound|Arabic|5300000
+LS|Lesotho|Maseru|Africa|LSL Loti|Sesotho, English|2300000
+LR|Liberia|Monrovia|Africa|LRD Liberian dollar|English|5300000
+LY|Libya|Tripoli|Africa|LYD Libyan dinar|Arabic|6800000
+LI|Liechtenstein|Vaduz|Europe|CHF Swiss franc|German|39000
+LT|Lithuania|Vilnius|Europe|EUR Euro|Lithuanian|2800000
+LU|Luxembourg|Luxembourg|Europe|EUR Euro|Luxembourgish, French, German|660000
+MG|Madagascar|Antananarivo|Africa|MGA Malagasy ariary|Malagasy, French|29600000
+MW|Malawi|Lilongwe|Africa|MWK Malawian kwacha|English, Chichewa|20400000
+MY|Malaysia|Kuala Lumpur|Asia|MYR Ringgit|Malay|33900000
+MV|Maldives|Malé|Asia|MVR Rufiyaa|Dhivehi|520000
+ML|Mali|Bamako|Africa|XOF West African CFA franc|French, Bambara|22600000
+MT|Malta|Valletta|Europe|EUR Euro|Maltese, English|530000
+MH|Marshall Islands|Majuro|Oceania|USD US dollar|Marshallese, English|42000
+MR|Mauritania|Nouakchott|Africa|MRU Ouguiya|Arabic|4700000
+MU|Mauritius|Port Louis|Africa|MUR Mauritian rupee|English, French, Creole|1300000
+MX|Mexico|Mexico City|Americas|MXN Mexican peso|Spanish|128000000
+FM|Micronesia|Palikir|Oceania|USD US dollar|English|110000
+MD|Moldova|Chișinău|Europe|MDL Moldovan leu|Romanian|2600000
+MC|Monaco|Monaco|Europe|EUR Euro|French|38000
+MN|Mongolia|Ulaanbaatar|Asia|MNT Tögrög|Mongolian|3400000
+ME|Montenegro|Podgorica|Europe|EUR Euro|Montenegrin|620000
+MA|Morocco|Rabat|Africa|MAD Moroccan dirham|Arabic, Berber|37500000
+MZ|Mozambique|Maputo|Africa|MZN Metical|Portuguese|33900000
+MM|Myanmar|Naypyidaw|Asia|MMK Kyat|Burmese|54600000
+NA|Namibia|Windhoek|Africa|NAD Namibian dollar|English|2600000
+NR|Nauru|Yaren|Oceania|AUD Australian dollar|Nauruan, English|12000
+NP|Nepal|Kathmandu|Asia|NPR Nepalese rupee|Nepali|30900000
+NL|Netherlands|Amsterdam|Europe|EUR Euro|Dutch|17800000
+NZ|New Zealand|Wellington|Oceania|NZD New Zealand dollar|English, Māori|5200000
+NI|Nicaragua|Managua|Americas|NIO Córdoba|Spanish|6900000
+NE|Niger|Niamey|Africa|XOF West African CFA franc|French|26200000
+NG|Nigeria|Abuja|Africa|NGN Naira|English|223000000
+MK|North Macedonia|Skopje|Europe|MKD Denar|Macedonian, Albanian|1800000
+NO|Norway|Oslo|Europe|NOK Norwegian krone|Norwegian|5500000
+OM|Oman|Muscat|Asia|OMR Omani rial|Arabic|4600000
+PK|Pakistan|Islamabad|Asia|PKR Pakistani rupee|Urdu, English|240000000
+PW|Palau|Ngerulmud|Oceania|USD US dollar|Palauan, English|18000
+PA|Panama|Panama City|Americas|PAB Balboa|Spanish|4400000
+PG|Papua New Guinea|Port Moresby|Oceania|PGK Kina|Tok Pisin, English, Hiri Motu|10300000
+PY|Paraguay|Asunción|Americas|PYG Guaraní|Spanish, Guaraní|6800000
+PE|Peru|Lima|Americas|PEN Sol|Spanish, Quechua, Aymara|34000000
+PH|Philippines|Manila|Asia|PHP Philippine peso|Filipino, English|117000000
+PL|Poland|Warsaw|Europe|PLN Złoty|Polish|37700000
+PT|Portugal|Lisbon|Europe|EUR Euro|Portuguese|10300000
+QA|Qatar|Doha|Asia|QAR Qatari riyal|Arabic|2700000
+RO|Romania|Bucharest|Europe|RON Romanian leu|Romanian|19000000
+RU|Russia|Moscow|Europe|RUB Russian ruble|Russian|144000000
+RW|Rwanda|Kigali|Africa|RWF Rwandan franc|Kinyarwanda, French, English|13800000
+KN|Saint Kitts and Nevis|Basseterre|Americas|XCD East Caribbean dollar|English|48000
+LC|Saint Lucia|Castries|Americas|XCD East Caribbean dollar|English|180000
+VC|Saint Vincent and the Grenadines|Kingstown|Americas|XCD East Caribbean dollar|English|100000
+WS|Samoa|Apia|Oceania|WST Tālā|Samoan, English|220000
+SM|San Marino|San Marino|Europe|EUR Euro|Italian|34000
+ST|São Tomé and Príncipe|São Tomé|Africa|STN Dobra|Portuguese|230000
+SA|Saudi Arabia|Riyadh|Asia|SAR Saudi riyal|Arabic|36900000
+SN|Senegal|Dakar|Africa|XOF West African CFA franc|French|17700000
+RS|Serbia|Belgrade|Europe|RSD Serbian dinar|Serbian|6700000
+SC|Seychelles|Victoria|Africa|SCR Seychellois rupee|English, French, Creole|110000
+SL|Sierra Leone|Freetown|Africa|SLE Leone|English|8600000
+SG|Singapore|Singapore|Asia|SGD Singapore dollar|English, Malay, Mandarin, Tamil|5900000
+SK|Slovakia|Bratislava|Europe|EUR Euro|Slovak|5400000
+SI|Slovenia|Ljubljana|Europe|EUR Euro|Slovene|2100000
+SB|Solomon Islands|Honiara|Oceania|SBD Solomon Islands dollar|English|740000
+SO|Somalia|Mogadishu|Africa|SOS Somali shilling|Somali, Arabic|17600000
+ZA|South Africa|Pretoria|Africa|ZAR Rand|Zulu, Xhosa, Afrikaans, English +7|60400000
+SS|South Sudan|Juba|Africa|SSP South Sudanese pound|English|11000000
+ES|Spain|Madrid|Europe|EUR Euro|Spanish|48000000
+LK|Sri Lanka|Sri Jayawardenepura Kotte|Asia|LKR Sri Lankan rupee|Sinhala, Tamil|22000000
+SD|Sudan|Khartoum|Africa|SDG Sudanese pound|Arabic, English|48000000
+SR|Suriname|Paramaribo|Americas|SRD Surinamese dollar|Dutch|620000
+SE|Sweden|Stockholm|Europe|SEK Swedish krona|Swedish|10500000
+CH|Switzerland|Bern|Europe|CHF Swiss franc|German, French, Italian, Romansh|8800000
+SY|Syria|Damascus|Asia|SYP Syrian pound|Arabic|22100000
+TW|Taiwan|Taipei|Asia|TWD New Taiwan dollar|Mandarin Chinese|23400000
+TJ|Tajikistan|Dushanbe|Asia|TJS Somoni|Tajik|10100000
+TZ|Tanzania|Dodoma|Africa|TZS Tanzanian shilling|Swahili, English|65000000
+TH|Thailand|Bangkok|Asia|THB Baht|Thai|71800000
+TL|Timor-Leste|Dili|Asia|USD US dollar|Tetum, Portuguese|1360000
+TG|Togo|Lomé|Africa|XOF West African CFA franc|French|8800000
+TO|Tonga|Nukuʻalofa|Oceania|TOP Paʻanga|Tongan, English|100000
+TT|Trinidad and Tobago|Port of Spain|Americas|TTD Trinidad and Tobago dollar|English|1500000
+TN|Tunisia|Tunis|Africa|TND Tunisian dinar|Arabic|12400000
+TR|Turkey|Ankara|Asia|TRY Turkish lira|Turkish|85300000
+TM|Turkmenistan|Ashgabat|Asia|TMT Manat|Turkmen|6400000
+TV|Tuvalu|Funafuti|Oceania|AUD Australian dollar|Tuvaluan, English|11000
+UG|Uganda|Kampala|Africa|UGX Ugandan shilling|English, Swahili|48600000
+UA|Ukraine|Kyiv|Europe|UAH Hryvnia|Ukrainian|38000000
+AE|United Arab Emirates|Abu Dhabi|Asia|AED UAE dirham|Arabic|9500000
+GB|United Kingdom|London|Europe|GBP Pound sterling|English|67700000
+US|United States|Washington, D.C.|Americas|USD US dollar|English|335000000
+UY|Uruguay|Montevideo|Americas|UYU Uruguayan peso|Spanish|3400000
+UZ|Uzbekistan|Tashkent|Asia|UZS Uzbekistani soʻm|Uzbek|35600000
+VU|Vanuatu|Port Vila|Oceania|VUV Vatu|Bislama, English, French|330000
+VA|Vatican City|Vatican City|Europe|EUR Euro|Italian, Latin|800
+VE|Venezuela|Caracas|Americas|VES Bolívar|Spanish|28800000
+VN|Vietnam|Hanoi|Asia|VND Đồng|Vietnamese|98900000
+YE|Yemen|Sanaa|Asia|YER Yemeni rial|Arabic|33700000
+ZM|Zambia|Lusaka|Africa|ZMW Zambian kwacha|English|20200000
+ZW|Zimbabwe|Harare|Africa|ZWL Zimbabwean dollar|English, Shona, Ndebele +13|16300000
+`.trim();
+
+const COUNTRIES = COUNTRY_RAW.split("\n").map(function(line){
+  const p = line.split("|");
+  return { code:p[0], name:p[1], capital:p[2], region:p[3], currency:p[4], languages:p[5], pop:parseInt(p[6],10) };
+});
+
+/* flag emoji from ISO2 code */
+function flagEmoji(code){
+  if (!code || code.length !== 2) return "🏳️";
+  const A = 0x1F1E6;
+  return String.fromCodePoint(A + code.charCodeAt(0) - 65, A + code.charCodeAt(1) - 65);
+}
+function fmtNum(n){ return n == null || isNaN(n) ? "—" : n.toLocaleString("en-US"); }
+/* Suite.esc also escapes quotes (v1's div-trick esc didn't) — safer in attribute contexts
+   like the .schip data-name attribute below. */
+const esc = Suite.esc;
+
+/* ---------- countries UI ---------- */
+const qEl = document.getElementById("q");
+const suggestEl = document.getElementById("suggest");
+const countryCard = Suite.liveRegion(document.getElementById("countryCard"));
+let suggestItems = [], activeIdx = -1;
+
+function renderCountry(c){
+  suggestEl.classList.remove("open");
+  countryCard.innerHTML =
+    '<div class="card">' +
+      '<div class="country-head">' +
+        '<div class="flag" role="img" aria-label="Flag of ' + esc(c.name) + '">' + flagEmoji(c.code) + '</div>' +
+        '<div><h2>' + esc(c.name) + '</h2>' +
+        '<div class="official">' + esc(c.region) + ' · ' + esc(c.code) + '</div></div>' +
+      '</div>' +
+      '<div class="facts">' +
+        '<div class="fact"><div class="k">Capital</div><div class="v">' + esc(c.capital) + '</div></div>' +
+        '<div class="fact"><div class="k">Population</div><div class="v big">' + fmtNum(c.pop) + ' <small>approx.</small></div></div>' +
+        '<div class="fact"><div class="k">Currency</div><div class="v">' + esc(c.currency) + '</div></div>' +
+        '<div class="fact"><div class="k">Languages</div><div class="v">' + esc(c.languages) + '</div></div>' +
+        '<div class="fact"><div class="k">Region</div><div class="v">' + esc(c.region) + '</div></div>' +
+      '</div>' +
+      '<p class="hint">Population is an approximate 2023-era figure from the embedded reference set.</p>' +
+    '</div>';
+}
+
+function updateSuggest(){
+  const term = qEl.value.trim().toLowerCase();
+  activeIdx = -1;
+  if (!term){ suggestEl.classList.remove("open"); suggestEl.innerHTML=""; return; }
+  suggestItems = COUNTRIES.filter(function(c){
+    return c.name.toLowerCase().indexOf(term) !== -1 || c.code.toLowerCase() === term;
+  }).slice(0,8);
+  if (!suggestItems.length){ suggestEl.innerHTML = '<button disabled style="color:var(--muted)">No match</button>'; suggestEl.classList.add("open"); return; }
+  suggestEl.innerHTML = suggestItems.map(function(c,i){
+    return '<button data-i="'+i+'">'+flagEmoji(c.code)+'&nbsp; '+esc(c.name)+'</button>';
+  }).join("");
+  suggestEl.classList.add("open");
+  Array.prototype.forEach.call(suggestEl.querySelectorAll("button[data-i]"), function(b){
+    b.addEventListener("click", function(){ pick(suggestItems[parseInt(b.dataset.i,10)]); });
+  });
+}
+function pick(c){ qEl.value = c.name; renderCountry(c); }
+
+qEl.addEventListener("input", updateSuggest);
+qEl.addEventListener("keydown", function(e){
+  if (e.key === "Escape"){ suggestEl.classList.remove("open"); return; } /* a11y: Esc closes the overlay */
+  if (!suggestEl.classList.contains("open")) return;
+  const btns = suggestEl.querySelectorAll("button[data-i]");
+  if (e.key === "ArrowDown"){ e.preventDefault(); activeIdx = Math.min(activeIdx+1, btns.length-1); }
+  else if (e.key === "ArrowUp"){ e.preventDefault(); activeIdx = Math.max(activeIdx-1, 0); }
+  else if (e.key === "Enter"){ e.preventDefault();
+    if (activeIdx >= 0 && suggestItems[activeIdx]) pick(suggestItems[activeIdx]);
+    else if (suggestItems[0]) pick(suggestItems[0]);
+    return;
+  } else return;
+  btns.forEach(function(b,i){ b.classList.toggle("active", i===activeIdx); });
+});
+document.addEventListener("click", function(e){
+  if (!e.target.closest(".searchbox")) suggestEl.classList.remove("open");
+});
+
+/* ---------- embedded US state dataset ----------
+   name | abbr | capital | admitted | nickname | population(2020 census) */
+const STATE_RAW = `
+Alabama|AL|Montgomery|1819|Yellowhammer State|5024279
+Alaska|AK|Juneau|1959|The Last Frontier|733391
+Arizona|AZ|Phoenix|1912|Grand Canyon State|7151502
+Arkansas|AR|Little Rock|1836|The Natural State|3011524
+California|CA|Sacramento|1850|Golden State|39538223
+Colorado|CO|Denver|1876|Centennial State|5773714
+Connecticut|CT|Hartford|1788|Constitution State|3605944
+Delaware|DE|Dover|1787|First State|989948
+Florida|FL|Tallahassee|1845|Sunshine State|21538187
+Georgia|GA|Atlanta|1788|Peach State|10711908
+Hawaii|HI|Honolulu|1959|Aloha State|1455271
+Idaho|ID|Boise|1890|Gem State|1839106
+Illinois|IL|Springfield|1818|Prairie State|12812508
+Indiana|IN|Indianapolis|1816|Hoosier State|6785528
+Iowa|IA|Des Moines|1846|Hawkeye State|3190369
+Kansas|KS|Topeka|1861|Sunflower State|2937880
+Kentucky|KY|Frankfort|1792|Bluegrass State|4505836
+Louisiana|LA|Baton Rouge|1812|Pelican State|4657757
+Maine|ME|Augusta|1820|Pine Tree State|1362359
+Maryland|MD|Annapolis|1788|Old Line State|6177224
+Massachusetts|MA|Boston|1788|Bay State|7029917
+Michigan|MI|Lansing|1837|Great Lakes State|10077331
+Minnesota|MN|Saint Paul|1858|North Star State|5706494
+Mississippi|MS|Jackson|1817|Magnolia State|2961279
+Missouri|MO|Jefferson City|1821|Show Me State|6154913
+Montana|MT|Helena|1889|Treasure State|1084225
+Nebraska|NE|Lincoln|1867|Cornhusker State|1961504
+Nevada|NV|Carson City|1864|Silver State|3104614
+New Hampshire|NH|Concord|1788|Granite State|1377529
+New Jersey|NJ|Trenton|1787|Garden State|9288994
+New Mexico|NM|Santa Fe|1912|Land of Enchantment|2117522
+New York|NY|Albany|1788|Empire State|20201249
+North Carolina|NC|Raleigh|1789|Tar Heel State|10439388
+North Dakota|ND|Bismarck|1889|Peace Garden State|779094
+Ohio|OH|Columbus|1803|Buckeye State|11799448
+Oklahoma|OK|Oklahoma City|1907|Sooner State|3959353
+Oregon|OR|Salem|1859|Beaver State|4237256
+Pennsylvania|PA|Harrisburg|1787|Keystone State|13002700
+Rhode Island|RI|Providence|1790|Ocean State|1097379
+South Carolina|SC|Columbia|1788|Palmetto State|5118425
+South Dakota|SD|Pierre|1889|Mount Rushmore State|886667
+Tennessee|TN|Nashville|1796|Volunteer State|6910840
+Texas|TX|Austin|1845|Lone Star State|29145505
+Utah|UT|Salt Lake City|1896|Beehive State|3271616
+Vermont|VT|Montpelier|1791|Green Mountain State|643077
+Virginia|VA|Richmond|1788|Old Dominion|8631393
+Washington|WA|Olympia|1889|Evergreen State|7705281
+West Virginia|WV|Charleston|1863|Mountain State|1793716
+Wisconsin|WI|Madison|1848|Badger State|5893718
+Wyoming|WY|Cheyenne|1890|Equality State|576851
+`.trim();
+
+const STATES = STATE_RAW.split("\n").map(function(line){
+  const p = line.split("|");
+  return { name:p[0], abbr:p[1], capital:p[2], admitted:p[3], nickname:p[4], pop:parseInt(p[5],10) };
+});
+
+const stateGrid = document.getElementById("stateGrid");
+const stateCard = Suite.liveRegion(document.getElementById("stateCard"));
+const qs = document.getElementById("qs");
+
+function renderStateCard(s){
+  stateCard.innerHTML =
+    '<div class="card">' +
+      '<div class="country-head"><div><h2>' + esc(s.name) + ' <span style="color:var(--muted);font-size:1rem;">(' + esc(s.abbr) + ')</span></h2>' +
+      '<div class="official">“' + esc(s.nickname) + '”</div></div></div>' +
+      '<div class="facts">' +
+        '<div class="fact"><div class="k">Capital</div><div class="v">' + esc(s.capital) + '</div></div>' +
+        '<div class="fact"><div class="k">Population</div><div class="v big">' + fmtNum(s.pop) + ' <small>2020 census</small></div></div>' +
+        '<div class="fact"><div class="k">Admitted to Union</div><div class="v">' + esc(s.admitted) + '</div></div>' +
+        '<div class="fact"><div class="k">Nickname</div><div class="v">' + esc(s.nickname) + '</div></div>' +
+      '</div>' +
+    '</div>';
+}
+
+function drawStateGrid(filter){
+  const f = (filter||"").trim().toLowerCase();
+  const list = STATES.filter(function(s){ return !f || s.name.toLowerCase().indexOf(f) !== -1 || s.abbr.toLowerCase()===f; });
+  stateGrid.innerHTML = list.map(function(s,i){
+    return '<button class="schip" data-name="'+esc(s.name)+'"><span>'+esc(s.name)+'</span><span class="pop">'+fmtNum(s.pop)+'</span></button>';
+  }).join("");
+  Array.prototype.forEach.call(stateGrid.querySelectorAll(".schip"), function(b){
+    b.addEventListener("click", function(){
+      const s = STATES.find(function(x){ return x.name === b.dataset.name; });
+      renderStateCard(s);
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+  });
+}
+qs.addEventListener("input", function(){
+  drawStateGrid(qs.value);
+  const f = qs.value.trim().toLowerCase();
+  const exact = STATES.find(function(s){ return s.name.toLowerCase()===f || s.abbr.toLowerCase()===f; });
+  if (exact) renderStateCard(exact); else stateCard.innerHTML = "";
+});
+
+/* ---------- tabs ---------- */
+const tabCountry = document.getElementById("tabCountry");
+const tabState = document.getElementById("tabState");
+const countryPanel = document.getElementById("countryPanel");
+const statePanel = document.getElementById("statePanel");
+function paintTabs(countryOn){
+  tabCountry.classList.toggle("on", countryOn); tabState.classList.toggle("on", !countryOn);
+  tabCountry.setAttribute("aria-pressed", String(countryOn));
+  tabState.setAttribute("aria-pressed", String(!countryOn));
+}
+tabCountry.addEventListener("click", function(){
+  paintTabs(true);
+  countryPanel.style.display = ""; statePanel.style.display = "none";
+});
+tabState.addEventListener("click", function(){
+  paintTabs(false);
+  statePanel.style.display = ""; countryPanel.style.display = "none";
+});
+
+/* ---------- boot: show a friendly default ---------- */
+renderCountry(COUNTRIES.find(function(c){ return c.code==="US"; }));
+drawStateGrid("");
+</script>
+</body>
+</html>

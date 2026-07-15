@@ -1,0 +1,17 @@
+{
+  "id": "factbook",
+  "file": "factbook.html",
+  "name": "Country & State Factbook",
+  "cat": "ref",
+  "cx": "S",
+  "desc": "Flags, capitals, populations, currencies; Census facts for states.",
+  "network": "offline",
+  "key": null,
+  "endpoints": [],
+  "storage": [
+    "suite.theme"
+  ],
+  "cacheTtlMin": null,
+  "since": "v1",
+  "flags": ["ea"]
+}

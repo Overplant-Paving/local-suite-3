@@ -1,0 +1,23 @@
+boot default country: h2="United States"
+  facts: Capital=Washington, D.C. | Population=335,000,000 approx. | Currency=USD US dollar | Languages=English | Region=Americas
+  flag: codepoints U+1F1FA U+1F1F8 aria-label="Flag of United States"
+suggest for "japan": 1 item(s): 🇯🇵  Japan
+country lookup "Japan" (keyboard pick): h2="Japan"
+  facts: Capital=Tokyo | Population=124,000,000 approx. | Currency=JPY Japanese yen | Languages=Japanese | Region=Asia
+  flag: codepoints U+1F1EF U+1F1F5 aria-label="Flag of Japan"
+  suggest closed after pick: open=false
+Esc closes suggest: open=false
+states tab: countryPanel display="none", tab aria-pressed=true
+state grid (unfiltered): 50 chips
+state lookup "texas": h2="Texas (TX)" official="“Lone Star State”"
+  facts: Capital=Austin | Population=29,145,505 2020 census | Admitted to Union=1845 | Nickname=Lone Star State
+  grid filtered to: Texas29,145,505
+state chip click "Ohio": h2="Ohio (OH)"
+  facts: Capital=Columbus | Population=11,799,448 2020 census | Admitted to Union=1803 | Nickname=Buckeye State
+offline reload: boot card h2="United States" (rendered with all http(s) aborted)
+offline country lookup "Kenya": h2="Kenya"
+  facts: Capital=Nairobi | Population=54,000,000 approx. | Currency=KES Kenyan shilling | Languages=Swahili, English | Region=Africa
+  flag: codepoints U+1F1F0 U+1F1EA aria-label="Flag of Kenya"
+offline verdict: zero-network tool — everything works with the network blocked; no stale card exists by design
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)
