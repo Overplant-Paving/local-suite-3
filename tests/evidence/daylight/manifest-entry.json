@@ -1,0 +1,15 @@
+{
+  "id": "daylight",
+  "file": "daylight.html",
+  "name": "Daylight Planner",
+  "cat": "time",
+  "cx": "M",
+  "desc": "Year-at-a-glance sunrise/sunset curves for your latitude.",
+  "network": "offline",
+  "key": null,
+  "endpoints": [],
+  "storage": ["suite.location"],
+  "cacheTtlMin": null,
+  "since": "v1",
+  "flags": []
+}

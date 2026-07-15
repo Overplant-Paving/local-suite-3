@@ -1,0 +1,26 @@
+first-run: locCard=block content=none locBar=none
+invalid lat 999 -> alert: Enter a valid latitude (−90 to 90) and longitude (−180 to 180).
+after invalid save, suite.location = null
+picked New York; autofill lat=40.7128 lon=-74.006
+locLabel: New York, USA
+yearLbl: 2026 · 40.7°N
+stat: 14h 49m | DAYLIGHT TODAY↑ 4:37am · ↓ 7:27pm
+stat: 15h 06m | LONGEST DAYJun 22
+stat: 9h 15m | SHORTEST DAYDec 22
+stat: 5h 51m | YEARLY SWINGlongest minus shortest
+chart drawn (SVG element counts): {"rects":367,"polylines":2,"polylinePoints":[365,365],"lines":25,"texts":23}
+hover ~mid-year tip: Jul 13 | ↑ 4:36am   ↓ 7:28pm | 14h 52m of daylight
+keyboard ArrowRight tip: Jul 14 | ↑ 4:36am   ↓ 7:27pm | 14h 51m of daylight
+keyboard ArrowLeft x2 tip: Jul 12 | ↑ 4:35am   ↓ 7:28pm | 14h 53m of daylight
+Escape hides tip: display=none
+change clicked: locCard=block
+Tromsø saved via Enter; locLabel: 69.65, 18.96
+polar stat: 24h 00m | DAYLIGHT TODAY
+polar stat: 24h 00m | LONGEST DAYMay 19
+polar stat: 0h 00m | SHORTEST DAYJan 1
+polar stat: 24h 00m | YEARLY SWINGlongest minus shortest
+caption: Days cross the 12-hour mark around Mar 18 and Sep 25. From Mar 18 onward the days are longer than the nights. Sunrise and sunset use your browser's local time zone, so the daylight-saving jumps appear as a step in the curves.
+polar chart counts: {"rects":319,"polylines":2}
+final suite.location = {"lat":40.7128,"lon":-74.006,"label":"New York, USA"}
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)

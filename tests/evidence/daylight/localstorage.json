@@ -1,0 +1,12 @@
+{
+  "v1": {
+    "suite.theme": "dark",
+    "suite.location": "{\"lat\":40.7128,\"lon\":-74.006,\"label\":\"New York, USA\"}"
+  },
+  "v2": {
+    "suite.theme": "dark",
+    "suite.location": "{\"lat\":40.7128,\"lon\":-74.006,\"label\":\"New York, USA\"}"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}
