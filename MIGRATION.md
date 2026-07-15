@@ -129,7 +129,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 31 | quakes.html | earth | cors | — | B | | ✅ `tests/evidence/quakes/` |
 | 32 | rivers.html | earth | cors | — | B | legacy NWIS API sunsets ~Q1 2027 — confirm new API | ⬜ |
 | 33 | wildfire.html | earth | cors | — | B | | ✅ `tests/evidence/wildfire/` |
-| 34 | drought.html | earth | cors | — | B | via Living Atlas (USDM direct is no-CORS) | ⬜ |
+| 34 | drought.html | earth | cors | — | B | via Living Atlas (USDM direct is no-CORS) | ✅ `tests/evidence/drought/` |
 | 35 | volcano.html | earth | cors | — | B | | ✅ `tests/evidence/volcano/` |
 | 36 | snow.html | earth | cors | — | B | | ⬜ |
 | 37 | wildlife.html | earth | cors | ebird opt. | B | eBird key onto `Suite.key()` | ⬜ |

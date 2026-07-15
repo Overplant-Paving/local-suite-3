@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drought Monitor · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  body{padding:1.4rem 1.25rem 4rem}
+  .wrap{max-width:820px;margin:0 auto}
+  .topbar{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;flex-wrap:wrap}
+  /* v1 chrome divergence from core: pill back-link, flex-pushed theme button */
+  .back{font-size:.85rem;text-decoration:none;color:var(--muted);
+    border:1px solid var(--line);background:var(--card);border-radius:999px;padding:.3rem .8rem;}
+  .back:hover{color:var(--ink);text-decoration:none}
+  .theme-btn{margin-left:auto;float:none}
+  header h1{font-size:1.6rem;letter-spacing:-.02em}
+  header .tag{color:var(--muted);margin-top:.25rem;font-size:.92rem}
+  .locbar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:1rem 0 .2rem;font-size:.9rem;color:var(--muted)}
+  .locbar b{color:var(--ink);font-weight:600}
+  .linkbtn{background:none;border:none;color:var(--accent);cursor:pointer;font-size:.85rem;padding:0;text-decoration:underline}
+  .hero{border-radius:16px;padding:1.6rem 1.4rem;box-shadow:var(--shadow);border:1px solid var(--line);margin-top:.6rem}
+  .hero .cat-lbl{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;opacity:.85}
+  .hero .cat{font-size:2rem;font-weight:700;line-height:1.1;margin-top:.15rem}
+  .hero .cat .code{font-weight:800;opacity:.9}
+  .hero .county{font-size:1rem;margin-top:.5rem;opacity:.9}
+  .hero .valid{font-size:.8rem;margin-top:.25rem;opacity:.8}
+  /* v1's .card is a plain block (core's is a flex column) */
+  .card{display:block;padding:1.1rem 1.15rem;margin-top:1rem}
+  .card h2{font-size:1.02rem;margin-bottom:.2rem}
+  .card .sub{font-size:.82rem;color:var(--muted);margin-bottom:.8rem}
+  svg.spark{display:block;width:100%;height:auto}
+  .spark-axis{font-size:9px;fill:var(--muted)}
+  .scale{display:flex;flex-wrap:wrap;gap:.5rem 1rem;margin-top:.9rem;font-size:.76rem;color:var(--muted)}
+  .scale .item{display:flex;align-items:center;gap:.35rem}
+  .scale .sw{width:.85rem;height:.85rem;border-radius:3px;border:1px solid rgba(0,0,0,.15)}
+  .msg{padding:2.2rem 1rem;text-align:center;color:var(--muted)}
+  .msg .big{font-size:1.15rem;color:var(--ink);margin-bottom:.4rem}
+  .stamp{font-size:.78rem;color:var(--muted);margin:.7rem 0 0}
+  .stamp.err{color:#c07f2d}
+  .skel{background:var(--chip);border-radius:16px;height:150px;animation:pulse 1.3s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+  @media (prefers-reduced-motion:reduce){.skel{animation:none}}
+  footer{margin-top:2.6rem;font-size:.82rem;padding-top:1rem}
+  .setup{max-width:440px;margin:2rem auto;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.2rem;box-shadow:var(--shadow)}
+  .setup h2{font-size:1.2rem;margin-bottom:.3rem}
+  .setup p{color:var(--muted);font-size:.9rem;margin-bottom:1rem}
+  .setup .row{display:flex;gap:.5rem;margin-bottom:.7rem}
+  .setup input{flex:1}
+  input[type=text]{padding:.5rem .65rem;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);font-size:.95rem}
+  .btn{border:none;border-radius:9px;padding:.55rem .9rem;cursor:pointer;font-size:.9rem;font-weight:600}
+  .btn.primary{background:var(--accent);color:#fff}
+  .btn.ghost{background:var(--card);border:1px solid var(--line);color:var(--ink)}
+  .err-inline{color:#c0603a;font-size:.82rem;min-height:1.1rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>🌵 Drought Monitor</h1>
+    <p class="tag">Your county's U.S. Drought Monitor category and its trend over the past year.</p>
+  </header>
+
+  <div id="app"></div>
+
+  <footer id="foot">
+    Data: U.S. Drought Monitor (NDMC · USDA · NOAA), read via the Esri Living Atlas ArcGIS service;
+    county from the FCC Census Block API. The USDM's own data portal (usdmdataservices.unl.edu) blocks
+    browser requests, so this tool reads the same weekly USDM layers from a CORS-enabled mirror.
+  </footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---------- suite helpers ---------- */
+const esc=Suite.esc;
+function getLoc(){ return Suite.location.get(); }
+function setLoc(l){ Suite.location.set(l); }
+/* v1 cached only the assembled result (suite.cache.drought.c_<lat>_<lon>, {t,v} envelope).
+   Same key, same envelope, read/written via Suite.store. */
+function cacheGet(key){ const e=Suite.store.get("suite.cache.drought."+key); return (e&&typeof e==="object"&&"t"in e&&"v"in e)?e:null; }
+function cacheSet(key,v){ Suite.store.set("suite.cache.drought."+key,{t:Date.now(),v}); }
+/* good-citizen TTL (manifest cacheTtlMin: 1440 — USDM is a weekly product): when the
+   assembled result is fresher than this, render it and make no requests at all. */
+const TTL=1440*60*1000;
+/* raw component requests go through Suite.fetchJSON (timeout/abort); they are not
+   individually cached — the composite envelope above is the tool's cache (see report). */
+async function fetchJSON(url){ return (await Suite.fetchJSON(url,{fallbackToCache:false})).v; }
+
+/* ---------- USDM category model ---------- */
+// dm: -1 None, 0 D0 … 4 D4. Official USDM colors.
+const CATS=[
+  {dm:-1, code:"None", name:"No Drought",           col:"#e9ecec", ink:"#3a4048"},
+  {dm:0,  code:"D0",   name:"Abnormally Dry",        col:"#ffff00", ink:"#5a5400"},
+  {dm:1,  code:"D1",   name:"Moderate Drought",      col:"#fcd37f", ink:"#6b4e12"},
+  {dm:2,  code:"D2",   name:"Severe Drought",        col:"#ffaa00", ink:"#5c3d00"},
+  {dm:3,  code:"D3",   name:"Extreme Drought",       col:"#e60000", ink:"#ffffff"},
+  {dm:4,  code:"D4",   name:"Exceptional Drought",   col:"#730000", ink:"#ffffff"},
+];
+function cat(dm){ return CATS.find(c=>c.dm===dm)||CATS[0]; }
+
+/* ---------- ArcGIS drought endpoints (Esri Living Atlas, USDM data) ---------- */
+const DS="https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/US_Drought_Intensity_v1/FeatureServer";
+const L_CURRENT=DS+"/3/query";
+const L_HIST=DS+"/2/query";
+const FCC="https://geo.fcc.gov/api/census/block/find";
+
+const appEl=Suite.liveRegion(document.getElementById("app"));
+let refreshTimer=null;
+
+/* ---------- first-run location ---------- */
+function renderSetup(){
+  clearInterval(refreshTimer);
+  appEl.innerHTML=`
+    <div class="setup">
+      <h2>Set your location</h2>
+      <p>The monitor reads the drought category for your county. Enter a US ZIP, or use your device location.
+         This is saved for the whole suite.</p>
+      <div class="row">
+        <input type="text" id="zip" inputmode="numeric" placeholder="US ZIP e.g. 79101" maxlength="5" aria-label="US ZIP code">
+        <button class="btn primary" id="zipBtn">Set</button>
+      </div>
+      <div class="row"><button class="btn ghost" id="geoBtn" style="flex:1">Use my location</button></div>
+      <div class="err-inline" id="setupErr"></div>
+    </div>`;
+  const zip=document.getElementById("zip"), err=document.getElementById("setupErr");
+  document.getElementById("zipBtn").addEventListener("click",async()=>{
+    const z=zip.value.trim(); err.textContent="";
+    if(!/^\d{5}$/.test(z)){ err.textContent="Enter a 5-digit ZIP."; return; }
+    try{ const d=await fetchJSON(`https://api.zippopotam.us/us/${z}`); const p=d.places[0];
+      setLoc({lat:parseFloat(p.latitude),lon:parseFloat(p.longitude),label:`${p["place name"]}, ${p["state abbreviation"]}`}); boot();
+    }catch(e){ err.textContent="Couldn't find that ZIP. Try another."; }
+  });
+  zip.addEventListener("keydown",e=>{ if(e.key==="Enter") document.getElementById("zipBtn").click(); });
+  document.getElementById("geoBtn").addEventListener("click",()=>{
+    if(!navigator.geolocation){ err.textContent="Geolocation isn't available here."; return; }
+    err.textContent="Locating…";
+    navigator.geolocation.getCurrentPosition(
+      pos=>{ setLoc({lat:+pos.coords.latitude.toFixed(4),lon:+pos.coords.longitude.toFixed(4),label:"My location"}); boot(); },
+      e=>{ err.textContent="Location denied. Try a ZIP instead (may need http://)."; });
+  });
+}
+
+/* ---------- shell ---------- */
+function renderShell(){
+  const loc=getLoc();
+  appEl.innerHTML=`
+    <div class="locbar"><span>For <b id="locLabel">${esc(loc.label)}</b></span><button class="linkbtn" id="changeLoc">change</button></div>
+    <div id="hero"><div class="skel"></div></div>
+    <div id="trend"></div>
+    <div id="stamp" class="stamp"></div>`;
+  document.getElementById("changeLoc").addEventListener("click",renderSetup);
+}
+
+/* ---------- helpers ---------- */
+function periodToDate(p){ // "YYYYMMDD" -> Date
+  return new Date(+p.slice(0,4), +p.slice(4,6)-1, +p.slice(6,8));
+}
+function maxDmFromFeatures(features){
+  let dm=-1;
+  for(const f of features){ const v=f.attributes?f.attributes.dm:(f.properties&&f.properties.dm); if(v!=null&&v>dm) dm=v; }
+  return dm;
+}
+
+/* ---------- load ---------- */
+async function load(){
+  const loc=getLoc(); if(!loc) return;
+  const ck="c_"+loc.lat.toFixed(3)+"_"+loc.lon.toFixed(3);
+  const cached=cacheGet(ck);
+  /* fresh within the weekly-product TTL: serve the cache, skip the network entirely */
+  if(cached && Date.now()-cached.t<TTL){ renderResult(cached.v, cached.t, null); return; }
+  if(cached){ renderResult(cached.v, cached.t, null); }
+  try{
+    const result=await fetchDrought(loc);
+    cacheSet(ck,result);
+    renderResult(result, Date.now(), null);
+  }catch(e){
+    if(cached) renderResult(cached.v, cached.t, e.message||String(e));
+    else renderError(e.message||String(e));
+  }
+}
+
+async function fetchDrought(loc){
+  const pt=`${loc.lon},${loc.lat}`;
+  // county name (FCC) — not fatal if it fails
+  const countyP=fetchJSON(`${FCC}?latitude=${loc.lat}&longitude=${loc.lon}&format=json&showall=false`).catch(()=>null);
+
+  // current category
+  const curUrl=`${L_CURRENT}?geometry=${encodeURIComponent(pt)}&geometryType=esriGeometryPoint&inSR=4326`+
+    `&spatialRel=esriSpatialRelIntersects&outFields=dm,period&returnGeometry=false&f=json`;
+  // recent distinct weeks (timeline)
+  const weeksUrl=`${L_HIST}?where=1%3D1&returnDistinctValues=true&outFields=period&orderByFields=period%20DESC`+
+    `&resultRecordCount=52&returnGeometry=false&f=json`;
+  const [cur,weeks]=await Promise.all([fetchJSON(curUrl), fetchJSON(weeksUrl)]);
+
+  const periods=(weeks.features||[]).map(f=>f.attributes.period).filter(Boolean).sort(); // asc
+  const earliest=periods.length?periods[0]:"20250101";
+
+  // point's drought history over those weeks (max dm per week)
+  const histUrl=`${L_HIST}?geometry=${encodeURIComponent(pt)}&geometryType=esriGeometryPoint&inSR=4326`+
+    `&spatialRel=esriSpatialRelIntersects&where=${encodeURIComponent("period>='"+earliest+"'")}`+
+    `&groupByFieldsForStatistics=period&outStatistics=${encodeURIComponent(JSON.stringify([{statisticType:"max",onStatisticField:"dm",outStatisticFieldName:"maxdm"}]))}`+
+    `&orderByFields=period&returnGeometry=false&f=json`;
+  const hist=await fetchJSON(histUrl);
+  const dmByPeriod={};
+  for(const f of (hist.features||[])){ dmByPeriod[f.attributes.period]=f.attributes.maxdm; }
+
+  const trend=periods.map(p=>({period:p, dm:(p in dmByPeriod)?dmByPeriod[p]:-1}));
+  const curDm=maxDmFromFeatures(cur.features||[]);
+  // current-week validity: latest period in timeline
+  const latestPeriod=periods.length?periods[periods.length-1]:(cur.features&&cur.features[0]&&cur.features[0].attributes.period);
+
+  const co=await countyP;
+  let county=null;
+  if(co&&co.County&&co.County.name){ county={name:co.County.name, state:co.State&&co.State.code, fips:co.County.FIPS}; }
+
+  return {curDm, trend, latestPeriod, county};
+}
+
+/* ---------- render ---------- */
+function renderResult(r, stamp, err){
+  if(!document.getElementById("hero")) renderShell();
+  const c=cat(r.curDm);
+  const county=r.county? esc(r.county.name)+(r.county.state?", "+esc(r.county.state):"") : (getLoc()?esc(getLoc().label):"your area");
+  const validTxt=r.latestPeriod? "Week of "+periodToDate(r.latestPeriod).toLocaleDateString([], {month:"long",day:"numeric",year:"numeric"}) : "";
+  document.getElementById("hero").innerHTML=`
+    <div class="hero" style="background:${c.col};color:${c.ink};border-color:${c.col}">
+      <div class="cat-lbl">Current U.S. Drought Monitor category</div>
+      <div class="cat">${c.dm>=0?`<span class="code">${c.code}</span> · `:""}${esc(c.name)}</div>
+      <div class="county">${county}</div>
+      <div class="valid">${esc(validTxt)}</div>
+    </div>`;
+
+  renderTrend(r.trend);
+  renderStamp(stamp, err);
+}
+
+function renderTrend(trend){
+  const el=document.getElementById("trend");
+  if(!trend||!trend.length){ el.innerHTML=`<div class="card"><div class="msg">No drought history available for this point.</div></div>`; return; }
+  const W=760, H=120, pad={l:6,r:6,t:8,b:18};
+  const n=trend.length;
+  const bw=(W-pad.l-pad.r)/n;
+  const maxLevel=5; // None(0)..D4(5) rows -> use dm+1
+  const usableH=H-pad.t-pad.b;
+  let bars="";
+  trend.forEach((d,i)=>{
+    const level=d.dm+1; // None=0, D0=1 … D4=5
+    const c=cat(d.dm);
+    const h=level===0? 3 : (level/maxLevel)*usableH;
+    const x=pad.l+i*bw;
+    const y=pad.t+usableH-h;
+    const dt=periodToDate(d.period);
+    bars+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${Math.max(1,bw-1).toFixed(1)}" height="${h.toFixed(1)}" `+
+      `fill="${c.col}" stroke="rgba(0,0,0,.08)" stroke-width=".3">`+
+      `<title>${esc(dt.toLocaleDateString([], {month:"short",day:"numeric",year:"numeric"}))} — ${c.code==="None"?"No drought":c.code+" "+esc(c.name)}</title></rect>`;
+  });
+  // month/quarter axis labels: first, ~middle, last
+  const idxs=[0, Math.floor(n/2), n-1];
+  let axis="";
+  idxs.forEach(i=>{
+    const x=pad.l+i*bw+bw/2;
+    const anchor=i===0?"start":(i===n-1?"end":"middle");
+    axis+=`<text class="spark-axis" x="${x.toFixed(1)}" y="${H-4}" text-anchor="${anchor}">${esc(periodToDate(trend[i].period).toLocaleDateString([], {month:"short",year:"2-digit"}))}</text>`;
+  });
+  const baseY=(pad.t+usableH).toFixed(1);
+  const scale=CATS.map(c=>`<span class="item"><span class="sw" style="background:${c.col}"></span>${c.code==="None"?"None":c.code}</span>`).join("");
+  el.innerHTML=`
+    <div class="card">
+      <h2>52-week trend</h2>
+      <div class="sub">Weekly U.S. Drought Monitor category at your location over the past year.</div>
+      <svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="52-week drought trend">
+        <line x1="${pad.l}" y1="${baseY}" x2="${W-pad.r}" y2="${baseY}" stroke="var(--line)" stroke-width="1"/>
+        ${bars}${axis}
+      </svg>
+      <div class="scale">${scale}</div>
+    </div>`;
+}
+
+function renderStamp(stamp, err){
+  const el=document.getElementById("stamp"); if(!el) return;
+  let s=stamp?`Data from ${new Date(stamp).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})} · USDM updates weekly (Thursdays)`:"";
+  if(err){ el.className="stamp err"; el.textContent=(s?s+" · ":"")+"connection issue: "+err; }
+  else{ el.className="stamp"; el.textContent=s; }
+}
+
+function renderError(msg){
+  if(!document.getElementById("hero")) renderShell();
+  document.getElementById("hero").innerHTML=`<div class="card"><div class="msg"><div class="big">Couldn't load drought data</div>
+    The drought service didn't respond. Check your connection; the monitor retries automatically.<br><br>
+    <span style="font-size:.8rem;color:var(--muted)">${esc(msg)}</span></div></div>`;
+  document.getElementById("trend").innerHTML="";
+}
+
+function boot(){
+  if(!getLoc()){ renderSetup(); return; }
+  renderShell();
+  load();
+  clearInterval(refreshTimer);
+  refreshTimer=setInterval(load, 6*3600*1000); // weekly data — a gentle 6h refresh is plenty
+}
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden && getLoc()) load(); });
+boot();
+</script>
+</body>
+</html>

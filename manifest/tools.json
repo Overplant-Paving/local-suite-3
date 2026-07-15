@@ -579,6 +579,29 @@
       "flags": []
     },
     {
+      "id": "drought",
+      "file": "drought.html",
+      "name": "Drought Monitor",
+      "cat": "earth",
+      "cx": "S",
+      "desc": "Your county's drought category and its trend over the year.",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://services9.arcgis.com",
+        "https://geo.fcc.gov",
+        "https://api.zippopotam.us"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.location",
+        "suite.cache.drought.*"
+      ],
+      "cacheTtlMin": 1440,
+      "since": "v1",
+      "flags": []
+    },
+    {
       "id": "volcano",
       "file": "volcano.html",
       "name": "Volcano Status Board",

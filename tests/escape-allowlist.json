@@ -142,5 +142,20 @@
     "nearest!=null&&isFinite(nearest)?Math.round(nearest)+\" km\":\"—\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/wildfire/report.md",
     "state.sort===\"size\"?\" selected\":\"\"": "boolean-gated literal attribute",
     "state.sort===\"new\"?\" selected\":\"\"": "boolean-gated literal attribute"
+  },
+  "drought.html": {
+    "c.col": "local-only expression, recorded verified-clean with reasoning in tests/evidence/drought/report.md",
+    "c.ink": "local-only expression, recorded verified-clean with reasoning in tests/evidence/drought/report.md",
+    "c.code": "local-only expression, recorded verified-clean with reasoning in tests/evidence/drought/report.md",
+    "county": "local-only expression, recorded verified-clean with reasoning in tests/evidence/drought/report.md",
+    "W": "local-only expression, recorded verified-clean with reasoning in tests/evidence/drought/report.md",
+    "H": "local-only expression, recorded verified-clean with reasoning in tests/evidence/drought/report.md",
+    "pad.l": "local-only expression, recorded verified-clean with reasoning in tests/evidence/drought/report.md",
+    "baseY": "local-only expression, recorded verified-clean with reasoning in tests/evidence/drought/report.md",
+    "W-pad.r": "local-only expression, recorded verified-clean with reasoning in tests/evidence/drought/report.md",
+    "bars": "local-only expression, recorded verified-clean with reasoning in tests/evidence/drought/report.md",
+    "axis": "local-only expression, recorded verified-clean with reasoning in tests/evidence/drought/report.md",
+    "scale": "local-only expression, recorded verified-clean with reasoning in tests/evidence/drought/report.md",
+    "c.dm>=0?`<span class=\"code\">${c.code}</span> · `:\"\"": "c is a row of the local CATS constant table; code is a D0-D4 literal"
   }
 }
