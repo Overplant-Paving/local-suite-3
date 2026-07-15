@@ -1,0 +1,15 @@
+{
+  "v1": {
+    "suite.theme": "dark",
+    "suite.cache.network.geo": "{\"t\":1784147078508,\"v\":{\"ip\":\"x.x.x.103\",\"network\":\"x.x.x.0/24\",\"version\":\"IPv4\",\"city\":\"Pocola\",\"region\":\"Oklahoma\",\"region_code\":\"OK\",\"country\":\"US\"…(614 chars)"
+  },
+  "v2": {
+    "suite.cache.network.ip": "{\"t\":1784060675190,\"v\":{\"ip\":\"x.x.x.103\"}}",
+    "suite.cache.network.geo": "{\"t\":1784060675190,\"v\":{\"ip\":\"x.x.x.103\",\"network\":\"x.x.x.0/24\",\"version\":\"IPv4\",\"city\":\"Pocola\",\"region\":\"Oklahoma\",\"region_code\":\"OK\",\"country\":\"US\"…(614 chars)",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": [
+    "suite.cache.network.ip"
+  ]
+}

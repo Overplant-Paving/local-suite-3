@@ -1,0 +1,31 @@
+ipapi.co live status: Cloudflare bot-challenge (403, Cf-Mitigated: challenge) for browser-class requests from this machine; endpoint aborted at the route layer for this run — same fetch-rejection path, zero challenged hits (see module header + report.md)
+ipapi.co replay payload source: fallback fixture (2026-07-15 curl capture)
+live IP (api.ipify.org): rendered "x.x.x.103" (redacted), copy button visible=true
+  #ipMsg: "" (expected empty on a fresh fetch)
+geo card under ipapi.co failure: "Lookup failed (Failed to fetch)." — partial render, no blank page (v1 renders the identical card)
+  #geoStamp: "" (expected empty — no data, no stamp)
+connection card: "Effective type4GDownlink (est.)1.5 MbpsRound-trip (est.)100 msData saveroffStatusonline"
+latency Cloudflare (cloudflare.com/cdn-cgi/trace): "35 ms" — sparkline svg path present=true
+latency Google (google.com/generate_204): "35 ms" — sparkline svg path present=true
+latency Weather.gov (api.weather.gov): "97 ms" — sparkline svg path present=true
+latency Wikipedia (wikipedia.org): "35 ms" — sparkline svg path present=true
+verdict: "Your connection looks healthy" / "All anchors respond, 35–97 ms. If one site is slow, it's likely on their end."
+copy button after click: "copied" ("copied" or the "select it" fallback)
+geo/ISP render (replayed genuine payload): City="Pocola, Oklahoma", Country="United States", ISP/Org="Proton AG", Timezone="America/Chicago" — Postal/Coords rendered but not logged
+  #geoStamp: "just now" (expected "just now")
+  suite.cache.network.geo written: true
+fresh-cache reload: ipapi.co requests observed=0 (expected 0 — the 60 min TTL skips the network), #geoStamp: "just now", City="Pocola, Oklahoma"
+rate-limit body on stale cache: City still "Pocola, Oklahoma", #geoStamp: "from 1:24 PM"; cached envelope now holds the previous good data (restored) — a rate-limit reply must never masquerade as data
+offline IP: rendered "x.x.x.103" with #ipMsg: "Offline — cached from 3:24 PM. Your address may have changed since."
+offline geo: City="Pocola, Oklahoma", ISP/Org="Proton AG", #geoStamp: "offline — from 3:24 PM"
+offline latency board: ["unreachable","unreachable","unreachable","unreachable"]
+offline verdict: "You appear offline" / "No anchor responded and the browser reports no connection."
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

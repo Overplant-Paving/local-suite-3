@@ -1,0 +1,26 @@
+{
+  "id": "network",
+  "file": "network.html",
+  "name": "What's My Network",
+  "cat": "local",
+  "cx": "S",
+  "desc": "Public IP, ISP, and a latency sparkline — \"is it my wifi or the site?\"",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": [
+    "https://api.ipify.org",
+    "https://ipapi.co",
+    "https://cloudflare.com",
+    "https://www.google.com",
+    "https://api.weather.gov",
+    "https://en.wikipedia.org"
+  ],
+  "storage": [
+    "suite.theme",
+    "suite.cache.network.geo",
+    "suite.cache.network.ip"
+  ],
+  "cacheTtlMin": 60,
+  "since": "v1",
+  "flags": []
+}

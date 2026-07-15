@@ -271,7 +271,7 @@ Index levels and a few tickers, once a day.
 
 ### 6.1 Illness Activity Tracker
 Flu/respiratory activity for your state, COVID wastewater trend — "should I be extra careful this week?"
-- **Data:** CDC open data (Socrata — keyless for light use, free app token raises to ~1,000 req/hr, CORS ✓): NWSS wastewater `https://data.cdc.gov/resource/g653-rqe2.json?$limit=50`, NHSN weekly hospital respiratory data `…/resource/ua7e-t2fy.json`. (Dataset IDs rotate over the years — confirm on data.cdc.gov at build time; classic FluView/ILINet is CSV downloads, not Socrata.)
+- **Data:** CDC open data (Socrata — keyless for light use, free app token raises to ~1,000 req/hr, CORS ✓): NWSS wastewater `https://data.cdc.gov/resource/g653-rqe2.json?$limit=50` (raw sewershed; the built tool uses the state-percentile dataset `2ew6-ywp6` — v2, Jul 2026), NHSN weekly hospital respiratory data `…/resource/ua7e-t2fy.json`. (Dataset IDs rotate over the years — confirm on data.cdc.gov at build time; classic FluView/ILINet is CSV downloads, not Socrata.)
 - **Key:** none · **Local:** file:// ✅ · **Complexity:** M
 - **Suggested file:** `illness.html`
 
@@ -421,7 +421,7 @@ Next departures for your stop, big-type, glanceable.
 
 ### 9.6 What's My Network
 Your public IP, rough geolocation, ISP, and a latency sparkline to a few endpoints — the "is it my wifi or the site?" tool.
-- **Data:** `https://api.ipify.org?format=json` (IP only, keyless, CORS ✓) + `https://ipapi.co/json/` (geo/ISP, keyless 1,000/day, HTTPS + CORS ✓ — prefer it over ip-api.com, whose free tier is HTTP-only). Latency measured client-side with fetch timing.
+- **Data:** `https://api.ipify.org?format=json` · latency anchors ping `cloudflare.com` and `www.google.com` (HEAD timing only — v2, Jul 2026) · `` (IP only, keyless, CORS ✓) + `https://ipapi.co/json/` (geo/ISP, keyless 1,000/day, HTTPS + CORS ✓ — prefer it over ip-api.com, whose free tier is HTTP-only). Latency measured client-side with fetch timing.
 - **Key:** none · **Local:** file:// ✅ · **Complexity:** S
 - **Suggested file:** `network.html`
 

@@ -151,7 +151,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 53 | art.html | ref | cors | — | B | EA · inline `onerror=` → listener | ⬜ |
 | 54 | geo.html | local | cors | — | B | Census JSONP path; Nominatim 1 req/s | ⬜ |
 | 55 | elevation.html | local | cors | — | B | | ⬜ |
-| 56 | network.html | local | cors | — | B | ipapi.co 1k/day | ⬜ |
+| 56 | network.html | local | cors | — | B | ipapi.co 1k/day | ✅ `tests/evidence/network/` |
 | 57 | apod.html | space | key | nasa (demo) | C | RL (DEMO_KEY 30/hr) | ⬜ |
 | 58 | nutrition.html | health | key | usda (demo) | C | RL | ⬜ |
 | 59 | congress.html | civic | key | congress | C | | ⬜ |
