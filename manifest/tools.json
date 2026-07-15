@@ -47,6 +47,26 @@
       "flags": []
     },
     {
+      "id": "almanac",
+      "file": "almanac.html",
+      "name": "Sun & Moon Almanac",
+      "cat": "sky",
+      "cx": "M",
+      "desc": "Sunrise, golden hour, moon phase, solstice countdowns — all computed in the file.",
+      "network": "offline",
+      "key": null,
+      "endpoints": [
+        "https://api.zippopotam.us"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.location"
+      ],
+      "cacheTtlMin": null,
+      "since": "v1",
+      "flags": []
+    },
+    {
       "id": "printables",
       "file": "printables.html",
       "name": "Printable Calendar & Planner",

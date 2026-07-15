@@ -1,0 +1,12 @@
+{
+  "v1": {
+    "suite.theme": "dark",
+    "suite.location": "{\"lat\":32.7185,\"lon\":-117.1593,\"label\":\"San Diego, CA 92101\"}"
+  },
+  "v2": {
+    "suite.theme": "dark",
+    "suite.location": "{\"lat\":32.7185,\"lon\":-117.1593,\"label\":\"San Diego, CA 92101\"}"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}

@@ -1,0 +1,39 @@
+firstrun visible on fresh open: true
+location label after ZIP 92101: San Diego, CA 92101
+suite.location = {"lat":32.7185,"lon":-117.1593,"label":"San Diego, CA 92101"}
+sun date label: JULY 15, 2026
+sun row: Sunrise 7:52 AM
+sun row: Solar noon 2:55 PM
+sun row: Sunset 9:58 PM
+sun row: Day length 14h 06m
+twilight row: Astronomical dawn 6:14 AM
+twilight row: Nautical dawn 6:50 AM
+twilight row: Civil dawn 7:24 AM
+twilight row: Morning golden hour 7:52 AM – 8:28 AM
+twilight row: Evening golden hour 9:23 PM – 9:58 PM
+twilight row: Civil dusk 10:26 PM
+twilight row: Nautical dusk 11:00 PM
+twilight row: Astronomical dusk 11:37 PM
+sun arc svg: 1231 chars, 4 circles, 5 text labels
+moon: Waxing Crescent · 4% illuminated · 1.9-day age
+moon row: Trend Waxing (growing)
+moon row: Next full moon Wed, Jul 29 · 13 days
+moon row: Next new moon Wed, Aug 12 · 28 days
+moon canvas: 590 bright (lit) pixels painted
+season: 69 days Autumn Equinox Tue, Sep 22, 2026 · 7:06 PM
+season: 159 days Winter Solstice Mon, Dec 21, 2026 · 2:51 PM
+season: 248 days Spring Equinox Sat, Mar 20, 2027 · 3:26 PM
+season: 340 days Summer Solstice Mon, Jun 21, 2027 · 9:11 AM
+season countdown cards rendered: 4
+after date -> 2026-12-21: label "DECEMBER 21, 2026"
+sun row (Dec 21): Sunrise 8:48 AM
+sun row (Dec 21): Solar noon 1:48 PM
+sun row (Dec 21): Sunset 6:47 PM
+sun row (Dec 21): Day length 10h 00m
+moon (Dec 21): Waxing Gibbous · 95%
+after "today": label "JULY 15, 2026", date input = 2026-07-15
+after "change": firstrun visible = true
+re-set location, app visible again: true
+Enter in ZIP field submitted and restored the app view
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)

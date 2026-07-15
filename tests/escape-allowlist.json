@@ -12,5 +12,12 @@
     "m[1]": "metric values: each is Suite.esc()'d or numeric-formatted where the metrics array is built",
     "i===0?'now':''": "literal CSS class name",
     "desc.length>=240?\"…\":\"\"": "literal ellipsis appended after an esc()'d truncated string"
+  },
+  "almanac.html": {
+    "countdown(s.date, now)": "local date math -> fixed English phrase",
+    "s.name": "fixed four-element season names array",
+    "fmtDate(s.date)": "locale date string of a computed Date",
+    "s.date.getFullYear()": "number",
+    "fmtTime(s.date)": "locale time string of a computed Date"
   }
 }
