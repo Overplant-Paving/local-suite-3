@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Federal Register Daily · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents: document-type badge palette (3-layer, same pattern as core) */
+  :root { --rule: #b0752a; --prorule: #2f6f6a; --notice: #6b7280; --presdoc: #8a4b8a; }
+  @media (prefers-color-scheme: dark) {
+    :root { --rule: #d09a53; --prorule: #6fb5ae; --notice: #9aa0a8; --presdoc: #c092c0; }
+  }
+  :root[data-theme="light"] { --rule: #b0752a; --prorule: #2f6f6a; --notice: #6b7280; --presdoc: #8a4b8a; }
+  :root[data-theme="dark"] { --rule: #d09a53; --prorule: #6fb5ae; --notice: #9aa0a8; --presdoc: #c092c0; }
+
+  body { padding: 1.4rem 1.25rem 4rem; }
+  .wrap { max-width: 940px; margin: 0 auto; }
+  .topbar { display: flex; align-items: center; gap: 1rem; }
+  .back { white-space: nowrap; }
+  .theme-btn { float: none; margin-left: auto; }
+  header h1 { font-size: 1.7rem; letter-spacing: -.02em; margin-top: .8rem; }
+  header .tag { color: var(--muted); margin-top: .3rem; max-width: 46rem; font-size: .95rem; }
+  .controls { margin: 1.3rem 0 .4rem; display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; }
+  label.field { font-size: .85rem; color: var(--muted); display: flex; align-items: center; gap: .4rem; }
+  input[type=date] {
+    font: inherit; font-size: .9rem; color: var(--ink); background: var(--card);
+    border: 1px solid var(--line); border-radius: 10px; padding: .4rem .6rem;
+  }
+  .stats { display: flex; gap: 1.6rem; margin: 1.2rem 0 .4rem; flex-wrap: wrap; }
+  .stat b { font-size: 1.5rem; display: block; line-height: 1.15; color: var(--accent); }
+  .stat span { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .pills { display: flex; flex-wrap: wrap; gap: .45rem; margin: .9rem 0 .3rem; }
+  .pill {
+    border: 1px solid var(--line); background: var(--card); color: var(--muted);
+    border-radius: 999px; padding: .28rem .8rem; font-size: .82rem; cursor: pointer; user-select: none;
+  }
+  .pill.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .agencybar { margin-top: .6rem; }
+  .agencybar summary { cursor: pointer; color: var(--accent); font-size: .85rem; user-select: none; }
+  .agency-chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .6rem; max-height: 210px; overflow-y: auto; padding: .2rem; }
+  .achip {
+    border: 1px solid var(--line); background: var(--card); color: var(--muted);
+    border-radius: 999px; padding: .22rem .65rem; font: inherit; font-size: .78rem;
+    cursor: pointer; user-select: none;
+  }
+  .achip.on { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+  .list { margin-top: 1.1rem; display: flex; flex-direction: column; gap: .8rem; }
+  .doc {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 1rem 1.1rem; box-shadow: var(--shadow);
+  }
+  .doc .badge {
+    display: inline-block; font-size: .7rem; font-weight: 600; letter-spacing: .03em;
+    text-transform: uppercase; padding: .12rem .5rem; border-radius: 6px; color: #fff; margin-bottom: .5rem;
+  }
+  .badge.t-rule { background: var(--rule); }
+  .badge.t-prorule { background: var(--prorule); }
+  .badge.t-notice { background: var(--notice); }
+  .badge.t-presdoc { background: var(--presdoc); }
+  .doc h3 { font-size: 1.02rem; line-height: 1.35; }
+  .doc h3 a { color: var(--ink); text-decoration: none; }
+  .doc h3 a:hover { color: var(--accent); text-decoration: underline; }
+  .doc .agencies { font-size: .8rem; color: var(--accent); margin-top: .35rem; }
+  .doc .abstract { font-size: .9rem; color: var(--muted); margin-top: .5rem; }
+  .card-msg {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 1.3rem 1.2rem; box-shadow: var(--shadow); text-align: center; color: var(--muted);
+  }
+  .card-msg h3 { color: var(--ink); font-size: 1.05rem; margin-bottom: .4rem; }
+  .card-msg button {
+    margin-top: .8rem; border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    border-radius: 10px; padding: .5rem 1rem; cursor: pointer; font: inherit; font-size: .9rem;
+  }
+  footer { font-size: .82rem; }
+  .stamp { font-size: .78rem; color: var(--muted); margin-top: .3rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Federal Register Daily</h1>
+    <p class="tag">What the federal government published on a given day — rules, proposed rules, notices,
+      and presidential documents. Filter by type and agency.</p>
+  </header>
+
+  <div class="controls">
+    <label class="field">Publication date
+      <input type="date" id="dateInput">
+    </label>
+    <span class="stamp" id="stamp"></span>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="pills" id="typePills"></div>
+
+  <details class="agencybar" id="agencyBar" hidden>
+    <summary>Filter by agency <span id="agencyCount"></span></summary>
+    <div class="agency-chips" id="agencyChips"></div>
+  </details>
+
+  <div class="list" id="list"></div>
+
+  <footer>Data: Federal Register · federalregister.gov — official daily journal of the U.S. government.</footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---- helpers ---- */
+/* v1 cache envelope kept byte-compatible: suite.cache.fedregister.<date> = {t, v: docsArray}.
+   Suite.fetchJSON's built-in cacheKey would store the whole API response object instead of
+   the results array, breaking v1-written caches — so the envelope stays managed here while
+   the network request itself goes through Suite.fetchJSON. */
+function cacheGet(key){
+  const e = Suite.store.get("suite.cache.fedregister." + key);
+  return (e && typeof e === "object" && "t" in e && "v" in e) ? e : null;
+}
+function cacheSet(key, v){ Suite.store.set("suite.cache.fedregister." + key, { t: Date.now(), v: v }); }
+function fmtTime(ms){
+  const d = new Date(ms);
+  return d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+}
+function todayISO(){
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+/* map API type string -> {code, label, cls} */
+function typeInfo(t){
+  switch (t) {
+    case "Rule": return { code: "RULE", label: "Rule", cls: "t-rule" };
+    case "Proposed Rule": return { code: "PRORULE", label: "Proposed Rule", cls: "t-prorule" };
+    case "Notice": return { code: "NOTICE", label: "Notice", cls: "t-notice" };
+    case "Presidential Document": return { code: "PRESDOCS", label: "Presidential", cls: "t-presdoc" };
+    default: return { code: "OTHER", label: t || "Document", cls: "t-notice" };
+  }
+}
+
+/* ---- state ---- */
+const state = { date: null, docs: [], type: "ALL", agencies: new Set(), stamp: "" };
+const listEl = Suite.liveRegion(document.getElementById("list"));
+const statsEl = Suite.liveRegion(document.getElementById("stats"));
+const typePillsEl = document.getElementById("typePills");
+const agencyBar = document.getElementById("agencyBar");
+const agencyChipsEl = document.getElementById("agencyChips");
+const agencyCountEl = document.getElementById("agencyCount");
+const dateInput = document.getElementById("dateInput");
+const stampEl = Suite.liveRegion(document.getElementById("stamp"));
+
+function msgCard(title, body, btnLabel, btnFn){
+  listEl.textContent = "";
+  const c = document.createElement("div"); c.className = "card-msg";
+  const h = document.createElement("h3"); h.textContent = title;
+  const p = document.createElement("p"); p.textContent = body;
+  c.append(h, p);
+  if (btnLabel){ const b = document.createElement("button"); b.textContent = btnLabel; b.addEventListener("click", btnFn); c.append(b); }
+  listEl.append(c);
+}
+
+/* FR data for a past date never changes — a cached past issue is served without a network
+   hit, as in v1. Today's issue can still gain documents during the day, so the current
+   date refreshes on the declared good-citizen interval (manifest cacheTtlMin: 60). */
+const TTL = 60 * 60 * 1000;
+
+async function load(date, opts){
+  opts = opts || {};
+  state.date = date;
+  const cached = cacheGet(date);
+  if (cached && !opts.force && (date < todayISO() || Date.now() - cached.t < TTL)){
+    apply(cached.v, cached.t);
+    return;
+  }
+  if (!cached) msgCard("Loading…", "Fetching documents published on " + date + ".");
+  const fields = ["title","type","abstract","html_url","agencies","document_number","publication_date"];
+  let url = "https://www.federalregister.gov/api/v1/documents.json?per_page=1000&order=newest";
+  url += "&conditions%5Bpublication_date%5D%5Bis%5D=" + encodeURIComponent(date);
+  fields.forEach(function(f){ url += "&fields%5B%5D=" + f; });
+  try {
+    const r = await Suite.fetchJSON(url, { accept: "application/json" });
+    const docs = r.v.results || [];
+    cacheSet(date, docs);
+    apply(docs, r.t);
+  } catch(e){
+    if (cached){ apply(cached.v, cached.t, true); }
+    else {
+      msgCard("Couldn't reach the Federal Register",
+        "Check your connection and try again. " + (e && e.message ? "(" + e.message + ")" : ""),
+        "Retry", function(){ load(date, { force: true }); });
+    }
+  }
+}
+
+function apply(docs, stampMs, stale){
+  state.docs = docs;
+  state.stamp = stampMs ? (stale ? "offline — data from " : "data from ") + fmtTime(stampMs) : "";
+  state.agencies = new Set();
+  stampEl.textContent = state.stamp;
+  buildAgencyChips();
+  renderStats();
+  renderTypePills();
+  render();
+}
+
+function agencyNamesOf(d){
+  const out = [];
+  (d.agencies || []).forEach(function(a){ if (a && a.name) out.push(a.name); });
+  return out;
+}
+
+function buildAgencyChips(){
+  const counts = {};
+  state.docs.forEach(function(d){
+    agencyNamesOf(d).forEach(function(n){ counts[n] = (counts[n] || 0) + 1; });
+  });
+  const names = Object.keys(counts).sort(function(a,b){ return counts[b] - counts[a] || a.localeCompare(b); });
+  agencyChipsEl.textContent = "";
+  if (!names.length){ agencyBar.hidden = true; return; }
+  agencyBar.hidden = false;
+  agencyCountEl.textContent = "(" + names.length + ")";
+  names.forEach(function(n){
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "achip";
+    b.textContent = n + " · " + counts[n];
+    b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", function(){
+      const on = !state.agencies.has(n);
+      if (on) state.agencies.add(n); else state.agencies.delete(n);
+      b.classList.toggle("on", on);
+      b.setAttribute("aria-pressed", String(on));
+      render();
+    });
+    agencyChipsEl.append(b);
+  });
+}
+
+function renderStats(){
+  const by = { RULE: 0, PRORULE: 0, NOTICE: 0, PRESDOCS: 0, OTHER: 0 };
+  state.docs.forEach(function(d){ by[typeInfo(d.type).code]++; });
+  statsEl.textContent = "";
+  function mk(n, l){
+    const w = document.createElement("div"); w.className = "stat";
+    const b = document.createElement("b"); b.textContent = n;
+    const s = document.createElement("span"); s.textContent = l;
+    w.append(b, s); return w;
+  }
+  statsEl.append(
+    mk(state.docs.length, "documents"),
+    mk(by.RULE, "rules"),
+    mk(by.PRORULE, "proposed"),
+    mk(by.NOTICE, "notices"),
+    mk(by.PRESDOCS, "presidential")
+  );
+}
+
+function renderTypePills(){
+  const defs = [["ALL","All types"],["RULE","Rules"],["PRORULE","Proposed"],["NOTICE","Notices"],["PRESDOCS","Presidential"]];
+  typePillsEl.textContent = "";
+  defs.forEach(function(d){
+    const b = document.createElement("button");
+    b.className = "pill" + (state.type === d[0] ? " on" : "");
+    b.setAttribute("aria-pressed", String(state.type === d[0]));
+    b.textContent = d[1];
+    b.addEventListener("click", function(){ state.type = d[0]; renderTypePills(); render(); });
+    typePillsEl.append(b);
+  });
+}
+
+function render(){
+  listEl.textContent = "";
+  let docs = state.docs.slice();
+  if (state.type !== "ALL") docs = docs.filter(function(d){ return typeInfo(d.type).code === state.type; });
+  if (state.agencies.size) docs = docs.filter(function(d){
+    return agencyNamesOf(d).some(function(n){ return state.agencies.has(n); });
+  });
+  if (!state.docs.length){
+    msgCard("Nothing published", "The Federal Register lists no documents for " + state.date +
+      ". It publishes on business days — try a recent weekday.");
+    return;
+  }
+  if (!docs.length){
+    const c = document.createElement("div"); c.className = "card-msg";
+    const p = document.createElement("p"); p.textContent = "No documents match the current filters.";
+    c.append(p); listEl.append(c); return;
+  }
+  docs.forEach(function(d){
+    const ti = typeInfo(d.type);
+    const card = document.createElement("article"); card.className = "doc";
+    const badge = document.createElement("span"); badge.className = "badge " + ti.cls; badge.textContent = ti.label;
+    const h = document.createElement("h3");
+    const a = document.createElement("a");
+    a.href = d.html_url || "#"; a.target = "_blank"; a.rel = "noopener";
+    a.textContent = d.title || "(untitled document)";
+    h.append(a);
+    card.append(badge, h);
+    const ags = agencyNamesOf(d);
+    if (ags.length){ const ae = document.createElement("div"); ae.className = "agencies"; ae.textContent = ags.join(" · "); card.append(ae); }
+    if (d.abstract){ const ab = document.createElement("div"); ab.className = "abstract"; ab.textContent = d.abstract; card.append(ab); }
+    listEl.append(card);
+  });
+}
+
+/* ---- init ---- */
+dateInput.value = todayISO();
+dateInput.max = todayISO();
+dateInput.addEventListener("change", function(){ if (dateInput.value){ state.type = "ALL"; load(dateInput.value); } });
+load(todayISO());
+</script>
+</body>
+</html>

@@ -760,6 +760,26 @@
       "flags": []
     },
     {
+      "id": "fedregister",
+      "file": "fedregister.html",
+      "name": "Federal Register Daily",
+      "cat": "civic",
+      "cx": "S",
+      "desc": "What the federal government published today, filterable by agency.",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://www.federalregister.gov"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.cache.fedregister.*"
+      ],
+      "cacheTtlMin": 60,
+      "since": "v1",
+      "flags": []
+    },
+    {
       "id": "currency",
       "file": "currency.html",
       "name": "Exchange Rate Board",
