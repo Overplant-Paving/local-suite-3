@@ -1,0 +1,36 @@
+== computed-style diff, light (16 differing values) ==
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.suite-link { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.search { outline-color: v1=rgb(35, 40, 46) | v2=rgb(47, 111, 106) }
+.search { outline-offset: v1=0px | v2=2px }
+.search { outline-style: v1=none | v2=solid }
+.search { outline-width: v1=3px | v2=2px }
+.search { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.mode.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#status { -webkit-font-smoothing: v1=auto | v2=antialiased }
+section.saved h2 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#savedEmpty { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+
+== computed-style diff, dark (16 differing values) ==
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.suite-link { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.search { outline-color: v1=rgb(231, 229, 224) | v2=rgb(111, 181, 174) }
+.search { outline-offset: v1=0px | v2=2px }
+.search { outline-style: v1=none | v2=solid }
+.search { outline-width: v1=3px | v2=2px }
+.search { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.mode.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#status { -webkit-font-smoothing: v1=auto | v2=antialiased }
+section.saved h2 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#savedEmpty { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+

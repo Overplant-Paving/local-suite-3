@@ -1,0 +1,49 @@
+export (empty list): status="Your read-next list is empty — nothing to export yet."
+search "The Left Hand of Darkness": status="36 found"
+result cards rendered: 20
+first result: title="The Left Hand of Darkness" author="Ursula K. Le Guin" sub="1969 · 91 editions · ISBN 9788419206671"
+cover loaded: https://covers.openlibrary.org/b/id/10618463-M.jpg (180x283 natural px)
+covers in results: 20 <img>, 0 placeholder(s) (records with no cover URL)
+add: first card button now "✓ On your list"
+saved: count="· 1" item="The Left Hand of DarknessUrsula K. Le Guin · 1969"
+localStorage["suite.books.readnext"] = [{"key":"/works/OL59800W","title":"The Left Hand of Darkness","authors":"Ursula K. Le Guin","year":1969,"editions":91,"coverUrl":"…
+remove: savedEmpty visible=true, stored length=0
+re-add: stored length=1
+mode switch: placeholder="Enter an ISBN — e.g. 9780441172719" aria-pressed=true
+ISBN 9780441172719: status="Found by ISBN"
+ISBN result: title="Dune" author="Frank Herbert" sub="1987 · ISBN 9780441172719"
+cache keys written: suite.cache.books.author:OL79034A, suite.cache.books.isbn:9780441172719, suite.cache.books.s:the left hand of darkness
+export: download fired, suggested filename "read-next.tsv"
+after reload: saved count="· 1" item="The Left Hand of DarknessUrsula K. Le Guin · 1969"
+offline search: status="Offline — showing cached results from 8 days ago"
+offline search: 20 cards rendered from the stale cache
+cover fallback (error listener): 20 placeholder(s) swapped in, 0 <img> remaining
+offline ISBN: status="Offline — cached ISBN result from 8 days ago"
+restored (fresh cache, no JSON refetch): status="Results (cached just now)"
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

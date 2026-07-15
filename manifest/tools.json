@@ -1028,6 +1028,30 @@
       ]
     },
     {
+      "id": "books",
+      "file": "books.html",
+      "name": "Book & Library Lookup",
+      "cat": "ref",
+      "cx": "S",
+      "desc": "Search books and editions, covers, ISBN lookup, read-next list.",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://openlibrary.org",
+        "https://covers.openlibrary.org",
+        "https://www.googleapis.com",
+        "https://books.google.com"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.books.readnext",
+        "suite.cache.books.*"
+      ],
+      "cacheTtlMin": 10080,
+      "since": "v1",
+      "flags": []
+    },
+    {
       "id": "network",
       "file": "network.html",
       "name": "What's My Network",
