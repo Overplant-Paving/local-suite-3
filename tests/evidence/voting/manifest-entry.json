@@ -1,0 +1,21 @@
+{
+  "id": "voting",
+  "file": "voting.html",
+  "name": "Election & Voting Info",
+  "cat": "civic",
+  "cx": "S",
+  "desc": "Registration deadlines and lookup links for your state, refreshed each cycle.",
+  "network": "offline",
+  "key": null,
+  "endpoints": [],
+  "storage": [
+    "suite.theme",
+    "suite.voting.state",
+    "suite.location"
+  ],
+  "cacheTtlMin": null,
+  "since": "v1",
+  "flags": [
+    "static-curated"
+  ]
+}

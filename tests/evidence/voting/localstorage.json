@@ -1,0 +1,12 @@
+{
+  "v1": {
+    "suite.voting.state": "TX",
+    "suite.theme": "dark"
+  },
+  "v2": {
+    "suite.voting.state": "TX",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}

@@ -1,0 +1,13 @@
+countdown at load: "111 DAYS TO ELECTION DAY Midterm general election Tuesday, November 3, 2026 · polls set by your state Primaries and local elections happen on other dates — check your state office for those."
+state table rows: 51 (v1 list = 50 states + DC = 51)
+picked CA -> pinned card h2: "★ California"
+  office link: https://www.sos.ca.gov/elections
+  register link: https://vote.gov/register/ca
+  highlighted table row: "California CA"
+  localStorage["suite.voting.state"] = "CA"
+unpinned -> key is removed (null, matches v1 removeItem); pinned cards in DOM: 0
+filter "dak" -> 2 rows: North Dakota ND | South Dakota SD
+table pin (Texas) -> select value=TX, pin button now reads "pinned", stored="TX"
+after reload -> select value=TX, pinned card: "★ Texas", highlighted row: "Texas TX"
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)

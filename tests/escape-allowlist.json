@@ -30,5 +30,12 @@
     "MONTHS[h.observed.getMonth()].slice(0,3)": "hardcoded month-name array, sliced literal",
     "h.observed.getDate()": "number from a computed Date",
     "shifted ? `${fmtDOW(h.observed)}, ${MONTHS[h.observed.getMonth()].slice(0,3)} ${h.observed.getDate()} <span class=\"tag-obs\">observed</span>` : \"—\"": "literal markup + the local formatter outputs above; holiday names elsewhere are Suite.esc()'d"
+  },
+  "voting.html": {
+    "days === 0 ? \"Today\" : days": "local-only expression, recorded verified-clean with reasoning in tests/evidence/voting/report.md",
+    "days === 0 ? \"is Election Day\" : days === 1 ? \"day to Election Day\" : \"days to Election Day\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/voting/report.md",
+    "dfmt": "local-only expression, recorded verified-clean with reasoning in tests/evidence/voting/report.md",
+    "abbr.toLowerCase()": "local-only expression, recorded verified-clean with reasoning in tests/evidence/voting/report.md",
+    "name": "local-only expression, recorded verified-clean with reasoning in tests/evidence/voting/report.md"
   }
 }
