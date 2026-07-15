@@ -399,6 +399,26 @@
       "cacheTtlMin": null,
       "since": "v1",
       "flags": []
+    },
+    {
+      "id": "flashcards",
+      "file": "flashcards.html",
+      "name": "Flashcards",
+      "cat": "util",
+      "cx": "M",
+      "desc": "Spaced-repetition-lite cards in localStorage, JSON/CSV import-export.",
+      "network": "offline",
+      "key": null,
+      "endpoints": [],
+      "storage": [
+        "suite.theme",
+        "suite.flashcards.v1"
+      ],
+      "cacheTtlMin": null,
+      "since": "v1",
+      "flags": [
+        "xp"
+      ]
     }
   ]
 }

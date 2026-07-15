@@ -118,7 +118,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 20 | paper.html | util | off | — | A | print CSS | ✅ `tests/evidence/paper/` |
 | 21 | timers.html | util | off | — | A | | ✅ `tests/evidence/timers/` |
 | 22 | loan.html | util | off | — | A | | ✅ `tests/evidence/loan/` |
-| 23 | flashcards.html | util | off | — | A | XP (keep) | ⬜ |
+| 23 | flashcards.html | util | off | — | A | XP (keep) | ✅ `tests/evidence/flashcards/` |
 | 24 | alerts.html | sky | cors | — | B | | ⬜ |
 | 25 | radar.html | sky | cors | — | B | image loops (no CORS issue) | ⬜ |
 | 26 | air.html | sky | cors | — | B | | ⬜ |

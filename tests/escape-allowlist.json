@@ -78,5 +78,19 @@
     "fmt$(nw.totalInterest)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
     "fmt$(costs)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/loan/report.md",
     "escrow > 0 ? `<div class=\"stat\"><b>${fmt$2(piti)}</b><span>Full PITI / mo</span></div>` : \"\"": "literal markup + fmt$2() currency formatter over computed number (escrow/piti are parsed numeric inputs)"
+  },
+  "flashcards.html": {
+    "total": "local-only expression, recorded verified-clean with reasoning in tests/evidence/flashcards/report.md",
+    "total===1?\"\":\"s\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/flashcards/report.md",
+    "due": "local-only expression, recorded verified-clean with reasoning in tests/evidence/flashcards/report.md",
+    "total ? Math.round(learned/total*100) : 0": "local-only expression, recorded verified-clean with reasoning in tests/evidence/flashcards/report.md",
+    "newN": "local-only expression, recorded verified-clean with reasoning in tests/evidence/flashcards/report.md",
+    "learned": "local-only expression, recorded verified-clean with reasoning in tests/evidence/flashcards/report.md",
+    "c.interval": "local-only expression, recorded verified-clean with reasoning in tests/evidence/flashcards/report.md",
+    "c.ease": "local-only expression, recorded verified-clean with reasoning in tests/evidence/flashcards/report.md",
+    "queue.length": "local-only expression, recorded verified-clean with reasoning in tests/evidence/flashcards/report.md",
+    "due ? `<span class=\"due\">${due} due</span>` : `<span>none due</span>`": "literal markup; due is a numeric count from the scheduler filter",
+    "due ? due + \" card(s) still due — take another pass?\" : \"Nothing left due in this deck. Nicely done.\"": "numeric count + literal strings",
+    "due ? `<button class=\"btn\" id=\"againBtn\">Study remaining</button>` : \"\"": "pure literal markup ternary"
   }
 }

@@ -1,0 +1,45 @@
+{
+  "name": "Spanish Verbs",
+  "cards": [
+    {
+      "id": "mrmbxjgk4h1w",
+      "front": "hablar",
+      "back": "to speak",
+      "ease": 2.5,
+      "interval": 0,
+      "reps": 0,
+      "due": 1784135029700,
+      "lapses": 0
+    },
+    {
+      "id": "mrmbxjhxu20f",
+      "front": "comer",
+      "back": "to eat",
+      "ease": 2.5,
+      "interval": 0,
+      "reps": 0,
+      "due": 1784135029749,
+      "lapses": 0
+    },
+    {
+      "id": "mrmbxjihb26n",
+      "front": "vivir",
+      "back": "to live",
+      "ease": 2.5,
+      "interval": 0,
+      "reps": 0,
+      "due": 1784135029769,
+      "lapses": 0
+    },
+    {
+      "id": "mrmbxjihreyg",
+      "front": "ser, estar",
+      "back": "to be, to be (state)",
+      "ease": 2.5,
+      "interval": 0,
+      "reps": 0,
+      "due": 1784135029769,
+      "lapses": 0
+    }
+  ]
+}

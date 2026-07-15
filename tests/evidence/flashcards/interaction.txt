@@ -1,0 +1,24 @@
+initial deck tiles: 0
+after create: deck tiles = 1, first tile = "Spanish Verbs"
+after 2 manual cards, stats: 2 CARDS 2 DUE NOW 2 NEW 0 LEARNED
+csv import dialog: alert: Imported 2 card(s).
+card rows after CSV import: 4
+quoted-comma row rendered as: "ser, estar" / "to be, to be (state)"
+stats after CSV: 4 CARDS 4 DUE NOW 4 NEW 0 LEARNED
+export: suggested filename "spanish-verbs.json", payload name="Spanish Verbs", cards=4
+study button: "Study 4 due"
+session counter: "4 left in this session"
+front shown: "hablar"
+after flip, back shown: "to speak", hint: "How well did you know it?"
+grade previews: Again 10 min1 Hard 1 d2 Good 1 d3 Easy 3 d4
+done screen: "✓ Session complete Nothing left due in this deck. Nicely done. Back to deck"
+localStorage suite.flashcards.v1: decks=1, cards=4
+card[0] after Good: ease=2.5, interval=1, reps=1, due>now=true
+after reload: deck tiles=1, tile meta="4 cards none due"
+after reload, stats: 4 CARDS 0 DUE NOW 0 NEW 4 LEARNED, study button: "Nothing due"
+after reload, card[0] schedule persisted: ease=2.5, interval=1, reps=1
+json import dialog: alert: Imported 1 deck(s).
+deck tiles after JSON re-import: 2
+imported deck: name="Spanish Verbs", cards=4, card[0] kept schedule: ease=2.5, interval=0, reps=0
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)
