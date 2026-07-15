@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus Timer · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents: break-time palette (3-layer, same pattern as core) */
+  :root { --break: #7a8ab0; --break-soft: #e6e9f2; }
+  @media (prefers-color-scheme: dark) {
+    :root { --break: #8b9bc4; --break-soft: #232a3a; }
+  }
+  :root[data-theme="light"] { --break: #7a8ab0; --break-soft: #e6e9f2; }
+  :root[data-theme="dark"] { --break: #8b9bc4; --break-soft: #232a3a; }
+
+  body { padding: 1.6rem 1.25rem 4rem; transition: background .5s; }
+  body.brk { --accent: var(--break); }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  header { position: relative; }
+  header h1 { font-size: 1.7rem; letter-spacing: -.02em; margin-top: .5rem; }
+  header .tag { color: var(--muted); margin-top: .3rem; }
+  .timer {
+    background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+    box-shadow: var(--shadow); padding: 2rem 1.5rem 1.8rem; margin-top: 1.6rem; text-align: center;
+  }
+  .modeRow { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; margin-bottom: 1.2rem; }
+  .modeRow button { border: none; background: transparent; color: var(--muted); padding: .5rem 1rem; cursor: pointer; font-size: .88rem; }
+  .modeRow button.on { background: var(--accent); color: #fff; }
+  .dial { position: relative; width: 260px; max-width: 72vw; margin: 0 auto; }
+  .dial svg { display: block; width: 100%; height: auto; }
+  .clockface { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .clock { font-size: 3.6rem; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1; }
+  .phase { color: var(--muted); font-size: .9rem; margin-top: .4rem; text-transform: uppercase; letter-spacing: .1em; }
+  .controls { margin-top: 1.6rem; display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    border-radius: 12px; padding: .7rem 1.6rem; cursor: pointer; font-size: 1rem; font-weight: 600;
+  }
+  .btn.ghost { background: var(--card); color: var(--accent); }
+  .btn:hover { filter: brightness(1.05); }
+  .hint { color: var(--muted); font-size: .82rem; margin-top: .9rem; }
+  .rounds { display: flex; gap: .4rem; justify-content: center; margin-top: 1rem; }
+  .rdot { width: .6rem; height: .6rem; border-radius: 50%; background: var(--line); }
+  .rdot.done { background: var(--accent); }
+  details { margin-top: 1.4rem; background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
+  details summary { cursor: pointer; padding: .9rem 1.1rem; font-weight: 600; color: var(--accent); list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::after { content: "⚙ settings"; float: right; color: var(--muted); font-weight: 400; font-size: .85rem; }
+  .settings { padding: 0 1.1rem 1.1rem; }
+  .field { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .5rem 0; border-top: 1px solid var(--line); }
+  .field label { color: var(--muted); font-size: .9rem; }
+  .field input { width: 5rem; padding: .45rem .6rem; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); text-align: right; }
+  .field input:focus { outline: none; border-color: var(--accent); }
+  .data-row { display: flex; gap: .6rem; align-items: center; padding-top: .8rem; border-top: 1px solid var(--line); flex-wrap: wrap; }
+  .data-row .btn { padding: .5rem 1rem; font-size: .88rem; }
+  .data-hint { color: var(--muted); font-size: .8rem; flex: 1 1 12rem; }
+  h2 { font-size: 1.1rem; margin: 2rem 0 .8rem; }
+  .summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: .8rem; }
+  .scard { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: .8rem .9rem; box-shadow: var(--shadow); }
+  .scard b { font-size: 1.6rem; display: block; color: var(--accent); line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .scard span { font-size: .74rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .log { margin-top: 1rem; }
+  .logrow { display: flex; justify-content: space-between; padding: .5rem .2rem; border-bottom: 1px solid var(--line); font-size: .9rem; }
+  .logrow .d { color: var(--muted); }
+  .logrow .bars { color: var(--accent); letter-spacing: .1em; }
+  .empty { color: var(--muted); padding: .8rem 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+    <h1>Focus Timer</h1>
+    <p class="tag">A calm Pomodoro clock with a gentle synthesized chime — no audio files, no network.
+      Press <b>space</b> to start or pause.</p>
+  </header>
+
+  <div class="timer">
+    <div class="modeRow" id="modeRow">
+      <button data-mode="focus" class="on">Focus</button>
+      <button data-mode="short">Short break</button>
+      <button data-mode="long">Long break</button>
+    </div>
+    <div class="dial">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="var(--line)" stroke-width="5"></circle>
+        <circle id="ring" cx="50" cy="50" r="45" fill="none" stroke="var(--accent)" stroke-width="5"
+          stroke-linecap="round" stroke-dasharray="282.743" stroke-dashoffset="0"
+          transform="rotate(-90 50 50)"></circle>
+      </svg>
+      <div class="clockface">
+        <div class="clock" id="clock">25:00</div>
+        <div class="phase" id="phase">Focus</div>
+      </div>
+    </div>
+    <div class="rounds" id="rounds"></div>
+    <div class="controls">
+      <button class="btn" id="startBtn">Start</button>
+      <button class="btn ghost" id="resetBtn">Reset</button>
+      <button class="btn ghost" id="skipBtn">Skip</button>
+    </div>
+    <p class="hint" id="hint">A focus block, then a short break. Every few rounds, a longer break.</p>
+  </div>
+
+  <details id="settings">
+    <summary>Session lengths</summary>
+    <div class="settings">
+      <div class="field"><label for="sFocus">Focus (minutes)</label><input id="sFocus" type="number" min="1" max="180" value="25"></div>
+      <div class="field"><label for="sShort">Short break (minutes)</label><input id="sShort" type="number" min="1" max="60" value="5"></div>
+      <div class="field"><label for="sLong">Long break (minutes)</label><input id="sLong" type="number" min="1" max="90" value="15"></div>
+      <div class="field"><label for="sRounds">Focus blocks before a long break</label><input id="sRounds" type="number" min="1" max="12" value="4"></div>
+      <div class="field"><label for="sChime">Chime volume</label><input id="sChime" type="number" min="0" max="100" value="60"></div>
+      <div class="field"><label for="sAuto">Auto-start next phase (1 = yes)</label><input id="sAuto" type="number" min="0" max="1" value="1"></div>
+      <div class="data-row">
+        <button class="btn ghost" id="exportBtn">Export data</button>
+        <button class="btn ghost" id="importBtn">Import data</button>
+        <input type="file" id="importFile" accept="application/json,.json" hidden>
+        <span class="data-hint" id="dataHint">Your settings and session history, as a JSON file.</span>
+      </div>
+    </div>
+  </details>
+
+  <h2>Today &amp; streak</h2>
+  <div class="summary" id="summary"></div>
+  <div class="log" id="log"></div>
+
+  <footer>No network — everything happens on your machine. Chimes are synthesized live with the Web Audio API.</footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---------- settings ---------- */
+const SET_KEY = "suite.focus.settings";
+const defSettings = { focus: 25, short: 5, long: 15, rounds: 4, chime: 60, auto: 1 };
+let settings = Object.assign({}, defSettings);
+{
+  const v = Suite.store.get(SET_KEY);
+  if (v && typeof v === "object") settings = Object.assign(settings, v);
+}
+function saveSettings(){ Suite.store.set(SET_KEY, settings); }
+
+const inputs = { focus: "sFocus", short: "sShort", long: "sLong", rounds: "sRounds", chime: "sChime", auto: "sAuto" };
+function paintSettingsInputs(){
+  for (const k in inputs) document.getElementById(inputs[k]).value = settings[k];
+}
+paintSettingsInputs();
+for (const k in inputs){
+  const el = document.getElementById(inputs[k]);
+  el.addEventListener("change", () => {
+    let v = parseInt(el.value, 10);
+    if (isNaN(v)) v = defSettings[k];
+    if (k === "auto") v = v ? 1 : 0;
+    if (k === "chime") v = Math.max(0, Math.min(100, v));
+    else if (k !== "auto") v = Math.max(1, v);
+    settings[k] = v; el.value = v; saveSettings();
+    if (!running && (k === mode || (k === "focus" && mode === "focus"))) resetToMode(mode);
+    if (k === mode) resetToMode(mode);
+  });
+}
+
+/* ---------- durations & state ---------- */
+function durOf(m){ return (m === "focus" ? settings.focus : m === "short" ? settings.short : settings.long) * 60; }
+const MODE_LABEL = { focus: "Focus", short: "Short break", long: "Long break" };
+let mode = "focus";
+let remaining = durOf(mode);   // seconds
+let total = remaining;
+let running = false;
+let endAt = 0;                 // epoch ms when the current run ends
+let raf = null;
+let completedFocus = 0;        // focus blocks completed in the current cycle (for long-break cadence)
+
+const CIRC = 2 * Math.PI * 45;
+const clockEl = document.getElementById("clock");
+const phaseEl = document.getElementById("phase");
+const ringEl = document.getElementById("ring");
+const startBtn = document.getElementById("startBtn");
+const roundsEl = document.getElementById("rounds");
+
+function fmt(sec){
+  sec = Math.max(0, Math.ceil(sec));
+  const m = Math.floor(sec / 60), s = sec % 60;
+  return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+}
+function paint(){
+  clockEl.textContent = fmt(remaining);
+  phaseEl.textContent = MODE_LABEL[mode];
+  const frac = total > 0 ? remaining / total : 0;
+  ringEl.style.strokeDashoffset = (CIRC * (1 - frac)).toFixed(2);
+  ringEl.style.stroke = mode === "focus" ? "var(--accent)" : "var(--break)";
+  document.body.classList.toggle("brk", mode !== "focus");
+  document.title = (running ? fmt(remaining) + " · " : "") + MODE_LABEL[mode] + " — Focus Timer";
+  // round dots
+  roundsEl.textContent = "";
+  for (let i = 0; i < settings.rounds; i++){
+    const d = document.createElement("div");
+    d.className = "rdot" + (i < completedFocus ? " done" : "");
+    roundsEl.append(d);
+  }
+}
+
+function resetToMode(m){
+  mode = m;
+  total = durOf(m);
+  remaining = total;
+  running = false;
+  startBtn.textContent = "Start";
+  document.querySelectorAll("#modeRow button").forEach(b => b.classList.toggle("on", b.dataset.mode === m));
+  cancelAnimationFrame(raf);
+  paint();
+}
+
+/* ---------- ticking ---------- */
+function loop(){
+  if (!running) return;
+  remaining = (endAt - Date.now()) / 1000;
+  if (remaining <= 0){
+    remaining = 0;
+    paint();
+    finishPhase();
+    return;
+  }
+  paint();
+  raf = requestAnimationFrame(loop);
+}
+function start(){
+  if (running) return;
+  if (remaining <= 0) remaining = total;
+  running = true;
+  endAt = Date.now() + remaining * 1000;
+  startBtn.textContent = "Pause";
+  loop();
+}
+function pause(){
+  running = false;
+  remaining = (endAt - Date.now()) / 1000;
+  startBtn.textContent = "Resume";
+  cancelAnimationFrame(raf);
+  paint();
+}
+function toggle(){ running ? pause() : start(); }
+
+function finishPhase(){
+  running = false;
+  cancelAnimationFrame(raf);
+  chime(mode === "focus");
+  if (mode === "focus"){
+    logSession(settings.focus);
+    completedFocus++;
+    const next = (completedFocus >= settings.rounds) ? "long" : "short";
+    if (next === "long") completedFocus = 0;
+    resetToMode(next);
+  } else {
+    resetToMode("focus");
+  }
+  renderSummary();
+  if (settings.auto){ start(); }
+}
+
+/* ---------- gentle synthesized bell (Web Audio) ---------- */
+let actx = null;
+function chime(isFocusEnd){
+  const vol = settings.chime / 100;
+  if (vol <= 0) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === "suspended") actx.resume();
+    const now = actx.currentTime;
+    // a soft bell: two/three partials with a slow decay, arpeggiated
+    const notes = isFocusEnd ? [523.25, 659.25, 783.99] : [659.25, 523.25]; // C-E-G up / E-C down
+    notes.forEach((f, i) => {
+      const t0 = now + i * 0.18;
+      [1, 2.01, 2.99].forEach((mult, p) => {
+        const osc = actx.createOscillator();
+        const g = actx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = f * mult;
+        const peak = vol * (p === 0 ? 0.5 : p === 1 ? 0.16 : 0.08);
+        g.gain.setValueAtTime(0, t0);
+        g.gain.linearRampToValueAtTime(peak, t0 + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.8);
+        osc.connect(g).connect(actx.destination);
+        osc.start(t0);
+        osc.stop(t0 + 1.9);
+      });
+    });
+  } catch(e){ /* audio not available — stay silent */ }
+}
+
+/* ---------- session log per day ---------- */
+const LOG_KEY = "suite.focus.log";
+function loadLog(){
+  const v = Suite.store.get(LOG_KEY);
+  return (v && typeof v === "object") ? v : {};
+}
+let log = loadLog(); // { "YYYY-MM-DD": { count, minutes } }
+function saveLog(){ Suite.store.set(LOG_KEY, log); }
+function todayKey(){ const n = new Date(); return n.getFullYear() + "-" + String(n.getMonth()+1).padStart(2,"0") + "-" + String(n.getDate()).padStart(2,"0"); }
+function logSession(minutes){
+  const k = todayKey();
+  if (!log[k]) log[k] = { count: 0, minutes: 0 };
+  log[k].count++; log[k].minutes += minutes;
+  saveLog();
+}
+function streak(){
+  let s = 0;
+  const d = new Date();
+  for (;;){
+    const k = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+    if (log[k] && log[k].count > 0){ s++; d.setDate(d.getDate() - 1); }
+    else { // allow today to be empty without breaking a prior streak
+      if (k === todayKey()){ d.setDate(d.getDate() - 1); continue; }
+      break;
+    }
+  }
+  return s;
+}
+function renderSummary(){
+  const t = log[todayKey()] || { count: 0, minutes: 0 };
+  let allSessions = 0, allMin = 0;
+  for (const k in log){ allSessions += log[k].count; allMin += log[k].minutes; }
+  document.getElementById("summary").innerHTML =
+    '<div class="scard"><b>' + t.count + '</b><span>Focus blocks today</span></div>' +
+    '<div class="scard"><b>' + t.minutes + '</b><span>Minutes today</span></div>' +
+    '<div class="scard"><b>' + streak() + '</b><span>Day streak</span></div>' +
+    '<div class="scard"><b>' + allSessions + '</b><span>Blocks all-time</span></div>';
+  // last 7 days
+  const logEl = document.getElementById("log");
+  const rows = [];
+  const d = new Date();
+  for (let i = 0; i < 7; i++){
+    const k = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+    const rec = log[k];
+    const label = i === 0 ? "Today" : d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+    const n = rec ? rec.count : 0;
+    rows.push('<div class="logrow"><span class="d">' + label + '</span>' +
+      '<span class="bars">' + (n ? "●".repeat(Math.min(n, 12)) + (n > 12 ? " +" + (n-12) : "") : "—") +
+      (rec ? ' <span class="d">' + rec.minutes + 'm</span>' : '') + '</span></div>');
+    d.setDate(d.getDate() - 1);
+  }
+  logEl.innerHTML = rows.join("");
+}
+
+/* ---------- export / import (the v1 data-loss fix — MIGRATION.md row 1) ---------- */
+const dataHint = Suite.liveRegion(document.getElementById("dataHint"));
+document.getElementById("exportBtn").addEventListener("click", () => {
+  const payload = {
+    format: "local-suite.focus.v1",
+    exported: new Date().toISOString(),
+    settings: settings,
+    log: log
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "focus-backup-" + todayKey() + ".json";
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  dataHint.textContent = "Exported settings and " + Object.keys(log).length + " day(s) of history.";
+});
+document.getElementById("importBtn").addEventListener("click", () => {
+  document.getElementById("importFile").click();
+});
+document.getElementById("importFile").addEventListener("change", e => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (!data || data.format !== "local-suite.focus.v1") throw new Error("not a Focus Timer backup");
+      if (data.settings && typeof data.settings === "object"){
+        for (const k in defSettings){
+          const v = parseInt(data.settings[k], 10);
+          if (!isNaN(v)) settings[k] = v;
+        }
+        saveSettings();
+        paintSettingsInputs();
+      }
+      let merged = 0;
+      if (data.log && typeof data.log === "object"){
+        for (const k in data.log){
+          const rec = data.log[k];
+          if (!rec || !/^\d{4}-\d{2}-\d{2}$/.test(k)) continue;
+          const count = parseInt(rec.count, 10) || 0, minutes = parseInt(rec.minutes, 10) || 0;
+          // merge per day: keep whichever record shows more work (re-importing never double-counts)
+          if (!log[k] || log[k].minutes < minutes){ log[k] = { count, minutes }; merged++; }
+        }
+        saveLog();
+      }
+      if (!running) resetToMode(mode);
+      renderSummary();
+      dataHint.textContent = "Imported: " + merged + " day(s) updated. Days with more local work were kept.";
+    } catch(err){
+      dataHint.textContent = "Import failed: " + (err.message || err);
+    }
+    e.target.value = "";
+  };
+  reader.readAsText(file);
+});
+
+/* ---------- controls ---------- */
+startBtn.addEventListener("click", toggle);
+document.getElementById("resetBtn").addEventListener("click", () => resetToMode(mode));
+document.getElementById("skipBtn").addEventListener("click", () => {
+  // skip to the next phase without logging a focus block
+  cancelAnimationFrame(raf); running = false;
+  if (mode === "focus"){
+    completedFocus++;
+    const next = (completedFocus >= settings.rounds) ? "long" : "short";
+    if (next === "long") completedFocus = 0;
+    resetToMode(next);
+  } else resetToMode("focus");
+});
+document.querySelectorAll("#modeRow button").forEach(b => {
+  b.addEventListener("click", () => resetToMode(b.dataset.mode));
+});
+document.addEventListener("keydown", e => {
+  if (e.code === "Space" && !/input|textarea|select/i.test(document.activeElement.tagName)){
+    e.preventDefault(); toggle();
+  }
+});
+
+/* ---------- boot ---------- */
+resetToMode("focus");
+renderSummary();
+// keep the display honest if the tab was backgrounded
+document.addEventListener("visibilitychange", () => { if (!document.hidden && running){ remaining = (endAt - Date.now())/1000; if (remaining <= 0) finishPhase(); else paint(); } });
+</script>
+</body>
+</html>

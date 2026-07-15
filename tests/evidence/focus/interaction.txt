@@ -1,0 +1,13 @@
+started; button reads: Pause
+after 5min fast-forward clock shows: 20:00
+paused; button reads: Resume
+after completing the focus block, phase: Short break
+summary: 1Focus blocks today25Minutes today1Day streak1Blocks all-time
+settings persisted: {"focus":30,"short":5,"long":15,"rounds":4,"chime":60,"auto":1}
+export: format=local-suite.focus.v1 settings.focus=30 logDays=1
+export hint: Exported settings and 1 day(s) of history.
+import hint: Imported: 2 day(s) updated. Days with more local work were kept.
+log after import: {"2026-07-15":{"count":9,"minutes":225},"2026-07-01":{"count":2,"minutes":50}}
+summary after import: 9Focus blocks today225Minutes today1Day streak11Blocks all-time
+space toggles start/pause; button reads: Resume
+theme toggle: aria-pressed false -> true, dataset.theme=dark

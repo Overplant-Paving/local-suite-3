@@ -1,0 +1,14 @@
+{
+  "v1": {
+    "suite.focus.settings": "{\"focus\":30,\"short\":5,\"long\":15,\"rounds\":4,\"chime\":60,\"auto\":1}",
+    "suite.theme": "light",
+    "suite.focus.log": "{\"2026-07-15\":{\"count\":1,\"minutes\":25}}"
+  },
+  "v2": {
+    "suite.focus.settings": "{\"focus\":30,\"short\":5,\"long\":15,\"rounds\":4,\"chime\":60,\"auto\":1}",
+    "suite.focus.log": "{\"2026-07-15\":{\"count\":9,\"minutes\":225},\"2026-07-01\":{\"count\":2,\"minutes\":50}}",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}

@@ -1,4 +1,26 @@
 {
   "schemaVersion": 2,
-  "tools": []
+  "tools": [
+    {
+      "id": "focus",
+      "file": "focus.html",
+      "name": "Focus Timer",
+      "cat": "time",
+      "cx": "S",
+      "desc": "Pomodoro with gentle WebAudio chimes and a big calm clock.",
+      "network": "offline",
+      "key": null,
+      "endpoints": [],
+      "storage": [
+        "suite.theme",
+        "suite.focus.settings",
+        "suite.focus.log"
+      ],
+      "cacheTtlMin": null,
+      "since": "v1",
+      "flags": [
+        "xp"
+      ]
+    }
+  ]
 }

@@ -1,0 +1,18 @@
+{
+  "format": "local-suite.focus.v1",
+  "exported": "2026-07-15T17:05:13.700Z",
+  "settings": {
+    "focus": 30,
+    "short": 5,
+    "long": 15,
+    "rounds": 4,
+    "chime": 60,
+    "auto": 1
+  },
+  "log": {
+    "2026-07-15": {
+      "count": 1,
+      "minutes": 25
+    }
+  }
+}
