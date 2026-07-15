@@ -99,7 +99,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 2 | weather.html | sky | cors | — | Pilot | | ✅ `tests/evidence/weather/` |
 | — | index.html (hub) | — | off | — | Pilot | generated from manifest | ✅ `tests/evidence/index/` |
 | 3 | almanac.html | sky | off | — | A | | ✅ `tests/evidence/almanac/` |
-| 4 | holidays.html | civic | off | — | A | | ⬜ |
+| 4 | holidays.html | civic | off | — | A | | ✅ `tests/evidence/holidays/` |
 | 5 | voting.html | civic | off | — | A | curated static links, refresh each cycle | ⬜ |
 | 6 | emergency.html | health | off | — | A | | ⬜ |
 | 7 | convert.html | ref | off | — | A | | ⬜ |

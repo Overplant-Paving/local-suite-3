@@ -19,5 +19,16 @@
     "fmtDate(s.date)": "locale date string of a computed Date",
     "s.date.getFullYear()": "number",
     "fmtTime(s.date)": "locale time string of a computed Date"
+  },
+  "holidays.html": {
+    "past ? \"past\" : \"\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/holidays/report.md",
+    "isNext ? \"next\" : \"\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/holidays/report.md",
+    "fmtDOW(h.date)": "weekday name from local DOW array over a computed holiday Date",
+    "MONTHS[h.date.getMonth()]": "hardcoded month-name array indexed by computed Date",
+    "h.date.getDate()": "number from a computed Date",
+    "fmtDOW(h.observed)": "weekday name from local DOW array over a computed holiday Date",
+    "MONTHS[h.observed.getMonth()].slice(0,3)": "hardcoded month-name array, sliced literal",
+    "h.observed.getDate()": "number from a computed Date",
+    "shifted ? `${fmtDOW(h.observed)}, ${MONTHS[h.observed.getMonth()].slice(0,3)} ${h.observed.getDate()} <span class=\"tag-obs\">observed</span>` : \"—\"": "literal markup + the local formatter outputs above; holiday names elsewhere are Suite.esc()'d"
   }
 }

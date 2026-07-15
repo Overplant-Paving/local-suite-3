@@ -1,0 +1,17 @@
+{
+  "id": "holidays",
+  "file": "holidays.html",
+  "name": "Holiday & Observance Calendar",
+  "cat": "civic",
+  "cx": "S",
+  "desc": "Federal holidays, DST changes, long-weekend countdowns.",
+  "network": "offline",
+  "key": null,
+  "endpoints": [],
+  "storage": [
+    "suite.theme"
+  ],
+  "cacheTtlMin": null,
+  "since": "v1",
+  "flags": []
+}

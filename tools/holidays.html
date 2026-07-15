@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Holiday & Observance Calendar · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents: warn/good palette (3-layer, same pattern as core) */
+  :root { --warn: #b0752a; --warn-soft: #f0e2ce; --good: #3a7d44; }
+  @media (prefers-color-scheme: dark) {
+    :root { --warn: #d9a05a; --warn-soft: #33291a; --good: #7dc487; }
+  }
+  :root[data-theme="light"] { --warn: #b0752a; --warn-soft: #f0e2ce; --good: #3a7d44; }
+  :root[data-theme="dark"] { --warn: #d9a05a; --warn-soft: #33291a; --good: #7dc487; }
+
+  body { padding: 2rem 1.25rem 4rem; }
+  .wrap { max-width: 1000px; margin: 0 auto; }
+  .topbar { display: flex; align-items: center; gap: .8rem; margin-bottom: 1rem; }
+  .spacer { flex: 1; }
+  .theme-btn { float: none; }
+  header h1 { font-size: 1.9rem; letter-spacing: -.02em; }
+  header .tag { color: var(--muted); margin-top: .3rem; max-width: 48rem; }
+
+  .yearbar { display: flex; align-items: center; gap: .6rem; margin: 1.5rem 0 .4rem; flex-wrap: wrap; }
+  .yearbar button {
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    border-radius: 10px; width: 2.2rem; height: 2.2rem; cursor: pointer; font-size: 1.1rem;
+  }
+  .yearbar button:hover { border-color: var(--accent); }
+  .yearbar .yr { font-size: 1.6rem; font-weight: 700; letter-spacing: -.01em; min-width: 4.4rem; text-align: center; }
+  .yearbar .today-btn { width: auto; padding: 0 .8rem; font-size: .85rem; }
+
+  .hero {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 1.2rem 1.3rem; box-shadow: var(--shadow); margin: 1rem 0 1.6rem;
+    display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;
+  }
+  .hero .big { font-size: 2.6rem; font-weight: 700; color: var(--accent); line-height: 1; }
+  .hero .lbl { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .hero .sub { color: var(--muted); font-size: .9rem; margin-top: .2rem; }
+  .hero .hcol { min-width: 8rem; }
+
+  section { margin-top: 2rem; }
+  section h2 { font-size: 1.15rem; margin-bottom: .2rem; }
+  section .note { color: var(--muted); font-size: .85rem; margin-bottom: .8rem; }
+
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; background: var(--card); font-size: .92rem; }
+  th, td { text-align: left; padding: .7rem .9rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  th { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+  tr.past td { opacity: .5; }
+  tr.next td { background: var(--accent-soft); }
+  td .name { font-weight: 600; }
+  td .dow { color: var(--muted); font-size: .82rem; }
+  .tag-obs { font-size: .72rem; color: var(--warn); background: var(--warn-soft); padding: .1rem .45rem; border-radius: 999px; margin-left: .4rem; }
+  .badge { font-size: .74rem; padding: .12rem .5rem; border-radius: 999px; white-space: nowrap; }
+  .badge.closed { background: color-mix(in srgb, #c0492d 16%, transparent); color: #c0492d; }
+  .badge.early { background: var(--warn-soft); color: var(--warn); }
+  .badge.open { background: var(--chip); color: var(--muted); }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .9rem; }
+  .minicard { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.1rem; box-shadow: var(--shadow); }
+  .minicard .k { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .minicard .v { font-size: 1.3rem; font-weight: 700; margin-top: .25rem; }
+  .minicard .d { color: var(--muted); font-size: .85rem; margin-top: .2rem; }
+
+  footer { padding-top: 1.2rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <div class="spacer"></div>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Holiday &amp; Observance Calendar</h1>
+    <p class="tag">U.S. federal holidays, stock-market closures, and daylight-saving changes for any year —
+      computed entirely on your machine from the date rules. No network, ever.</p>
+  </header>
+
+  <div class="yearbar">
+    <button id="prevYear" aria-label="Previous year">‹</button>
+    <span class="yr" id="yearLabel">—</span>
+    <button id="nextYear" aria-label="Next year">›</button>
+    <button class="today-btn" id="thisYear">this year</button>
+  </div>
+
+  <div class="hero" id="hero"></div>
+
+  <section>
+    <h2>Federal holidays</h2>
+    <p class="note">The 11 U.S. federal holidays. When a fixed-date holiday lands on a weekend, most federal
+      offices observe it on the nearest weekday (Saturday → Friday, Sunday → Monday) — shown as
+      <span class="tag-obs">observed</span>.</p>
+    <div class="table-scroll">
+      <table id="fedTable">
+        <thead><tr><th>Holiday</th><th>Date</th><th>Observed</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Stock-market closures (NYSE / Nasdaq)</h2>
+    <p class="note">U.S. equity markets follow their own calendar: they add <strong>Good Friday</strong> but do
+      <em>not</em> close for Columbus Day or Veterans Day, and they hold shortened (1:00&nbsp;pm ET) sessions around
+      a few holidays. Rules can change — confirm the official schedule at
+      <a href="https://www.nyse.com/markets/hours-calendars" target="_blank" rel="noopener">nyse.com</a>.</p>
+    <div class="table-scroll">
+      <table id="mktTable">
+        <thead><tr><th>Date</th><th>Occasion</th><th>Market</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Daylight saving time</h2>
+    <p class="note">Most of the U.S. springs forward on the second Sunday of March and falls back on the first
+      Sunday of November, both at 2:00&nbsp;am local time. (Hawaii and most of Arizona do not observe DST.)</p>
+    <div class="cards" id="dstCards"></div>
+  </section>
+
+  <footer id="footer">No network — everything happens on your machine. Federal-holiday and DST rules are U.S. law;
+    market rules follow current NYSE/Nasdaq practice and are provided for convenience.</footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---------- date helpers (all local time, no tz surprises) ---------- */
+const DAY = 86400000;
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+function nthWeekday(y, month, weekday, n) { // month 0-based, weekday 0=Sun
+  const first = new Date(y, month, 1);
+  const offset = (weekday - first.getDay() + 7) % 7;
+  return new Date(y, month, 1 + offset + (n - 1) * 7);
+}
+function lastWeekday(y, month, weekday) {
+  const last = new Date(y, month + 1, 0);
+  const offset = (last.getDay() - weekday + 7) % 7;
+  return new Date(y, month, last.getDate() - offset);
+}
+function observedFed(d) { // federal weekend-shift rule
+  const wd = d.getDay();
+  if (wd === 6) return new Date(d.getFullYear(), d.getMonth(), d.getDate() - 1); // Sat -> Fri
+  if (wd === 0) return new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1); // Sun -> Mon
+  return new Date(d);
+}
+function easter(y) { // Anonymous Gregorian algorithm (Computus)
+  const a = y % 19, b = Math.floor(y / 100), c = y % 100,
+        d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25),
+        g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30,
+        i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7,
+        m = Math.floor((a + 11 * h + 22 * l) / 451),
+        month = Math.floor((h + l - 7 * m + 114) / 31),
+        day = ((h + l - 7 * m + 114) % 31) + 1;
+  return new Date(y, month - 1, day);
+}
+function sameDay(a, b) { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
+function startOfDay(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+const fmtLong = d => `${["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d.getDay()]}, ${MONTHS[d.getMonth()].slice(0,3)} ${d.getDate()}`;
+const fmtDOW = d => ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][d.getDay()];
+
+/* ---------- federal holidays for a year ---------- */
+function federalHolidays(y) {
+  return [
+    { name: "New Year's Day",              date: new Date(y, 0, 1),  fixed: true },
+    { name: "Birthday of Martin Luther King, Jr.", date: nthWeekday(y, 0, 1, 3), fixed: false },
+    { name: "Washington's Birthday",       date: nthWeekday(y, 1, 1, 3), fixed: false }, // 3rd Mon Feb
+    { name: "Memorial Day",                date: lastWeekday(y, 4, 1),  fixed: false },   // last Mon May
+    { name: "Juneteenth National Independence Day", date: new Date(y, 5, 19), fixed: true },
+    { name: "Independence Day",            date: new Date(y, 6, 4),  fixed: true },
+    { name: "Labor Day",                   date: nthWeekday(y, 8, 1, 1), fixed: false },  // 1st Mon Sep
+    { name: "Columbus Day",                date: nthWeekday(y, 9, 1, 2), fixed: false },  // 2nd Mon Oct
+    { name: "Veterans Day",                date: new Date(y, 10, 11), fixed: true },
+    { name: "Thanksgiving Day",            date: nthWeekday(y, 10, 4, 4), fixed: false }, // 4th Thu Nov
+    { name: "Christmas Day",               date: new Date(y, 11, 25), fixed: true },
+  ].map(h => ({ ...h, observed: h.fixed ? observedFed(h.date) : new Date(h.date) }));
+}
+
+/* ---------- NYSE / Nasdaq market calendar ---------- */
+function marketDays(y) {
+  const rows = [];
+  const add = (date, name, status) => rows.push({ date, name, status }); // status: closed | early
+  // Full closures
+  add(observedFed(new Date(y, 0, 1)), "New Year's Day", "closed");
+  add(nthWeekday(y, 0, 1, 3), "Martin Luther King, Jr. Day", "closed");
+  add(nthWeekday(y, 1, 1, 3), "Presidents' Day", "closed");
+  const gf = new Date(easter(y).getTime() - 2 * DAY);
+  add(gf, "Good Friday", "closed");
+  add(lastWeekday(y, 4, 1), "Memorial Day", "closed");
+  add(observedFed(new Date(y, 5, 19)), "Juneteenth", "closed");
+  add(observedFed(new Date(y, 6, 4)), "Independence Day", "closed");
+  add(nthWeekday(y, 8, 1, 1), "Labor Day", "closed");
+  const thanks = nthWeekday(y, 10, 4, 4);
+  add(thanks, "Thanksgiving Day", "closed");
+  add(observedFed(new Date(y, 11, 25)), "Christmas Day", "closed");
+  // Early (1:00 pm ET) closes — only when they land on a weekday
+  const dayAfterThanks = new Date(thanks.getTime() + DAY);
+  add(dayAfterThanks, "Day after Thanksgiving", "early");
+  const jul3 = new Date(y, 6, 3);
+  if (jul3.getDay() >= 1 && jul3.getDay() <= 5 && new Date(y, 6, 4).getDay() >= 1 && new Date(y, 6, 4).getDay() <= 5)
+    add(jul3, "Independence Day eve", "early");
+  const dec24 = new Date(y, 11, 24);
+  if (dec24.getDay() >= 1 && dec24.getDay() <= 5) add(dec24, "Christmas Eve", "early");
+  return rows.sort((a, b) => a.date - b.date);
+}
+
+/* ---------- DST ---------- */
+function dstDates(y) {
+  return {
+    spring: nthWeekday(y, 2, 0, 2), // 2nd Sun Mar
+    fall: nthWeekday(y, 10, 0, 1),  // 1st Sun Nov
+  };
+}
+
+/* ---------- long weekends (observed holiday on Mon or Fri) ---------- */
+function longWeekends(fromYear) {
+  const out = [];
+  for (let y = fromYear; y <= fromYear + 1; y++) {
+    for (const h of federalHolidays(y)) {
+      const wd = h.observed.getDay();
+      if (wd === 1) out.push({ name: h.name, start: new Date(h.observed.getTime() - 2 * DAY), day: h.observed, kind: "Mon" });
+      else if (wd === 5) out.push({ name: h.name, start: h.observed, day: h.observed, kind: "Fri" });
+    }
+    // Thanksgiving (Thursday) commonly pairs with Friday for a 4-day weekend
+    const thanks = nthWeekday(y, 10, 4, 4);
+    out.push({ name: "Thanksgiving weekend", start: thanks, day: thanks, kind: "Thu–Sun" });
+  }
+  return out.sort((a, b) => a.day - b.day);
+}
+
+/* ---------- rendering ---------- */
+let year = new Date().getFullYear();
+const today = startOfDay(new Date());
+
+function daysUntil(d) { return Math.round((startOfDay(d) - today) / DAY); }
+
+function renderHero() {
+  const hero = document.getElementById("hero");
+  // next federal holiday from today (search this & next 2 years)
+  let nextHol = null;
+  for (let y = today.getFullYear(); y <= today.getFullYear() + 2 && !nextHol; y++) {
+    for (const h of federalHolidays(y)) {
+      if (startOfDay(h.observed) >= today) { nextHol = h; break; }
+    }
+  }
+  // next long weekend from today
+  let nextLW = null;
+  for (const lw of longWeekends(today.getFullYear())) {
+    if (startOfDay(lw.start) >= today || (startOfDay(lw.start) <= today && startOfDay(lw.day) >= today)) { nextLW = lw; break; }
+  }
+  let html = "";
+  if (nextHol) {
+    const n = daysUntil(nextHol.observed);
+    html += `<div class="hcol"><div class="big">${n === 0 ? "Today" : n}</div>
+      <div class="lbl">${n === 0 ? "is a holiday" : n === 1 ? "day away" : "days away"}</div>
+      <div class="sub">Next holiday: <strong>${Suite.esc(nextHol.name)}</strong><br>${fmtDOW(nextHol.observed)}, ${MONTHS[nextHol.observed.getMonth()]} ${nextHol.observed.getDate()}</div></div>`;
+  }
+  if (nextLW) {
+    const n = daysUntil(nextLW.start);
+    html += `<div class="hcol"><div class="big">${n <= 0 ? "Now" : n}</div>
+      <div class="lbl">${n <= 0 ? "long weekend on" : n === 1 ? "day to a long weekend" : "days to a long weekend"}</div>
+      <div class="sub"><strong>${Suite.esc(nextLW.name)}</strong><br>${fmtLong(nextLW.start)} → ${fmtLong(new Date(nextLW.day.getTime() + (nextLW.kind === "Fri" ? 2 : 0) * DAY))} · ${nextLW.kind} weekend</div></div>`;
+  }
+  hero.innerHTML = html;
+}
+
+function renderFedTable() {
+  const tb = document.querySelector("#fedTable tbody");
+  const hols = federalHolidays(year);
+  // find the next upcoming (by observed date) within this year for highlight
+  let nextIdx = hols.findIndex(h => startOfDay(h.observed) >= today);
+  tb.innerHTML = hols.map((h, i) => {
+    const shifted = !sameDay(h.date, h.observed);
+    const past = startOfDay(h.observed) < today;
+    const isNext = i === nextIdx;
+    return `<tr class="${past ? "past" : ""} ${isNext ? "next" : ""}">
+      <td><span class="name">${Suite.esc(h.name)}</span></td>
+      <td><span class="dow">${fmtDOW(h.date)}</span><br>${MONTHS[h.date.getMonth()]} ${h.date.getDate()}</td>
+      <td>${shifted ? `${fmtDOW(h.observed)}, ${MONTHS[h.observed.getMonth()].slice(0,3)} ${h.observed.getDate()} <span class="tag-obs">observed</span>` : "—"}</td>
+    </tr>`;
+  }).join("");
+}
+
+function renderMktTable() {
+  const tb = document.querySelector("#mktTable tbody");
+  const rows = marketDays(year);
+  tb.innerHTML = rows.map(r => {
+    const past = startOfDay(r.date) < today;
+    const badge = r.status === "closed"
+      ? `<span class="badge closed">Closed</span>`
+      : `<span class="badge early">Early close 1:00 pm ET</span>`;
+    return `<tr class="${past ? "past" : ""}">
+      <td><span class="dow">${fmtDOW(r.date)}</span><br>${MONTHS[r.date.getMonth()]} ${r.date.getDate()}</td>
+      <td>${Suite.esc(r.name)}</td>
+      <td>${badge}</td>
+    </tr>`;
+  }).join("");
+}
+
+function renderDST() {
+  const el = document.getElementById("dstCards");
+  const { spring, fall } = dstDates(year);
+  const mk = (title, d, dir, note) => {
+    const n = daysUntil(d);
+    return `<div class="minicard">
+      <div class="k">${title}</div>
+      <div class="v">${MONTHS[d.getMonth()]} ${d.getDate()}</div>
+      <div class="d">${fmtDOW(d)} · ${dir}<br>${n === 0 ? "today" : n > 0 ? `in ${n} day${n===1?"":"s"}` : `${-n} day${n===-1?"":"s"} ago`} · ${note}</div>
+    </div>`;
+  };
+  el.innerHTML =
+    mk("Spring forward", spring, "clocks +1h at 2:00 am", "DST begins") +
+    mk("Fall back", fall, "clocks −1h at 2:00 am", "DST ends");
+}
+
+function render() {
+  document.getElementById("yearLabel").textContent = year;
+  renderHero();
+  renderFedTable();
+  renderMktTable();
+  renderDST();
+}
+
+/* a11y: announce the year change that re-renders every section */
+Suite.liveRegion(document.getElementById("yearLabel"));
+
+document.getElementById("prevYear").addEventListener("click", () => { year--; render(); });
+document.getElementById("nextYear").addEventListener("click", () => { year++; render(); });
+document.getElementById("thisYear").addEventListener("click", () => { year = new Date().getFullYear(); render(); });
+
+render();
+</script>
+</body>
+</html>

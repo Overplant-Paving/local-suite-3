@@ -1,0 +1,69 @@
+clock fixed at Wed Jul 15 2026 12:00:00 GMT-0500 (Central Daylight Time)
+hero countdown columns (2):
+  54 DAYS AWAY Next holiday: Labor Day Monday, September 7
+  52 DAYS TO A LONG WEEKEND Labor Day Sat, Sep 5 → Mon, Sep 7 · Mon weekend
+[2026] year label: 2026
+[2026] federal holidays (11 rows):
+  New Year's Day | Thursday January 1 | —  [class: past]
+  Birthday of Martin Luther King, Jr. | Monday January 19 | —  [class: past]
+  Washington's Birthday | Monday February 16 | —  [class: past]
+  Memorial Day | Monday May 25 | —  [class: past]
+  Juneteenth National Independence Day | Friday June 19 | —  [class: past]
+  Independence Day | Saturday July 4 | Friday, Jul 3 observed  [class: past]
+  Labor Day | Monday September 7 | —  [class: next]
+  Columbus Day | Monday October 12 | —  [class: ]
+  Veterans Day | Wednesday November 11 | —  [class: ]
+  Thanksgiving Day | Thursday November 26 | —  [class: ]
+  Christmas Day | Friday December 25 | —  [class: ]
+[2026] market calendar (12 rows):
+  Thursday January 1 | New Year's Day | Closed
+  Monday January 19 | Martin Luther King, Jr. Day | Closed
+  Monday February 16 | Presidents' Day | Closed
+  Friday April 3 | Good Friday | Closed
+  Monday May 25 | Memorial Day | Closed
+  Friday June 19 | Juneteenth | Closed
+  Friday July 3 | Independence Day | Closed
+  Monday September 7 | Labor Day | Closed
+  Thursday November 26 | Thanksgiving Day | Closed
+  Friday November 27 | Day after Thanksgiving | Early close 1:00 pm ET
+  Thursday December 24 | Christmas Eve | Early close 1:00 pm ET
+  Friday December 25 | Christmas Day | Closed
+[2026] DST cards:
+  SPRING FORWARD March 8 Sunday · clocks +1h at 2:00 am 129 days ago · DST begins
+  FALL BACK November 1 Sunday · clocks −1h at 2:00 am in 109 days · DST ends
+[next(2027)] year label: 2027
+[next(2027)] federal holidays (11 rows):
+  New Year's Day | Friday January 1 | —  [class: next]
+  Birthday of Martin Luther King, Jr. | Monday January 18 | —  [class: ]
+  Washington's Birthday | Monday February 15 | —  [class: ]
+  Memorial Day | Monday May 31 | —  [class: ]
+  Juneteenth National Independence Day | Saturday June 19 | Friday, Jun 18 observed  [class: ]
+  Independence Day | Sunday July 4 | Monday, Jul 5 observed  [class: ]
+  Labor Day | Monday September 6 | —  [class: ]
+  Columbus Day | Monday October 11 | —  [class: ]
+  Veterans Day | Thursday November 11 | —  [class: ]
+  Thanksgiving Day | Thursday November 25 | —  [class: ]
+  Christmas Day | Saturday December 25 | Friday, Dec 24 observed  [class: ]
+[next(2027)] market calendar (12 rows):
+  Friday January 1 | New Year's Day | Closed
+  Monday January 18 | Martin Luther King, Jr. Day | Closed
+  Monday February 15 | Presidents' Day | Closed
+  Friday March 26 | Good Friday | Closed
+  Monday May 31 | Memorial Day | Closed
+  Friday June 18 | Juneteenth | Closed
+  Monday July 5 | Independence Day | Closed
+  Monday September 6 | Labor Day | Closed
+  Thursday November 25 | Thanksgiving Day | Closed
+  Friday November 26 | Day after Thanksgiving | Early close 1:00 pm ET
+  Friday December 24 | Christmas Day | Closed
+  Friday December 24 | Christmas Eve | Early close 1:00 pm ET
+[next(2027)] DST cards:
+  SPRING FORWARD March 14 Sunday · clocks +1h at 2:00 am in 242 days · DST begins
+  FALL BACK November 7 Sunday · clocks −1h at 2:00 am in 480 days · DST ends
+after "this year": year label = 2026
+prev(2025) DST dates: spring=March 9, fall=November 2
+final year label: 2026
+#yearLabel aria-live: polite
+year buttons aria-labels: prev="Previous year", next="Next year"
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)
