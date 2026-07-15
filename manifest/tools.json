@@ -461,6 +461,30 @@
       "flags": []
     },
     {
+      "id": "radar",
+      "file": "radar.html",
+      "name": "Radar & Satellite Viewer",
+      "cat": "sky",
+      "cx": "S",
+      "desc": "Animated radar loop and GOES satellite imagery for your region.",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://radar.weather.gov",
+        "https://cdn.star.nesdis.noaa.gov",
+        "https://api.zippopotam.us"
+      ],
+      "storage": [
+        "suite.location",
+        "suite.radar.station",
+        "suite.radar.sector",
+        "suite.radar.product"
+      ],
+      "cacheTtlMin": null,
+      "since": "v1",
+      "flags": []
+    },
+    {
       "id": "air",
       "file": "air.html",
       "name": "Air Quality & UV Panel",

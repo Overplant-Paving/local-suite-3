@@ -1,0 +1,29 @@
+seeded suite.location = {"lat":34.0522,"lon":-118.2437,"label":"Los Angeles, CA"}
+#locLabel: "Los Angeles, CA"
+nearest-station hint: "Nearest to Los Angeles, CA: KSOX (62 km)"
+auto-selected station (nearest to LA): KSOX; suite.radar.station=KSOX
+radar loop KSOX (radar.weather.gov): LOADED 600x550 px — alt="Radar loop for Santa Ana Mts (KSOX)" src=https://radar.weather.gov/ridge/standard/KSOX_loop.gif
+radar caption: "Santa Ana Mts · KSOX" · "animated ~1-hour loop · loaded 3:10 PM"
+switched station to KOKX; suite.radar.station=KOKX
+radar loop KOKX after station switch: LOADED 600x550 px — alt="Radar loop for New York City (KOKX)" src=https://radar.weather.gov/ridge/standard/KOKX_loop.gif
+radar caption after switch: "New York City · KOKX"
+sat tab: tabSat aria-pressed=true, tabRadar aria-pressed=false
+GOES CONUS GEOCOLOR (cdn.star.nesdis.noaa.gov): LOADED 1250x750 px — alt="GOES-19 GeoColor (true-ish color) imagery of Continental US" src=https://cdn.star.nesdis.noaa.gov/GOES19/ABI/CONUS/GEOCOLOR/1250x750.jpg
+sat caption: "Continental US · GeoColor (true-ish color)"
+GOES psw sector after region switch: LOADED 1200x1200 px — alt="GOES-19 GeoColor (true-ish color) imagery of Pacific Southwest" src=https://cdn.star.nesdis.noaa.gov/GOES19/ABI/SECTOR/psw/GEOCOLOR/1200x1200.jpg
+GOES psw product "13" (clean infrared): LOADED 1200x1200 px — alt="GOES-19 Clean infrared (13) imagery of Pacific Southwest" src=https://cdn.star.nesdis.noaa.gov/GOES19/ABI/SECTOR/psw/13/1200x1200.jpg
+stored prefs: sector=psw, product=13 (must be the bare string "13")
+sat caption: "Pacific Southwest · Clean infrared (13)"
+after reload, sat selects restore: sector=psw (expect psw), product=13 (expect "13")
+change-location card: "Set your location"; #locLabel="not set"
+invalid ZIP "123": #locMsg="Enter a 5-digit ZIP code."
+after ZIP 90012 (Enter key): #locLabel="Los Angeles, CA 90012"
+  suite.location={"lat":34.0614,"lon":-118.2385,"label":"Los Angeles, CA 90012"}
+radar loop after ZIP change (station select keeps saved KOKX): LOADED 600x550 px — alt="Radar loop for New York City (KOKX)" src=https://radar.weather.gov/ridge/standard/KOKX_loop.gif
+offline radar view (network blocked): .err rendered=true; text="Couldn't load the KOKX radar loop. Try another station or refresh."
+offline satellite view: .err rendered=true; text="That imagery combination isn't available right now. Try another region or product."
+back online, radar loop reloaded: LOADED 600x550 px — alt="Radar loop for New York City (KOKX)" src=https://radar.weather.gov/ridge/standard/KOKX_loop.gif
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

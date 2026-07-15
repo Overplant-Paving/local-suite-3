@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radar & Satellite Viewer · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  body { padding: 1.4rem 1.25rem 4rem; }
+  .wrap { max-width: 1000px; margin: 0 auto; }
+  .topbar { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+  /* v1: back link is muted (hover -> accent, no underline); core default is accent */
+  .back { color: var(--muted); white-space: nowrap; }
+  .back:hover { color: var(--accent); text-decoration: none; }
+  /* v1: button sits in the flex topbar, no float */
+  .topbar .theme-btn { margin-left: auto; float: none; }
+  header h1 { font-size: 1.6rem; letter-spacing: -.02em; }
+  .locbar { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+    margin: .5rem 0 1.2rem; color: var(--muted); font-size: .9rem; }
+  .locbar .loclabel { color: var(--ink); font-weight: 600; }
+  .linklike { background: none; border: none; color: var(--accent); cursor: pointer;
+    font-size: .85rem; padding: 0; text-decoration: underline; }
+  .tabs { display: flex; gap: .4rem; margin-bottom: 1rem; }
+  .tab { border: 1px solid var(--line); background: var(--card); color: var(--muted);
+    border-radius: 999px; padding: .35rem 1rem; cursor: pointer; font-size: .9rem; }
+  .tab.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: var(--shadow); padding: 1rem 1.1rem 1.15rem; }
+  .panel + .panel { margin-top: 1rem; }
+  .ctrls { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-bottom: .9rem; }
+  label.fld { display: flex; flex-direction: column; gap: .25rem; font-size: .74rem;
+    text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  select, .field input {
+    padding: .5rem .6rem; font-size: .95rem; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 10px; background: var(--bg); max-width: 100%;
+  }
+  select:focus, .field input:focus { outline: none; border-color: var(--accent); }
+  .imgwrap { position: relative; border-radius: 12px; overflow: hidden;
+    background: #0b1420; min-height: 240px; display: grid; place-items: center; }
+  .imgwrap img { display: block; width: 100%; height: auto; }
+  .imgwrap .load { position: absolute; color: #cdd6e4; font-size: .9rem; }
+  .imgwrap .err { color: #ec8c7c; font-size: .9rem; text-align: center; padding: 2rem; }
+  .capt { margin-top: .6rem; font-size: .84rem; color: var(--muted);
+    display: flex; flex-wrap: wrap; gap: .3rem .9rem; align-items: center; }
+  .capt .stn { color: var(--ink); font-weight: 600; }
+  .btn { border: none; border-radius: 10px; padding: .55rem 1rem; cursor: pointer;
+    font-size: .9rem; font-weight: 600; background: var(--accent); color: #fff; }
+  .btn.ghost { background: transparent; border: 1px solid var(--line); color: var(--ink); }
+  .btn.sm { padding: .35rem .7rem; font-size: .82rem; }
+  .row { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; }
+  .card-msg { text-align: center; color: var(--muted); padding: 1.4rem; }
+  .card-msg .big { font-size: 1.1rem; color: var(--ink); margin-bottom: .4rem; font-weight: 600; }
+  .field { margin: .8rem auto; max-width: 320px; text-align: left; }
+  .field label { display: block; font-size: .8rem; color: var(--muted); margin-bottom: .3rem; }
+  .field input { width: 100%; }
+  .notice { font-size: .82rem; color: var(--muted); margin-top: .5rem; }
+  .hint { font-size: .8rem; color: var(--muted); margin-top: .4rem; }
+  /* v1 footer is slightly tighter than core's default */
+  footer { font-size: .82rem; padding-top: 1rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header><h1>Radar &amp; Satellite Viewer</h1></header>
+  <div class="locbar">
+    <span>Location:</span>
+    <span class="loclabel" id="locLabel">—</span>
+    <button class="linklike" id="changeLoc">change</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" data-view="radar" id="tabRadar" aria-pressed="true">Radar loop</button>
+    <button class="tab" data-view="sat" id="tabSat" aria-pressed="false">GOES satellite</button>
+  </div>
+
+  <main id="main"></main>
+
+  <footer>
+    Radar loops: National Weather Service (radar.weather.gov RIDGE). Satellite: NOAA/NESDIS GOES-19 (cdn.star.nesdis.noaa.gov).
+    Images load directly in the browser and are re-fetched when you refresh.
+  </footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---------- shared location ---------- */
+function getLocation() { return Suite.location.get(); }
+function saveLocation(loc) { Suite.location.set(loc); }
+
+const $ = s => document.querySelector(s);
+const mainEl = Suite.liveRegion($("#main"));
+const locLabelEl = $("#locLabel");
+const esc = Suite.esc;
+
+/* ---------- NWS WSR-88D radar stations (id, lat, lon, name) ---------- */
+const STATIONS = [["KABR",45.456,-98.413,"Aberdeen"],["KABX",35.15,-106.824,"Albuquerque"],["KAKQ",36.984,-77.007,"Norfolk"],["KAMA",35.233,-101.709,"Amarillo"],["KAMX",25.611,-80.413,"Miami"],["KAPX",44.906,-84.72,"Gaylord MI"],["KARX",43.823,-91.191,"La Crosse"],["KATX",48.195,-122.496,"Seattle"],["KBBX",39.496,-121.632,"Beale AFB"],["KBGM",42.2,-75.985,"Binghamton"],["KBHX",40.498,-124.292,"Eureka"],["KBIS",46.771,-100.76,"Bismarck"],["KBLX",45.854,-108.607,"Billings"],["KBMX",33.172,-86.77,"Birmingham"],["KBOX",41.956,-71.137,"Boston"],["KBRO",25.916,-97.419,"Brownsville"],["KBUF",42.949,-78.737,"Buffalo"],["KBYX",24.597,-81.703,"Key West"],["KCAE",33.949,-81.119,"Columbia"],["KCBW",46.039,-67.806,"Caribou"],["KCBX",43.49,-116.236,"Boise"],["KCCX",40.923,-78.004,"State College"],["KCLE",41.413,-81.86,"Cleveland"],["KCLX",32.656,-81.042,"Charleston SC"],["KCRP",27.784,-97.511,"Corpus Christi"],["KCXX",44.511,-73.166,"Burlington"],["KCYS",41.152,-104.806,"Cheyenne"],["KDAX",38.501,-121.678,"Sacramento"],["KDDC",37.761,-99.969,"Dodge City"],["KDFX",29.273,-100.28,"Laughlin AFB"],["KDGX",32.28,-89.984,"Jackson MS"],["KDIX",39.947,-74.411,"Philadelphia"],["KDLH",46.837,-92.21,"Duluth"],["KDMX",41.731,-93.723,"Des Moines"],["KDOX",38.826,-75.44,"Dover AFB"],["KDTX",42.7,-83.472,"Detroit"],["KDVN",41.612,-90.581,"Quad Cities"],["KDYX",32.538,-99.254,"Dyess AFB"],["KEAX",38.81,-94.264,"Kansas City"],["KEMX",31.894,-110.63,"Tucson"],["KENX",42.587,-74.064,"Albany"],["KEOX",31.461,-85.459,"Ft Rucker"],["KEPZ",31.873,-106.698,"El Paso"],["KESX",35.701,-114.891,"Las Vegas"],["KEVX",30.565,-85.922,"Eglin AFB"],["KEWX",29.704,-98.029,"San Antonio"],["KEYX",35.098,-117.561,"Edwards AFB"],["KFCX",37.024,-80.274,"Roanoke"],["KFDR",34.362,-98.977,"Altus AFB"],["KFDX",34.634,-103.619,"Cannon AFB"],["KFFC",33.363,-84.566,"Atlanta"],["KFSD",43.588,-96.729,"Sioux Falls"],["KFSX",34.574,-111.198,"Flagstaff"],["KFTG",39.787,-104.546,"Denver"],["KFWS",32.573,-97.303,"Dallas/Ft Worth"],["KGGW",48.206,-106.625,"Glasgow"],["KGJX",39.062,-108.214,"Grand Junction"],["KGLD",39.367,-101.7,"Goodland"],["KGRB",44.499,-88.111,"Green Bay"],["KGRK",30.722,-97.383,"Ft Hood"],["KGRR",42.894,-85.545,"Grand Rapids"],["KGSP",34.883,-82.22,"Greenville SC"],["KGWX",33.897,-88.329,"Columbus AFB"],["KGYX",43.891,-70.256,"Portland ME"],["KHDC",30.52,-90.407,"Hammond"],["KHDX",33.077,-106.12,"Holloman AFB"],["KHGX",29.472,-95.079,"Houston"],["KHNX",36.314,-119.632,"Hanford CA"],["KHPX",36.737,-87.285,"Ft Campbell"],["KHTX",34.931,-86.084,"Huntsville"],["KICT",37.654,-97.443,"Wichita"],["KICX",37.591,-112.862,"Cedar City"],["KILN",39.42,-83.822,"Cincinnati"],["KILX",40.15,-89.337,"Central Illinois"],["KIND",39.707,-86.28,"Indianapolis"],["KINX",36.175,-95.564,"Tulsa"],["KIWA",33.289,-111.67,"Phoenix"],["KIWX",41.359,-85.7,"Northern Indiana"],["KJAX",30.485,-81.702,"Jacksonville"],["KJGX",32.675,-83.351,"Robins AFB"],["KJKL",37.591,-83.313,"Jackson KY"],["KLBB",33.654,-101.814,"Lubbock"],["KLCH",30.125,-93.216,"Lake Charles"],["KLGX",47.117,-124.107,"Langley Hill"],["KLNX",41.958,-100.576,"North Platte"],["KLOT",41.604,-88.084,"Chicago"],["KLRX",40.74,-116.803,"Elko"],["KLSX",38.699,-90.683,"St Louis"],["KLTX",33.989,-78.429,"Wilmington NC"],["KLVX",37.975,-85.944,"Louisville"],["KLWX",38.976,-77.487,"Washington DC"],["KLZK",34.836,-92.262,"Little Rock"],["KMAF",31.943,-102.189,"Midland/Odessa"],["KMAX",42.081,-122.717,"Medford"],["KMBX",48.392,-100.864,"Minot AFB"],["KMHX",34.776,-76.876,"Morehead City"],["KMKX",42.968,-88.551,"Milwaukee"],["KMLB",28.113,-80.654,"Melbourne"],["KMOB",30.679,-88.24,"Mobile"],["KMPX",44.849,-93.566,"Minneapolis"],["KMQT",46.531,-87.548,"Marquette"],["KMRX",36.168,-83.402,"Knoxville"],["KMSX",47.041,-113.986,"Missoula"],["KMTX",41.263,-112.448,"Salt Lake City"],["KMUX",37.155,-121.898,"San Francisco"],["KMVX",47.528,-97.325,"Grand Forks"],["KMXX",32.537,-85.79,"Maxwell AFB"],["KNKX",32.919,-117.042,"San Diego"],["KNQA",35.345,-89.873,"Memphis"],["KOAX",41.32,-96.367,"Omaha"],["KOHX",36.247,-86.562,"Nashville"],["KOKX",40.866,-72.864,"New York City"],["KOTX",47.681,-117.626,"Spokane"],["KPAH",37.068,-88.772,"Paducah"],["KPBZ",40.532,-80.218,"Pittsburgh"],["KPDT",45.691,-118.853,"Pendleton"],["KPOE",31.155,-92.976,"Ft Polk"],["KPUX",38.459,-104.181,"Pueblo"],["KRAX",35.665,-78.49,"Raleigh/Durham"],["KRGX",39.754,-119.462,"Reno"],["KRIW",43.066,-108.477,"Riverton"],["KRLX",38.311,-81.723,"Charleston WV"],["KRTX",45.715,-122.965,"Portland OR"],["KSFX",43.106,-112.686,"Pocatello"],["KSGF",37.235,-93.4,"Springfield MO"],["KSHV",32.451,-93.841,"Shreveport"],["KSJT",31.371,-100.492,"San Angelo"],["KSOX",33.818,-117.636,"Santa Ana Mts"],["KSRX",35.29,-94.362,"Ft Smith"],["KTBW",27.705,-82.402,"Tampa"],["KTFX",47.46,-111.385,"Great Falls"],["KTLH",30.397,-84.329,"Tallahassee"],["KTLX",35.333,-97.278,"Oklahoma City"],["KTWX",38.997,-96.232,"Topeka"],["KTYX",43.756,-75.68,"Ft Drum"],["KUDX",44.125,-102.83,"Rapid City"],["KUEX",40.321,-98.442,"Grand Island"],["KVAX",30.89,-83.002,"Moody AFB"],["KVBX",34.839,-120.398,"Vandenberg AFB"],["KVNX",36.741,-98.127,"Vance AFB"],["KVTX",34.412,-119.179,"Los Angeles"],["KVWX",38.26,-87.725,"Evansville"],["KYUX",32.495,-114.657,"Yuma"],["PABC",60.792,-161.876,"Bethel"],["PACG",56.853,-135.529,"Sitka"],["PAEC",64.511,-165.295,"Nome"],["PAHG",60.726,-151.351,"Kenai"],["PAIH",59.462,-146.301,"Middleton Is"],["PAKC",58.679,-156.629,"King Salmon"],["PAPD",65.035,-147.501,"Fairbanks"],["PGUA",13.456,144.811,"Guam"],["PHKI",21.894,-159.552,"Kauai"],["PHKM",20.125,-155.778,"Kohala HI"],["PHMO",21.133,-157.18,"Molokai"],["PHWA",19.095,-155.569,"Hawaii S Shore"],["RKJK",35.924,126.622,"Kunsan AB"],["RKSG",37.208,127.286,"Camp Humphreys"],["RODN",26.302,127.91,"Kadena AB"],["TJUA",18.116,-66.078,"San Juan"]];
+
+/* GOES-19 sectors (code, label). CONUS + full disk + regional. */
+const SECTORS = [
+  ["CONUS", "Continental US"],
+  ["ne", "Northeast"],
+  ["se", "Southeast"],
+  ["umv", "Upper Mississippi Valley"],
+  ["cgl", "Great Lakes"],
+  ["sp", "Southern Plains"],
+  ["sr", "Southern Rockies"],
+  ["nr", "Northern Rockies"],
+  ["pnw", "Pacific Northwest"],
+  ["psw", "Pacific Southwest"],
+  ["pr", "Puerto Rico"],
+  ["FD", "Full Disk (whole hemisphere)"]
+];
+const PRODUCTS = [
+  ["GEOCOLOR", "GeoColor (true-ish color)"],
+  ["13", "Clean infrared (13)"],
+  ["AirMass", "Air mass"],
+  ["Sandwich", "Sandwich (IR + visible)"]
+];
+
+function haversine(a, b, c, d) {
+  const R = 6371, r = Math.PI/180;
+  const dLat = (c-a)*r, dLon = (d-b)*r;
+  const s = Math.sin(dLat/2)**2 + Math.cos(a*r)*Math.cos(c*r)*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(s));
+}
+function nearestStation(lat, lon) {
+  let best = null, bestD = Infinity;
+  for (const s of STATIONS) {
+    const dkm = haversine(lat, lon, s[1], s[2]);
+    if (dkm < bestD) { bestD = dkm; best = s; }
+  }
+  return { s: best, km: bestD };
+}
+
+/* ---------- state ---------- */
+let view = "radar";
+
+/* v1 wrote these keys as bare strings. Suite.store.get JSON-parses when it can,
+   so the product code "13" (clean infrared) would come back as the number 13 —
+   normalize every read through String(). Writes stay bare strings (byte-identical). */
+function getPref(key, d) {
+  const v = Suite.store.get(key, d);
+  return v == null ? d : String(v);
+}
+
+/* ---------- RADAR view ---------- */
+function renderRadar() {
+  const loc = getLocation();
+  let saved = getPref("suite.radar.station", "");
+  if (!saved && loc) saved = nearestStation(loc.lat, loc.lon).s[0];
+  if (!saved) saved = "KLWX";
+
+  const opts = STATIONS.map(s => {
+    const dist = loc ? " · " + Math.round(haversine(loc.lat, loc.lon, s[1], s[2])) + " km" : "";
+    return `<option value="${s[0]}"${s[0]===saved?" selected":""}>${s[0]} — ${s[3]}${dist}</option>`;
+  }).join("");
+  const near = loc ? nearestStation(loc.lat, loc.lon) : null;
+
+  mainEl.innerHTML =
+    `<div class="panel">
+      <div class="ctrls">
+        <label class="fld">Radar station
+          <select id="stnSel">${opts}</select>
+        </label>
+        <button class="btn ghost sm" id="refreshR" style="align-self:flex-end">↻ Refresh</button>
+        ${near ? `<span class="hint" style="align-self:flex-end">Nearest to ${esc(loc.label)}: <strong>${near.s[0]}</strong> (${Math.round(near.km)} km)</span>` : ""}
+      </div>
+      <div class="imgwrap" id="rWrap"><span class="load">Loading radar loop…</span></div>
+      <div class="capt">
+        <span class="stn" id="rCapt">—</span>
+        <span id="rTime"></span>
+      </div>
+    </div>`;
+
+  const sel = $("#stnSel");
+  function show(id) {
+    Suite.store.set("suite.radar.station", id);
+    const s = STATIONS.find(x => x[0] === id) || STATIONS[0];
+    const wrap = $("#rWrap");
+    wrap.innerHTML = `<span class="load">Loading ${esc(id)} loop…</span>`;
+    const url = `https://radar.weather.gov/ridge/standard/${id}_loop.gif?t=${Date.now()}`;
+    const img = new Image();
+    img.alt = `Radar loop for ${s[3]} (${id})`;
+    img.addEventListener("load", () => { wrap.innerHTML = ""; wrap.appendChild(img); });
+    img.addEventListener("error", () => { wrap.innerHTML = `<div class="err">Couldn't load the ${esc(id)} radar loop. Try another station or refresh.</div>`; });
+    img.src = url;
+    $("#rCapt").textContent = `${s[3]} · ${id}`;
+    $("#rTime").textContent = "animated ~1-hour loop · loaded " + new Date().toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
+  }
+  sel.addEventListener("change", () => show(sel.value));
+  $("#refreshR").addEventListener("click", () => show(sel.value));
+  show(saved);
+}
+
+/* ---------- SATELLITE view ---------- */
+function renderSat() {
+  const savedSec = getPref("suite.radar.sector", "CONUS");
+  const savedProd = getPref("suite.radar.product", "GEOCOLOR");
+  const secOpts = SECTORS.map(s => `<option value="${s[0]}"${s[0]===savedSec?" selected":""}>${s[1]}</option>`).join("");
+  const prodOpts = PRODUCTS.map(p => `<option value="${p[0]}"${p[0]===savedProd?" selected":""}>${p[1]}</option>`).join("");
+
+  mainEl.innerHTML =
+    `<div class="panel">
+      <div class="ctrls">
+        <label class="fld">Region
+          <select id="secSel">${secOpts}</select>
+        </label>
+        <label class="fld">Imagery
+          <select id="prodSel">${prodOpts}</select>
+        </label>
+        <button class="btn ghost sm" id="refreshS" style="align-self:flex-end">↻ Refresh</button>
+      </div>
+      <div class="imgwrap" id="sWrap"><span class="load">Loading satellite imagery…</span></div>
+      <div class="capt">
+        <span class="stn" id="sCapt">—</span>
+        <span id="sTime"></span>
+      </div>
+      <div class="hint">GOES-19 imagery updates roughly every 5–10 minutes. Full-disk and CONUS images are large; regional sectors load fastest.</div>
+    </div>`;
+
+  function sizeFor(sec) {
+    if (sec === "CONUS") return "1250x750.jpg";
+    if (sec === "FD") return "1808x1808.jpg";
+    return "1200x1200.jpg";
+  }
+  function pathFor(sec, prod) {
+    const size = sizeFor(sec);
+    if (sec === "CONUS" || sec === "FD")
+      return `https://cdn.star.nesdis.noaa.gov/GOES19/ABI/${sec}/${prod}/${size}`;
+    return `https://cdn.star.nesdis.noaa.gov/GOES19/ABI/SECTOR/${sec}/${prod}/${size}`;
+  }
+  function show() {
+    const sec = $("#secSel").value, prod = $("#prodSel").value;
+    Suite.store.set("suite.radar.sector", sec); Suite.store.set("suite.radar.product", prod);
+    const wrap = $("#sWrap");
+    wrap.innerHTML = `<span class="load">Loading imagery…</span>`;
+    const secLbl = (SECTORS.find(s => s[0] === sec) || [])[1] || sec;
+    const prodLbl = (PRODUCTS.find(p => p[0] === prod) || [])[1] || prod;
+    const url = pathFor(sec, prod) + "?t=" + Date.now();
+    const img = new Image();
+    img.alt = `GOES-19 ${prodLbl} imagery of ${secLbl}`;
+    img.addEventListener("load", () => { wrap.innerHTML = ""; wrap.appendChild(img); });
+    img.addEventListener("error", () => { wrap.innerHTML = `<div class="err">That imagery combination isn't available right now. Try another region or product.</div>`; });
+    img.src = url;
+    $("#sCapt").textContent = `${secLbl} · ${prodLbl}`;
+    $("#sTime").textContent = "latest available · loaded " + new Date().toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
+  }
+  $("#secSel").addEventListener("change", show);
+  $("#prodSel").addEventListener("change", show);
+  $("#refreshS").addEventListener("click", show);
+  show();
+}
+
+/* ---------- first run ---------- */
+function renderFirstRun(msg) {
+  locLabelEl.textContent = "not set";
+  mainEl.innerHTML =
+    `<div class="panel"><div class="card-msg">
+      <div class="big">Set your location</div>
+      Radar auto-suggests the nearest NWS station once it knows where you are. (Satellite works without it.)
+      ${msg ? `<div class="notice" style="color:#c0392b">${esc(msg)}</div>` : ""}
+      <div class="field"><label for="zip">US ZIP code</label>
+        <input id="zip" inputmode="numeric" placeholder="e.g. 10001" maxlength="5"></div>
+      <div class="row" style="justify-content:center">
+        <button class="btn" id="zipGo">Set location</button>
+        <button class="btn ghost" id="geoGo">Use my location</button>
+        <button class="btn ghost" id="skipGo">Skip — just satellite</button>
+      </div>
+      <div class="notice" id="locMsg"></div>
+    </div></div>`;
+  const zip = $("#zip"), locMsg = Suite.liveRegion($("#locMsg"));
+  zip.focus();
+  zip.addEventListener("keydown", e => { if (e.key === "Enter") $("#zipGo").click(); });
+  $("#zipGo").addEventListener("click", async () => {
+    const z = (zip.value || "").trim();
+    if (!/^\d{5}$/.test(z)) { locMsg.textContent = "Enter a 5-digit ZIP code."; return; }
+    locMsg.textContent = "Looking up…";
+    try {
+      const r = await Suite.fetchJSON(`https://api.zippopotam.us/us/${z}`, { accept: "application/json" });
+      const place = r.v.places && r.v.places[0];
+      if (!place) throw new Error("ZIP not found");
+      saveLocation({ lat: parseFloat(place.latitude), lon: parseFloat(place.longitude),
+        label: `${place["place name"]}, ${place["state abbreviation"]} ${z}` });
+      boot();
+    } catch(e) { locMsg.textContent = "Couldn't find that ZIP (" + (e.message || e) + ")."; }
+  });
+  $("#geoGo").addEventListener("click", () => {
+    if (!navigator.geolocation) { locMsg.textContent = "Geolocation isn't available here."; return; }
+    locMsg.textContent = "Requesting location…";
+    navigator.geolocation.getCurrentPosition(
+      pos => { saveLocation({ lat: +pos.coords.latitude.toFixed(4), lon: +pos.coords.longitude.toFixed(4),
+        label: `My location (${pos.coords.latitude.toFixed(3)}, ${pos.coords.longitude.toFixed(3)})` }); boot(); },
+      err => { locMsg.textContent = "Couldn't get location: " + err.message; });
+  });
+  $("#skipGo").addEventListener("click", () => { view = "sat"; setTab(); renderSat(); });
+}
+
+/* ---------- tabs ---------- */
+function setTab() {
+  $("#tabRadar").classList.toggle("on", view === "radar");
+  $("#tabSat").classList.toggle("on", view === "sat");
+  $("#tabRadar").setAttribute("aria-pressed", String(view === "radar"));
+  $("#tabSat").setAttribute("aria-pressed", String(view === "sat"));
+}
+$("#tabRadar").addEventListener("click", () => { view = "radar"; setTab(); boot(); });
+$("#tabSat").addEventListener("click", () => { view = "sat"; setTab(); renderSat(); });
+$("#changeLoc").addEventListener("click", () => renderFirstRun());
+
+/* ---------- boot ---------- */
+function boot() {
+  const loc = getLocation();
+  locLabelEl.textContent = loc ? loc.label : "not set";
+  setTab();
+  if (view === "sat") { renderSat(); return; }
+  if (!loc) { renderFirstRun(); return; }
+  renderRadar();
+}
+boot();
+</script>
+</body>
+</html>

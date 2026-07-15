@@ -126,5 +126,12 @@
     "Math.round(tempStr)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tides/report.md",
     "fmtClock(tempWhen)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tides/report.md",
     "nextEvent?`<div class=\"now-item\"><div class=\"lbl\">Next ${nextEvent.type===\"H\"?\"high\":\"low\"}</div><div class=\"val\" style=\"font-size:1.1rem\">${relTime(nextEvent.t,now)}</div></div>`:\"\"": "literal markup; type gates two literals, relTime() is a local formatter over a numeric timestamp"
+  },
+  "radar.html": {
+    "opts": "local-only expression, recorded verified-clean with reasoning in tests/evidence/radar/report.md",
+    "near.s[0]": "local-only expression, recorded verified-clean with reasoning in tests/evidence/radar/report.md",
+    "Math.round(near.km)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/radar/report.md",
+    "secOpts": "local-only expression, recorded verified-clean with reasoning in tests/evidence/radar/report.md",
+    "prodOpts": "local-only expression, recorded verified-clean with reasoning in tests/evidence/radar/report.md"
   }
 }
