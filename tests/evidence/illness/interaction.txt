@@ -1,0 +1,21 @@
+initial state: select=CA, locNote="saved on this device", suite.state=CA
+LIVE (CA) wastewater — California: level="High", state-average activity level 79th percentile, trend="→ roughly steady", chart points=615; stamp="Latest sample week ending Sep 6, 2025 · data just now"
+LIVE (CA) admissions: COVID-19=152 (new admissions · ▲ +28 vs prior wk) · Influenza=102 (new admissions · ▲ +7 vs prior wk) · RSV=19 (new admissions · ▲ +4 vs prior wk); stamp="Week ending Jul 3, 2026 · California · data just now"
+LIVE response (suite.cache.illness.ww.CA): 615 rows; first={"date_end":"2024-01-02","percentile":"94.286","ptc_15d":"19"}; last={"date_end":"2025-09-07","percentile":"79.2","ptc_15d":"8"}
+LIVE response (suite.cache.illness.adm.CA): 153 rows; last={"weekendingdate":"2026-07-04T00:00:00.000","totalconfc19newadm":"152.0","totalconfflunewadm":"102.0","totalconfrsvnewadm":"19.0"}
+picker: selected TX -> suite.state=TX
+LIVE (TX) wastewater — Texas: level="High", state-average activity level 67th percentile, trend="▼ falling vs. prior week", chart points=260; stamp="Latest sample week ending Sep 16, 2024 · data just now"
+LIVE (TX) admissions: COVID-19=120 (new admissions · ▲ +33 vs prior wk) · Influenza=76 (new admissions · ▲ +3 vs prior wk) · RSV=24 (new admissions · ▼ -6 vs prior wk); stamp="Week ending Jul 3, 2026 · Texas · data just now"
+derivation: suite.state cleared, suite.location label "Boston, MA" -> select=MA (not the CA fallback, not stored TX)
+no-cache error cards (network blocked, MA never fetched): ww="Wastewater data unavailable right now (Failed to fetch)." | adm="Hospital admission data unavailable right now (Failed to fetch)."
+LA seed: suite.location "Los Angeles, CA" -> select=CA, suite.state=CA
+SEEDED-LA (CA, fresh cache within TTL) wastewater — California: level="High", state-average activity level 79th percentile, trend="→ roughly steady", chart points=615; stamp="Latest sample week ending Sep 6, 2025 · data just now"
+SEEDED-LA (CA, fresh cache within TTL) admissions: COVID-19=152 (new admissions · ▲ +28 vs prior wk) · Influenza=102 (new admissions · ▲ +7 vs prior wk) · RSV=19 (new admissions · ▲ +4 vs prior wk); stamp="Week ending Jul 3, 2026 · California · data just now"
+STALE PATH (network blocked, cache aged 25h): wastewater — California: level="High", state-average activity level 79th percentile, trend="→ roughly steady", chart points=615; stamp="Latest sample week ending Sep 6, 2025 · data 25 hr ago (offline — cached)"
+STALE PATH (network blocked, cache aged 25h): admissions: COVID-19=152 (new admissions · ▲ +28 vs prior wk) · Influenza=102 (new admissions · ▲ +7 vs prior wk) · RSV=19 (new admissions · ▲ +4 vs prior wk); stamp="Week ending Jul 3, 2026 · California · data 25 hr ago (offline — cached)"
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

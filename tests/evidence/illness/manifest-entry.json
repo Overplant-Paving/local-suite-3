@@ -1,0 +1,23 @@
+{
+  "id": "illness",
+  "file": "illness.html",
+  "name": "Illness Activity Tracker",
+  "cat": "health",
+  "cx": "M",
+  "desc": "Flu activity and COVID wastewater trend for your state.",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": [
+    "https://data.cdc.gov"
+  ],
+  "storage": [
+    "suite.theme",
+    "suite.state",
+    "suite.location",
+    "suite.cache.illness.ww.*",
+    "suite.cache.illness.adm.*"
+  ],
+  "cacheTtlMin": 1440,
+  "since": "v1",
+  "flags": []
+}
