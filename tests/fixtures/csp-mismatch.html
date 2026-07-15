@@ -1,0 +1,10 @@
+<!doctype html>
+<!-- fixture: CSP meta whose sha256 hash does not match the script — the csp gate must flag it -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='; style-src 'unsafe-inline'; img-src data:; connect-src 'none'">
+<title>Broken · fixture</title>
+</head>
+<body><script>"use strict"; const tampered = true;</script></body>
+</html>

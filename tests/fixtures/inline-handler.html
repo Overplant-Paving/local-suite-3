@@ -1,0 +1,9 @@
+<!doctype html>
+<!-- fixture: the v1 onerror= pattern — the no-inline-handlers gate must flag it -->
+<html lang="en">
+<head><meta charset="utf-8"><title>Broken · fixture</title></head>
+<body>
+<img src="cover.png" onerror="this.remove()">
+<script>"use strict"; /* an onclick = assignment in JS is fine; the attribute above is not */</script>
+</body>
+</html>

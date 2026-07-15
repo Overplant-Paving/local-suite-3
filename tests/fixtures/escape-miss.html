@@ -1,0 +1,10 @@
+<!doctype html>
+<!-- fixture: remote data interpolated into innerHTML without Suite.esc — the heuristic must flag it -->
+<html lang="en">
+<head><meta charset="utf-8"><title>Broken · fixture</title></head>
+<body><div id="out"></div><script>
+"use strict";
+const data = { name: "<img src=x onerror=alert(1)>" };
+document.getElementById("out").innerHTML = `<b>${data.name}</b>`;
+</script></body>
+</html>

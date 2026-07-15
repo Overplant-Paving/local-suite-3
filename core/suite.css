@@ -1,0 +1,91 @@
+/* Local Suite v2 — core/suite.css
+   Extraction of the v1 shared theme (canonical copy: weather.html:8–70 at v1-import)
+   plus the shared chrome patterns. This is an extraction, not a redesign — see
+   README.md preserve list #1. Tool accents, layout, and .wrap widths stay per-tool. */
+
+/* ---- 3-layer theming: color-scheme / prefers-color-scheme / data-theme ---- */
+:root {
+  --bg: #f5f3ee;
+  --card: #fffdf9;
+  --ink: #23282e;
+  --muted: #6b7280;
+  --line: #e4e0d6;
+  --accent: #2f6f6a;
+  --accent-soft: #e3efed;
+  --built: #3a7d44;
+  --chip: #efece4;
+  --shadow: 0 1px 2px rgba(40,35,25,.06), 0 4px 14px rgba(40,35,25,.05);
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15171b; --card: #1d2026; --ink: #e7e5e0; --muted: #9aa0a8;
+    --line: #2c3038; --accent: #6fb5ae; --accent-soft: #22333179;
+    --built: #7dc487; --chip: #262a31;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f5f3ee; --card: #fffdf9; --ink: #23282e; --muted: #6b7280;
+  --line: #e4e0d6; --accent: #2f6f6a; --accent-soft: #e3efed;
+  --built: #3a7d44; --chip: #efece4;
+  --shadow: 0 1px 2px rgba(40,35,25,.06), 0 4px 14px rgba(40,35,25,.05);
+}
+:root[data-theme="dark"] {
+  --bg: #15171b; --card: #1d2026; --ink: #e7e5e0; --muted: #9aa0a8;
+  --line: #2c3038; --accent: #6fb5ae; --accent-soft: #22333179;
+  --built: #7dc487; --chip: #262a31;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25);
+}
+
+/* ---- reset + base typography ---- */
+* { box-sizing: border-box; margin: 0; }
+body {
+  background: var(--bg); color: var(--ink);
+  font: 16px/1.55 ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.mono { font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace; }
+a { color: var(--accent); }
+
+/* ---- shared chrome ---- */
+.back { color: var(--accent); text-decoration: none; font-size: .9rem; }
+.back:hover { text-decoration: underline; }
+.theme-btn {
+  float: right; border: 1px solid var(--line); background: var(--card);
+  color: var(--ink); border-radius: 999px; padding: .35rem .8rem;
+  cursor: pointer; font-size: .85rem;
+}
+.card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  padding: 1rem 1.05rem .9rem; box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: .55rem;
+}
+.chip {
+  font-size: .72rem; padding: .14rem .55rem; border-radius: 999px;
+  background: var(--chip); color: var(--muted); white-space: nowrap;
+}
+.chip.good { background: var(--accent-soft); color: var(--accent); }
+.search {
+  width: 100%; padding: .7rem 1rem; font-size: 1rem; color: var(--ink);
+  border: 1px solid var(--line); border-radius: 12px; background: var(--card);
+  box-shadow: var(--shadow); outline: none;
+}
+.search:focus { border-color: var(--accent); }
+footer {
+  margin-top: 3rem; color: var(--muted); font-size: .85rem;
+  border-top: 1px solid var(--line); padding-top: 1.1rem;
+}
+
+/* ---- accessibility, fixed once in core (QUALITY.md §2) ---- */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
+textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

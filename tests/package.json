@@ -1,0 +1,9 @@
+{
+  "name": "local-suite-tests",
+  "private": true,
+  "description": "The one npm concession (ADR D8): Playwright for the smoke suite and per-tool verification evidence. Never required to build — always required to ship.",
+  "type": "module",
+  "dependencies": {
+    "playwright": "^1.61.1"
+  }
+}

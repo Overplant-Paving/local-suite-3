@@ -1,0 +1,16 @@
+{
+  "_comment": "Escaping-heuristic resolutions (QUALITY.md §1.2): every flag is either fixed or recorded here as verified-clean, keyed by the exact interpolated expression. The heuristic re-fires if the expression text changes.",
+  "weather.html": {
+    "temp(d.tempC)": "numeric formatter: Math.round() output or the literal em-dash — never remote text",
+    "U()": "returns the local unit constant '°F'/'°C'",
+    "iconFor(d.desc, d.isDay).replace('width=\"24\" height=\"24\"','width=\"76\" height=\"76\"')": "intentional markup: SVG built from a fixed local icon set; remote text only selects which icon",
+    "iconFor(p.shortForecast, p.isDaytime)": "intentional markup: SVG from the fixed local icon set",
+    "iconFor(r.desc, r.isDay)": "intentional markup: SVG from the fixed local icon set",
+    "feels": "built from temp() + U() locals only (numeric + unit constant)",
+    "metrics.map(m=>`<div class=\"metric\"><div class=\"m-k\">${m[0]}</div><div class=\"m-v disp\">${m[1]}</div></div>`).join(\"\")": "intentional markup join; the cell contents are covered by the m[0]/m[1] entries",
+    "m[0]": "metric labels: hardcoded string literals ('Wind', 'Humidity', …)",
+    "m[1]": "metric values: each is Suite.esc()'d or numeric-formatted where the metrics array is built",
+    "i===0?'now':''": "literal CSS class name",
+    "desc.length>=240?\"…\":\"\"": "literal ellipsis appended after an esc()'d truncated string"
+  }
+}
