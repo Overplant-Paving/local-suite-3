@@ -1,0 +1,18 @@
+{
+  "id": "timers",
+  "file": "timers.html",
+  "name": "Stopwatch & Kitchen Timers",
+  "cat": "util",
+  "cx": "S",
+  "desc": "Multiple named timers, laps, chimes, big type.",
+  "network": "offline",
+  "key": null,
+  "endpoints": [],
+  "storage": [
+    "suite.theme",
+    "suite.timers.v1"
+  ],
+  "cacheTtlMin": null,
+  "since": "v1",
+  "flags": []
+}

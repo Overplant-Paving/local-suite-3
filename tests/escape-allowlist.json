@@ -51,5 +51,9 @@
     "galOne.toFixed(2)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tripcost/report.md",
     "money(diff)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tripcost/report.md",
     "pct.toFixed(0)": "local-only expression, recorded verified-clean with reasoning in tests/evidence/tripcost/report.md"
+  },
+  "timers.html": {
+    "name": "local-only expression, recorded verified-clean with reasoning in tests/evidence/timers/report.md",
+    "rows": "local-only expression, recorded verified-clean with reasoning in tests/evidence/timers/report.md"
   }
 }

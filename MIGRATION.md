@@ -116,7 +116,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 18 | dataviewer.html | util | off | — | A | | ⬜ |
 | 19 | sound.html | util | off | — | A | | ✅ `tests/evidence/sound/` |
 | 20 | paper.html | util | off | — | A | print CSS | ✅ `tests/evidence/paper/` |
-| 21 | timers.html | util | off | — | A | | ⬜ |
+| 21 | timers.html | util | off | — | A | | ✅ `tests/evidence/timers/` |
 | 22 | loan.html | util | off | — | A | | ⬜ |
 | 23 | flashcards.html | util | off | — | A | XP (keep) | ⬜ |
 | 24 | alerts.html | sky | cors | — | B | | ⬜ |
