@@ -25,7 +25,7 @@ Standing rules for the executing agent:
 - [x] Analysis of v1 complete (architecture + quality/risk audits, July 2026)
 - [x] Planning document set written
 - [x] Version-control hazard fixed (home-dir `.git` removed; v1 suite committed as `7088cab` on `main` in `../Local Suite`)
-- [ ] Phase 0 — Foundation
+- [x] Phase 0 — Foundation (2026-07-15 — evidence: `tests/evidence/phase0/gates.txt`)
 - [ ] Phase 1 — Core machinery, proven on pilots
 - [ ] Phase 2 — Full migration (parallel batches)
 - [ ] Phase 3 — PWA + GitHub sharing

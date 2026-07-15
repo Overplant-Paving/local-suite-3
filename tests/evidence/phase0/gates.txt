@@ -1,0 +1,33 @@
+== Phase 0 exit-gate evidence (2026-07-15) ==
+
+$ git rev-parse --show-toplevel
+C:/Users/henry/Developement/Local Suite 2
+
+$ git rev-parse v1-import
+7088cab0bf8d69e37db34f7532e1991b5117f1bb
+
+$ git ls-tree -r v1-import --name-only | wc -l
+175
+
+$ python build.py --check
+GATE manifest-files-sync  NOT IMPLEMENTED
+GATE markers              NOT IMPLEMENTED
+GATE dist-staleness       NOT IMPLEMENTED
+GATE no-inline-handlers   NOT IMPLEMENTED
+GATE csp                  NOT IMPLEMENTED
+GATE escaping-heuristic   NOT IMPLEMENTED
+GATE catalog-crosscheck   NOT IMPLEMENTED
+GATE key-hygiene          NOT IMPLEMENTED
+
+tools in manifest: 0 / 71 migrated
+
+8 gate(s) not implemented -- Phase 1 work remains:
+  - manifest-files-sync
+  - markers
+  - dist-staleness
+  - no-inline-handlers
+  - csp
+  - escaping-heuristic
+  - catalog-crosscheck
+  - key-hygiene
+exit code: 2

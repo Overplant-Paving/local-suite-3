@@ -1,0 +1,5 @@
+# Deterministic builds: the dist staleness gate hashes file bytes, so line
+# endings must be identical in working copy and repo. Everything is LF.
+* text=auto eol=lf
+*.png binary
+*.ico binary
