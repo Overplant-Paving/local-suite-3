@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Snowpack &amp; SNOTEL · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents (3-layer, same pattern as core) */
+  :root { --snow: #3f7cbf; --low: #c99a1e; --high: #3a7d44; --star: #d9a521; --bar: #dfe6ee; }
+  @media (prefers-color-scheme: dark) {
+    :root { --snow: #6aa3d9; --low: #e0be55; --high: #7dc487; --star: #e0be55; --bar: #2c3340; }
+  }
+  :root[data-theme="light"] { --snow: #3f7cbf; --low: #c99a1e; --high: #3a7d44; --star: #d9a521; --bar: #dfe6ee; }
+  :root[data-theme="dark"] { --snow: #6aa3d9; --low: #e0be55; --high: #7dc487; --star: #e0be55; --bar: #2c3340; }
+
+  body { padding: 1.4rem 1.25rem 4rem; }
+  .wrap { max-width: 960px; margin: 0 auto; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  /* v1 chrome differs from core: muted back-link (accent on hover), no float on the theme button */
+  .back { font-size: .9rem; color: var(--muted); }
+  .back:hover { color: var(--accent); text-decoration: none; }
+  .topbar .theme-btn { float: none; }
+  header h1 { font-size: 1.7rem; letter-spacing: -.02em; margin-top: 1rem; }
+  header .tag { color: var(--muted); margin-top: .3rem; max-width: 46rem; font-size: .95rem; }
+  .locbar { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin-top: .9rem; font-size: .85rem; color: var(--muted); }
+  .locchip {
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    border-radius: 999px; padding: .28rem .7rem; cursor: pointer; font-size: .82rem;
+  }
+  .firstrun {
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    box-shadow: var(--shadow); padding: 1.6rem; margin-top: 1.6rem; max-width: 34rem;
+  }
+  .firstrun h2 { font-size: 1.2rem; margin-bottom: .5rem; }
+  .firstrun p { color: var(--muted); font-size: .92rem; margin-bottom: 1rem; }
+  .row { display: flex; gap: .55rem; flex-wrap: wrap; align-items: center; }
+  input.txt {
+    border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+    border-radius: 9px; padding: .55rem .7rem; font-size: .95rem;
+  }
+  .btn {
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    border-radius: 9px; padding: .55rem .9rem; cursor: pointer; font-size: .9rem;
+  }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .err { color: #c0392b; font-size: .82rem; }
+  .section-h { margin: 1.9rem 0 .2rem; font-size: .82rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .9rem; margin-top: .7rem; }
+  .st {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: var(--shadow); padding: 1rem 1.1rem; display: flex; flex-direction: column; gap: .5rem;
+  }
+  .st .top { display: flex; justify-content: space-between; align-items: start; gap: .5rem; }
+  .st .name { font-weight: 600; font-size: 1.05rem; line-height: 1.25; }
+  .st .sub { font-size: .8rem; color: var(--muted); margin-top: .1rem; }
+  .star { background: none; border: none; cursor: pointer; font-size: 1.15rem; line-height: 1; color: var(--line); flex: none; padding: 0; }
+  .star.on { color: var(--star); }
+  .readings { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+  .reading { background: var(--chip); border-radius: 10px; padding: .55rem .65rem; }
+  .reading .k { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  .reading .v { font-size: 1.5rem; font-weight: 600; line-height: 1.1; color: var(--snow); }
+  .reading .v small { font-size: .8rem; color: var(--muted); font-weight: 400; }
+  .pom { margin-top: .1rem; }
+  .pom .pk { font-size: .74rem; color: var(--muted); display: flex; justify-content: space-between; }
+  .pombar { height: 8px; border-radius: 5px; background: var(--bar); overflow: hidden; margin-top: .3rem; position: relative; }
+  .pombar i { display: block; height: 100%; border-radius: 5px; }
+  .pombar .mid { position: absolute; top: -2px; bottom: -2px; left: 50%; width: 1px; background: var(--muted); opacity: .5; }
+  .st .asof { font-size: .74rem; color: var(--muted); }
+  .card-msg {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: var(--shadow); padding: 2rem 1.5rem; text-align: center; color: var(--muted); margin-top: 1.4rem;
+  }
+  .card-msg .big { font-size: 1.2rem; color: var(--ink); margin-bottom: .5rem; }
+  .skelcard { background: var(--chip); border-radius: 14px; height: 160px; animation: pulse 1.4s infinite; }
+  @keyframes pulse { 50% { opacity: .55; } }
+  @media (prefers-reduced-motion: reduce) { .skelcard { animation: none; } }
+  .stamp { font-size: .8rem; color: var(--muted); margin-top: 1rem; }
+  footer { font-size: .82rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Snowpack &amp; SNOTEL</h1>
+    <p class="tag">Mountain snow depth and snow-water equivalent from the nearest USDA SNOTEL stations —
+      for skiers watching the base and anyone watching the water supply. Star the ones you follow.</p>
+    <div class="locbar" id="locbar"></div>
+  </header>
+
+  <div id="firstrun"></div>
+  <main id="main"></main>
+
+  <footer>
+    Data: USDA NRCS Air &amp; Water Database (AWDB) · wcc.sc.egov.usda.gov. SNWD = snow depth, WTEQ =
+    snow-water equivalent; "% of median" compares today with the 1991–2020 median for the date where published.
+  </footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+const $ = (s, r = document) => r.querySelector(s);
+const AWDB = "https://wcc.sc.egov.usda.gov/awdbRestApi/services/v1";
+
+/* Cache policy (API-AND-RELAY.md §2):
+   - readings (/data): manifest cacheTtlMin 60. AWDB DAILY values change at most a few times
+     a day upstream, so an hour keeps the board current without hammering the service. v1 did
+     not cache this request at all — caching it is the Batch B policy-mandated change.
+   - station list (/stations): reference data; v1's own 7-day trimmed cache is kept verbatim
+     (same key, same {t, v} envelope with the trimmed array — see getStations). */
+const DATA_TTL = 60 * 60 * 1000;
+const STATIONS_TTL = 7 * 864e5;
+const DATA_CACHE = "suite.cache.snow.data";
+
+/* ---------- helpers ---------- */
+function haversineMi(la1, lo1, la2, lo2) {
+  const R = 3958.8, r = Math.PI / 180;
+  const dLa = (la2 - la1) * r, dLo = (lo2 - lo1) * r;
+  const s = Math.sin(dLa / 2) ** 2 + Math.cos(la1 * r) * Math.cos(la2 * r) * Math.sin(dLo / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(s));
+}
+function ymd(d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+
+/* ---------- favorites ---------- */
+function getFavs() { const f = Suite.store.get("suite.pref.snow.fav"); return Array.isArray(f) ? f : []; }
+function setFavs(a) { Suite.store.set("suite.pref.snow.fav", a); }
+function toggleFav(trip) {
+  const f = getFavs(); const i = f.indexOf(trip);
+  if (i >= 0) f.splice(i, 1); else f.push(trip);
+  setFavs(f); return f;
+}
+
+/* ---------- location / first run ---------- */
+function renderLocBar() {
+  const bar = $("#locbar"); bar.textContent = "";
+  const loc = Suite.location.get(); if (!loc) return;
+  const chip = document.createElement("button"); chip.className = "locchip";
+  chip.textContent = "📍 " + loc.label + " · change";
+  chip.addEventListener("click", showFirstRun);
+  bar.append(chip);
+}
+function showFirstRun() {
+  $("#main").textContent = "";
+  const box = $("#firstrun"); box.innerHTML = "";
+  const card = document.createElement("div"); card.className = "firstrun";
+  const h = document.createElement("h2"); h.textContent = "Where are you?";
+  const p = document.createElement("p"); p.textContent = "Set a location so we can find the nearest SNOTEL stations. Enter a US ZIP or use your browser location — saved for the whole suite.";
+  const r1 = document.createElement("div"); r1.className = "row";
+  const zip = document.createElement("input"); zip.className = "txt"; zip.placeholder = "US ZIP"; zip.inputMode = "numeric"; zip.maxLength = 5;
+  zip.setAttribute("aria-label", "US ZIP code");
+  const zb = document.createElement("button"); zb.className = "btn primary"; zb.textContent = "Look up ZIP"; r1.append(zip, zb);
+  const r2 = document.createElement("div"); r2.className = "row"; r2.style.marginTop = ".6rem";
+  const gb = document.createElement("button"); gb.className = "btn"; gb.textContent = "Use my location"; r2.append(gb);
+  const err = document.createElement("div"); err.className = "err"; err.style.marginTop = ".5rem";
+  Suite.liveRegion(err);
+  card.append(h, p, r1, r2, err); box.append(card);
+  const lookupZip = async () => {
+    const v = zip.value.trim(); err.textContent = "";
+    if (!/^\d{5}$/.test(v)) { err.textContent = "Enter a 5-digit ZIP."; return; }
+    try { const d = (await Suite.fetchJSON("https://api.zippopotam.us/us/" + v, { timeout: 15000 })).v; const pl = d.places[0];
+      Suite.location.set({ lat: +pl.latitude, lon: +pl.longitude, label: pl["place name"] + ", " + pl["state abbreviation"] }); boot();
+    } catch (e) { err.textContent = "ZIP not found."; }
+  };
+  zb.addEventListener("click", lookupZip);
+  zip.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); lookupZip(); } });
+  gb.addEventListener("click", () => {
+    err.textContent = "";
+    if (!navigator.geolocation) { err.textContent = "Geolocation unavailable."; return; }
+    gb.textContent = "Locating…";
+    navigator.geolocation.getCurrentPosition(
+      pos => { Suite.location.set({ lat: +pos.coords.latitude.toFixed(4), lon: +pos.coords.longitude.toFixed(4), label: "My location" }); boot(); },
+      e => { gb.textContent = "Use my location"; err.textContent = "Couldn't get location (may need http://)."; }
+    );
+  });
+}
+
+/* ---------- station list (cached ~7 days, trimmed) ----------
+   AWDB gotcha (CATALOG.md §2.6): /stations IGNORES network/state filter params, so the v1
+   workaround is preserved exactly — fetch every active SNOTEL triplet (*:*:SNTL, ~900
+   stations) and rank nearest client-side. The raw response is large, so it is trimmed
+   before caching; Suite.fetchJSON gets no cacheKey here and the tool keeps v1's manual
+   envelope (same suite.cache.snow.stations key, same {t, v: trimmed} shape) so v1 caches
+   keep working and the raw payload never lands in localStorage. */
+async function getStations() {
+  const c = Suite.store.get("suite.cache.snow.stations", null);
+  const usable = c && typeof c === "object" && Array.isArray(c.v) && c.v.length;
+  if (usable && Date.now() - c.t < STATIONS_TTL) return { list: c.v, t: c.t, stale: false };
+  try {
+    const r = await Suite.fetchJSON(AWDB + "/stations?stationTriplets=*:*:SNTL&activeOnly=true", { timeout: 15000 });
+    const trimmed = r.v
+      .filter(s => isFinite(s.latitude) && isFinite(s.longitude))
+      .map(s => ({ t: s.stationTriplet, n: s.name, st: s.stateCode, lat: s.latitude, lon: s.longitude, el: s.elevation }));
+    Suite.store.set("suite.cache.snow.stations", { t: r.t, v: trimmed });
+    return { list: trimmed, t: r.t, stale: false };
+  } catch (e) {
+    // serve-stale-on-failure (API-AND-RELAY.md §2): an expired list still ranks stations
+    if (usable) return { list: c.v, t: c.t, stale: true };
+    throw e;
+  }
+}
+
+/* ---------- data ---------- */
+function latestValue(values) {
+  if (!values) return null;
+  for (let i = values.length - 1; i >= 0; i--) {
+    if (values[i].value !== null && values[i].value !== undefined) return values[i];
+  }
+  return null;
+}
+async function getData(triplets) {
+  if (!triplets.length) return { byTrip: {}, t: null, stale: false };
+  const setKey = triplets.slice().sort().join(",");
+  const prior = Suite.store.get(DATA_CACHE, null);
+  if (prior && prior.key !== setKey) {
+    // the single data slot belongs to a different station set (location or favorites
+    // changed) — drop it so Suite.fetchJSON can't serve the wrong stations, fresh or stale
+    try { localStorage.removeItem(DATA_CACHE); } catch (e) {} // raw removal: Suite.store has no delete
+  }
+  const end = new Date(); const beg = new Date(Date.now() - 9 * 864e5);
+  const url = AWDB + "/data?stationTriplets=" + encodeURIComponent(triplets.join(","))
+    + "&elements=SNWD,WTEQ&duration=DAILY&beginDate=" + ymd(beg) + "&endDate=" + ymd(end) + "&centralTendencyType=MEDIAN";
+  const r = await Suite.fetchJSON(url, { cacheKey: "snow.data", ttl: DATA_TTL, timeout: 15000 });
+  if (!r.fromCache) Suite.store.set(DATA_CACHE, { t: r.t, key: setKey, v: r.v }); // re-add the set key to the envelope
+  const byTrip = {};
+  for (const st of (r.v || [])) {
+    const rec = { snwd: null, wteq: null, medianPeak: null };
+    for (const e of (st.data || [])) {
+      const code = e.stationElement && e.stationElement.elementCode;
+      const lv = latestValue(e.values);
+      if (code === "SNWD") rec.snwd = lv;
+      if (code === "WTEQ") {
+        rec.wteq = lv;
+        if (e.timingCentralTendencies && e.timingCentralTendencies.medianPeak) rec.medianPeak = e.timingCentralTendencies.medianPeak.value;
+      }
+    }
+    byTrip[st.stationTriplet] = rec;
+  }
+  return { byTrip, t: r.t, stale: r.stale };
+}
+
+/* ---------- render ---------- */
+function stationCard(s, rec, loc) {
+  const el = document.createElement("article"); el.className = "st";
+  const top = document.createElement("div"); top.className = "top";
+  const nameWrap = document.createElement("div");
+  const name = document.createElement("div"); name.className = "name"; name.textContent = s.n;
+  const sub = document.createElement("div"); sub.className = "sub";
+  const dist = loc ? Math.round(haversineMi(loc.lat, loc.lon, s.lat, s.lon)) + " mi · " : "";
+  sub.textContent = dist + s.st + " · " + (isFinite(s.el) ? Math.round(s.el).toLocaleString() + " ft" : "");
+  nameWrap.append(name, sub);
+  const isFav = getFavs().includes(s.t);
+  const star = document.createElement("button"); star.className = "star" + (isFav ? " on" : "");
+  star.textContent = "★"; star.title = "Follow this station";
+  star.setAttribute("aria-label", (isFav ? "Unfollow " : "Follow ") + s.n);
+  star.setAttribute("aria-pressed", String(isFav));
+  star.addEventListener("click", () => { toggleFav(s.t); render(); });
+  top.append(nameWrap, star);
+  el.append(top);
+
+  const readings = document.createElement("div"); readings.className = "readings";
+  const depth = rec && rec.snwd ? rec.snwd.value : null;
+  const swe = rec && rec.wteq ? rec.wteq.value : null;
+  readings.append(reading("Snow depth", depth, "in"), reading("Snow-water eq.", swe, "in"));
+  el.append(readings);
+
+  // percent of median (WTEQ)
+  if (rec && rec.wteq && rec.wteq.median !== null && rec.wteq.median !== undefined) {
+    const med = rec.wteq.median;
+    const pom = document.createElement("div"); pom.className = "pom";
+    const pk = document.createElement("div"); pk.className = "pk";
+    if (med > 0 && swe !== null) {
+      const pct = Math.round((swe / med) * 100);
+      const l = document.createElement("span"); l.textContent = "% of median SWE";
+      const rv = document.createElement("span"); rv.textContent = pct + "% (median " + med.toFixed(1) + '")';
+      pk.append(l, rv);
+      const barWrap = document.createElement("div"); barWrap.className = "pombar";
+      const fill = document.createElement("i");
+      fill.style.width = Math.min(100, pct / 2) + "%"; // bar spans 0–200%
+      fill.style.background = pct >= 90 ? "var(--high)" : pct >= 60 ? "var(--snow)" : "var(--low)";
+      const mid = document.createElement("span"); mid.className = "mid";
+      barWrap.append(fill, mid);
+      pom.append(pk, barWrap);
+    } else {
+      const l = document.createElement("span"); l.textContent = "Median SWE for today";
+      const rv = document.createElement("span"); rv.textContent = med.toFixed(1) + '"';
+      pk.append(l, rv); pom.append(pk);
+    }
+    el.append(pom);
+  }
+
+  const asof = document.createElement("div"); asof.className = "asof";
+  const dt = (rec && (rec.snwd || rec.wteq)) ? (rec.snwd || rec.wteq).date : null;
+  asof.textContent = dt ? "As of " + dt : "No recent data";
+  el.append(asof);
+  return el;
+}
+function reading(label, val, unit) {
+  const d = document.createElement("div"); d.className = "reading";
+  const k = document.createElement("div"); k.className = "k"; k.textContent = label;
+  const v = document.createElement("div"); v.className = "v";
+  if (val === null || val === undefined) { v.textContent = "—"; }
+  else { v.textContent = (Math.round(val * 10) / 10).toString(); const sm = document.createElement("small"); sm.textContent = " " + unit; v.append(sm); }
+  d.append(k, v); return d;
+}
+
+let ALL_STATIONS = null, STATIONS_INFO = { t: null, stale: false };
+async function render() {
+  const loc = Suite.location.get(); if (!loc) return;
+  const main = $("#main");
+  if (!ALL_STATIONS) main.innerHTML = '<div class="grid">' + '<div class="skelcard"></div>'.repeat(6) + '</div>';
+  try {
+    if (!ALL_STATIONS) { const r = await getStations(); ALL_STATIONS = r.list; STATIONS_INFO = { t: r.t, stale: r.stale }; }
+  } catch (e) {
+    main.innerHTML = "";
+    const c = document.createElement("div"); c.className = "card-msg";
+    const b = document.createElement("div"); b.className = "big"; b.textContent = "Couldn't load the station list";
+    const p = document.createElement("div"); p.textContent = "The SNOTEL service didn't answer. Try again shortly.";
+    c.append(b, p); main.append(c); return;
+  }
+  const favs = getFavs();
+  const withDist = ALL_STATIONS.map(s => ({ s, d: haversineMi(loc.lat, loc.lon, s.lat, s.lon) })).sort((a, b) => a.d - b.d);
+  const nearest = withDist.slice(0, 8).map(x => x.s);
+  const favStations = favs.map(t => ALL_STATIONS.find(s => s.t === t)).filter(Boolean);
+  const nearestNonFav = nearest.filter(s => !favs.includes(s.t));
+
+  // one data request covers everything visible
+  const triplets = [...new Set([...favStations.map(s => s.t), ...nearestNonFav.map(s => s.t)])];
+  let data = { byTrip: {}, t: null, stale: false };
+  try { data = await getData(triplets); } catch (e) { /* no cache either — cards show "no recent data" */ }
+
+  main.textContent = "";
+  if (favStations.length) {
+    const h = document.createElement("div"); h.className = "section-h"; h.textContent = "Following";
+    const g = document.createElement("div"); g.className = "grid";
+    for (const s of favStations) g.append(stationCard(s, data.byTrip[s.t], loc));
+    main.append(h, g);
+  }
+  const h2 = document.createElement("div"); h2.className = "section-h";
+  h2.textContent = favStations.length ? "Nearest stations" : "Nearest SNOTEL stations";
+  const g2 = document.createElement("div"); g2.className = "grid";
+  for (const s of nearestNonFav) g2.append(stationCard(s, data.byTrip[s.t], loc));
+  main.append(h2, g2);
+
+  const stamp = document.createElement("div"); stamp.className = "stamp";
+  if (STATIONS_INFO.stale || data.stale) {
+    // never pretend stale data is fresh (API-AND-RELAY.md §2)
+    const ts = [];
+    if (STATIONS_INFO.stale && STATIONS_INFO.t) ts.push(STATIONS_INFO.t);
+    if (data.stale && data.t) ts.push(data.t);
+    const from = new Date(ts.length ? Math.min(...ts) : Date.now());
+    stamp.textContent = "Offline — showing cached data from " +
+      from.toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+  } else {
+    stamp.textContent = "Updated " + new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  }
+  main.append(stamp);
+}
+
+/* ---------- boot ---------- */
+Suite.liveRegion($("#main"));
+function boot() { $("#firstrun").innerHTML = ""; renderLocBar(); render(); }
+if (Suite.location.get()) boot(); else showFirstRun();
+document.addEventListener("visibilitychange", () => { if (!document.hidden && Suite.location.get()) render(); });
+</script>
+</body>
+</html>

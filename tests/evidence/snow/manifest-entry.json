@@ -1,0 +1,22 @@
+{
+  "id": "snow",
+  "file": "snow.html",
+  "name": "Snowpack & SNOTEL",
+  "cat": "earth",
+  "cx": "M",
+  "desc": "Mountain snow depth and snow-water equivalent from SNOTEL stations.",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": [
+    "https://wcc.sc.egov.usda.gov",
+    "https://api.zippopotam.us"
+  ],
+  "storage": [
+    "suite.location",
+    "suite.pref.snow.fav",
+    "suite.cache.snow.*"
+  ],
+  "cacheTtlMin": 60,
+  "since": "v1",
+  "flags": []
+}

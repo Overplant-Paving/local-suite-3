@@ -1,0 +1,19 @@
+{
+  "v1": {
+    "suite.pref.snow.fav": "[\"1110:NV:SNTL\"]",
+    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
+    "suite.cache.snow.stations": "{\"t\":1784147099722,\"v\":[{\"t\":\"301:CA:SNTL\",\"n\":\"Adin Mtn\",\"st\":\"CA\",\"lat\":41.23583,\"lon\":-120.79192,\"el\":6170},{\"t\":\"907:UT:SNTL\",\"n\":\"Agua Canyon\",\"s…(83233 chars)",
+    "suite.theme": "dark"
+  },
+  "v2": {
+    "suite.pref.snow.fav": "[\"842:CO:SNTL\"]",
+    "suite.location": "{\"lat\":39.6512,\"lon\":-106.3234,\"label\":\"Vail, CO\"}",
+    "suite.cache.snow.stations": "{\"t\":1784060696300,\"v\":[{\"t\":\"301:CA:SNTL\",\"n\":\"Adin Mtn\",\"st\":\"CA\",\"lat\":41.23583,\"lon\":-120.79192,\"el\":6170},{\"t\":\"907:UT:SNTL\",\"n\":\"Agua Canyon\",\"s…(83233 chars)",
+    "suite.cache.snow.data": "{\"t\":1784060696300,\"key\":\"1014:CO:SNTL,1040:CO:SNTL,1041:CO:SNTL,1120:CO:SNTL,415:CO:SNTL,485:CO:SNTL,802:CO:SNTL,842:CO:SNTL\",\"v\":[{\"stationTriplet\":…(10627 chars)",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": [
+    "suite.cache.snow.data"
+  ]
+}

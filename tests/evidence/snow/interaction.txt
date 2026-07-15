@@ -1,0 +1,22 @@
+first-run card (no suite.location): "Where are you?"
+LIVE (Los Angeles seed): 8 station cards rendered; nearest:
+  "Rainbow Canyon" (212 mi · NV · 7,840 ft) Snow depth=0 in, Snow-water eq.=0 in · Median SWE for today0.0" [As of 2026-07-14]
+  "Lee Canyon Upper" (212 mi · NV · 9,390 ft) Snow depth=0 in, Snow-water eq.=0 in [As of 2026-07-14]
+  "Bristlecone Trail" (213 mi · NV · 8,900 ft) Snow depth=0 in, Snow-water eq.=0 in · Median SWE for today0.0" [As of 2026-07-14]
+  "Lee Canyon" (213 mi · NV · 8,620 ft) Snow depth=0 in, Snow-water eq.=0 in · Median SWE for today0.0" [As of 2026-07-14]
+LIVE /stations evidence: suite.cache.snow.stations holds 913 trimmed SNOTEL stations (filter-bug workaround: *:*:SNTL fetched, ranked client-side); sample={"t":"301:CA:SNTL","n":"Adin Mtn","st":"CA","lat":41.23583,"lon":-120.79192,"el":6170}
+LIVE /data evidence: envelope key="1110:NV:SNTL,1111:NV:SNTL,1112:NV:SNTL,1317:CA:SNTL,1350:NV:SNTL,574:CA:SNTL,575:CA:SNTL,846:CA:SNTL"; response covers ["1110:NV:SNTL","1350:NV:SNTL","1111:NV:SNTL","1112:NV:SNTL","846:CA:SNTL","1317:CA:SNTL","574:CA:SNTL","575:CA:SNTL"]
+LIVE /data raw sample (latest values incl. median): {"triplet":"1110:NV:SNTL","elements":[{"code":"SNWD","latest":{"date":"2026-07-14","value":0}},{"code":"WTEQ","latest":{"date":"2026-07-14","value":0,"median":0}}]}
+LIVE zippopotam: ZIP 81657 -> location chip "📍 Vail, CO · change" (suite.location rewritten, data cache slot dropped and refetched for the new station set)
+LIVE (Vail, CO): nearest stations:
+  "Vail Mountain" (4 mi · CO · 10,290 ft) Snow depth=0 in, Snow-water eq.=0 in · Median SWE for today0.0" [As of 2026-07-14]
+  "Summit Ranch" (10 mi · CO · 9,350 ft) Snow depth=0 in, Snow-water eq.=0 in · Median SWE for today0.0" [As of 2026-07-14]
+  "Beaver Ck Village" (11 mi · CO · 8,530 ft) Snow depth=0 in, Snow-water eq.=0 in · Median SWE for today0.0" [As of 2026-07-09]
+  "Mccoy Park" (12 mi · CO · 9,500 ft) Snow depth=0 in, Snow-water eq.=0.1 in · Median SWE for today0.0" [As of 2026-07-14]
+starred "Vail Mountain": sections now [Following | Nearest stations]; suite.pref.snow.fav=["842:CO:SNTL"]; star aria-pressed=true, aria-label="Unfollow Vail Mountain", .on=true
+(star re-render served /data from the fresh cache — same station set, no extra network call)
+STALE PATH (network blocked, caches aged 24h): 8 cards rendered from cache (first: "Vail Mountain"); stamp: "Offline — showing cached data from Jul 14, 3:24 PM"
+(station list aged 24h is still inside its 7-day reference TTL -> served fromCache; /data aged past its 60-min TTL -> stale fallback, offline stamp)
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
