@@ -231,6 +231,9 @@ def gate_escaping_heuristic(source_texts, allowlist):
         allowed = set(allowlist.get(name, {}).keys())
         for body in SCRIPT_BODY_RE.findall(text):
             for m in re.finditer(r'\.innerHTML\s*\+?=', body):
+                rhs = body[m.end():].lstrip()
+                if rhs[:1] in ('"', "'"):
+                    continue  # plain string literal (e.g. innerHTML = "") — not a template
                 tick = body.find("`", m.end())
                 if tick == -1 or tick - m.end() > 200:
                     continue
