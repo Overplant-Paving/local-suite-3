@@ -1,0 +1,17 @@
+{
+  "id": "text",
+  "file": "text.html",
+  "name": "Text Toolbox",
+  "cat": "util",
+  "cx": "S",
+  "desc": "Counts, case, sort/dedupe, diff, SHA-256, URL/Base64.",
+  "network": "offline",
+  "key": null,
+  "endpoints": [],
+  "storage": [
+    "suite.theme"
+  ],
+  "cacheTtlMin": null,
+  "since": "v1",
+  "flags": []
+}

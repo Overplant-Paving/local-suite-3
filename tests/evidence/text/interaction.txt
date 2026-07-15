@@ -1,0 +1,28 @@
+counts expected: 5 words / 23 characters / 19 no spaces / 2 lines / 1 sentences / 1 paragraphs / <1 min
+counts actual:   5 words / 23 characters / 19 no spaces / 2 lines / 1 sentences / 1 paragraphs / <1 min read time
+UPPERCASE expected "HELLO WORLD" actual "HELLO WORLD"
+camelCase expected "helloWorld" actual "helloWorld"
+undo (1x) expected "HELLO WORLD" actual "HELLO WORLD"
+sort A-Z expected "apple\nbanana\nbanana\ncherry" actual "apple\nbanana\nbanana\ncherry"
+dedupe expected "apple\nbanana\ncherry" actual "apple\nbanana\ncherry"
+shuffle output sorted back expected "1,2,3,4,5" actual "1,2,3,4,5"
+jsonPretty produces indented output: true
+jsonMin expected '{"b":1,"a":[1,2]}' actual '{"b":1,"a":[1,2]}'
+jsonPretty error hint: "Could not apply: Unexpected token 'o', "not json" is not valid JSON"
+error left input untouched: "not json"
+SHA-256("abc") expected ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
+SHA-256("abc") actual   ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad  match=true
+Base64 encode("Hello, Wörld! ✓") = SGVsbG8sIFfDtnJsZCEg4pyT
+Base64 round-trip expected "Hello, Wörld! ✓" actual "Hello, Wörld! ✓" match=true
+URL encode("a b&c=d?é") = a%20b%26c%3Dd%3F%C3%A9
+URL round-trip expected "a b&c=d?é" actual "a b&c=d?é" match=true
+Base64 decode of junk shows error: "Error: Failed to execute 'atob' on 'Window': The string to b"
+diff visible=true expected del/ins/eq = 2/2/1, actual 2/2/1
+diff word marks expected [brown, red, removed, added] actual [brown, red, removed, added]
+diff summary expected "2 lines added, 2 removed." actual "2 lines added, 2 removed."
+diff identical-texts summary: "The two texts are identical."
+tab switch back to transform: shown=true, encode hidden=true, diff hidden=true
+copy toast says: "Copied"
+webcrypto on file: secureContext=true crypto.subtle=true
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)
