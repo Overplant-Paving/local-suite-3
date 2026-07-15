@@ -65,15 +65,19 @@ def host_of(url):
 def sha256_b64(text):
     return base64.b64encode(hashlib.sha256(text.encode("utf-8")).digest()).decode()
 
-def build_csp(html, endpoints):
-    """Per-file CSP meta tag: sha256 hashes of every inline script + manifest hosts (ADR D6)."""
+def build_csp(html, endpoints, script_endpoints=()):
+    """Per-file CSP meta tag: sha256 hashes of every inline script + manifest hosts (ADR D6).
+    script_endpoints: rare per-tool script-src host additions for JSONP sources (currently
+    only geo.html's Census geocoder, which is JSONP-only by the provider's design — a host
+    source is far narrower than the documented unsafe-inline fallback)."""
     hashes = " ".join(f"'sha256-{sha256_b64(body)}'"
                       for body in SCRIPT_BODY_RE.findall(html))
+    script_src = hashes + "".join(f" {host_of(e)}" for e in script_endpoints)
     hosts = " ".join(dict.fromkeys(host_of(e) for e in endpoints))  # dedupe, keep order
     connect = hosts if hosts else "'none'"
     img = f"data: {hosts}".strip()
     return ('<meta http-equiv="Content-Security-Policy" content="'
-            f"default-src 'none'; script-src {hashes}; style-src 'unsafe-inline'; "
+            f"default-src 'none'; script-src {script_src}; style-src 'unsafe-inline'; "
             f'img-src {img}; connect-src {connect}">')
 
 def render_tool(name, source, core_css, core_js, manifest_tools):

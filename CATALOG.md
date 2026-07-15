@@ -135,7 +135,7 @@ Mountain snow depth and snow-water equivalent from SNOTEL stations — skiers an
 
 ### 2.7 Wildlife Sightings Nearby *(global source)*
 Recent notable bird sightings around you (eBird) or all-taxa observations (iNaturalist).
-- **Data:** iNaturalist `https://api.inaturalist.org/v1/observations?lat={lat}&lng={lon}&radius=25&order_by=observed_on` (keyless, CORS ✓). eBird needs a free key.
+- **Data:** iNaturalist `https://api.inaturalist.org/v1/observations?lat={lat}&lng={lon}&radius=25&order_by=observed_on` (keyless, CORS ✓). eBird needs a free key. Observation photos load from `inaturalist-open-data.s3.amazonaws.com` and `static.inaturalist.org`; the eBird API host is `api.ebird.org` (key via x-ebirdapitoken header) — v2, Jul 2026.
 - **Key:** none (iNat) / free key (eBird) · **Local:** file:// ✅ · **Complexity:** S
 - **Suggested file:** `wildlife.html`
 
@@ -157,7 +157,7 @@ NASA's APOD with its explanation — a serene "new tab" page.
 
 ### 3.3 Near-Earth Asteroid Watch
 Today's close approaches: how big, how fast, how close (in lunar distances) — existential perspective with breakfast.
-- **Data:** JPL SSD close-approach API `https://ssd-api.jpl.nasa.gov/cad.api` (fully keyless); or NASA NeoWs `https://api.nasa.gov/neo/rest/v1/feed/today?api_key=DEMO_KEY`.
+- **Data:** JPL SSD close-approach API `https://ssd-api.jpl.nasa.gov/cad.api` — **CORS regression (verified Jul 2026): cad.api no longer sends ACAO for any origin; all browser fetches blocked. Re-source to NeoWs (api.nasa.gov, CORS ✓, demo tier) queued for Batch C.** `` (fully keyless); or NASA NeoWs `https://api.nasa.gov/neo/rest/v1/feed/today?api_key=DEMO_KEY`.
 - **Key:** none (JPL) / demo tier (NeoWs) · **Local:** file:// ✅ · **Complexity:** S
 - **Suggested file:** `asteroids.html`
 
@@ -343,7 +343,7 @@ A daily word with definition and origin; keeps a little "words I've met" list in
 
 ### 7.7 Book & Library Lookup
 Search books, see covers/editions, keep a "read next" list; ISBN lookup.
-- **Data:** Open Library `https://openlibrary.org/search.json?q={q}` (keyless, CORS ✓ on search; 1 req/s anonymous). Covers: load `https://covers.openlibrary.org/b/isbn/{isbn}-M.jpg` as `<img>` (the covers host has CORS gaps for fetch — images don't care). Google Books keyless `https://www.googleapis.com/books/v1/volumes?q=` as backup.
+- **Data:** Open Library `https://openlibrary.org/search.json?q={q}` (keyless, CORS ✓ on search; 1 req/s anonymous). Covers: load `https://covers.openlibrary.org/b/isbn/{isbn}-M.jpg` as `<img>` (the covers host has CORS gaps for fetch — images don't care). Google Books keyless `https://www.googleapis.com/books/v1/volumes?q=` as backup. Google Books fallback: `www.googleapis.com` (JSON) + `books.google.com` (thumbnails) — v2, Jul 2026.
 - **Key:** none · **Local:** file:// ✅ · **Complexity:** S
 - **Suggested file:** `books.html`
 

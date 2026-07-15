@@ -219,6 +219,13 @@ errors** across all 9 browser×file combinations (evidence:
 `tests/evidence/phase1/csp-verdict.txt`). **Verdict: full hash-based CSP ships suite-wide in
 Phase 2; the per-file `unsafe-inline` fallback remains documented but was not needed.**
 
+**D6 addendum 2 (Batch B, 2026-07-15).** One tool needed a narrower per-file relaxation than the
+documented fallback: geo.html's Census geocoder is JSONP-only by the provider's design (no ACAO
+header — re-verified via curl and a live fetch probe). The manifest entry may declare
+`scriptEndpoints`: hosts appended to that file's `script-src` alongside the hashes. Scripts still
+cannot be injected from anywhere else, and no file uses `unsafe-inline`. Sole user: geo.html →
+`https://geocoding.geo.census.gov`.
+
 ## 9. Risks & mitigations
 
 | Risk | Mitigation |
