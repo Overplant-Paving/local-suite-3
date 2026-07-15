@@ -78,7 +78,7 @@ def build_csp(html, endpoints, script_endpoints=()):
     img = f"data: {hosts}".strip()
     return ('<meta http-equiv="Content-Security-Policy" content="'
             f"default-src 'none'; script-src {script_src}; style-src 'unsafe-inline'; "
-            f'img-src {img}; connect-src {connect}">')
+            f'img-src {img}; media-src {connect}; connect-src {connect}">')
 
 def render_tool(name, source, core_css, core_js, manifest_tools):
     """Source tool -> self-contained dist file: inline core, header comment, hub data, CSP."""
