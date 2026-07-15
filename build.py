@@ -17,6 +17,11 @@ import re
 import sys
 from pathlib import Path
 
+# Windows consoles default to cp1252; gate output quotes tool source (arrows,
+# em-dashes), which must never crash the check itself.
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 ROOT = Path(__file__).resolve().parent
 TOOLS_DIR = ROOT / "tools"
 DIST_DIR = ROOT / "dist"
