@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dictionary &amp; Thesaurus · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  body { padding: 1.4rem 1.25rem 4rem; }
+  .wrap { max-width: 780px; margin: 0 auto; }
+  .topbar { display: flex; align-items: center; gap: .8rem; }
+  .spacer { flex: 1; }
+  header h1 { font-size: 1.7rem; letter-spacing: -.02em; margin-top: 1rem; }
+  header .tag { color: var(--muted); margin-top: .3rem; max-width: 46rem; font-size: .95rem; }
+  .searchrow { display: flex; gap: .5rem; margin: 1.3rem 0 .3rem; }
+  .search { flex: 1; font-size: 1.05rem; font-family: inherit; }
+  .gobtn { border: 1px solid var(--accent); background: var(--accent); color: #fff; border-radius: 12px; padding: 0 1.2rem; cursor: pointer; font-size: 1rem; }
+  .gobtn:hover { filter: brightness(1.06); }
+  .history { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1.2rem; min-height: 1.2rem; }
+  .hchip { border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 999px; padding: .2rem .7rem; font-size: .82rem; cursor: pointer; }
+  .hchip:hover { border-color: var(--accent); color: var(--accent); }
+  .card { display: block; padding: 1.3rem 1.4rem; margin-bottom: 1rem; }
+  .word-head { display: flex; align-items: baseline; gap: .8rem; flex-wrap: wrap; }
+  .word-head h2 { font-size: 2rem; letter-spacing: -.01em; }
+  .phon { color: var(--muted); font-size: 1.05rem; font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace; }
+  .audio-btn { border: 1px solid var(--line); background: var(--bg); color: var(--accent); border-radius: 999px; width: 2.1rem; height: 2.1rem; cursor: pointer; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; }
+  .audio-btn:hover { border-color: var(--accent); }
+  .pos { margin-top: 1.3rem; }
+  .pos h3 { font-size: 1rem; color: var(--accent); font-style: italic; border-bottom: 1px solid var(--line); padding-bottom: .3rem; margin-bottom: .6rem; }
+  ol.defs { margin: 0 0 0 1.3rem; padding: 0; display: flex; flex-direction: column; gap: .55rem; }
+  ol.defs li { padding-left: .2rem; }
+  .example { color: var(--muted); font-style: italic; font-size: .92rem; margin-top: .2rem; }
+  .synrow { margin-top: .35rem; font-size: .88rem; }
+  .synrow .lbl { color: var(--muted); text-transform: uppercase; letter-spacing: .05em; font-size: .72rem; margin-right: .3rem; }
+  .synchip { display: inline-block; border: 1px solid var(--line); background: var(--bg); color: var(--accent); border-radius: 999px; padding: .12rem .6rem; font-size: .82rem; cursor: pointer; margin: .15rem .2rem .15rem 0; }
+  .synchip.ant { color: #b0522a; }
+  .synchip:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .msg { padding: 1.1rem 1.2rem; border-radius: 12px; background: var(--accent-soft); font-size: .95rem; }
+  .msg.err { background: color-mix(in srgb, #c0402d 14%, transparent); }
+  .src-note { font-size: .8rem; color: var(--muted); margin-top: 1rem; }
+  .loading { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <div class="spacer"></div>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Dictionary &amp; Thesaurus</h1>
+    <p class="tag">Instant definitions, pronunciation, and synonyms — no ads, no accounts. Click any synonym or
+      antonym to look it up. Recent words are cached for offline recall.</p>
+  </header>
+
+  <div class="searchrow">
+    <input class="search" id="q" type="search" placeholder="Look up a word…  (press Enter)" autocomplete="off" autofocus aria-label="Look up a word">
+    <button class="gobtn" id="go">Search</button>
+  </div>
+  <div class="history" id="history" aria-label="Recent lookups"></div>
+
+  <div id="result"></div>
+
+  <footer>Data: dictionaryapi.dev (primary) · Wiktionary REST (fallback) · pronunciation audio from Wikimedia Commons.</footer>
+</div>
+
+<audio id="player"></audio>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---------- helpers ---------- */
+function el(tag, cls, txt){ const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+/* mouse + keyboard activation for the span chips (a11y: keyboard path for every mouse path) */
+function chipify(node, fn){
+  node.setAttribute("role", "button");
+  node.tabIndex = 0;
+  node.addEventListener("click", fn);
+  node.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fn(); } });
+  return node;
+}
+/* one live request per source, no fetchJSON-level caching: the tool caches the
+   NORMALIZED model under the v1 keys (suite.cache.dictionary.<word>) instead of
+   raw per-source responses, so v1 caches keep working and keys stay identical. */
+async function fetchSource(url){
+  const r = await Suite.fetchJSON(url, { fallbackToCache: false, accept: "application/json" });
+  return r.v;
+}
+function cacheGet(key){
+  const e = Suite.store.get("suite.cache.dictionary." + key);
+  return (e && typeof e === "object" && "t" in e && "v" in e) ? e : null;
+}
+function cacheSet(key, v){ Suite.store.set("suite.cache.dictionary." + key, { t: Date.now(), v }); }
+
+/* reference data: manifest cacheTtlMin 10080 (7 days) — a looked-up word is served
+   from cache within the TTL instead of re-hitting the source (API-AND-RELAY.md §2). */
+const TTL = 10080 * 60 * 1000;
+
+const resultEl = Suite.liveRegion(document.getElementById("result"));
+const player = document.getElementById("player");
+
+/* ---------- history ---------- */
+function getHistory(){ const h = Suite.store.get("suite.dictionary.history", []); return Array.isArray(h) ? h : []; }
+function pushHistory(word){
+  let h = getHistory().filter(w => w !== word);
+  h.unshift(word); h = h.slice(0, 16);
+  Suite.store.set("suite.dictionary.history", h);
+  renderHistory();
+}
+function renderHistory(){
+  const box = document.getElementById("history");
+  box.innerHTML = "";
+  const h = getHistory();
+  if (!h.length) return;
+  h.forEach(w => {
+    box.append(chipify(el("span", "hchip", w), () => search(w)));
+  });
+}
+
+/* ---------- normalize the two API shapes into one model ---------- */
+/* model: { word, phonetic, audio, meanings:[{pos, defs:[{def, example, synonyms:[], antonyms:[]}], synonyms:[], antonyms:[]}], source } */
+function fromDictApi(data) {
+  const entries = Array.isArray(data) ? data : [];
+  if (!entries.length) return null;
+  let phonetic = "", audio = "";
+  const meanings = [];
+  entries.forEach(e => {
+    if (!phonetic && e.phonetic) phonetic = e.phonetic;
+    (e.phonetics || []).forEach(p => { if (!phonetic && p.text) phonetic = p.text; if (!audio && p.audio) audio = p.audio; });
+    (e.meanings || []).forEach(m => {
+      meanings.push({
+        pos: m.partOfSpeech || "",
+        defs: (m.definitions || []).map(d => ({ def: d.definition || "", example: d.example || "", synonyms: d.synonyms || [], antonyms: d.antonyms || [] })),
+        synonyms: m.synonyms || [], antonyms: m.antonyms || [],
+      });
+    });
+  });
+  if (!meanings.length) return null;
+  return { word: entries[0].word, phonetic, audio, meanings, source: "dictionaryapi.dev" };
+}
+function fromWiktionary(data, word) {
+  // shape: { en: [ { partOfSpeech, definitions:[{definition (HTML), examples:[HTML]}] } ], ... }
+  const en = data && data.en;
+  if (!Array.isArray(en) || !en.length) return null;
+  const meanings = en.map(m => ({
+    pos: (m.partOfSpeech || "").toLowerCase(),
+    defs: (m.definitions || []).map(d => ({ def: stripHtml(d.definition || ""), example: (d.examples && d.examples[0]) ? stripHtml(d.examples[0]) : "", synonyms: [], antonyms: [] }))
+              .filter(d => d.def),
+    synonyms: [], antonyms: [],
+  })).filter(m => m.defs.length);
+  if (!meanings.length) return null;
+  return { word, phonetic: "", audio: "", meanings, source: "Wiktionary" };
+}
+/* DOMParser instead of a detached div: parses the remote Wiktionary HTML without
+   triggering subresource loads; scripts inert; only textContent is extracted. */
+function stripHtml(html) {
+  const doc = new DOMParser().parseFromString(String(html == null ? "" : html), "text/html");
+  return (doc.body.textContent || "").trim();
+}
+
+/* ---------- search ---------- */
+async function search(word) {
+  word = (word || "").trim().toLowerCase();
+  if (!word) return;
+  document.getElementById("q").value = word;
+  resultEl.innerHTML = "";
+  const loading = el("div", "card loading", "Looking up “" + word + "”…");
+  resultEl.append(loading);
+
+  const cacheKey = encodeURIComponent(word);
+  const cached = cacheGet(cacheKey);
+
+  /* fresh within the reference-data TTL: serve from cache, no request */
+  if (cached && Date.now() - cached.t < TTL) {
+    pushHistory((cached.v && cached.v.word) || word);
+    render(cached.v, false, cached.t);
+    return;
+  }
+
+  let model = null, fromCache = false;
+
+  try {
+    const data = await fetchSource("https://api.dictionaryapi.dev/api/v2/entries/en/" + encodeURIComponent(word));
+    model = fromDictApi(data);
+  } catch (e) { /* 404 or network failure — fall through to Wiktionary */ }
+
+  if (!model) {
+    try {
+      const wdata = await fetchSource("https://en.wiktionary.org/api/rest_v1/page/definition/" + encodeURIComponent(word));
+      model = fromWiktionary(wdata, word);
+    } catch (e) { /* fall through to cache */ }
+  }
+
+  if (!model && cached) { model = cached.v; fromCache = true; }
+
+  if (!model) {
+    resultEl.innerHTML = "";
+    resultEl.append(el("div", "msg err", "No definition found for “" + word + "”. Check the spelling, or it may be a word neither dictionary covers."));
+    return;
+  }
+
+  if (!fromCache) cacheSet(cacheKey, model); /* only fresh data refreshes the timestamp */
+  pushHistory(model.word || word);
+  render(model, fromCache, fromCache ? cached.t : Date.now());
+}
+
+function render(model, fromCache, fetchedAt) {
+  resultEl.innerHTML = "";
+  const card = el("div", "card");
+  const head = el("div", "word-head");
+  head.append(el("h2", null, model.word));
+  if (model.phonetic) head.append(el("span", "phon", model.phonetic));
+  if (model.audio) {
+    const btn = el("button", "audio-btn", "🔊");
+    btn.title = "Play pronunciation";
+    btn.setAttribute("aria-label", "Play pronunciation");
+    btn.addEventListener("click", () => { player.src = model.audio; player.play().catch(() => {}); });
+    head.append(btn);
+  }
+  card.append(head);
+
+  model.meanings.forEach(m => {
+    const sec = el("div", "pos");
+    if (m.pos) sec.append(el("h3", null, m.pos));
+    const ol = el("ol", "defs");
+    m.defs.forEach(d => {
+      const li = document.createElement("li");
+      li.append(document.createTextNode(d.def));
+      if (d.example) li.append(el("div", "example", "“" + d.example + "”"));
+      if (d.synonyms && d.synonyms.length) li.append(chipRow("Synonyms", d.synonyms, false));
+      if (d.antonyms && d.antonyms.length) li.append(chipRow("Antonyms", d.antonyms, true));
+      ol.append(li);
+    });
+    sec.append(ol);
+    // meaning-level syn/ant (dictionaryapi groups some here)
+    if (m.synonyms && m.synonyms.length) sec.append(chipRow("Synonyms", dedupe(m.synonyms), false));
+    if (m.antonyms && m.antonyms.length) sec.append(chipRow("Antonyms", dedupe(m.antonyms), true));
+    card.append(sec);
+  });
+
+  const note = el("div", "src-note", (fromCache ? "Offline — cached from " + new Date(fetchedAt).toLocaleString() + " · " : "") + "Source: " + model.source);
+  card.append(note);
+  resultEl.append(card);
+}
+function dedupe(arr){ return [...new Set(arr)]; }
+function chipRow(label, words, isAnt) {
+  const row = el("div", "synrow");
+  row.append(el("span", "lbl", label));
+  dedupe(words).slice(0, 24).forEach(w => {
+    const c = chipify(el("span", "synchip" + (isAnt ? " ant" : ""), w),
+      () => { search(w); window.scrollTo({ top: 0, behavior: "smooth" }); });
+    row.append(c);
+  });
+  return row;
+}
+
+/* ---------- wire up ---------- */
+const qEl = document.getElementById("q");
+document.getElementById("go").addEventListener("click", () => search(qEl.value));
+qEl.addEventListener("keydown", e => { if (e.key === "Enter") search(qEl.value); });
+renderHistory();
+const last = getHistory()[0];
+if (last) search(last); else search("serendipity");
+</script>
+</body>
+</html>

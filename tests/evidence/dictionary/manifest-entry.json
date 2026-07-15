@@ -1,0 +1,15 @@
+{
+  "id": "dictionary",
+  "file": "dictionary.html",
+  "name": "Dictionary & Thesaurus",
+  "cat": "ref",
+  "cx": "S",
+  "desc": "Instant definitions and synonyms — the no-ads dictionary.",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": ["https://api.dictionaryapi.dev", "https://en.wiktionary.org"],
+  "storage": ["suite.dictionary.history", "suite.cache.dictionary.*"],
+  "cacheTtlMin": 10080,
+  "since": "v1",
+  "flags": ["ea"]
+}

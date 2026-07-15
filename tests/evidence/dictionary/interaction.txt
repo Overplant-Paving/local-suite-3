@@ -1,0 +1,26 @@
+auto-search rendered word: "serendipity"
+phonetic: "/ˌsɛ.ɹən.ˈdɪ.pɪ.ti/"
+first definition: "A combination of events which have come together by chance to make a surprisingly good or wonderful outcome."
+synonym chips rendered: [chance, luck, chance, luck]
+antonym chips rendered: [Murphy's law, perfect storm, Murphy's law, perfect storm]
+source note: "Source: dictionaryapi.dev"
+cache envelope written: t=1784147471558 source=dictionaryapi.dev meanings=1 audio=https://api.dictionaryapi.dev/media/pronunciations/en/serendipity-au.mp3
+audio button present: true aria-label="Play pronunciation"
+Enter-submitted lookup rendered: "ephemeral"
+  first definition: "Something which lasts for a short period of time."
+synonym chip "ephemeron" activated via keyboard Enter -> rendered "ephemeron"
+  primary source blocked for this word -> fallback source note: "Source: Wiktionary"
+history chips: [ephemeron(role=button,tab=0), ephemeral(role=button,tab=0), serendipity(role=button,tab=0)]
+history chip click re-rendered: "ephemeral" note="Source: dictionaryapi.dev"
+not-found state: "No definition found for “zzxqwvv”. Check the spelling, or it may be a word neither dictionary covers."
+gibberish NOT pushed to history (v1 parity): [ephemeral, ephemeron, serendipity]
+offline reload rendered word: "ephemeral"
+offline stale note: "Offline — cached from 7/7/2026, 3:31:12 PM · Source: dictionaryapi.dev"
+restored (fresh cache, no refetch): "ephemeral" note="Source: dictionaryapi.dev"
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

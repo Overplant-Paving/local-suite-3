@@ -143,7 +143,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 45 | illness.html | health | cors | — | B | | ✅ `tests/evidence/illness/` |
 | 46 | medicine.html | health | cors | — | B | | ✅ `tests/evidence/medicine/` |
 | 47 | foodrecalls.html | health | cors | — | B | | ✅ `tests/evidence/foodrecalls/` |
-| 48 | dictionary.html | ref | cors | — | B | EA | ⬜ |
+| 48 | dictionary.html | ref | cors | — | B | EA | ✅ `tests/evidence/dictionary/` |
 | 49 | wiki.html | ref | cors | — | B | EA | ⬜ |
 | 50 | zip.html | ref | cors | — | B | | ✅ `tests/evidence/zip/` |
 | 51 | factbook.html | ref | off | — | B | EA — shipped v1 is zero-network (embedded data, emoji flags); the cors label was a planning artifact | ✅ `tests/evidence/factbook/` |
