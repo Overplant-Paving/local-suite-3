@@ -1,0 +1,46 @@
+== Batch A completion gates (2026-07-15) ==
+
+$ python build.py --check
+GATE manifest-files-sync  pass
+GATE markers              pass
+GATE dist-staleness       pass
+GATE no-inline-handlers   pass
+GATE csp                  pass
+GATE escaping-heuristic   pass
+GATE catalog-crosscheck   pass
+GATE key-hygiene          pass
+NEGATIVE TESTS          pass (all fatal gates seen to fail on fixtures)
+
+migrated: 23/71 tools (+hub)  by network: {'offline': 22, 'cors-open': 1}  flagged: 6
+
+--check: all fatal gates green
+exit: 0
+
+$ node smoke.mjs (tier 2, all dist files)
+ok   almanac.html
+ok   color.html
+ok   convert.html
+ok   dataviewer.html
+ok   dates.html
+ok   daylight.html
+ok   emergency.html
+ok   flashcards.html
+ok   focus.html
+ok   holidays.html
+ok   index.html
+ok   loan.html
+ok   notes.html
+ok   paper.html
+ok   printables.html
+ok   qr.html
+ok   random.html
+ok   sound.html
+ok   text.html
+ok   timers.html
+ok   tripcost.html
+ok   voting.html
+ok   weather.html
+ok   worldclock.html
+
+smoke: 24/24 green
+exit: 0
