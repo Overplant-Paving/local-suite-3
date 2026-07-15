@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Printable Calendar &amp; Planner · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  body { padding: 1.6rem 1.25rem 4rem; }
+  .wrap { max-width: 1000px; margin: 0 auto; }
+  header { position: relative; }
+  header h1 { font-size: 1.7rem; letter-spacing: -.02em; margin-top: .5rem; }
+  header .tag { color: var(--muted); margin-top: .3rem; max-width: 46rem; }
+
+  .panel {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: var(--shadow); padding: 1.1rem 1.2rem; margin-top: 1.4rem;
+  }
+  .tabs { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .tabs button { border: none; background: transparent; color: var(--muted); padding: .5rem 1rem; cursor: pointer; font-size: .9rem; }
+  .tabs button.on { background: var(--accent); color: #fff; }
+  .opts { display: flex; flex-wrap: wrap; gap: 1rem 1.4rem; align-items: flex-end; margin-top: 1rem; }
+  .opt { display: flex; flex-direction: column; gap: .25rem; }
+  .opt label { font-size: .78rem; color: var(--muted); }
+  input, select, textarea {
+    padding: .5rem .65rem; font-size: .92rem; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 9px; background: var(--bg); outline: none; font-family: inherit;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  .opt.check { flex-direction: row; align-items: center; gap: .45rem; }
+  .opt.check input { width: 1.1rem; height: 1.1rem; accent-color: var(--accent); }
+  .actions { margin-top: 1.1rem; display: flex; gap: .6rem; flex-wrap: wrap; }
+  .btn { border: 1px solid var(--accent); background: var(--accent); color: #fff; border-radius: 10px; padding: .6rem 1.2rem; cursor: pointer; font-size: .95rem; font-weight: 600; }
+  .btn.ghost { background: var(--card); color: var(--accent); }
+  .btn:hover { filter: brightness(1.05); }
+  .previewNote { color: var(--muted); font-size: .82rem; margin: 1.6rem 0 .6rem; }
+
+  /* the printable sheet — always light so the preview matches the print */
+  .stage { display: flex; justify-content: center; }
+  .sheet {
+    background: #ffffff; color: #1a1a1a; width: 100%; max-width: 900px;
+    border: 1px solid #d8d4ca; border-radius: 6px; box-shadow: 0 4px 24px rgba(0,0,0,.12);
+    padding: 22px 24px; overflow-x: auto;
+  }
+  .sheet.landscape { max-width: 1100px; }
+  .sheet .sh-title { font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; }
+  .sheet .sh-sub { color: #666; font-size: .9rem; margin-top: .1rem; }
+  .sheet .sh-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; gap: 1rem; flex-wrap: wrap; }
+
+  /* month calendar */
+  table.cal { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  table.cal th { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: #555; padding: 6px 4px; border-bottom: 1.5px solid #bbb; text-align: left; }
+  table.cal td { border: 1px solid #cfcac0; vertical-align: top; height: 92px; padding: 4px 5px; }
+  table.cal td.pad { background: #fafafa; }
+  table.cal .dnum { font-size: .95rem; font-weight: 600; }
+  table.cal td.today { outline: 2px solid #2f6f6a; outline-offset: -2px; }
+  table.cal .hol { font-size: .62rem; color: #b23; margin-top: 2px; line-height: 1.15; }
+  table.cal .wknd .dnum { color: #999; }
+
+  /* weekly planner */
+  .weekgrid { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
+  .days7 { display: flex; flex-direction: column; gap: 8px; }
+  .dayblock { border: 1px solid #cfcac0; border-radius: 5px; padding: 6px 9px; min-height: 74px; }
+  .dayblock .dh { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #e3e0d8; padding-bottom: 3px; margin-bottom: 4px; }
+  .dayblock .dh b { font-size: .95rem; }
+  .dayblock .dh span { color: #888; font-size: .8rem; }
+  .dayblock .dh .hol { color: #b23; font-size: .72rem; }
+  .lines { background-image: repeating-linear-gradient(#fff 0 22px, #e6e3db 22px 23px); min-height: 46px; }
+  .sidebar .box { border: 1px solid #cfcac0; border-radius: 5px; padding: 8px 10px; margin-bottom: 12px; }
+  .sidebar .box h4 { font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: #555; margin-bottom: 6px; }
+  .sidebar .box .lines { min-height: 120px; }
+
+  /* habit tracker */
+  table.habit { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  table.habit th, table.habit td { border: 1px solid #cfcac0; text-align: center; }
+  table.habit thead th { font-size: .62rem; color: #555; padding: 3px 1px; }
+  table.habit thead th.wd { color: #999; font-weight: 400; }
+  table.habit td.hname, table.habit th.hname { text-align: left; padding: 5px 8px; font-size: .85rem; width: 150px; font-weight: 500; }
+  table.habit td.wknd { background: #fafafa; }
+  table.habit tbody td { height: 26px; }
+  table.habit td.today { outline: 2px solid #2f6f6a; outline-offset: -2px; }
+
+  /* ---------- print ---------- */
+  @media print {
+    body { padding: 0; background: #fff; }
+    .noprint { display: none !important; }
+    .stage { display: block; }
+    .sheet { max-width: none; width: auto; border: none; border-radius: 0; box-shadow: none; padding: 0; overflow: visible; }
+    table.cal td { height: 108px; }
+  }
+</style>
+<style id="pageStyle">@page { size: portrait; margin: 12mm; }</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="noprint">
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+    <h1>Printable Calendar &amp; Planner Pages</h1>
+    <p class="tag">Make a clean monthly calendar, a weekly planner, or a habit tracker and send it to paper.
+      What you see below is exactly what prints. US federal holidays can be overlaid, computed offline.</p>
+  </header>
+
+  <div class="panel noprint">
+    <div class="tabs" id="tabs">
+      <button data-t="month" class="on">Monthly calendar</button>
+      <button data-t="week">Weekly planner</button>
+      <button data-t="habit">Habit tracker</button>
+    </div>
+
+    <div class="opts" id="opts"></div>
+
+    <div class="actions">
+      <button class="btn" id="printBtn">🖨 Print</button>
+      <button class="btn ghost" id="todayBtn">Jump to today</button>
+    </div>
+  </div>
+
+  <p class="previewNote noprint">Preview</p>
+  <div class="stage">
+    <div class="sheet" id="sheet"></div>
+  </div>
+
+  <footer class="noprint">No network — everything happens on your machine. Holiday dates are computed with US federal date rules.</footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---------- US federal holidays (actual dates + observed) ---------- */
+function nthWeekday(year, month, weekday, n){
+  let count = 0;
+  for (let d = 1; d <= 31; d++){
+    const t = new Date(year, month, d);
+    if (t.getMonth() !== month) break;
+    if (t.getDay() === weekday){ count++; if (count === n) return t; }
+  }
+  return null;
+}
+function lastWeekday(year, month, weekday){
+  let last = null;
+  for (let d = 1; d <= 31; d++){
+    const t = new Date(year, month, d);
+    if (t.getMonth() !== month) break;
+    if (t.getDay() === weekday) last = t;
+  }
+  return last;
+}
+function ymd(dt){ return dt.getFullYear() + "-" + String(dt.getMonth()+1).padStart(2,"0") + "-" + String(dt.getDate()).padStart(2,"0"); }
+const holCache = {};
+function holidayMap(year){
+  if (holCache[year]) return holCache[year];
+  const map = {};
+  const add = (dt, name) => { map[ymd(dt)] = name; };
+  add(new Date(year,0,1), "New Year's Day");
+  add(nthWeekday(year,0,1,3), "MLK Jr. Day");
+  add(nthWeekday(year,1,1,3), "Presidents' Day");
+  add(lastWeekday(year,4,1), "Memorial Day");
+  add(new Date(year,5,19), "Juneteenth");
+  add(new Date(year,6,4), "Independence Day");
+  add(nthWeekday(year,8,1,1), "Labor Day");
+  add(nthWeekday(year,9,1,2), "Columbus Day");
+  add(new Date(year,10,11), "Veterans Day");
+  add(nthWeekday(year,10,4,4), "Thanksgiving");
+  add(new Date(year,11,25), "Christmas Day");
+  // observed shifts for fixed-date holidays landing on a weekend
+  [[new Date(year,0,1),"New Year's (observed)"],[new Date(year,5,19),"Juneteenth (observed)"],
+   [new Date(year,6,4),"Independence Day (observed)"],[new Date(year,10,11),"Veterans Day (observed)"],
+   [new Date(year,11,25),"Christmas (observed)"]].forEach(([dt,label]) => {
+    const dow = dt.getDay();
+    if (dow === 6){ const o = new Date(dt); o.setDate(o.getDate()-1); if (!map[ymd(o)]) map[ymd(o)] = label; }
+    else if (dow === 0){ const o = new Date(dt); o.setDate(o.getDate()+1); if (!map[ymd(o)]) map[ymd(o)] = label; }
+  });
+  holCache[year] = map;
+  return map;
+}
+
+/* ---------- shared state ---------- */
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const DOW_LONG = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const DOW_SHORT = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const DOW_LTR = ["S","M","T","W","T","F","S"];
+
+let tab = "month";
+const now = new Date();
+let state = {
+  month: now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2,"0"),
+  weekDate: ymd(now),
+  weekStart: 0,      // 0 = Sunday, 1 = Monday
+  holidays: true,
+  title: "",
+  orient: "portrait",
+  habits: "Water\nExercise\nRead\nSleep by 11\nNo phone in bed"
+};
+const todayY = now.getFullYear(), todayKey = ymd(now);
+
+const optsEl = document.getElementById("opts");
+const sheet = Suite.liveRegion(document.getElementById("sheet"));
+const pageStyle = document.getElementById("pageStyle");
+
+function o(labelHtml, control, forId){ return '<div class="opt">' + (labelHtml ? '<label' + (forId ? ' for="' + forId + '"' : '') + '>' + labelHtml + '</label>' : '') + control + '</div>'; }
+
+function renderOpts(){
+  let html = "";
+  if (tab === "month"){
+    html += o("Month", '<input type="month" id="oMonth" value="' + state.month + '">', "oMonth");
+  } else if (tab === "week"){
+    html += o("Any date in the week", '<input type="date" id="oWeekDate" value="' + state.weekDate + '">', "oWeekDate");
+  } else {
+    html += o("Month", '<input type="month" id="oHabitMonth" value="' + state.month + '">', "oHabitMonth");
+    html += o("Habits (one per line)", '<textarea id="oHabits" rows="4" cols="24" style="resize:vertical">' + escAttr(state.habits) + '</textarea>', "oHabits");
+  }
+  if (tab !== "habit"){
+    html += o("Week starts on", '<select id="oWeekStart"><option value="0"' + (state.weekStart===0?" selected":"") + '>Sunday</option><option value="1"' + (state.weekStart===1?" selected":"") + '>Monday</option></select>', "oWeekStart");
+  }
+  html += o("Title (optional)", '<input type="text" id="oTitle" placeholder="' + (tab==="week"?"My week":tab==="habit"?"Habits":"") + '" value="' + escAttr(state.title) + '">', "oTitle");
+  html += o("Paper", '<select id="oOrient"><option value="portrait"' + (state.orient==="portrait"?" selected":"") + '>Portrait</option><option value="landscape"' + (state.orient==="landscape"?" selected":"") + '>Landscape</option></select>', "oOrient");
+  html += '<div class="opt check"><input type="checkbox" id="oHol"' + (state.holidays?" checked":"") + '><label for="oHol">US federal holidays</label></div>';
+  optsEl.innerHTML = html;
+
+  const bind = (id, ev, fn) => { const e = document.getElementById(id); if (e) e.addEventListener(ev, fn); };
+  bind("oMonth","change", e => { state.month = e.target.value || state.month; render(); });
+  bind("oHabitMonth","change", e => { state.month = e.target.value || state.month; render(); });
+  bind("oWeekDate","change", e => { state.weekDate = e.target.value || state.weekDate; render(); });
+  bind("oWeekStart","change", e => { state.weekStart = +e.target.value; render(); });
+  bind("oTitle","input", e => { state.title = e.target.value; render(); });
+  bind("oHabits","input", e => { state.habits = e.target.value; render(); });
+  bind("oOrient","change", e => { state.orient = e.target.value; applyOrient(); render(); });
+  bind("oHol","change", e => { state.holidays = e.target.checked; render(); });
+}
+
+function applyOrient(){
+  pageStyle.textContent = "@page { size: " + state.orient + "; margin: 12mm; }";
+  sheet.classList.toggle("landscape", state.orient === "landscape");
+}
+
+function escHtml(s){ return String(s).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+function escAttr(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+/* ---------- month calendar ---------- */
+function renderMonth(){
+  const [y, m] = state.month.split("-").map(Number);
+  const year = y, monthIdx = m - 1;
+  const hols = state.holidays ? holidayMap(year) : {};
+  const order = []; for (let i = 0; i < 7; i++) order.push((state.weekStart + i) % 7);
+  const first = new Date(year, monthIdx, 1);
+  const daysInMonth = new Date(year, monthIdx + 1, 0).getDate();
+  const lead = (first.getDay() - state.weekStart + 7) % 7;
+
+  let head = '<div class="sh-head"><div><div class="sh-title">' +
+    (state.title ? escHtml(state.title) : MONTHS[monthIdx] + " " + year) + '</div>' +
+    (state.title ? '<div class="sh-sub">' + MONTHS[monthIdx] + " " + year + '</div>' : '') +
+    '</div></div>';
+
+  let t = '<table class="cal"><thead><tr>';
+  order.forEach(d => { t += '<th>' + DOW_LONG[d] + '</th>'; });
+  t += '</tr></thead><tbody>';
+
+  let day = 1 - lead;
+  const totalCells = Math.ceil((lead + daysInMonth) / 7) * 7;
+  for (let c = 0; c < totalCells; c++){
+    if (c % 7 === 0) t += "<tr>";
+    if (day < 1 || day > daysInMonth){
+      t += '<td class="pad"></td>';
+    } else {
+      const dt = new Date(year, monthIdx, day);
+      const key = ymd(dt);
+      const wknd = dt.getDay() === 0 || dt.getDay() === 6;
+      const hol = hols[key];
+      t += '<td class="' + (wknd ? "wknd " : "") + (key === todayKey ? "today" : "") + '">' +
+           '<div class="dnum">' + day + '</div>' +
+           (hol ? '<div class="hol">' + escHtml(hol) + '</div>' : '') +
+           '</td>';
+    }
+    if (c % 7 === 6) t += "</tr>";
+    day++;
+  }
+  t += "</tbody></table>";
+  sheet.innerHTML = head + t;
+}
+
+/* ---------- weekly planner ---------- */
+function renderWeek(){
+  const [y, m, d] = state.weekDate.split("-").map(Number);
+  const base = new Date(y, m - 1, d);
+  const offset = (base.getDay() - state.weekStart + 7) % 7;
+  const start = new Date(base); start.setDate(base.getDate() - offset);
+  const end = new Date(start); end.setDate(start.getDate() + 6);
+  const hols = state.holidays ? holidayMap(start.getFullYear()) : {};
+  const holsEnd = state.holidays ? holidayMap(end.getFullYear()) : {};
+
+  const rng = start.toLocaleDateString(undefined,{month:"long",day:"numeric"}) + " – " +
+    end.toLocaleDateString(undefined,{month:"long",day:"numeric",year:"numeric"});
+  let head = '<div class="sh-head"><div><div class="sh-title">' +
+    (state.title ? escHtml(state.title) : "Week of " + start.toLocaleDateString(undefined,{month:"long",day:"numeric"})) +
+    '</div><div class="sh-sub">' + rng + '</div></div></div>';
+
+  let days = '<div class="days7">';
+  for (let i = 0; i < 7; i++){
+    const dt = new Date(start); dt.setDate(start.getDate() + i);
+    const key = ymd(dt);
+    const hol = (hols[key] || holsEnd[key]);
+    days += '<div class="dayblock"><div class="dh"><b>' + DOW_LONG[dt.getDay()] + '</b>' +
+      '<span>' + dt.toLocaleDateString(undefined,{month:"short",day:"numeric"}) +
+      (hol ? ' · <span class="hol">' + escHtml(hol) + '</span>' : '') + '</span></div>' +
+      '<div class="lines"></div></div>';
+  }
+  days += '</div>';
+
+  const side = '<div class="sidebar">' +
+    '<div class="box"><h4>Top priorities</h4><div class="lines"></div></div>' +
+    '<div class="box"><h4>Notes</h4><div class="lines"></div></div>' +
+    '</div>';
+
+  sheet.innerHTML = head + '<div class="weekgrid">' + days + side + '</div>';
+}
+
+/* ---------- habit tracker ---------- */
+function renderHabit(){
+  const [y, m] = state.month.split("-").map(Number);
+  const year = y, monthIdx = m - 1;
+  const daysInMonth = new Date(year, monthIdx + 1, 0).getDate();
+  const hols = state.holidays ? holidayMap(year) : {};
+  const habits = state.habits.split("\n").map(s => s.trim()).filter(Boolean).slice(0, 20);
+
+  let head = '<div class="sh-head"><div><div class="sh-title">' +
+    (state.title ? escHtml(state.title) : "Habit Tracker") + '</div>' +
+    '<div class="sh-sub">' + MONTHS[monthIdx] + " " + year + '</div></div></div>';
+
+  let t = '<table class="habit"><thead><tr><th class="hname">Habit</th>';
+  for (let d = 1; d <= daysInMonth; d++){ t += '<th>' + d + '</th>'; }
+  t += '</tr><tr><th class="hname"></th>';
+  for (let d = 1; d <= daysInMonth; d++){
+    const dow = new Date(year, monthIdx, d).getDay();
+    t += '<th class="wd">' + DOW_LTR[dow] + '</th>';
+  }
+  t += '</tr></thead><tbody>';
+  (habits.length ? habits : [" "," "," "," "," "]).forEach(h => {
+    t += '<tr><td class="hname">' + escHtml(h) + '</td>';
+    for (let d = 1; d <= daysInMonth; d++){
+      const dt = new Date(year, monthIdx, d);
+      const wknd = dt.getDay() === 0 || dt.getDay() === 6;
+      const isToday = ymd(dt) === todayKey;
+      t += '<td class="' + (wknd ? "wknd " : "") + (isToday ? "today" : "") + '"></td>';
+    }
+    t += '</tr>';
+  });
+  t += '</tbody></table>';
+  sheet.innerHTML = head + t;
+}
+
+/* ---------- orchestration ---------- */
+function render(){
+  if (tab === "month") renderMonth();
+  else if (tab === "week") renderWeek();
+  else renderHabit();
+}
+
+document.querySelectorAll("#tabs button").forEach(b => {
+  b.addEventListener("click", () => {
+    tab = b.dataset.t;
+    document.querySelectorAll("#tabs button").forEach(x => x.classList.toggle("on", x === b));
+    // habit trackers read better in landscape by default
+    if (tab === "habit" && state.orient === "portrait"){ state.orient = "landscape"; }
+    if (tab !== "habit" && state.orient === "landscape"){ state.orient = "portrait"; }
+    applyOrient();
+    renderOpts(); render();
+  });
+});
+document.getElementById("printBtn").addEventListener("click", () => window.print());
+document.getElementById("todayBtn").addEventListener("click", () => {
+  state.month = now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2,"0");
+  state.weekDate = ymd(now);
+  renderOpts(); render();
+});
+
+/* ---------- boot ---------- */
+applyOrient();
+renderOpts();
+render();
+</script>
+</body>
+</html>

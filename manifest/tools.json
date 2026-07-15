@@ -45,6 +45,25 @@
       "cacheTtlMin": 10,
       "since": "v1",
       "flags": []
+    },
+    {
+      "id": "printables",
+      "file": "printables.html",
+      "name": "Printable Calendar & Planner",
+      "cat": "time",
+      "cx": "S",
+      "desc": "Clean monthly calendars, weekly planners, habit trackers — print CSS.",
+      "network": "offline",
+      "key": null,
+      "endpoints": [],
+      "storage": [
+        "suite.theme"
+      ],
+      "cacheTtlMin": null,
+      "since": "v1",
+      "flags": [
+        "print-css"
+      ]
     }
   ]
 }

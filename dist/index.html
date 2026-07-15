@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-BNH4HJHWYwFJtLHjbqRlvx4k6qRkgCYwWkfN/8YbrPE=' 'sha256-hYhUP7OEglkWhAsI2UstKu1YFMAiRIeO0DTWtC1+ng4='; style-src 'unsafe-inline'; img-src data:; connect-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-BNH4HJHWYwFJtLHjbqRlvx4k6qRkgCYwWkfN/8YbrPE=' 'sha256-QdYTxp0VISrdUHZc4JwM+fmMlEzO6WvF669BcTdBAyw='; style-src 'unsafe-inline'; img-src data:; connect-src 'none'">
 <title>Local Suite · Command Center</title>
 <style>
 /* Local Suite v2 — core/suite.css
@@ -350,7 +350,7 @@ Suite.theme.init();
 Suite.store.migrate([]); // suite entry point; the v2 migration list starts empty (ARCHITECTURE.md §6)
 
 /* ==== data: filled from manifest/tools.json by build.py ==== */
-const TOOLS = /* @suite:tools */[{"id": "focus", "file": "focus.html", "name": "Focus Timer", "cat": "time", "cx": "S", "desc": "Pomodoro with gentle WebAudio chimes and a big calm clock.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.focus.settings", "suite.focus.log"], "cacheTtlMin": null, "since": "v1", "flags": ["xp"]}, {"id": "weather", "file": "weather.html", "name": "Weather Station", "cat": "sky", "cx": "M", "desc": "Current conditions, forecast and details for your saved location. The original.", "network": "cors-open", "key": null, "endpoints": ["https://api.weather.gov", "https://api.zippopotam.us", "https://radar.weather.gov"], "storage": ["suite.theme", "suite.location", "suite.units", "suite.cache.weather.*"], "cacheTtlMin": 10, "since": "v1", "flags": []}]/* /@suite:tools */;
+const TOOLS = /* @suite:tools */[{"id": "focus", "file": "focus.html", "name": "Focus Timer", "cat": "time", "cx": "S", "desc": "Pomodoro with gentle WebAudio chimes and a big calm clock.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.focus.settings", "suite.focus.log"], "cacheTtlMin": null, "since": "v1", "flags": ["xp"]}, {"id": "weather", "file": "weather.html", "name": "Weather Station", "cat": "sky", "cx": "M", "desc": "Current conditions, forecast and details for your saved location. The original.", "network": "cors-open", "key": null, "endpoints": ["https://api.weather.gov", "https://api.zippopotam.us", "https://radar.weather.gov"], "storage": ["suite.theme", "suite.location", "suite.units", "suite.cache.weather.*"], "cacheTtlMin": 10, "since": "v1", "flags": []}, {"id": "printables", "file": "printables.html", "name": "Printable Calendar & Planner", "cat": "time", "cx": "S", "desc": "Clean monthly calendars, weekly planners, habit trackers — print CSS.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": ["print-css"]}]/* /@suite:tools */;
 
 const CAT_LABEL = {
   sky:   "☀️ Weather & Sky",

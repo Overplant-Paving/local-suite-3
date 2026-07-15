@@ -1,0 +1,28 @@
+== computed-style diff, light (12 differing values) ==
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.panel { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tabs button.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn.ghost { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.previewNote { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sheet { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sheet .sh-title { -webkit-font-smoothing: v1=auto | v2=antialiased }
+table.cal th { -webkit-font-smoothing: v1=auto | v2=antialiased }
+table.cal td { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+
+== computed-style diff, dark (12 differing values) ==
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.panel { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tabs button.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn.ghost { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.previewNote { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sheet { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sheet .sh-title { -webkit-font-smoothing: v1=auto | v2=antialiased }
+table.cal th { -webkit-font-smoothing: v1=auto | v2=antialiased }
+table.cal td { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+
