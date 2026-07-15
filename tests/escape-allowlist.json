@@ -103,5 +103,18 @@
     "aqiOutlook || '<div class=\"card-msg\">No forecast.</div>'": "local-only expression, recorded verified-clean with reasoning in tests/evidence/air/report.md",
     "uvOutlook": "local-only expression, recorded verified-clean with reasoning in tests/evidence/air/report.md"
   },
-  "currency.html": {}
+  "currency.html": {},
+  "quakes.html": {
+    "feedOpts": "local-only expression, recorded verified-clean with reasoning in tests/evidence/quakes/report.md",
+    "state.minMag": "local-only expression, recorded verified-clean with reasoning in tests/evidence/quakes/report.md",
+    "state.maxDist": "local-only expression, recorded verified-clean with reasoning in tests/evidence/quakes/report.md",
+    "shown.length": "local-only expression, recorded verified-clean with reasoning in tests/evidence/quakes/report.md",
+    "loc&&shown.length&&shown.some(q=>q.dist!=null)?Math.round(Math.min(...shown.filter(q=>q.dist!=null).map(q=>q.dist)))+\" km\":\"â€”\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/quakes/report.md",
+    "newCount": "local-only expression, recorded verified-clean with reasoning in tests/evidence/quakes/report.md",
+    "firstRenderDone?`<div class=\"stat\"><b>${newCount}</b><span>new</span></div>`:\"\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/quakes/report.md",
+    "W": "local-only expression, recorded verified-clean with reasoning in tests/evidence/quakes/report.md",
+    "H": "local-only expression, recorded verified-clean with reasoning in tests/evidence/quakes/report.md",
+    "largest>-Infinity?\"M\"+largest.toFixed(1):\"—\"": "numeric max-magnitude via toFixed, or a literal em-dash",
+    "loc&&shown.length&&shown.some(q=>q.dist!=null)?Math.round(Math.min(...shown.filter(q=>q.dist!=null).map(q=>q.dist)))+\" km\":\"—\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/quakes/report.md"
+  }
 }

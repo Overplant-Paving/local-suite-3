@@ -1,0 +1,22 @@
+{
+  "v1": {
+    "suite.quakes.seen": "[\"aka2026nxrisg\",\"hv75003266\",\"tx2026nvlizg\",\"ci40655802\",\"aka2026nxrehk\",\"aka2026nxrbqj\",\"ci40655786\",\"hv75003256\",\"aka2026nxqdwi\",\"aka2026nxqcmu\",\"n…(3836 chars)",
+    "suite.quakes.minMag": "0",
+    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
+    "suite.quakes.feed": "all_day",
+    "suite.quakes.maxDist": "20000",
+    "suite.cache.quakes.all_day": "{\"t\":1784145985676,\"v\":{\"type\":\"FeatureCollection\",\"metadata\":{\"generated\":1784145967000,\"url\":\"https://earthquake.usgs.gov/earthquakes/feed/v1.0/summ…(197477 chars)",
+    "suite.theme": "dark"
+  },
+  "v2": {
+    "suite.quakes.minMag": "0",
+    "suite.quakes.seen": "[\"aka2026nxrisg\",\"hv75003266\",\"tx2026nvlizg\",\"ci40655802\",\"aka2026nxrehk\",\"aka2026nxrbqj\",\"ci40655786\",\"hv75003256\",\"aka2026nxqdwi\",\"aka2026nxqcmu\",\"n…(3836 chars)",
+    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
+    "suite.quakes.feed": "all_day",
+    "suite.quakes.maxDist": "20000",
+    "suite.cache.quakes.all_day": "{\"t\":1784059581328,\"v\":{\"type\":\"FeatureCollection\",\"metadata\":{\"generated\":1784145967000,\"url\":\"https://earthquake.usgs.gov/earthquakes/feed/v1.0/summ…(197477 chars)",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}

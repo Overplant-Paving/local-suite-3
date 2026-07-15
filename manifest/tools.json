@@ -483,6 +483,32 @@
       "flags": []
     },
     {
+      "id": "quakes",
+      "file": "quakes.html",
+      "name": "Earthquake Monitor",
+      "cat": "earth",
+      "cx": "S",
+      "desc": "Live quake list and map, filterable by magnitude and distance from you.",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://earthquake.usgs.gov",
+        "https://api.zippopotam.us"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.location",
+        "suite.quakes.feed",
+        "suite.quakes.minMag",
+        "suite.quakes.maxDist",
+        "suite.quakes.seen",
+        "suite.cache.quakes.*"
+      ],
+      "cacheTtlMin": 5,
+      "since": "v1",
+      "flags": []
+    },
+    {
       "id": "iss",
       "file": "iss.html",
       "name": "ISS Tracker",

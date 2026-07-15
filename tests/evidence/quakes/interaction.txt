@@ -1,0 +1,31 @@
+first-run setup card visible: true
+ZIP 90012 lookup -> locbar: "Los Angeles, CA", suite.location = {"lat":34.0614,"lon":-118.2385,"label":"Los Angeles, CA"}
+locbar label: "Los Angeles, CA"
+live all_day feed: 276 quakes in cache envelope (cached at 2026-07-15T20:06:20.560Z)
+sample quake: M3.5 — "51 km ENE of Denali National Park, Alaska" at 2026-07-15T19:31:38.157Z
+stat: 273 SHOWN
+stat: M5.7 LARGEST
+stat: 30 km NEAREST
+stat: 0 NEW
+stamp: "Data from 3:06 PM"
+list rows rendered: 250 (list caps at 250)
+first list row: "M 3.5 51 km ENE of Denali National Park, Alaska 5 km deep · 3,972 km away 35m ago 2:31 PM"
+map svg present: true
+map quake dots: 273
+home (you) marker parts: 3 (expect 3: 2 lines + circle)
+legend swatches: 6 (expect 6 magnitude bands)
+minMag label after slider -> 4.5: "M4.5"
+after minMag 4.5: shown 12 SHOWN (was 273 SHOWN); list rows = 12
+maxDist label after slider -> 1000: "1000 KM"
+after maxDist 1000 km of LA: shown 112 SHOWN, nearest 30 km NEAREST; list rows = 112
+first row meta under distance filter: "3 km deep · 197 km away"
+persisted filters: feed=null, minMag=0, maxDist=1000
+offline stale stamp: "Data from 3:06 PM · showing cached, retrying · connection issue: offline — showing cached data"
+offline: list still renders 250 cached rows, map dots 273
+offline feed switch to 2.5_week (uncached): stamp "Data from 3:06 PM · showing cached, retrying · connection issue: Failed to fetch", rows still 250
+back to all_day (cached): rows 250, persisted feed = all_day
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
