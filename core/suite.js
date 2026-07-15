@@ -1,8 +1,7 @@
 /* Local Suite v2 — core/suite.js
    One IIFE, one global. Small, boring, dependency-free. Spec: ARCHITECTURE.md §3.
 
-   Not here yet (no dead API surface ships — ROADMAP Phase 1 exit gate):
-   - Suite.key / Suite.relay land in Phase 2 Batch C with their first users.
+   Not here yet (no dead API surface ships):
    - Protocol-gated service-worker registration lands in Phase 3 (PWA.md). */
 (() => {
 "use strict";
@@ -46,6 +45,11 @@ const store = {
     try {
       backend.setItem(key, typeof value === "string" ? value : JSON.stringify(value));
     } catch (e) { /* quota exceeded or denied - never fatal */ }
+  },
+  /* Deletes a key outright (v1 tools used removeItem for unpin/clear flows). */
+  remove(key) {
+    assertNamespaced(key);
+    try { backend.removeItem(key); } catch (e) {}
   },
   /* Ordered migrations gated by suite.meta.schemaVersion (ARCHITECTURE.md §6).
      Baseline v2 = v1 layout, so the suite-wide list starts empty. */
@@ -100,7 +104,7 @@ const theme = {
 async function fetchJSON(url, opts = {}) {
   const {
     timeout = 12000, cacheKey = null, ttl = 0, fallbackToCache = true,
-    accept = "application/json", tries = 1
+    accept = "application/json", tries = 1, headers = {}
   } = opts;
   const fullKey = cacheKey ? "suite.cache." + cacheKey : null;
 
@@ -121,7 +125,7 @@ async function fetchJSON(url, opts = {}) {
     try {
       const r = await fetch(url, {
         signal: ctrl.signal,
-        headers: accept ? { "Accept": accept } : {}
+        headers: Object.assign(accept ? { "Accept": accept } : {}, headers)
       });
       clearTimeout(timer);
       if (r.ok) {
@@ -171,5 +175,28 @@ const loc = {
   }
 };
 
-window.Suite = { theme, fetchJSON, store, esc, liveRegion, location: loc };
+/* ---- API keys: the suite.key.<name> convention (API-AND-RELAY.md §3) ----
+   Officially published demo/public keys only — never a personal key. */
+const DEMO_KEYS = {
+  nasa: "DEMO_KEY",              // api.nasa.gov demo tier: 30/hr, 50/day
+  usda: "DEMO_KEY",              // USDA FoodData Central demo tier
+  bart: "MW9S-E7SL-26DU-VV8V"    // BART's officially published public key
+};
+function key(name) {
+  const v = store.get("suite.key." + name);
+  if (typeof v === "string" && v.trim()) return { value: v.trim(), isDemo: false };
+  if (DEMO_KEYS[name]) return { value: DEMO_KEYS[name], isDemo: true };
+  return { value: null, isDemo: false };
+}
+
+/* ---- optional power-user relay (API-AND-RELAY.md §6) ----
+   Unset for everyone by default: tools use their link-out/embedded paths. */
+function relay(url) {
+  const base = store.get("suite.relay.url");
+  if (typeof base !== "string" || !base.trim()) return null;
+  const b = base.trim().replace(/\/$/, "");
+  return b + (b.includes("?") ? "&" : "?") + "url=" + encodeURIComponent(url);
+}
+
+window.Suite = { theme, fetchJSON, store, esc, liveRegion, location: loc, key, relay };
 })();

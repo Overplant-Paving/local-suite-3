@@ -275,6 +275,15 @@ KEY_PATTERNS = [
 ]
 KEY_ALLOWLIST = ("DEMO_KEY", "MW9S-E7SL-26DU-VV8V")  # documented public demo keys
 
+def gate_no_example_urls(dist_texts):
+    """Phase 2 exit gate: the v1 placeholder pattern (your-worker.example.workers.dev
+    and friends) must never reach dist — those tools get embedded data or link-outs."""
+    problems = []
+    for name, text in sorted(dist_texts.items()):
+        for m in re.finditer(r'\b[a-z0-9-]+\.example\b[^\s"\'<]*', text, re.I):
+            problems.append(f"{name}: placeholder URL fragment: {m.group(0)!r}")
+    return problems
+
 def gate_key_hygiene(source_texts):
     problems = []
     for name, text in sorted(source_texts.items()):
@@ -313,6 +322,8 @@ def negative_tests():
     expect("escaping-heuristic", gate_escaping_heuristic(
         {"escape-miss.html": fx["escape-miss.html"]}, {}))
     expect("key-hygiene", gate_key_hygiene({"key-leak.html": fx["key-leak.html"]}))
+    expect("no-example-urls", gate_no_example_urls(
+        {"example-url.html": '<a href="https://my-relay.example/?url=x">broken</a>'}))
     return failures
 
 def cmd_check(_args):
@@ -334,6 +345,7 @@ def cmd_check(_args):
         ("escaping-heuristic",  False, gate_escaping_heuristic(sources, load_escape_allowlist())),
         ("catalog-crosscheck",  False, gate_catalog_crosscheck(tools, catalog_text)),
         ("key-hygiene",         True,  gate_key_hygiene({**sources, **core_texts})),
+        ("no-example-urls",     True,  gate_no_example_urls(dist_texts)),
     ]
 
     failed = warned = 0
