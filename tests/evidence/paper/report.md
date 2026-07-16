@@ -76,3 +76,9 @@ segmented buttons on `--bg`, print note, hints); dark #fff-on-accent 2.36 (activ
 button, `.btn`). Core-palette pairs.
 
 No changes made to paper.html — **pass as was**.
+
+## Phase 4 accent-ink sweep (D10)
+
+Converted `color:#fff` -> `color:var(--bg)` on filled-accent control rules: `.seg button.on`, `.btn`.
+Runtime measurement (Playwright, file://, network route-aborted, probe of converted rule):
+light fg=rgb(245,243,238) on bg=rgb(47,111,106) = 5.26:1; dark fg=rgb(21,23,27) on bg=rgb(111,181,174) = 7.60:1. No pageerrors on load in either theme.

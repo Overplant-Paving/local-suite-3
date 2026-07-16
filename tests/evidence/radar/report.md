@@ -160,3 +160,9 @@ Suite-wide failures observed here but NOT fixed locally (core palette — flagge
 - white text on `--accent` in **dark** theme (#fff on #6fb5ae) = **2.36:1** — `.tab.on` here, and the `.btn`/`.btn.primary` filled-button pattern suite-wide. Light theme passes (5.85:1).
 
 Fix delta: theme-split `--errnote` variable + one inline style swap. No behavior change; re-verified with `node verify-tool.mjs radar` — exit 0, evidence files in this directory regenerated 2026-07-16.
+
+## Phase 4 accent-ink sweep (D10)
+
+Converted `color:#fff` -> `color:var(--bg)` on filled-accent control rules: `.tab.on`, `.btn`.
+Runtime measurement (Playwright, file://, network route-aborted, probe of converted rule):
+light fg=rgb(245,243,238) on bg=rgb(47,111,106) = 5.26:1; dark fg=rgb(21,23,27) on bg=rgb(111,181,174) = 7.60:1. No pageerrors on load in either theme.

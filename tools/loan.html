@@ -26,7 +26,7 @@
 
   .tabs { display: flex; gap: .5rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
   .tab { border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 999px; padding: .4rem 1rem; cursor: pointer; font-size: .9rem; }
-  .tab.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .tab.on { background: var(--accent); border-color: var(--accent); color: var(--bg); }
 
   /* v1's .card is a plain block — neutralize the core flex-card layout */
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.1rem 1.2rem; box-shadow: var(--shadow); margin-bottom: 1.2rem; display: block; flex-direction: row; gap: normal; }
@@ -53,7 +53,7 @@
   .legend { display: flex; gap: 1.2rem; flex-wrap: wrap; margin-top: .7rem; font-size: .82rem; color: var(--muted); }
   .legend i { display: inline-block; width: .8rem; height: .8rem; border-radius: 3px; margin-right: .35rem; vertical-align: -1px; }
 
-  .btn { border: 1px solid var(--accent); background: var(--accent); color: #fff; border-radius: 9px; padding: .5rem .9rem; cursor: pointer; font-size: .92rem; }
+  .btn { border: 1px solid var(--accent); background: var(--accent); color: var(--bg); border-radius: 9px; padding: .5rem .9rem; cursor: pointer; font-size: .92rem; }
   .btn.ghost { background: var(--card); color: var(--accent); }
   .btn:hover { filter: brightness(1.05); }
 

@@ -96,3 +96,7 @@ the selected row) and muted-on-bg 4.36 (editor-bar count); dark passes.
 
 Fix made: tool-local `--warn` definition (all four theme contexts). No behavior change;
 `suite.notes` format untouched.
+
+## Phase 4 accent-ink sweep (D10)
+
+No filled-accent controls with #fff/white ink — no-op.

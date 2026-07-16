@@ -205,3 +205,9 @@ route-fulfilled with a 7-quake fixture spanning all magnitude bands; raw measure
 Note: map quake dots keep the USGS-ish band colors — magnitude is triple-encoded (dot size,
 badge text, list) so the dots are not the sole conveyor. Suite-wide flag (not fixed locally):
 `--muted` on `--bg` = 4.36:1. No behavior change; re-verified with `node verify-tool.mjs quakes` — exit 0, evidence files in this directory regenerated 2026-07-16.
+
+## Phase 4 accent-ink sweep (D10)
+
+Converted `color:#fff` -> `color:var(--bg)` on filled-accent control rules: `.btn.primary` (magnitude `.badge` data fill untouched per batch audit).
+Runtime measurement (Playwright, file://, network route-aborted, probe of converted rule):
+light fg=rgb(245,243,238) on bg=rgb(47,111,106) = 5.26:1; dark fg=rgb(21,23,27) on bg=rgb(111,181,174) = 7.60:1. No pageerrors on load in either theme.

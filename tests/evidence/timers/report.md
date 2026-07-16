@@ -147,3 +147,9 @@ dark #fff-on-accent 2.36 (`.tab.on`, `.btn`).
 Fixes made: tool-local CSS accents (all four theme contexts) + the `#announce` sr-only live
 region (3 announcement call sites; a11y-only, no functional change). `suite.timers.v1`
 format untouched — verified by the harness localStorage snapshot.
+
+## Phase 4 accent-ink sweep (D10)
+
+Converted `color:#fff` -> `color:var(--bg)` on filled-accent control rules: `.tab.on`, `.btn`.
+Runtime measurement (Playwright, file://, network route-aborted, probe of converted rule):
+light fg=rgb(245,243,238) on bg=rgb(47,111,106) = 5.26:1; dark fg=rgb(21,23,27) on bg=rgb(111,181,174) = 7.60:1. No pageerrors on load in either theme.

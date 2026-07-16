@@ -194,3 +194,9 @@ route-fulfilled with fixtures ("12° warmer than normal" verdict); raw measureme
 Suite-wide flags (not fixed locally): `--muted` on `--bg` = 4.36:1 and `--muted` on
 `--accent-soft` = **4.11:1** (the small tile captions) — both are core-palette pairs.
 No behavior change; re-verified with `node verify-tool.mjs normals` — exit 0, evidence files in this directory regenerated 2026-07-16.
+
+## Phase 4 accent-ink sweep (D10)
+
+Converted `color:#fff` -> `color:var(--bg)` on filled-accent control rules: `.btn`.
+Runtime measurement (Playwright, file://, network route-aborted, probe of converted rule):
+light fg=rgb(245,243,238) on bg=rgb(47,111,106) = 5.26:1; dark fg=rgb(21,23,27) on bg=rgb(111,181,174) = 7.60:1. No pageerrors on load in either theme.

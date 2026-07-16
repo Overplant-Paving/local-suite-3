@@ -24,3 +24,9 @@ SUITE-WIDE flags (core palette — reported, not fixed locally per the addendum)
 - `--muted` #6b7280 on `--bg` #f5f3ee = **4.36** (light) — footer text here; affects every tool.
 - white on `--accent` #6fb5ae = **2.36** (dark) — `.btn` and `.modeRow button.on` here; the
   accent-background/white-text button convention fails suite-wide in dark.
+
+## Phase 4 accent-ink sweep (D10)
+
+Converted `color:#fff` -> `color:var(--bg)` on filled-accent control rules: `.modeRow button.on`, `.btn`.
+Runtime measurement (Playwright, file://, network route-aborted, probe of converted rule):
+light fg=rgb(245,243,238) on bg=rgb(47,111,106) = 5.26:1; dark fg=rgb(21,23,27) on bg=rgb(111,181,174) = 7.60:1. No pageerrors on load in either theme.

@@ -129,7 +129,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
     border: 1px solid var(--line); background: var(--card); color: var(--muted);
     border-radius: 999px; padding: .38rem .95rem; font-size: .9rem; cursor: pointer;
   }
-  .tab.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .tab.on { background: var(--accent); border-color: var(--accent); color: var(--bg); }
   /* core .card is a flex column; v1 random cards are plain blocks — restore the v1 values */
   .card {
     background: var(--card); border: 1px solid var(--line); border-radius: 14px;
@@ -149,7 +149,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .row { display: flex; gap: .8rem; flex-wrap: wrap; align-items: flex-end; }
   .row > div { flex: 1; min-width: 6rem; }
   button.go {
-    border: none; background: var(--accent); color: #fff; border-radius: 10px;
+    border: none; background: var(--accent); color: var(--bg); border-radius: 10px;
     padding: .7rem 1.4rem; font-size: 1rem; cursor: pointer; font-weight: 600;
   }
   button.go:hover { filter: brightness(1.06); }

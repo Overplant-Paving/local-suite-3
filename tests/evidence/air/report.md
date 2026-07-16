@@ -98,3 +98,9 @@ variant (`text` field, light-theme values) while the UV pill background check st
 exact EPA color. (Also fixed in air.mjs while here: the scale-pin check now compares numerically — the old string compare false-MISMATCHed on any AQI whose percentage exceeds the browser's ~6-digit style serialization.) Suite-wide flag (not fixed locally): `--muted` on `--bg` = 4.36:1.
 
 No behavior change; re-verified with `node verify-tool.mjs air` — exit 0, evidence files in this directory regenerated 2026-07-16.
+
+## Phase 4 accent-ink sweep (D10)
+
+Converted `color:#fff` -> `color:var(--bg)` on filled-accent control rules: `.btn` (severity `.uv-pill`/`.badge` data fills untouched per batch audit).
+Runtime measurement (Playwright, file://, network route-aborted, probe of converted rule):
+light fg=rgb(245,243,238) on bg=rgb(47,111,106) = 5.26:1; dark fg=rgb(21,23,27) on bg=rgb(111,181,174) = 7.60:1. No pageerrors on load in either theme.

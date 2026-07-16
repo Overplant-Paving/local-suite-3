@@ -125,3 +125,9 @@ Harness: `node verify-tool.mjs emergency` re-run after the fix — exit 0, conso
 (print-media shot regenerated; print styles force black-on-white and are unaffected).
 SUITE-WIDE flags: muted-on-`--bg` 4.36 light (footer); white-on-accent 2.36 dark
 (`.metro button` start state, `.cardactions .primary`).
+
+## Phase 4 accent-ink sweep (D10)
+
+Converted `color:#fff` -> `color:var(--bg)` on filled-accent control rules: `.metro button`, `.cardactions button.primary` (also pinned explicit `color:#fff` on `.metro button.stop`, whose `--emerg-deep` fill is dark red in both themes and would otherwise inherit the new dark ink; white on #a83a2a = 6.3:1).
+Runtime measurement (Playwright, file://, network route-aborted, probe of converted rule):
+light fg=rgb(245,243,238) on bg=rgb(47,111,106) = 5.26:1; dark fg=rgb(21,23,27) on bg=rgb(111,181,174) = 7.60:1. No pageerrors on load in either theme.

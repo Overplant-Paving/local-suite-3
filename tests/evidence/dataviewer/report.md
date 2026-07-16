@@ -147,3 +147,9 @@ th stats 4.76/6.19, `td.num` 4.95/6.30.
 mode button).
 
 Fix made: light `--t-bool` #9a5cc0→#8a53ae (both light contexts). No behavior change; no storage.
+
+## Phase 4 accent-ink sweep (D10)
+
+Converted `color:#fff` -> `color:var(--bg)` on filled-accent control rules: `.drop button`, `.filebar button.on`.
+Runtime measurement (Playwright, file://, network route-aborted, probe of converted rule):
+light fg=rgb(245,243,238) on bg=rgb(47,111,106) = 5.26:1; dark fg=rgb(21,23,27) on bg=rgb(111,181,174) = 7.60:1. No pageerrors on load in either theme.

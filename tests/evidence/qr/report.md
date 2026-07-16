@@ -130,3 +130,9 @@ Contrast measurements (fg, effective bg, ratio — threshold 4.5 normal / 3 larg
 - **SUITE-WIDE (not fixed locally)**: light `--muted` on `--bg` 4.36 (tagline, footer); dark `#fff` on `--accent` 2.36 (`.tab.on`, `.seg .on`, `.btn`). Both are core-palette pairs — see the audit's suite-wide flag.
 
 No changes made to qr.html — **pass as was**.
+
+## Phase 4 accent-ink sweep (D10)
+
+Converted `color:#fff` -> `color:var(--bg)` on filled-accent control rules: `.tab.on`, `.seg button.on`, `.btn`.
+Runtime measurement (Playwright, file://, network route-aborted, probe of converted rule):
+light fg=rgb(245,243,238) on bg=rgb(47,111,106) = 5.26:1; dark fg=rgb(21,23,27) on bg=rgb(111,181,174) = 7.60:1. No pageerrors on load in either theme.

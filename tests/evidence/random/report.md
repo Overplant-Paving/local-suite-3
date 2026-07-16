@@ -143,3 +143,9 @@ dark #fff-on-accent 2.36 (`.tab.on`, `button.go`).
 
 Fix made: `.coin { color: #4a3800 }` (tool-local, both themes by design — the gradient is
 theme-invariant). No behavior change; no storage.
+
+## Phase 4 accent-ink sweep (D10)
+
+Converted `color:#fff` -> `color:var(--bg)` on filled-accent control rules: `.tab.on`, `button.go`.
+Runtime measurement (Playwright, file://, network route-aborted, probe of converted rule):
+light fg=rgb(245,243,238) on bg=rgb(47,111,106) = 5.26:1; dark fg=rgb(21,23,27) on bg=rgb(111,181,174) = 7.60:1. No pageerrors on load in either theme.

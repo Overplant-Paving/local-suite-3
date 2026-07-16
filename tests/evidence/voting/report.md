@@ -135,3 +135,7 @@ QUALITY.md §2 re-verified against `tools/voting.html` from `file://`, light + d
 
 Harness: `node verify-tool.mjs voting` re-run after the fix — exit 0, console clean.
 SUITE-WIDE flag: muted-on-`--bg` 4.36 light (footer).
+
+## Phase 4 accent-ink sweep (D10)
+
+No filled-accent controls with #fff/white ink — no-op.

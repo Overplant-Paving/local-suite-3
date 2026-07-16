@@ -106,3 +106,9 @@ back text + state badges — the card list sits on the page background); dark #f
 
 Fixes made: light `--again`/`--hard` (both light contexts). SM-2 scheduling, storage
 (`suite.flashcards.v1`) and behavior untouched.
+
+## Phase 4 accent-ink sweep (D10)
+
+Converted `color:#fff` -> `color:var(--bg)` on filled-accent control rules: `.btn`.
+Runtime measurement (Playwright, file://, network route-aborted, probe of converted rule):
+light fg=rgb(245,243,238) on bg=rgb(47,111,106) = 5.26:1; dark fg=rgb(21,23,27) on bg=rgb(111,181,174) = 7.60:1. No pageerrors on load in either theme.

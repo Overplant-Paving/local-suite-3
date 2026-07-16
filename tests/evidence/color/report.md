@@ -141,3 +141,9 @@ Other passes: `.fmt .v` 13.39/14.25, `.savebtn` 5.74/6.91, `.sw .lab` 14.61/12.9
 
 Fixes made: tool-local badge palette only (all four theme contexts). No behavior change;
 `suite.color.palettes` untouched.
+
+## Phase 4 accent-ink sweep (D10)
+
+Converted `color:#fff` -> `color:var(--bg)` on filled-accent control rules: `.tab.on`, `.btn`.
+Runtime measurement (Playwright, file://, network route-aborted, probe of converted rule):
+light fg=rgb(245,243,238) on bg=rgb(47,111,106) = 5.26:1; dark fg=rgb(21,23,27) on bg=rgb(111,181,174) = 7.60:1. No pageerrors on load in either theme.

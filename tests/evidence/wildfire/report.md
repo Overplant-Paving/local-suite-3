@@ -99,3 +99,9 @@ measurements in [a11y-phase4.txt](a11y-phase4.txt).
 
 Suite-wide flag (not fixed locally): `--muted` on `--bg` = 4.36:1. No behavior change;
 re-verified with `node verify-tool.mjs wildfire` — exit 0, evidence files in this directory regenerated 2026-07-16.
+
+## Phase 4 accent-ink sweep (D10)
+
+Converted `color:#fff` -> `color:var(--bg)` on filled-accent control rules: `.btn.primary`.
+Runtime measurement (Playwright, file://, network route-aborted, probe of converted rule):
+light fg=rgb(245,243,238) on bg=rgb(47,111,106) = 5.26:1; dark fg=rgb(21,23,27) on bg=rgb(111,181,174) = 7.60:1. No pageerrors on load in either theme.
