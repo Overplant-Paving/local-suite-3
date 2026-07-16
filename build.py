@@ -450,8 +450,104 @@ def cmd_serve(_args):
     print("serving dist/ at http://localhost:8000 — Ctrl+C to stop")
     HTTPServer(("127.0.0.1", 8000), handler).serve_forever()
 
+BLS_MARKER_RE = re.compile(r'/\* @suite:bls \*/(.*?)/\* /@suite:bls \*/', re.S)
+BLS_API = "https://api.bls.gov/publicAPI/v1/timeseries/data/"
+
+def _bls_num(s):
+    # preserve the source's integer/decimal formatting so an unchanged month
+    # round-trips byte-identical
+    v = float(s)
+    return int(v) if v.is_integer() and "." not in s else v
+
+def _bls_series_slots(obj):
+    """Yield (series_id, start, setter) for both marker shapes:
+    jobs:      {"asOf","start","series":{"<ID>":[...]}}
+    inflation: {"asOf","series":{"<name>":{"id","start","values":[...]}}}"""
+    for key, val in obj["series"].items():
+        if isinstance(val, list):
+            yield key, obj["start"], (lambda vs, k=key, o=obj: o["series"].__setitem__(k, vs))
+        else:
+            yield val["id"], val["start"], (lambda vs, v=val: v.__setitem__("values", vs))
+
 def cmd_refresh_data(_args):
-    sys.exit("--refresh-data: not implemented until Phase 2 Batch C (jobs/inflation)")
+    import datetime
+    import urllib.request
+
+    carriers = []          # (path, src, raw_json, obj)
+    for path in sorted(TOOLS_DIR.glob("*.html")):
+        src = read(path)
+        m = BLS_MARKER_RE.search(src)
+        if not m:
+            continue
+        try:
+            obj = json.loads(m.group(1))
+        except json.JSONDecodeError as e:
+            sys.exit(f"{path.name}: @suite:bls marker is not valid JSON: {e}")
+        carriers.append((path, src, m.group(1), obj))
+    if not carriers:
+        sys.exit("no @suite:bls markers found under tools/")
+
+    all_ids, min_year = [], 9999
+    for _, _, _, obj in carriers:
+        for sid, start, _ in _bls_series_slots(obj):
+            if sid not in all_ids:
+                all_ids.append(sid)
+            min_year = min(min_year, int(start[:4]))
+    print(f"refreshing {len(all_ids)} BLS series for "
+          f"{', '.join(p.name for p, _, _, _ in carriers)}")
+
+    body = json.dumps({"seriesid": all_ids, "startyear": str(min_year),
+                       "endyear": str(datetime.date.today().year)}).encode()
+    req = urllib.request.Request(BLS_API, data=body,
+                                 headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        resp = json.loads(r.read().decode("utf-8"))
+    if resp.get("status") != "REQUEST_SUCCEEDED":
+        sys.exit(f"BLS API refused: status={resp.get('status')} "
+                 f"messages={resp.get('message')}")
+
+    fetched = {}           # id -> {"YYYY-MM": number}
+    for s in resp["Results"]["series"]:
+        months = {}
+        for d in s.get("data", []):
+            if not d["period"].startswith("M") or d["period"] == "M13":
+                continue   # skip annual averages
+            if d["value"] in ("-", ""):
+                continue
+            months[f"{d['year']}-{d['period'][1:]}"] = _bls_num(d["value"])
+        fetched[s["seriesID"]] = months
+    missing = [i for i in all_ids if not fetched.get(i)]
+    if missing:
+        sys.exit(f"BLS returned no data for: {missing}")
+
+    def month_range(start, end):
+        y, mo = int(start[:4]), int(start[5:])
+        while f"{y:04d}-{mo:02d}" <= end:
+            yield f"{y:04d}-{mo:02d}"
+            mo += 1
+            if mo == 13:
+                y, mo = y + 1, 1
+
+    changed = 0
+    for path, src, raw, obj in carriers:
+        # asOf = latest month any of this tool's series actually reported
+        as_of = max(max(fetched[sid]) for sid, _, _ in _bls_series_slots(obj))
+        obj["asOf"] = as_of
+        for sid, start, setter in _bls_series_slots(obj):
+            setter([fetched[sid].get(mo) for mo in month_range(start, as_of)])
+        new_raw = json.dumps(obj, ensure_ascii=False, separators=(",", ":"))
+        if new_raw == raw:
+            print(f"  {path.name}: unchanged (asOf {as_of})")
+            continue
+        write(path, src.replace(f"/* @suite:bls */{raw}/* /@suite:bls */",
+                                f"/* @suite:bls */{new_raw}/* /@suite:bls */"))
+        changed += 1
+        print(f"  {path.name}: updated (asOf {as_of})")
+
+    if changed:
+        cmd_build(_args)
+    else:
+        print("all markers current — dist not rebuilt")
 
 # ---------------------------------------------------------------- main
 

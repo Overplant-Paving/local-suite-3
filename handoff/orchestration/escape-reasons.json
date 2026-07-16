@@ -1,0 +1,11 @@
+{
+  "gas.html": {
+    "chg>=0?\"▲\":\"▼\"": "orchestrator-reviewed: literal-only ternary on a number (chg = latest.value - prev.value, values parseFloat'd + NaN-filtered at gas.html:173-174)",
+    "chg!=null?` · <span class=\"chg ${chg>=0?\"up\":\"down\"}\">${chg>=0?\"▲\":\"▼\"} ${Math.abs(chg).toFixed(3)} vs prior week</span>`:\"\"": "orchestrator-reviewed: nested template emits only literal classes/arrows and Math.abs(chg).toFixed(3) — chg is arithmetic on parseFloat'd EIA values (gas.html:173-174, 234)",
+    "prev?fmtP(prev.value):\"—\"": "orchestrator-reviewed: fmtP is \"$\"+v.toFixed(3) (gas.html:237); prev.value is parseFloat'd + NaN-filtered (gas.html:173-174)",
+    "yearAgo?fmtP(yearAgo.value):\"—\"": "orchestrator-reviewed: fmtP is \"$\"+v.toFixed(3) (gas.html:237); yearAgo.value is parseFloat'd + NaN-filtered (gas.html:173-174)",
+    "yChg!=null?(yChg>=0?\"up\":\"down\"):\"\"": "orchestrator-reviewed: literal-only ternary on a number (yChg = latest.value - yearAgo.value, gas.html:236)",
+    "yChg!=null?\"color:\"+(yChg>=0?\"var(--pos)\":\"var(--neg)\"):\"\"": "orchestrator-reviewed: literal-only ternary emitting fixed CSS var strings, guarded by numeric yChg (gas.html:236)",
+    "yChg!=null?(yChg>=0?\"+\":\"−\")+\"$\"+Math.abs(yChg).toFixed(3):\"—\"": "orchestrator-reviewed: literals + Math.abs(number).toFixed(3); yChg is arithmetic on parseFloat'd values (gas.html:236)"
+  }
+}

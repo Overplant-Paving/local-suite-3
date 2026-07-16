@@ -5,6 +5,8 @@ after whitespace normalization) — otherwise exit 1 for manual orchestrator rev
 import json, re, subprocess, sys
 from pathlib import Path
 
+sys.stdout.reconfigure(encoding="utf-8")  # Windows console is cp1252; flags may contain non-ASCII
+
 ROOT = Path(r"C:\Users\henry\Developement\Local Suite 2")
 PATH_REASONS = ROOT / "handoff" / "orchestration" / "escape-reasons.json"
 tool = sys.argv[1]
