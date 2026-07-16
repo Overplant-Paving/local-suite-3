@@ -143,12 +143,12 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 45 | illness.html | health | cors | — | B | | ✅ `tests/evidence/illness/` |
 | 46 | medicine.html | health | cors | — | B | | ✅ `tests/evidence/medicine/` |
 | 47 | foodrecalls.html | health | cors | — | B | | ✅ `tests/evidence/foodrecalls/` |
-| 48 | dictionary.html | ref | cors | — | B | EA | ✅ `tests/evidence/dictionary/` |
-| 49 | wiki.html | ref | cors | — | B | EA | ✅ `tests/evidence/wiki/` |
+| 48 | dictionary.html | ref | cors | — | B | EA · EA resolved 2026-07-16: 19 sites; fixed audio-src http(s) gate; hostile probe inert | ✅ `tests/evidence/dictionary/` |
+| 49 | wiki.html | ref | cors | — | B | EA · EA resolved 2026-07-16: plain-text extract ruling (no remote HTML parsed); fixed content_urls href guard; hostile probe inert | ✅ `tests/evidence/wiki/` |
 | 50 | zip.html | ref | cors | — | B | | ✅ `tests/evidence/zip/` |
-| 51 | factbook.html | ref | off | — | B | EA — shipped v1 is zero-network (embedded data, emoji flags); the cors label was a planning artifact | ✅ `tests/evidence/factbook/` |
+| 51 | factbook.html | ref | off | — | B | EA — shipped v1 is zero-network (embedded data, emoji flags); the cors label was a planning artifact · EA resolved 2026-07-16: 16 sites line-by-line, 0 unsafe; hostile-row probe inert | ✅ `tests/evidence/factbook/` |
 | 52 | books.html | ref | cors | — | B | inline `onerror=` → listener | ✅ `tests/evidence/books/` |
-| 53 | art.html | ref | cors | — | B | EA · inline `onerror=` → listener | ✅ `tests/evidence/art/` |
+| 53 | art.html | ref | cors | — | B | EA · inline `onerror=` → listener · EA resolved 2026-07-16: 19 sites; fixed img-src scheme guard (incl. stored favorites); hostile probe inert | ✅ `tests/evidence/art/` |
 | 54 | geo.html | local | cors | — | B | Census JSONP path; Nominatim 1 req/s | ✅ `tests/evidence/geo/` |
 | 55 | elevation.html | local | cors | — | B | | ✅ `tests/evidence/elevation/` |
 | 56 | network.html | local | cors | — | B | ipapi.co 1k/day | ✅ `tests/evidence/network/` |
@@ -165,7 +165,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 67 | inflation.html | money | blocked | — | C | remove `.example` → embedded monthly BLS data | ✅ `tests/evidence/inflation/` |
 | 68 | transit.html | local | blocked/key | bart (new) | C | externalize BART key (v1 `transit.html:163`); custom feed → link-out card | ✅ `tests/evidence/transit/` |
 | 69 | password.html | util | off | — | D | LD (62 KB EFF wordlist — must survive build byte-exact) | ✅ `tests/evidence/password/` |
-| 70 | word.html | util/ref | cors | — | D | LD (embedded dictionary) · EA | ✅ `tests/evidence/word/` |
+| 70 | word.html | util/ref | cors | — | D | LD (embedded dictionary) · EA · EA resolved 2026-07-16: independent 2nd pass agrees 6 sites safe; probe added; WORD_RAW hash unchanged | ✅ `tests/evidence/word/` |
 | 71 | passes.html | space | cors | — | D | LD (SGP4 math + TLE handling) | ✅ `tests/evidence/passes/` |
 
 New in v2 (not migrations): **settings.html** (Phase 4 — backup/restore, keys, relay config) and
