@@ -13,7 +13,7 @@
      export const printShots = false;                      // optional: print-media screenshots   */
 import { chromium } from "playwright";
 import { pathToFileURL } from "node:url";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync, existsSync } from "node:fs";
 import { resolve, join } from "node:path";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -23,6 +23,9 @@ if (!tool) { console.error("usage: node verify-tool.mjs <tool>"); process.exit(1
 const EV = join(ROOT, "tests", "evidence", tool);
 mkdirSync(EV, { recursive: true });
 
+// tools born in v2 (settings.html, future --new scaffolds) have no v1 original:
+// the v1 capture, style diff, and localStorage parity sections go N/A, explicitly.
+const hasV1 = existsSync(join(V1, `${tool}.html`));
 const v1Url = pathToFileURL(join(V1, `${tool}.html`)).href;
 const v2Url = pathToFileURL(join(ROOT, "tools", `${tool}.html`)).href;
 const VIEWPORT = { width: 1280, height: 900 };
@@ -88,11 +91,13 @@ async function capture(url, prefix) {
   return styles;
 }
 
-const v1Styles = await capture(v1Url, "v1");
+const v1Styles = hasV1 ? await capture(v1Url, "v1") : null;
 const v2Styles = await capture(v2Url, "v2");
 
-let styleReport = "";
-for (const theme of ["light", "dark"]) {
+let styleReport = hasV1 ? "" :
+  "(new-in-v2 tool — no v1 original; parity N/A. Both-theme captures are in v2-*.png.)
+";
+for (const theme of hasV1 ? ["light", "dark"] : []) {
   const lines = [];
   for (const sel of selectors) {
     const a = v1Styles[theme][sel], b = v2Styles[theme][sel];
@@ -129,7 +134,7 @@ await ctx.close();
 
 /* localStorage parity vs v1 */
 let v1ls = {};
-{
+if (hasV1) {
   const p = await newPage("light");
   await p.page.goto(v1Url);
   await p.page.waitForTimeout(400);
@@ -138,11 +143,11 @@ let v1ls = {};
   v1ls = await lsSnapshot(p.page);
   await p.ctx.close();
 }
-writeFileSync(join(EV, "localstorage.json"), JSON.stringify({
+writeFileSync(join(EV, "localstorage.json"), JSON.stringify(hasV1 ? {
   v1: v1ls, v2: v2ls,
   keysOnlyInV1: Object.keys(v1ls).filter(k => !(k in v2ls)),
   keysOnlyInV2: Object.keys(v2ls).filter(k => !(k in v1ls)),
-}, null, 2));
+} : { note: "new-in-v2 tool — no v1 original; parity N/A", v2: v2ls }, null, 2));
 
 await browser.close();
 console.log(`evidence written to tests/evidence/${tool}/`);
