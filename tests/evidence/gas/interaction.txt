@@ -23,15 +23,15 @@ cache keys: suite.cache.gas.NUS.EPMR, suite.cache.gas.R10.EPMR, suite.cache.gas.
 envelope suite.cache.gas.NUS.EPMR: v is processed-rows array=true, 4 rows, asc=true, last={period:2026-07-13, value:3.1, units:$/GAL, name:"Regular Gasoline"} (v1 envelope shape)
 area -> R20: hero "$2.950 / gal" (expected $2.950), meta "Midwest (PADD 2) · Regular Gasoline Week of Jul 13, 2026 · ▼ 0.052 vs prior week"
 product -> EPD2D (diesel): hero "$3.500 / gal" (expected $3.500), all-regions sub "· Diesel (No. 2), latest week", NUS cell "$3.650" (expected $3.650)
-refresh: cache t renewed (1784174388038 -> 1784174388108), hero re-rendered
+refresh: cache t renewed (1784182492564 -> 1784182492635), hero re-rendered
 theme redraw: chart line stroke #2f6f6a (light) -> #6fb5ae (dark --accent #6fb5ae) after theme click
 key rejected (HTTP 403): "That key was rejected by EIA. Enter a different key."
 rekey link: keycard visible=true, mainCard visible=false
 network error, no cache: "Couldn't reach EIA (Failed to fetch). It caches weekly — try Refresh in a bit."
 empty data set: "No data returned for this region/fuel combination."
 offline stale reload: hero "$3.100 / gal" still rendered from aged cache
-  stale note: "Offline — cached from 9:59 PM Jul 14."
-  all-regions stale note: "Offline — cached from 9:59 PM Jul 14.", NUS cell "$3.100"
+  stale note: "Offline — cached from 12:14 AM Jul 15."
+  all-regions stale note: "Offline — cached from 12:14 AM Jul 15.", NUS cell "$3.100"
   chart still rendered: 2 paths
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:

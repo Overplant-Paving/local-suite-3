@@ -19,7 +19,7 @@ area code 213 (offline, embedded table): expected 213 / Los Angeles (downtown) /
 area code 999 (not a US geographic code): observed = "Area code 999 isn't a recognized US geographic code (it may be a non-geographic, Canadian, or Caribbean NANP code)."
 offline + 8-day-old cache, ZIP 90012 again:
   observed .big  = "Los Angeles, CA"
-  observed stale note = "Offline — showing cached result from 7/7/2026, 12:26:01 PM."
+  observed stale note = "Offline — showing cached result from 7/8/2026, 1:12:27 AM."
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
   console.error: Failed to load resource: net::ERR_FAILED

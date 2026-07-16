@@ -1,0 +1,54 @@
+# Phase 4 a11y audit run — wiki — 2026-07-16T06:04:02.032Z
+# page: file:///C:/Users/henry/Developement/Local%20Suite%202/tools/wiki.html (all http(s) route-fulfilled/aborted; zero live requests)
+
+== 3. KEYBOARD PATH (page.keyboard only) ==
+suggest open after typing: true
+keyboard path: type -> ArrowDown -> Enter opened 'Ada Lovelace' article
+Esc closes suggest overlay: hidden=true
+Tab->Enter on save button: reached=true, now reads '✓ In reading list'
+reading list row rendered (remove button aria-label='Remove “Ada Lovelace” from reading list')
+
+== 1. ICON-ONLY BUTTONS/LINKS ==
+ok   button text="✕" aria-label="Remove “Ada Lovelace” from reading list" title="Remove"
+
+== 2. ARIA-LIVE ON ASYNC CONTAINERS ==
+ok   #article aria-live=polite
+ok   #featured aria-live=polite
+ok   #onthisday aria-live=polite
+ok   #readlist aria-live=polite
+
+== 3b. TABINDEX SANITY ==
+ok   no positive tabindex anywhere
+
+== 4. INPUT LABELS ==
+ok   input#q[type=search] -> aria-label
+
+== 6. FOCUS VISIBILITY ==
+focus visibility: 5/5 tabbed elements show a computed focus indicator
+  div.featured-mini: visible (2px solid rgb(47, 111, 106))
+  div.feeditem: visible (2px solid rgb(47, 111, 106))
+  div.feeditem: visible (2px solid rgb(47, 111, 106))
+
+== 5. CONTRAST — light theme (primed page, distinct pairs, worst-case sample each) ==
+SUITE-FLAG 4.36 (need 4.5) fg=#6b7280 on bg=#f5f3ee 13.6px/400 footer “Data: Wikipedia REST API (en”
+ok   4.76 (need 4.5) fg=#6b7280 on bg=#fffdf9 16px/400 button “✕”
+ok   5.26 (need 4.5) fg=#2f6f6a on bg=#f5f3ee 14.4px/400 a.back “← suite”
+ok   5.26 (need 4.5) fg=#f5f3ee on bg=#2f6f6a 15.2px/400 button#go.btn.primary “Search”
+ok   5.74 (need 4.5) fg=#2f6f6a on bg=#fffdf9 14.7px/600 span.yr “1901”
+ok   13.39 (need 3) fg=#23282e on bg=#f5f3ee 27.2px/700 h1 “Wikipedia Reader”
+ok   14.61 (need 4.5) fg=#23282e on bg=#fffdf9 13.6px/400 button#themeBtn.theme-btn “◐ theme”
+ok   14.61 (need 3) fg=#23282e on bg=#fffdf9 30.4px/700 h2 “Ada Lovelace”
+
+console: clean (no non-network errors)
+
+== 5. CONTRAST — dark theme (primed page, distinct pairs, worst-case sample each) ==
+ok   6.19 (need 4.5) fg=#9aa0a8 on bg=#1d2026 16px/400 div.desc “audit fixture description”
+ok   6.81 (need 4.5) fg=#9aa0a8 on bg=#15171b 13.6px/400 footer “Data: Wikipedia REST API (en”
+ok   6.91 (need 4.5) fg=#6fb5ae on bg=#1d2026 14.7px/600 span.yr “1815”
+ok   7.6 (need 4.5) fg=#6fb5ae on bg=#15171b 14.4px/400 a.back “← suite”
+ok   7.6 (need 4.5) fg=#15171b on bg=#6fb5ae 15.2px/400 button#go.btn.primary “Search”
+ok   12.96 (need 4.5) fg=#e7e5e0 on bg=#1d2026 13.6px/400 button#themeBtn.theme-btn “◐ theme”
+ok   12.96 (need 3) fg=#e7e5e0 on bg=#1d2026 30.4px/700 h2 “Ada Lovelace”
+ok   14.25 (need 3) fg=#e7e5e0 on bg=#15171b 27.2px/700 h1 “Wikipedia Reader”
+
+== RESULT: ALL TOOL-LOCAL CHECKS PASS + 1 suite-palette flag(s) (reported, not fixed locally) ==

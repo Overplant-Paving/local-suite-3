@@ -98,3 +98,30 @@ interaction.txt:
 
 Harness re-run: `node verify-tool.mjs geo` exit 0. Real geo cache keys stashed/restored around
 the probe, so the parity snapshot keeps the original key set.
+
+## Phase 4 a11y audit
+
+Re-verified 2026-07-16 against QUALITY.md §2 (Phase 4 audit addendum). Full runtime log in
+`a11y-phase4.txt` (harness: `tests/a11y-phase4-batch.mjs`; Open-Meteo/Nominatim/Census-JSONP all
+route-fulfilled — zero live geocoder requests in the audit run).
+
+| # | Checklist item | Verdict | Evidence (one line) |
+|---|---|---|---|
+| 1 | icon-only controls named | n-a | no icon-only buttons or links render (all buttons worded) |
+| 2 | aria-live on async containers | pass | runtime `aria-live=polite` on #locBar, #fwdRes, #revRes, #convOut, #dbOut |
+| 3 | keyboard path | pass | forward geocode (Enter in #fwdQ), "use in tools"/"save as suite location" (Tab+Enter), DMS conversion (Enter in fields), distance/bearing (Enter in #ptB), reverse geocode (Enter in #revQ) — all keyboard-only; no positive tabindex; no overlays |
+| 4 | input labels | pass | all 9 inputs + the source `<select>` have `<label for>` (each enumerated at runtime) |
+| 5 | contrast, both palettes | fixed | see below — 1 tool-local failure fixed, 2 suite flags |
+| 6 | focus visibility | pass | 8/8 tabbed elements show the core 2px accent outline |
+
+Contrast measurements:
+- FIXED: `.btn.primary` (+ :hover) was `#fff` on `var(--accent)` — **2.36:1 dark**. Now
+  `color: var(--bg)` (5.26:1 light / 7.60:1 dark).
+- SUITE FLAG (not fixed locally): `--muted` on `--bg` = **4.36:1 light** (footer);
+  `--muted` on `--chip` = **4.10:1 light** (`.src-tag` result badges, `code`). Dark passes both.
+- Passing spot-checks: tool accents `--warn`/`--bad` already 3-layer from migration; `.co`
+  accent mono 5.26/7.60; `.hint` on card 4.76.
+
+Fixes made: the `.btn.primary` color swap above (tools/geo.html only).
+Harness after fix: `node verify-tool.mjs geo` → exit 0 (live Open-Meteo/Census/Nominatim,
+stale paths, bounded-cache prune probe).

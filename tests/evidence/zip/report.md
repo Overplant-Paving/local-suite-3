@@ -142,3 +142,27 @@ unchanged from the v1 pattern.
   have stored `null`s; unreachable in practice because the save button only
   renders when `lat && lon` are truthy API strings. Behavior for valid data is
   identical.
+
+## Phase 4 a11y audit
+
+Re-verified 2026-07-16 against QUALITY.md §2 (Phase 4 audit addendum). Full runtime log in
+`a11y-phase4.txt` (harness: `tests/a11y-phase4-batch.mjs`, all http(s) route-fulfilled).
+
+| # | Checklist item | Verdict | Evidence (one line) |
+|---|---|---|---|
+| 1 | icon-only controls named | n-a | no icon-only buttons or links render (★/✓/✕ glyphs all appear inside worded buttons) |
+| 2 | aria-live on async containers | pass | runtime `aria-live=polite` on #zipOut, #cityOut, #acOut |
+| 3 | keyboard path | pass | full flow keyboard-only: Tab→#zipIn, Enter submits; Tab+Enter saves location, switches pills, jumps via a `.zchip` (`role=button` `tabindex=0` + Enter/Space); area code fully offline via keyboard; no positive tabindex; no overlays |
+| 4 | input labels | pass | all four inputs have `<label for>` (visible acIn in the main scan; zipIn/stIn/cityIn confirmed by the hidden-tab probe in a11y-phase4.txt) |
+| 5 | contrast, both palettes | fixed | see below — 1 tool-local failure fixed, 1 suite flag |
+| 6 | focus visibility | pass | 8/8 tabbed elements show the core 2px accent outline |
+
+Contrast measurements:
+- FIXED: `.pill.on` and `button.go` were `#fff` on `var(--accent)` — 5.83:1 light but **2.36:1
+  dark**. Now `color: var(--bg)`: 5.26:1 light / 7.60:1 dark. No visible light change.
+- SUITE FLAG (not fixed locally): `--muted` on `--bg` = **4.36:1 light** (footer, `.fact span`
+  labels on the `--bg` fact tiles). Dark passes (6.81:1).
+- Passing spot-checks: `.sub` muted-on-card 4.76, `.fact b` accent-on-bg 5.26/7.60, `.big` ≥13.
+
+Fixes made: the two `color:#fff` → `color:var(--bg)` swaps above (tools/zip.html only).
+Harness after fix: `node verify-tool.mjs zip` → exit 0 (live Zippopotamus fetches + stale path).

@@ -226,3 +226,30 @@ hostile thumbnail) — all net::-classified, no hard issues.
 
 No entries needed, none requested: `tests/escape-allowlist.json` has no wiki entries and the
 tool still contains zero interpolations into innerHTML.
+
+## Phase 4 a11y audit
+
+Re-verified 2026-07-16 against QUALITY.md §2 (Phase 4 audit addendum). Full runtime log — keyboard
+transcript and every computed contrast pair in both themes — in `a11y-phase4.txt` (harness:
+`tests/a11y-phase4-batch.mjs`, all http(s) route-fulfilled; zero live requests in the audit run).
+
+| # | Checklist item | Verdict | Evidence (one line) |
+|---|---|---|---|
+| 1 | icon-only controls named | pass | only symbol control is the readlist ✕ — carries per-item `aria-label` ("Remove “Ada Lovelace” from reading list") |
+| 2 | aria-live on async containers | pass | runtime `aria-live=polite` on #article, #featured, #onthisday, #readlist |
+| 3 | keyboard path | pass | primary feature driven keyboard-only: type → ArrowDown → Enter opened the article; Esc closes the suggest overlay; Tab+Enter operates save; feed rows/readlist entries are `role=button` `tabindex=0` with Enter/Space handlers; no positive tabindex |
+| 4 | input labels | pass | #q has `aria-label="Search Wikipedia"` |
+| 5 | contrast, both palettes | fixed | see below — 2 tool-local failures fixed, 1 suite flag |
+| 6 | focus visibility | pass | 5/5 tabbed elements show the core 2px accent outline |
+
+Contrast measurements (worst pair per fg/bg combination; full table in a11y-phase4.txt):
+- FIXED: `.btn.primary` was `#fff` on `var(--accent)` — 5.83:1 light but **2.36:1 dark** (#fff on
+  #6fb5ae). Now `color: var(--bg)`: measured 5.26:1 light / 7.60:1 dark. No visible light change.
+- FIXED: `.readlist-item button:hover` was hardcoded `#b0402d` (2.81:1 on the dark card) — now a
+  3-layer tool accent `--rm-hover` (#b0402d light / #e0766a dark, 5.71:1 / 5.41:1).
+- SUITE FLAG (not fixed locally): `--muted` on `--bg` = **4.36:1 light** (footer). See the
+  suite-wide flags in the audit final report; dark passes at 6.81:1.
+- Passing spot-checks: muted-on-card 4.76, accent `.yr` 5.74/6.91, body text ≥13.4.
+
+Fixes made: the two CSS changes above (tools/wiki.html only; no behavior change).
+Harness after fix: `node verify-tool.mjs wiki` → exit 0 (live Wikipedia fetches, escape probe inert).

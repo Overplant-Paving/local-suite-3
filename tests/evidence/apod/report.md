@@ -163,3 +163,40 @@ correct, rl backoff + 429/404 hints correct, and the video link-out already impl
 with an accurate CSP justification in its comments. No fixes were required; the file was
 moved to tools/apod.html unchanged. All verification artifacts (interaction module,
 evidence, this report) are new work by the completer.
+
+## Phase 4 a11y audit
+
+Re-verified 2026-07-16 against QUALITY.md §2 (Phase 4 audit addendum). Full runtime log in
+`a11y-phase4.txt` (harness: `tests/a11y-phase4-batch.mjs` — api.nasa.gov and all media hosts
+route-fulfilled with labeled synthetic fixtures: **zero live NASA requests**, per the batch
+instruction — the shared DEMO_KEY pool 429'd earlier and must not be spent on this audit).
+
+| # | Checklist item | Verdict | Evidence (one line) |
+|---|---|---|---|
+| 1 | icon-only controls named | n-a | all controls worded ("‹ prev", "🎲 random", "↻ refresh" carry words) |
+| 2 | aria-live on async containers | pass | runtime `aria-live=polite` on #view and #stamp |
+| 3 | keyboard path | pass | day navigation via document-level ArrowLeft/ArrowRight verified; keycard is a native `<details>/<summary>` (Tab+Enter opens); Enter in #keyInput saves the key, Tab+Enter clears; prev/today/next/random/refresh are real buttons; date input native; no positive tabindex |
+| 4 | input labels | pass | #keyInput and #datePick both carry `aria-label` |
+| 5 | contrast, both palettes | fixed | see below — 1 tool-local failure fixed, 1 suite flag |
+| 6 | focus visibility | pass | 8/8 tabbed elements show the core 2px accent outline |
+
+Contrast measurements:
+- FIXED: `.keycard button` was `#fff` on `var(--accent)` — **2.36:1 dark**. Now
+  `color: var(--bg)` (5.26:1 light / 7.60:1 dark). (#keyClear overrides to card/ink inline —
+  unaffected.)
+- SUITE FLAG (not fixed locally): `--muted` on `--bg` = **4.36:1 light** (footer). Dark passes.
+- Measured ok: white-on-scrim overlays (.hd pill spec / .videocard .play, rgba(0,0,0,.55–.65)
+  over media) are ≥4.75:1 even over a worst-case white frame.
+
+Fixes made: the `.keycard button` color swap above (tools/apod.html only; CSS-only).
+Harness after fix: `node verify-tool.mjs apod` **deliberately NOT re-run** — its module spends
+up to 2 real DEMO_KEY requests per run-day (today's archived payload is dated 2026-07-15, so a
+rerun would fetch fresh), and the batch instruction forbids live NASA requests today (pool
+429'd). Targeted verification instead: the change is CSS-only, and `a11y-phase4.txt` records the
+full render/navigation/key flow console-clean against route-fulfilled endpoints in both themes.
+Re-run the harness on a later day when the demo pool has headroom.
+
+Found in passing (cosmetic, v2-only, out of audit scope — spawned as its own follow-up task):
+the HD badge is appended to `.media-wrap` but styled by the selector `.media a.hd`, which never
+matches — the "HD ↗" link renders unstyled below the image instead of as the overlay pill. Not
+an a11y failure (measured 5.74:1); flagged for visual-parity follow-up.

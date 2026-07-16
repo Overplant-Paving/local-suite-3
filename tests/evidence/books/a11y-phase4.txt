@@ -1,0 +1,49 @@
+# Phase 4 a11y audit run — books — 2026-07-16T06:07:11.761Z
+# page: file:///C:/Users/henry/Developement/Local%20Suite%202/tools/books.html (all http(s) route-fulfilled/aborted; zero live requests)
+
+== 3. KEYBOARD PATH (page.keyboard only) ==
+keyboard search: status='2 found'
+Tab->Enter add to read-next: '✓ On your list', saved count='· 1'
+Tab->Enter remove from list: savedEmpty visible=true
+keyboard ISBN lookup: status='Found by ISBN'
+
+== 1. ICON-ONLY BUTTONS/LINKS ==
+no icon-only/symbol-only buttons or links rendered
+
+== 2. ARIA-LIVE ON ASYNC CONTAINERS ==
+ok   #status aria-live=polite
+note: #status is the announced channel; result cards themselves are deliberately not a live region (list re-renders would be spammy) — v1-parity design, announced via status.
+
+== 3b. TABINDEX SANITY ==
+ok   no positive tabindex anywhere
+
+== 4. INPUT LABELS ==
+ok   input#q[type=search] -> aria-label
+
+== 6. FOCUS VISIBILITY ==
+focus visibility: 8/8 tabbed elements show a computed focus indicator
+  button#modeSearch.mode: visible (2px solid rgb(47, 111, 106))
+  button#modeIsbn.mode: visible (2px solid rgb(47, 111, 106))
+  button.addbtn: visible (2px solid rgb(47, 111, 106))
+
+== 5. CONTRAST — light theme (primed page, distinct pairs, worst-case sample each) ==
+SUITE-FLAG 4.36 (need 4.5) fg=#6b7280 on bg=#f5f3ee 13.3px/400 footer “Data: Open Library (openlibr”
+ok   4.76 (need 4.5) fg=#6b7280 on bg=#fffdf9 13.1px/400 button#exportBtn “Export”
+ok   5.26 (need 4.5) fg=#f5f3ee on bg=#2f6f6a 13.6px/400 button#modeIsbn.mode.on “ISBN lookup”
+ok   5.74 (need 4.5) fg=#2f6f6a on bg=#fffdf9 13.1px/400 button.addbtn “+ Read next”
+ok   13.39 (need 3) fg=#23282e on bg=#f5f3ee 27.2px/700 h1 “Book & Library Lookup”
+ok   13.39 (need 4.5) fg=#23282e on bg=#f5f3ee 17.6px/700 h2 “Read next”
+ok   14.61 (need 4.5) fg=#23282e on bg=#fffdf9 13.6px/400 button#themeBtn.theme-btn “◐ theme”
+
+console: clean (no non-network errors)
+
+== 5. CONTRAST — dark theme (primed page, distinct pairs, worst-case sample each) ==
+ok   6.19 (need 4.5) fg=#9aa0a8 on bg=#1d2026 14.4px/400 a.suite-link “← suite”
+ok   6.81 (need 4.5) fg=#9aa0a8 on bg=#15171b 13.3px/400 footer “Data: Open Library (openlibr”
+ok   6.91 (need 4.5) fg=#6fb5ae on bg=#1d2026 13.1px/400 button.addbtn “+ Read next”
+ok   7.6 (need 4.5) fg=#15171b on bg=#6fb5ae 13.6px/400 button#modeIsbn.mode.on “ISBN lookup”
+ok   12.96 (need 4.5) fg=#e7e5e0 on bg=#1d2026 13.6px/400 button#themeBtn.theme-btn “◐ theme”
+ok   14.25 (need 3) fg=#e7e5e0 on bg=#15171b 27.2px/700 h1 “Book & Library Lookup”
+ok   14.25 (need 4.5) fg=#e7e5e0 on bg=#15171b 17.6px/700 h2 “Read next”
+
+== RESULT: ALL TOOL-LOCAL CHECKS PASS + 1 suite-palette flag(s) (reported, not fixed locally) ==

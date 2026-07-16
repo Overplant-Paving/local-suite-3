@@ -148,3 +148,47 @@ flag them; listed here for the record anyway.
 5. EPQS was healthy during verification; the EPQS-timeout → Open-Elevation fallback for US points
    was therefore only exercised by code inspection plus the offline test, not by a live EPQS
    outage.
+
+## Phase 4 a11y audit
+
+Re-verified 2026-07-16 against QUALITY.md §2 (Phase 4 audit addendum). Full runtime log in
+`a11y-phase4.txt` (harness: `tests/a11y-phase4-batch.mjs`; USGS EPQS + Open-Elevation
+route-fulfilled — zero live requests in the audit run).
+
+| # | Checklist item | Verdict | Evidence (one line) |
+|---|---|---|---|
+| 1 | icon-only controls named | n-a | no icon-only buttons or links (all worded; A/B dots are decorative) |
+| 2 | aria-live on async containers | pass | runtime `aria-live=polite` on #formErr, #pointResult, #profResult, #locbar, and the dynamically created #readout |
+| 3 | keyboard path | pass | point lookup (Enter in a Point-A field), profile (Enter in a Point-B field), unit toggle (Tab+Enter, `aria-pressed`), and the SVG chart readout (`tabindex=0`, ArrowLeft/Right mirror hover) all keyboard-only; no positive tabindex; no overlays |
+| 4 | input labels | pass | latA/lonA/latB/lonB all `<label for>` (enumerated at runtime) |
+| 5 | contrast, both palettes | fixed | see below — 2 tool-local failures fixed, 2 suite flags |
+| 6 | focus visibility | pass | 8/8 — buttons/links get the core outline; the number inputs keep the v1 pattern (tool CSS `outline:none` + `:focus` border flips `--line`→`--accent`), a visible indicator recorded in the log |
+
+Contrast measurements:
+- FIXED: `button.go` and `.unit-tog button.on` were `#fff` on `var(--accent)` — **2.36:1 dark**.
+  Now `color: var(--bg)` (5.26:1 light / 7.60:1 dark).
+- FIXED: the error red was hardcoded `#c0392b` (5.35:1 light but **3.00:1 on the dark card**) in
+  `.err h2` and the #formErr inline style — now `--bad` added to the tool's existing 3-layer
+  accent block (#c0392b light / #e0766a dark 5.41:1).
+- SUITE FLAG (not fixed locally): `--muted` on `--bg` = **4.36:1 light** (footer);
+  `--muted` on `--chip` = **4.10:1 light** (`code` spans). Dark passes both.
+- Passing spot-checks: `--up`/`--down` stats are large bold text — 3.79/5.35 light ≥3.0,
+  6.66/6.33 dark; `.srcbadge` accent-on-soft 4.95/6.30.
+
+Fixes made: the CSS changes above (tools/elevation.html only; no behavior change).
+
+Harness after fix: `node verify-tool.mjs elevation` could NOT reach exit 0 on 2026-07-16 —
+**live-source failure, documented, not hammered** (2 runs + 3 probes, then stopped):
+api.open-elevation.com's CORS preflight is 504-flapping (Node probe: OPTIONS answered 204 once,
+then 504 with correct ACAO/ACAM headers; a real Chrome POST from file:// is therefore blocked —
+"Response to preflight request doesn't pass access control check"). The v1 original fails the
+same way in a browser today (its profile wait timed out), so this is environmental, not a
+regression: the audit's change is CSS-only, and the tool's full point + profile + keyboard-readout
+flow ran console-clean against route-fulfilled endpoints in `a11y-phase4.txt` (the targeted
+verification). The last good live-source harness evidence is in git history (Batch B completion
+commit ac2c83a); today's interaction.txt intentionally archives the degraded-source run.
+
+Found in passing (pre-existing v2 bug, out of audit scope — spawned as its own task): when the
+profile POST fails with nothing cached, elevationBatch's sparse new Array(n) plus
+Array.prototype.some (which skips holes) lets a NaN chart render instead of the error card —
+see the SVG "Expected length, NaN" console errors in today's interaction.txt.

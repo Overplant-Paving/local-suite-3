@@ -166,3 +166,29 @@ counts and covers are stable reference data; 7 d matches factbook/zip.
 - The v2 screenshots show an accent focus ring on the search box that v1 lacks — that is
   core's `:focus-visible` outline on the autofocused input (QUALITY.md §2), not a palette
   drift; explained under changes.
+
+## Phase 4 a11y audit
+
+Re-verified 2026-07-16 against QUALITY.md §2 (Phase 4 audit addendum). Full runtime log in
+`a11y-phase4.txt` (harness: `tests/a11y-phase4-batch.mjs`, Open Library route-fulfilled).
+
+| # | Checklist item | Verdict | Evidence (one line) |
+|---|---|---|---|
+| 1 | icon-only controls named | pass | the saved-list ✕ carries a per-item `aria-label` ("Remove <title> from the read-next list"); everything else is worded |
+| 2 | aria-live on async containers | pass | `aria-live=polite` on #status — the announced channel; the results grid itself is deliberately not live (list re-renders would spam screen readers), status announces every outcome incl. offline/stale |
+| 3 | keyboard path | pass | search, add-to-list, remove, mode switch, and ISBN lookup all driven keyboard-only (Enter submits; Tab reaches every button); no positive tabindex; no overlays |
+| 4 | input labels | pass | #q has `aria-label` covering both modes |
+| 5 | contrast, both palettes | fixed | see below — 2 tool-local failures fixed, 1 suite flag |
+| 6 | focus visibility | pass | 8/8 tabbed elements show the core 2px accent outline |
+
+Contrast measurements:
+- FIXED: `.mode.on` was `#fff` on `var(--accent)` — **2.36:1 dark**. Now `color: var(--bg)`
+  (5.26:1 light / 7.60:1 dark).
+- FIXED: `.saved-item .rm:hover` was hardcoded `#c0552d` (3.55:1 on the dark card) — now a
+  3-layer `--rm-hover` accent (#c0552d light 4.51:1 / #e0766a dark 5.41:1).
+- SUITE FLAG (not fixed locally): `--muted` on `--bg` = **4.36:1 light** (footer). Dark passes.
+- n-a: the 📖 cover placeholder glyph on `--chip` is decorative (no information conveyed).
+
+Fixes made: the two CSS changes above (tools/books.html only).
+Harness after fix: `node verify-tool.mjs books` → exit 0 (live Open Library fetch, cover load,
+TSV export, stale path).

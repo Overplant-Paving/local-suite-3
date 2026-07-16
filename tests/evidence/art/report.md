@@ -232,3 +232,37 @@ remain safe as reasoned, with one hardening — the `renderFavs` image-URL claim
 no `javascript:` risk") was true for freshly constructed URLs but not for URLs read back from
 tampered/legacy localStorage; F1 closes that gap. No previously-allowlisted expression is
 unsafe. No allowlist revisions needed.
+
+## Phase 4 a11y audit
+
+Re-verified 2026-07-16 against QUALITY.md §2 (Phase 4 audit addendum). Full runtime log in
+`a11y-phase4.txt` (harness: `tests/a11y-phase4-batch.mjs` — api.artic.edu and both image hosts
+route-fulfilled; www.artic.edu 403s headless automation intermittently, the documented
+environment failure, so the audit made zero live artic requests).
+
+| # | Checklist item | Verdict | Evidence (one line) |
+|---|---|---|---|
+| 1 | icon-only controls named | pass | the favorites ✕ has `aria-label="Remove from favorites"`; fav tiles have `aria-label="Show favorite: <title>"` |
+| 2 | aria-live on async containers | pass | runtime `aria-live=polite` on #postcard and #favCount |
+| 3 | keyboard path | pass | favorite, fav-tile open (`role=button` `tabindex=0` + Enter/Space), AIC tab, and search all driven keyboard-only (Enter fires search); no positive tabindex; no overlays |
+| 4 | input labels | pass | #q has `aria-label="Search the Art Institute"` |
+| 5 | contrast, both palettes | fixed | see below — 3 tool-local failures fixed, 1 suite flag |
+| 6 | focus visibility | pass | 8/8 tabbed elements show the core 2px accent outline |
+
+Contrast measurements:
+- FIXED: `.tab.on` and `button.act.primary` were `#fff` on `var(--accent)` — **2.36:1 dark**.
+  Now `color: var(--bg)` (5.26:1 light / 7.60:1 dark).
+- FIXED: `button.act.fav.on` was hardcoded `#c0552d` in both palettes (4.51:1 light, **3.55:1
+  dark**) — now a 3-layer `--fav-on` accent (#c0552d light / #e0766a dark 5.41:1).
+- SUITE FLAG (not fixed locally): `--muted` on `--bg` = **4.36:1 light** (footer). Dark passes.
+- Measured ok: the fav-tile ✕ (white on rgba(0,0,0,.55) scrim over an image) is 4.82:1 over the
+  scan's rendered tile and ≥4.75:1 even over a worst-case pure-white image.
+
+Observation (v1-parity, not changed): on boot the tool renders the Met daily pick while the
+markup's initial "Art Institute (live)" tab still carries `.on`/`aria-pressed="true"` (paintTabs
+only runs on click) — the mismatch affects sighted and SR users identically and is inherited
+from the v1 markup; flagged for a possible cosmetic follow-up, not an audit failure.
+
+Fixes made: the CSS changes above (tools/art.html only; embedded MET dataset untouched).
+Harness after fix: `node verify-tool.mjs art` → exit 0 (live Met image, AIC pool/search,
+escaping probes inert; artic iiif 403-under-headless tolerated as documented).

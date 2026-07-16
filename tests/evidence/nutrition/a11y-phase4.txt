@@ -1,0 +1,92 @@
+# Phase 4 a11y audit run — nutrition — 2026-07-16T06:10:40.446Z
+# page: file:///C:/Users/henry/Developement/Local%20Suite%202/tools/nutrition.html (all http(s) route-fulfilled/aborted; zero live requests)
+
+== 3. KEYBOARD PATH (page.keyboard only) ==
+keyboard search (archived USDA payload replayed; zero live requests): 20 rows
+Tab->Enter slot A: aria-pressed=true
+Tab->Enter slot B: compare class='compare two'
+basis toggle via keyboard: pressed=true
+keyToggle Enter opens keybox: aria-expanded=true, focus=#keyInput
+Esc closes keybox: aria-expanded=false, focus returned to=#keyToggle
+
+== 1. ICON-ONLY BUTTONS/LINKS ==
+ok   button.a.on text="A" aria-label="Put Banana in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Banana in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Banana in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Banana in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Bananas, Dehydrated, Or Banana Powder in slot A" title="Put in slot A"
+ok   button.b.on text="B" aria-label="Put Bananas, Dehydrated, Or Banana Powder in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Bananas, Raw in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Bananas, Raw in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Bananas, Overripe, Raw in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Bananas, Overripe, Raw in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Melon, Banana (Navajo) in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Melon, Banana (Navajo) in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Pepper, Banana, Raw in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Pepper, Banana, Raw in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Snacks, Banana Chips in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Snacks, Banana Chips in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Babyfood, Apple-Banana Juice in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Babyfood, Apple-Banana Juice in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Babyfood, Banana No Tapioca, Strained in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Babyfood, Banana No Tapioca, Strained in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Babyfood, Juice, Orange And Banana in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Babyfood, Juice, Orange And Banana in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Babyfood, Banana Apple Dessert, Strained in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Babyfood, Banana Apple Dessert, Strained in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Babyfood, Banana With Mixed Berries, Strained in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Babyfood, Banana With Mixed Berries, Strained in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Babyfood, Cereal, Mixed, With Bananas, Dry in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Babyfood, Cereal, Mixed, With Bananas, Dry in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Babyfood, Cereal, Oatmeal, With Bananas, Dry in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Babyfood, Cereal, Oatmeal, With Bananas, Dry in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Babyfood, Cereal, Rice, With Bananas, Dry in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Babyfood, Cereal, Rice, With Bananas, Dry in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Babyfood, Dessert, Banana Pudding, Strained in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Babyfood, Dessert, Banana Pudding, Strained in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Babyfood, Dessert, Banana Yogurt, Strained in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Babyfood, Dessert, Banana Yogurt, Strained in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Babyfood, Fruit, Applesauce With Banana, Junior in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Babyfood, Fruit, Applesauce With Banana, Junior in slot B" title="Put in slot B"
+ok   button.a text="A" aria-label="Put Babyfood, Fruit, Banana And Strawberry, Junior in slot A" title="Put in slot A"
+ok   button.b text="B" aria-label="Put Babyfood, Fruit, Banana And Strawberry, Junior in slot B" title="Put in slot B"
+
+== 2. ARIA-LIVE ON ASYNC CONTAINERS ==
+ok   #results aria-live=polite
+ok   #compare aria-live=polite
+
+== 3b. TABINDEX SANITY ==
+ok   no positive tabindex anywhere
+
+== 4. INPUT LABELS ==
+ok   input#q[type=search] -> aria-label
+
+== 6. FOCUS VISIBILITY ==
+focus visibility: 8/8 tabbed elements show a computed focus indicator
+  button.a: visible (2px solid rgb(47, 111, 106))
+  button.b: visible (2px solid rgb(47, 111, 106))
+  button.a: visible (2px solid rgb(47, 111, 106))
+
+== 5. CONTRAST — light theme (primed page, distinct pairs, worst-case sample each) ==
+SUITE-FLAG 4.36 (need 4.5) fg=#6b7280 on bg=#f5f3ee 13.1px/400 footer “Data: USDA FoodData Central ”
+ok   4.76 (need 4.5) fg=#6b7280 on bg=#fffdf9 11.8px/400 td “Key micronutrients”
+ok   4.85 (need 4.5) fg=#f5f3ee on bg=#9a5b2b 13.3px/700 button.b.on “B”
+ok   5.26 (need 4.5) fg=#2f6f6a on bg=#f5f3ee 13.1px/400 a#keyToggle “Use your own free key →”
+ok   5.26 (need 4.5) fg=#f5f3ee on bg=#2f6f6a 12.8px/400 button.on “per 100 g”
+ok   5.74 (need 3) fg=#2f6f6a on bg=#fffdf9 32px/700 div.cal “346”
+ok   13.39 (need 3) fg=#23282e on bg=#f5f3ee 28px/700 h1 “Nutrition Lookup”
+ok   14.61 (need 4.5) fg=#23282e on bg=#fffdf9 13.6px/400 button#themeBtn.theme-btn “◐ theme”
+
+console: clean (no non-network errors)
+
+== 5. CONTRAST — dark theme (primed page, distinct pairs, worst-case sample each) ==
+ok   6.19 (need 4.5) fg=#9aa0a8 on bg=#1d2026 12.5px/400 div.meta “Wonder Natural Foods Corp · ”
+ok   6.81 (need 4.5) fg=#9aa0a8 on bg=#15171b 13.1px/400 footer “Data: USDA FoodData Central ”
+ok   6.91 (need 3) fg=#6fb5ae on bg=#1d2026 32px/700 div.cal “100”
+ok   7.23 (need 4.5) fg=#15171b on bg=#cf9a63 13.3px/700 button.b.on “B”
+ok   7.6 (need 4.5) fg=#6fb5ae on bg=#15171b 14.4px/400 a.back “← suite”
+ok   7.6 (need 4.5) fg=#15171b on bg=#6fb5ae 16px/400 button.go “Search”
+ok   12.96 (need 4.5) fg=#e7e5e0 on bg=#1d2026 13.6px/400 button#themeBtn.theme-btn “◐ theme”
+ok   14.25 (need 3) fg=#e7e5e0 on bg=#15171b 28px/700 h1 “Nutrition Lookup”
+
+== RESULT: ALL TOOL-LOCAL CHECKS PASS + 1 suite-palette flag(s) (reported, not fixed locally) ==

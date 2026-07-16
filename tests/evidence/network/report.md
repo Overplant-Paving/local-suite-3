@@ -180,3 +180,28 @@ envelope as offline fallback only.
    was `row`. Screenshots confirm identical card layout.
 5. **Latency numbers and connection-card estimates differ run-to-run** (live
    measurements); screenshot diffs in those regions are dynamic content, not style drift.
+
+## Phase 4 a11y audit
+
+Re-verified 2026-07-16 against QUALITY.md §2 (Phase 4 audit addendum). Full runtime log in
+`a11y-phase4.txt` (harness: `tests/a11y-phase4-batch.mjs` — ipapi.co route-fulfilled per the
+batch instruction: it serves Cloudflare bot challenges to browser-class clients from this VPN
+exit; ipify and the four latency anchors were also fulfilled, so the audit made zero live hits).
+
+| # | Checklist item | Verdict | Evidence (one line) |
+|---|---|---|---|
+| 1 | icon-only controls named | n-a | the only button is the worded "copy" |
+| 2 | aria-live on async containers | pass | runtime `aria-live=polite` on #ipVal, #ipMsg, #geoBody; #latBody/#verdict are deliberately NOT live (the 10 s ping loop re-render would spam screen readers — documented in source), a designed exception the audit endorses |
+| 3 | keyboard path | pass | passive tool; the one interaction (copy IP) is Tab-reachable and Enter-operable ("copied" observed); no positive tabindex; no overlays |
+| 4 | input labels | n-a | the tool has no form inputs |
+| 5 | contrast, both palettes | pass | zero tool-local failures — the verdict palette (--good/--warn/--bad) was already 3-layer from migration; 2 suite flags below |
+| 6 | focus visibility | pass | 7/7 tabbed elements show the core 2px accent outline |
+
+Contrast measurements:
+- SUITE FLAG (not fixed locally): `--muted` on `--chip` = **4.10:1 light** (the "copy" button);
+  `--muted` on `--bg` = **4.36:1 light** (footer). Dark passes both (5.47 / 6.81).
+- Passing spot-checks: `.ip` accent 5.74/6.91 (large), `.lat-nums .big` ink 14.6/12.96,
+  `.err` `--bad` 4.63 light / 5.41 dark.
+
+Fixes made: none — the tool passes as-was (tools/network.html unmodified by this audit).
+Harness: not re-run (unmodified); the migration-time evidence above stands.

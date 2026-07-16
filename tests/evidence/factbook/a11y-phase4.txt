@@ -1,0 +1,50 @@
+# Phase 4 a11y audit run — factbook — 2026-07-16T06:06:39.821Z
+# page: file:///C:/Users/henry/Developement/Local%20Suite%202/tools/factbook.html (all http(s) route-fulfilled/aborted; zero live requests)
+
+== 3. KEYBOARD PATH (page.keyboard only) ==
+keyboard country lookup: Japan card rendered
+Esc closes suggest: open=false
+states tab via keyboard: aria-pressed=true
+state search via keyboard: 'Texas (TX)'
+state chip via Tab+Enter: 'Alabama (AL)'
+
+== 1. ICON-ONLY BUTTONS/LINKS ==
+no icon-only/symbol-only buttons or links rendered
+
+== 2. ARIA-LIVE ON ASYNC CONTAINERS ==
+ok   #countryCard aria-live=polite
+ok   #stateCard aria-live=polite
+
+== 3b. TABINDEX SANITY ==
+ok   no positive tabindex anywhere
+
+== 4. INPUT LABELS ==
+ok   input#qs[type=search] -> aria-label
+
+== 6. FOCUS VISIBILITY ==
+focus visibility: 8/8 tabbed elements show a computed focus indicator
+  button.schip: visible (2px solid rgb(47, 111, 106))
+  button.schip: visible (2px solid rgb(47, 111, 106))
+  button.schip: visible (2px solid rgb(47, 111, 106))
+
+== 5. CONTRAST — light theme (primed page, distinct pairs, worst-case sample each) ==
+SUITE-FLAG 4.36 (need 4.5) fg=#6b7280 on bg=#f5f3ee 13.3px/400 footer#footer “Country data is an embedded ”
+ok   4.76 (need 4.5) fg=#6b7280 on bg=#fffdf9 13.1px/400 span.pop “576,851”
+ok   5.26 (need 4.5) fg=#f5f3ee on bg=#2f6f6a 14.4px/400 button#tabState.tab.on “US States”
+ok   5.74 (need 3) fg=#2f6f6a on bg=#fffdf9 27.2px/600 div.v.big “5,024,279”
+ok   13.39 (need 3) fg=#23282e on bg=#f5f3ee 27.2px/700 h1 “Country & State Factbook”
+ok   14.61 (need 4.5) fg=#23282e on bg=#fffdf9 13.6px/400 button#themeBtn.theme-btn “◐ theme”
+ok   14.61 (need 3) fg=#23282e on bg=#fffdf9 27.2px/700 h2 “Alabama”
+
+console: clean (no non-network errors)
+
+== 5. CONTRAST — dark theme (primed page, distinct pairs, worst-case sample each) ==
+ok   6.19 (need 4.5) fg=#9aa0a8 on bg=#1d2026 14.4px/400 a.suite-link “← suite”
+ok   6.81 (need 4.5) fg=#9aa0a8 on bg=#15171b 13.3px/400 footer#footer “Country data is an embedded ”
+ok   6.91 (need 3) fg=#6fb5ae on bg=#1d2026 27.2px/600 div.v.big “5,024,279”
+ok   7.6 (need 4.5) fg=#15171b on bg=#6fb5ae 14.4px/400 button#tabState.tab.on “US States”
+ok   12.96 (need 4.5) fg=#e7e5e0 on bg=#1d2026 13.6px/400 button#themeBtn.theme-btn “◐ theme”
+ok   12.96 (need 3) fg=#e7e5e0 on bg=#1d2026 27.2px/700 h2 “Alabama”
+ok   14.25 (need 3) fg=#e7e5e0 on bg=#15171b 27.2px/700 h1 “Country & State Factbook”
+
+== RESULT: ALL TOOL-LOCAL CHECKS PASS + 1 suite-palette flag(s) (reported, not fixed locally) ==

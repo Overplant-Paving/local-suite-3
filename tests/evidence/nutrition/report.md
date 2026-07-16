@@ -79,3 +79,36 @@ literals with zero interpolation; every remote-data render goes through `createE
 3. **CATALOG.md line 512 still lists USDA FDC CORS as "verify"** — this session's live `file://` fetch is the missing verification; CATALOG is orchestrator-owned so it was not touched.
 4. **`slim()` drops `nutrient.number`-shaped nutrients** (search API returns flat `nutrientNumber`, so harmless today) — v1 had exactly the same shape assumption; kept for parity.
 5. The tool never fetches per-food detail endpoints (`/fdc/v1/food/{id}`) — compare works entirely from search-response nutrients, as in v1. No hidden request budget.
+
+## Phase 4 a11y audit
+
+Re-verified 2026-07-16 against QUALITY.md §2 (Phase 4 audit addendum). Full runtime log in
+`a11y-phase4.txt` (harness: `tests/a11y-phase4-batch.mjs` — api.nal.usda.gov route-fulfilled by
+replaying this evidence dir's archived `live-response.json`: **zero live USDA requests**, per
+the batch instruction — shared DEMO_KEY pool).
+
+| # | Checklist item | Verdict | Evidence (one line) |
+|---|---|---|---|
+| 1 | icon-only controls named | pass | all 40 rendered A/B slot buttons enumerated — every one carries `aria-label="Put <food> in slot A/B"` + `aria-pressed`; "remove ✕" is worded + labeled |
+| 2 | aria-live on async containers | pass | runtime `aria-live=polite` on #results and #compare |
+| 3 | keyboard path | pass | search (Enter submits the form), slot A/B picks, basis toggle, and the keybox (keyToggle is `role=button tabindex=0`, opening focuses #keyInput, **Esc closes and returns focus to the toggle**) all keyboard-only; no positive tabindex |
+| 4 | input labels | pass | #q and #keyInput both carry `aria-label` |
+| 5 | contrast, both palettes | fixed | see below — 2 tool-local failures fixed, 1 suite flag |
+| 6 | focus visibility | pass | 8/8 tabbed elements show the core 2px accent outline |
+
+Contrast measurements:
+- FIXED: `button.go` and `.basis button.on` were `#fff` on `var(--accent)` — **2.36:1 dark**;
+  the slot buttons `.a.on`/`.b.on` were `#fff` on `--a`/`--b` — 5.83/5.38 light but **2.36/2.48
+  dark** (#fff on #6fb5ae/#cf9a63). All now `color: var(--bg)`: ≥4.85:1 light, ≥7.2:1 dark.
+- SUITE FLAG (not fixed locally): `--muted` on `--bg` = **4.36:1 light** (footer, .keyrow).
+  Dark passes.
+- Passing spot-checks: `.cal` accent 5.74/6.91 (large), table text ink ≥12.9, `.meta`
+  muted-on-card 4.76/6.19.
+
+Fixes made: the color swaps above (tools/nutrition.html only; the --a/--b/--bad 3-layer accents
+themselves are untouched).
+Harness after fix: `node verify-tool.mjs nutrition` **deliberately NOT re-run** — its module
+makes exactly one real USDA request per run, and the batch instruction forbids live USDA
+requests today (shared demo pool). Targeted verification instead: the change is CSS-only, and
+`a11y-phase4.txt` records search → compare → basis → keybox console-clean against the archived
+real payload in both themes. Re-run the harness on a later day when the demo pool has headroom.

@@ -1,0 +1,55 @@
+# Phase 4 a11y audit run — gas — 2026-07-16T06:11:51.114Z
+# page: file:///C:/Users/henry/Developement/Local%20Suite%202/tools/gas.html (all http(s) route-fulfilled/aborted; zero live requests)
+
+== 3. KEYBOARD PATH (page.keyboard only) ==
+keyboard key save -> hero renders: '$3.100 / gal'
+all-regions grid rendered: 6 cells
+fuel changed via keyboard (ArrowDown): meta='United States · Midgrade Gasoline Week of Jul 13, 2026 · ▼ 0.052 vs prior week'
+refresh via Tab+Enter: hero re-rendered
+chart svg: role=img, aria-label='52-week price trend chart'
+
+== 1. ICON-ONLY BUTTONS/LINKS ==
+no icon-only/symbol-only buttons or links rendered
+
+== 2. ARIA-LIVE ON ASYNC CONTAINERS ==
+ok   #dataArea aria-live=polite
+ok   #compare aria-live=polite
+ok   #keyMsg aria-live=polite
+ok   #natlMsg aria-live=polite
+
+== 3b. TABINDEX SANITY ==
+ok   no positive tabindex anywhere
+
+== 4. INPUT LABELS ==
+ok   select#product[type=select-one] -> label[for]
+ok   select#area[type=select-one] -> label[for]
+
+== 6. FOCUS VISIBILITY ==
+focus visibility: 8/8 tabbed elements show a computed focus indicator
+  a.back: visible (2px solid rgb(47, 111, 106))
+  button#themeBtn.theme-btn: visible (2px solid rgb(47, 111, 106))
+  select#product: visible (2px solid rgb(47, 111, 106))
+
+== 5. CONTRAST — light theme (primed page, distinct pairs, worst-case sample each) ==
+SUITE-FLAG 4.36 (need 4.5) fg=#6b7280 on bg=#f5f3ee 13.1px/400 footer#footer “Data: U.S. Energy Informatio”
+ok   4.76 (need 4.5) fg=#6b7280 on bg=#fffdf9 12.5px/400 div.k “West Coast (PADD 5)”
+ok   4.93 (need 4.5) fg=#3a7d44 on bg=#fffdf9 14.4px/600 span.chg.down “▼ 0.052 vs prior week”
+ok   5.26 (need 4.5) fg=#2f6f6a on bg=#f5f3ee 14.4px/400 a.back “← suite”
+ok   5.74 (need 3) fg=#2f6f6a on bg=#fffdf9 48px/700 div.price “$3.500”
+ok   5.77 (need 4.5) fg=#b23b3b on bg=#fffdf9 20.8px/600 div.v.up “+$0.073”
+ok   13.39 (need 3) fg=#23282e on bg=#f5f3ee 27.2px/700 h1 “Gas Price Tracker”
+ok   14.61 (need 4.5) fg=#23282e on bg=#fffdf9 13.6px/400 button#themeBtn.theme-btn “◐ theme”
+
+console: clean (no non-network errors)
+
+== 5. CONTRAST — dark theme (primed page, distinct pairs, worst-case sample each) ==
+ok   5.31 (need 4.5) fg=#e0736b on bg=#1d2026 20.8px/600 div.v.up “+$0.073”
+ok   6.19 (need 4.5) fg=#9aa0a8 on bg=#1d2026 11.5px/400 label “Fuel”
+ok   6.81 (need 4.5) fg=#9aa0a8 on bg=#15171b 13.1px/400 footer#footer “Data: U.S. Energy Informatio”
+ok   6.91 (need 3) fg=#6fb5ae on bg=#1d2026 48px/700 div.price “$3.500”
+ok   7.6 (need 4.5) fg=#6fb5ae on bg=#15171b 14.4px/400 a.back “← suite”
+ok   7.86 (need 4.5) fg=#7dc487 on bg=#1d2026 14.4px/600 span.chg.down “▼ 0.052 vs prior week”
+ok   12.96 (need 4.5) fg=#e7e5e0 on bg=#1d2026 13.6px/400 button#themeBtn.theme-btn “◐ theme”
+ok   14.25 (need 3) fg=#e7e5e0 on bg=#15171b 27.2px/700 h1 “Gas Price Tracker”
+
+== RESULT: ALL TOOL-LOCAL CHECKS PASS + 1 suite-palette flag(s) (reported, not fixed locally) ==

@@ -124,3 +124,32 @@ CORS table, "verify" status — see concerns). The signup link is navigation, no
    deliberate offline segments (harness-filtered as expected for network tools).
 5. `report.md` was written via shell copy because of the session's PostToolUse Write hook on
    report.md (expected per HANDOFF.md).
+
+## Phase 4 a11y audit
+
+Re-verified 2026-07-16 against QUALITY.md §2 (Phase 4 audit addendum). Full runtime log in
+`a11y-phase4.txt` (harness: `tests/a11y-phase4-batch.mjs` — api.eia.gov route-fulfilled with the
+same deterministic EIA-v2-shape generator as interactions/gas.mjs; EIA has no demo tier and no
+key was invented, so zero live requests).
+
+| # | Checklist item | Verdict | Evidence (one line) |
+|---|---|---|---|
+| 1 | icon-only controls named | n-a | all controls worded |
+| 2 | aria-live on async containers | pass | runtime `aria-live=polite` on #dataArea, #compare, #keyMsg, #natlMsg |
+| 3 | keyboard path | pass | from the no-key designed state: paste key + Enter renders hero/regions/chart; fuel/region `<select>`s change via ArrowDown; Refresh via Tab+Enter; the trend SVG carries `role=img` + `aria-label="52-week price trend chart"`; no positive tabindex; no overlays |
+| 4 | input labels | pass | #keyInput `aria-label`; #product and #area `<label for>` |
+| 5 | contrast, both palettes | fixed | see below — 1 tool-local failure fixed, 1 suite flag |
+| 6 | focus visibility | pass | 8/8 tabbed elements show the core 2px accent outline |
+
+Contrast measurements:
+- FIXED: `.btn` (keycard "Save key") was `#fff` on `var(--accent)` — **2.36:1 dark** (the pair
+  is proven by the identical measured pairing across the batch; the keycard hides after the
+  audit's key save, so this instance was fixed from the source reading + the shared measurement).
+  Now `color: var(--bg)` (5.26:1 light / 7.60:1 dark). `.btn.ghost` overrides to ink — unchanged.
+- SUITE FLAG (not fixed locally): `--muted` on `--bg` = **4.36:1 light** (footer). Dark passes.
+- Passing spot-checks: price-change palette `--pos`/`--neg` (3-layer from migration) 5.77/4.93
+  light, 5.31/7.86 dark; hero price accent 5.74/6.91 (large); chart axis text muted-on-card.
+
+Fixes made: the `.btn` color swap above (tools/gas.html only).
+Harness after fix: `node verify-tool.mjs gas` → exit 0 (route-fulfilled module: no-key state,
+key mechanics, deterministic render pipeline, 403 rejection, theme redraw, stale path).

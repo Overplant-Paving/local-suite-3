@@ -7,12 +7,14 @@
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
   /* tool accents: climb / descent / profile fill (3-layer, same pattern as core) */
-  :root { --up: #b5732b; --down: #3d6f8e; --fill: #cfe0dd; }
+  :root { --up: #b5732b; --down: #3d6f8e; --fill: #cfe0dd; --bad: #c0392b; }
   @media (prefers-color-scheme: dark) {
-    :root { --up: #d59a52; --down: #6fa8cc; --fill: #243b39; }
+    :root { --up: #d59a52; --down: #6fa8cc; --fill: #243b39; --bad: #e0766a; }
   }
-  :root[data-theme="light"] { --up: #b5732b; --down: #3d6f8e; --fill: #cfe0dd; }
-  :root[data-theme="dark"] { --up: #d59a52; --down: #6fa8cc; --fill: #243b39; }
+  :root[data-theme="light"] { --up: #b5732b; --down: #3d6f8e; --fill: #cfe0dd; --bad: #c0392b; }
+  :root[data-theme="dark"] { --up: #d59a52; --down: #6fa8cc; --fill: #243b39; --bad: #e0766a; }
+  /* --bad added by the Phase 4 a11y audit: the error red was hardcoded #c0392b in both
+     palettes and measured 3.00:1 on the dark card (4.5:1 needed). Light value unchanged. */
 
   body { padding: 1.4rem 1.25rem 4rem; }
   .wrap { max-width: 900px; margin: 0 auto; }
@@ -43,15 +45,18 @@
   .dotA { background: var(--accent); }
   .dotB { background: var(--up); }
   .btns { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .9rem; }
+  /* Phase 4 a11y audit: #fff on the dark-theme accent (#6fb5ae) measured 2.36:1 — below
+     the 4.5:1 AA floor. var(--bg) passes both palettes (5.26:1 light / 7.60:1 dark).
+     Same fix on .unit-tog button.on below. */
   button.go {
-    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    border: 1px solid var(--accent); background: var(--accent); color: var(--bg);
     border-radius: 10px; padding: .55rem 1.1rem; cursor: pointer; font-size: .95rem;
   }
   button.go.ghost { background: var(--card); color: var(--accent); }
   button.go:disabled { opacity: .55; cursor: default; }
   .unit-tog { margin-left: auto; display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
   .unit-tog button { border: none; background: var(--card); color: var(--muted); padding: .35rem .8rem; cursor: pointer; font-size: .82rem; }
-  .unit-tog button.on { background: var(--accent); color: #fff; }
+  .unit-tog button.on { background: var(--accent); color: var(--bg); }
 
   .locbar { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin: 1rem 0 .1rem; font-size: .88rem; color: var(--muted); }
   .locbar b { color: var(--ink); }
@@ -80,7 +85,7 @@
 
   .msg { color: var(--muted); font-size: .92rem; }
   .err { border-color: color-mix(in srgb, #c0392b 40%, var(--line)); background: color-mix(in srgb, #c0392b 7%, var(--card)); }
-  .err h2 { color: #c0392b; }
+  .err h2 { color: var(--bad); }
   .spin { display: inline-block; width: 1rem; height: 1rem; border: 2px solid var(--line);
     border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; vertical-align: -2px; margin-right: .4rem; }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -134,7 +139,7 @@
       <button class="go ghost" id="geoBtn">Use my location for A</button>
       <button class="go ghost" id="swapBtn" title="Swap A and B">Swap</button>
     </div>
-    <p class="msg" id="formErr" style="margin-top:.6rem;color:#c0392b"></p>
+    <p class="msg" id="formErr" style="margin-top:.6rem;color:var(--bad)"></p>
   </div>
 
   <div id="pointResult"></div>

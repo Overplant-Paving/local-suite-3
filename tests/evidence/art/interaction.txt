@@ -1,24 +1,24 @@
 boot (Met, today's pick): label="Artwork of the day" title="The Rocky Mountains, Lander's Peak" artist="Albert Bierstadt"
   meta="1863 · Oil on canvas" · Collection: The Metropolitan Museum of Art · img=https://images.metmuseum.org/CRDImages/ad/web-large/DT82.jpg
   Met image (images.metmuseum.org): {"loaded":true,"naturalWidth":599}
-after Another (Met): label="From the Met set" title="Still Life with Teapot and Fruit" artist="Paul Gauguin"
-  meta="1896 · Oil on canvas" · Collection: The Metropolitan Museum of Art · img=https://images.metmuseum.org/CRDImages/ep/web-large/DT1027.jpg
+after Another (Met): label="From the Met set" title="Merced River, Yosemite Valley" artist="Albert Bierstadt"
+  meta="1866 · Oil on canvas" · Collection: The Metropolitan Museum of Art · img=https://images.metmuseum.org/CRDImages/ad/web-large/DT2961.jpg
 after Today's pick: label="Artwork of the day" title="The Rocky Mountains, Lander's Peak" artist="Albert Bierstadt"
   meta="1863 · Oil on canvas" · Collection: The Metropolitan Museum of Art · img=https://images.metmuseum.org/CRDImages/ad/web-large/DT82.jpg
   today's pick deterministic: same title as boot = true
 favorite toggled: btn="★ Favorited" count="· 1" grid items=1 stored ids=["met:10154"]
   fav item keyboard path: role=button tabindex=0
-AIC tab (live weekly pool, today's pick): label="Artwork of the day" title="Valley of Aosta: Snowstorm, Avalanche, and Thunderstorm" artist="Joseph Mallord William Turner (English, 1775–1851)"
-  meta="1836–37 · Oil on canvas" · Collection: Art Institute of Chicago · img=https://www.artic.edu/iiif/2/564e2e3f-eb93-88a7-d265-8fea006facff/full/843,/0/default.jpg
-pool cache written: {"key":"suite.cache.art.pool:2026-w28","fetchedAt":"2026-07-16T05:35:51.392Z","records":100}
-  AIC iiif image (www.artic.edu, 403s under HEADLESS automation only): {"loaded":true,"naturalWidth":843}
+AIC tab (live weekly pool, today's pick): label="Artwork of the day" title="View of the Grotta di Palazzo with Banquet" artist="Louis Jean Desprez"
+  meta="c. 1790 · Pen and black ink and brush and watercolor, over traces of graphite, on ivory laid paper, laid down on card" · Collection: Art Institute of Chicago · img=https://www.artic.edu/iiif/2/5bbc0c4b-ace9-38ef-460f-4a9efedad60a/full/843,/0/default.jpg
+pool cache written: {"key":"suite.cache.art.pool:2026-w28","fetchedAt":"2026-07-16T06:12:54.618Z","records":100}
+  AIC iiif image (www.artic.edu, 403s under HEADLESS automation only): {"loaded":false,"broken":"This image couldn't be loaded (the museum's image server declined the request). Try “Another”, or switch to the offline Met set."}
 search "sunflowers": label="Search: “sunflowers”" title="Sunflowers, Marché St Germain, Paris" artist="James McNeill Whistler"
   meta="1888/93 · Etching with foul biting in black ink on ivory Japanese paper" · Collection: Art Institute of Chicago · img=https://www.artic.edu/iiif/2/2e9476db-2d28-c197-25d8-9b525d63d5a0/full/843,/0/default.jpg
 search cache keys (policy-mandated, v2-only): ["suite.cache.art.search:sunflowers"]
 offline reload (Met set, zero network): label="Artwork of the day" title="The Rocky Mountains, Lander's Peak" artist="Albert Bierstadt"
   meta="1863 · Oil on canvas" · Collection: The Metropolitan Museum of Art · img=null
-offline AIC tab (stale pool): label="Offline — cached from Jul 15, 12:35 AM" title="Valley of Aosta: Snowstorm, Avalanche, and Thunderstorm" artist="Joseph Mallord William Turner (English, 1775–1851)"
-  meta="1836–37 · Oil on canvas" · Collection: Art Institute of Chicago · img=null
+offline AIC tab (stale pool): label="Offline — cached from Jul 15, 1:12 AM" title="View of the Grotta di Palazzo with Banquet" artist="Louis Jean Desprez"
+  meta="c. 1790 · Pen and black ink and brush and watercolor, over traces of graphite, on ivory laid paper, laid down on card" · Collection: Art Institute of Chicago · img=null
   offline frame state: "This image couldn't be loaded (the museum's image server declined the request). Try “Another”, or switch to the offline Met set."
 escaping probe · javascript: favorite: img rendered=false (scheme guard) placeholder=true cap="tampered favorite (javascript: img)"
 escaping probe · hostile pool record: pwned=undefined scripts=0 svgs=0 injected-imgs=0 on*-attrs=0

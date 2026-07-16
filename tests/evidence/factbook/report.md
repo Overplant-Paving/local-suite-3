@@ -228,3 +228,28 @@ template-literal heuristic has nothing to flag. The three unescaped expression c
 migration report pre-declared (`flagEmoji(code)`, `fmtNum(pop)`, the `data-i` map index) are
 confirmed safe by construction and by the probe. No previously-allowlisted expression exists,
 so none needed revision.
+
+## Phase 4 a11y audit
+
+Re-verified 2026-07-16 against QUALITY.md §2 (Phase 4 audit addendum). Full runtime log in
+`a11y-phase4.txt` (harness: `tests/a11y-phase4-batch.mjs`; the tool is zero-network).
+
+| # | Checklist item | Verdict | Evidence (one line) |
+|---|---|---|---|
+| 1 | icon-only controls named | n-a | no icon-only buttons or links; the flag emoji is `role=img` with `aria-label="Flag of <country>"` |
+| 2 | aria-live on async containers | pass | runtime `aria-live=polite` on #countryCard, #stateCard (grid filter feeds the announced card) |
+| 3 | keyboard path | pass | country lookup keyboard-only (type → ArrowDown → Enter); Esc closes the suggest overlay; states tab, state search, and `.schip` grid picks (real `<button>`s) all Tab+Enter operable; no positive tabindex |
+| 4 | input labels | pass | #q and #qs both carry `aria-label` |
+| 5 | contrast, both palettes | fixed | see below — 2 tool-local failures fixed, 1 suite flag |
+| 6 | focus visibility | pass | 8/8 tabbed elements show the core 2px accent outline |
+
+Contrast measurements:
+- FIXED (real bug): `.schip` set no `color`, so the `<button>` text stayed UA-default black —
+  20.67:1 light but **1.29:1 in dark** (black on the #1d2026 card). Now `color: var(--ink)`.
+- FIXED: `.tab.on` was `#fff` on `var(--accent)` — **2.36:1 dark**. Now `color: var(--bg)`
+  (5.26:1 light / 7.60:1 dark).
+- SUITE FLAG (not fixed locally): `--muted` on `--bg` = **4.36:1 light** (footer). Dark passes.
+- Passing spot-checks: `.pop` muted-on-card 4.76, `.v.big` accent 5.74/6.91 (large text).
+
+Fixes made: the two CSS changes above (tools/factbook.html only; embedded datasets untouched).
+Harness after fix: `node verify-tool.mjs factbook` → exit 0 (offline reload + escape probes inert).

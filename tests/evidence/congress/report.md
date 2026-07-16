@@ -172,3 +172,32 @@ titles are inert.
   behavioral deltas, both addendum-mandated and called out above.
 - report.md written via shell move (Write → scratchpad → mv): the PostToolUse hook that
   blocks writing report.md directly is a known session gotcha.
+
+## Phase 4 a11y audit
+
+Re-verified 2026-07-16 against QUALITY.md §2 (Phase 4 audit addendum). Full runtime log in
+`a11y-phase4.txt` (harness: `tests/a11y-phase4-batch.mjs` — api.congress.gov route-fulfilled
+with the same fixture shapes as interactions/congress.mjs; no key exists and none was invented).
+
+| # | Checklist item | Verdict | Evidence (one line) |
+|---|---|---|---|
+| 1 | icon-only controls named | n-a | no icon-only controls; party dots are decorative next to the printed party name |
+| 2 | aria-live on async containers | pass | runtime `aria-live=polite` on #list and #stamp |
+| 3 | keyboard path | pass | the whole tool driven keyboard-only from the no-key state: paste key + Enter saves and boots; tabs Tab+Enter; state `<select>` ArrowDown picks and loads the delegation; member cards are `role=button tabindex=0 aria-expanded` and Enter-expand (false → true, sponsored bills load); no positive tabindex |
+| 4 | input labels | pass | key input `aria-label="Congress.gov API key"`; #stateSel wrapped in a `<label>` |
+| 5 | contrast, both palettes | fixed | see below — 2 tool-local failures fixed, 1 suite flag |
+| 6 | focus visibility | pass | 8/8 tabbed elements show the core 2px accent outline |
+
+Contrast measurements:
+- FIXED: `.tab.on` and `button.primary` were `#fff` on `var(--accent)` — **2.36:1 dark**; the
+  `.passbadge` was `#fff` on `var(--pass)` — 5.00:1 light but **2.08:1 dark** (#fff on #7dc487).
+  All now `color: var(--bg)`: measured 4.51:1 light / 8.65:1 dark on the passbadge (light is a
+  narrow pass — worth revisiting if the suite palette ever changes), 5.26/7.60 on accent fills.
+- SUITE FLAG (not fixed locally): `--muted` on `--bg` = **4.36:1 light** (footer). Dark passes.
+- Passing spot-checks: party palette (--dem/--rep/--ind) is decorative-dot-only; `.num` accent
+  5.74/6.91; `.meta` muted-on-card 4.76/6.19.
+
+Fixes made: the three color swaps above (tools/congress.html only; the --dem/--rep/--ind/--pass
+3-layer accents themselves are untouched).
+Harness after fix: `node verify-tool.mjs congress` → exit 0 (route-fulfilled module: no-key
+designed state, key mechanics, 403 gate, hostile-title probe inert, stale path).

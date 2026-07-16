@@ -1,0 +1,53 @@
+# Phase 4 a11y audit run — apod — 2026-07-16T06:10:10.468Z
+# page: file:///C:/Users/henry/Developement/Local%20Suite%202/tools/apod.html (all http(s) route-fulfilled/aborted; zero live requests)
+
+== 3. KEYBOARD PATH (page.keyboard only) ==
+initial render: 'Audit fixture — 2026-07-16'
+ArrowLeft -> previous day: 'Audit fixture — 2026-07-15', nextBtn enabled
+ArrowRight -> back to today
+keycard opened via Tab+Enter on <summary>: open=true
+Enter saves key: summary='Using your saved NASA key (1,000/hour). ✓ Change or remove →'
+Tab->Enter clears key: stamp='Loaded just now · demo key.'
+today button via Tab+Enter: ok
+
+== 1. ICON-ONLY BUTTONS/LINKS ==
+no icon-only/symbol-only buttons or links rendered
+
+== 2. ARIA-LIVE ON ASYNC CONTAINERS ==
+ok   #view aria-live=polite
+ok   #stamp aria-live=polite
+
+== 3b. TABINDEX SANITY ==
+ok   no positive tabindex anywhere
+
+== 4. INPUT LABELS ==
+ok   input#keyInput[type=text] -> aria-label
+ok   input#datePick[type=date] -> aria-label
+
+== 6. FOCUS VISIBILITY ==
+focus visibility: 8/8 tabbed elements show a computed focus indicator
+  input#datePick: visible (2px solid rgb(47, 111, 106))
+  input#datePick: visible (2px solid rgb(47, 111, 106))
+  input#datePick: visible (2px solid rgb(47, 111, 106))
+
+== 5. CONTRAST — light theme (primed page, distinct pairs, worst-case sample each) ==
+SUITE-FLAG 4.36 (need 4.5) fg=#6b7280 on bg=#f5f3ee 13.4px/400 footer “Data: NASA Astronomy Picture”
+ok   4.76 (need 4.5) fg=#6b7280 on bg=#fffdf9 14.1px/400 span “© fixture”
+ok   5.26 (need 4.5) fg=#f5f3ee on bg=#2f6f6a 14.4px/400 button#keySave “Save key”
+ok   5.74 (need 4.5) fg=#2f6f6a on bg=#fffdf9 16px/400 a.hd “HD ↗”
+ok   13.39 (need 3) fg=#23282e on bg=#f5f3ee 24px/700 h1 “Astronomy Picture of the Day”
+ok   14.61 (need 4.5) fg=#23282e on bg=#fffdf9 13.6px/400 button#themeBtn.theme-btn “◐ theme”
+ok   14.61 (need 3) fg=#23282e on bg=#fffdf9 24.8px/700 h2 “Audit fixture — 2026-07-16”
+
+console: clean (no non-network errors)
+
+== 5. CONTRAST — dark theme (primed page, distinct pairs, worst-case sample each) ==
+ok   6.19 (need 4.5) fg=#9aa0a8 on bg=#1d2026 14.4px/400 p.note “Free instant key at”
+ok   6.81 (need 4.5) fg=#9aa0a8 on bg=#15171b 13.4px/400 footer “Data: NASA Astronomy Picture”
+ok   6.91 (need 4.5) fg=#6fb5ae on bg=#1d2026 14.4px/400 summary#keySummary “Using the shared NASA demo k”
+ok   7.6 (need 4.5) fg=#15171b on bg=#6fb5ae 14.4px/400 button#keySave “Save key”
+ok   12.96 (need 4.5) fg=#e7e5e0 on bg=#1d2026 13.6px/400 button#themeBtn.theme-btn “◐ theme”
+ok   12.96 (need 3) fg=#e7e5e0 on bg=#1d2026 24.8px/700 h2 “Audit fixture — 2026-07-16”
+ok   14.25 (need 3) fg=#e7e5e0 on bg=#15171b 24px/700 h1 “Astronomy Picture of the Day”
+
+== RESULT: ALL TOOL-LOCAL CHECKS PASS + 1 suite-palette flag(s) (reported, not fixed locally) ==

@@ -12,12 +12,12 @@ opened via Search: h2="Ada Lovelace", desc="English mathematician (1815–1852)"
 save button now reads: "✓ In reading list"
 suite.wiki.readlist = ["Ada Lovelace"]
 reading-list panel: "Ada Lovelace✕"
-random roll: h2="Dolbina inexacta"
+random roll: h2="Berezanka Raion"
   cached as suite.cache.wiki.s:<title>: true
 offline stale article: h2="Ada Lovelace"
-  stale line: "· Offline — cached from 7/15/2026, 12:35:32 AM"
-offline featured panel: "Holden Commodore (VE)Australian full-size carOffline — cached from 7/15/2026, 12:35:32 AM"
-offline on-this-day: 10 items from cache, note: "Offline — cached from 7/15/2026, 12:35:32 AM"
+  stale line: "· Offline — cached from 7/15/2026, 1:12:19 AM"
+offline featured panel: "Holden Commodore (VE)Australian full-size carOffline — cached from 7/15/2026, 1:12:19 AM"
+offline on-this-day: 10 items from cache, note: "Offline — cached from 7/15/2026, 1:12:19 AM"
 restored (fresh cache, no refetch): h2="Ada Lovelace"
 escape probe: h2="Escape Probe"
   extract rendered as literal text: true (element children: 0, injected script/img nodes: 0)

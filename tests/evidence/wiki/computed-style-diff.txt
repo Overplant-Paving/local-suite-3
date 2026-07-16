@@ -1,34 +1,78 @@
-== computed-style diff, light (15 differing values) ==
+== computed-style diff, light (39 differing values) ==
+body { block-size: v1=818.406px | v2=2021.42px }
+body { height: v1=818.406px | v2=2021.42px }
+body { perspective-origin: v1=640px 409.203px | v2=640px 1010.7px }
+body { transform-origin: v1=640px 409.203px | v2=640px 1010.71px }
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --rm-hover: v1=undefined | v2=#b0402d }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --rm-hover: v1=undefined | v2=#b0402d }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --rm-hover: v1=undefined | v2=#b0402d }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --rm-hover: v1=undefined | v2=#b0402d }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --rm-hover: v1=undefined | v2=#b0402d }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --rm-hover: v1=undefined | v2=#b0402d }
 .search { outline-color: v1=rgb(35, 40, 46) | v2=rgb(47, 111, 106) }
 .search { outline-offset: v1=0px | v2=2px }
 .search { outline-style: v1=none | v2=solid }
 .search { outline-width: v1=3px | v2=2px }
 .search { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.search { --rm-hover: v1=undefined | v2=#b0402d }
+.btn.primary { caret-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn.primary { color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn.primary { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn.primary { outline-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn.primary { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn.primary { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn.primary { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 .btn.primary { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn.primary { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn.primary { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn.primary { --rm-hover: v1=undefined | v2=#b0402d }
 .card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card { --rm-hover: v1=undefined | v2=#b0402d }
 .side h3 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.side h3 { --rm-hover: v1=undefined | v2=#b0402d }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --rm-hover: v1=undefined | v2=#b0402d }
 
-== computed-style diff, dark (15 differing values) ==
+== computed-style diff, dark (35 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --rm-hover: v1=undefined | v2=#e0766a }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --rm-hover: v1=undefined | v2=#e0766a }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --rm-hover: v1=undefined | v2=#e0766a }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --rm-hover: v1=undefined | v2=#e0766a }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --rm-hover: v1=undefined | v2=#e0766a }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --rm-hover: v1=undefined | v2=#e0766a }
 .search { outline-color: v1=rgb(231, 229, 224) | v2=rgb(111, 181, 174) }
 .search { outline-offset: v1=0px | v2=2px }
 .search { outline-style: v1=none | v2=solid }
 .search { outline-width: v1=3px | v2=2px }
 .search { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.search { --rm-hover: v1=undefined | v2=#e0766a }
+.btn.primary { caret-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn.primary { color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn.primary { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn.primary { outline-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn.primary { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn.primary { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn.primary { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 .btn.primary { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn.primary { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn.primary { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn.primary { --rm-hover: v1=undefined | v2=#e0766a }
 .card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card { --rm-hover: v1=undefined | v2=#e0766a }
 .side h3 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.side h3 { --rm-hover: v1=undefined | v2=#e0766a }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --rm-hover: v1=undefined | v2=#e0766a }
 

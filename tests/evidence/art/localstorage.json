@@ -1,13 +1,13 @@
 {
   "v1": {
-    "suite.cache.art.pool:2026-w28": "{\"t\":1784180154399,\"v\":[{\"id\":145466,\"title\":\"Panel (Furnishing Fabric)\",\"date_display\":\"about 1600-1625\",\"artist_display\":\"Italy, probably Tuscany or…(15503 chars)",
+    "suite.cache.art.pool:2026-w28": "{\"t\":1784182377631,\"v\":[{\"id\":58418,\"title\":\"Table Centerpiece\",\"date_display\":\"1881\",\"artist_display\":\"Rinaldo Carnielo (Italian, 1853–1910)\",\"medium…(22922 chars)",
     "suite.theme": "dark",
     "suite.art.favorites": "[{\"id\":\"met:10154\",\"source\":\"met\",\"title\":\"The Rocky Mountains, Lander's Peak\",\"artist\":\"Albert Bierstadt\",\"date\":\"1863\",\"medium\":\"Oil on canvas\",\"img…(216 chars)"
   },
   "v2": {
     "suite.art.favorites": "[{\"id\":\"met:10154\",\"source\":\"met\",\"title\":\"The Rocky Mountains, Lander's Peak\",\"artist\":\"Albert Bierstadt\",\"date\":\"1863\",\"medium\":\"Oil on canvas\",\"img…(216 chars)",
-    "suite.cache.art.search:sunflowers": "{\"t\":1784093751682,\"v\":{\"preference\":null,\"pagination\":{\"total\":61659,\"limit\":25,\"offset\":0,\"total_pages\":2467,\"current_page\":1},\"data\":[{\"_score\":53.…(7986 chars)",
-    "suite.cache.art.pool:2026-w28": "{\"t\":1784093751682,\"v\":{\"pagination\":{\"total\":132135,\"limit\":100,\"offset\":1300,\"total_pages\":1322,\"current_page\":14,\"prev_url\":\"https://api.artic.edu/…(28048 chars)",
+    "suite.cache.art.search:sunflowers": "{\"t\":1784095974935,\"v\":{\"preference\":null,\"pagination\":{\"total\":61659,\"limit\":25,\"offset\":0,\"total_pages\":2467,\"current_page\":1},\"data\":[{\"_score\":53.…(7987 chars)",
+    "suite.cache.art.pool:2026-w28": "{\"t\":1784095974935,\"v\":{\"pagination\":{\"total\":132135,\"limit\":100,\"offset\":1300,\"total_pages\":1322,\"current_page\":14,\"prev_url\":\"https://api.artic.edu/…(29313 chars)",
     "suite.theme": "dark"
   },
   "keysOnlyInV1": [],

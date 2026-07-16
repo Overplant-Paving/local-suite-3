@@ -1,36 +1,78 @@
-== computed-style diff, light (16 differing values) ==
+== computed-style diff, light (37 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --rm-hover: v1=undefined | v2=#c0552d }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --rm-hover: v1=undefined | v2=#c0552d }
 .suite-link { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.suite-link { --rm-hover: v1=undefined | v2=#c0552d }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --rm-hover: v1=undefined | v2=#c0552d }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --rm-hover: v1=undefined | v2=#c0552d }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --rm-hover: v1=undefined | v2=#c0552d }
 .search { outline-color: v1=rgb(35, 40, 46) | v2=rgb(47, 111, 106) }
 .search { outline-offset: v1=0px | v2=2px }
 .search { outline-style: v1=none | v2=solid }
 .search { outline-width: v1=3px | v2=2px }
 .search { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.search { --rm-hover: v1=undefined | v2=#c0552d }
+.mode.on { caret-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.mode.on { color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.mode.on { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.mode.on { outline-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.mode.on { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.mode.on { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.mode.on { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 .mode.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.mode.on { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.mode.on { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.mode.on { --rm-hover: v1=undefined | v2=#c0552d }
 #status { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#status { --rm-hover: v1=undefined | v2=#c0552d }
 section.saved h2 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+section.saved h2 { --rm-hover: v1=undefined | v2=#c0552d }
 #savedEmpty { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#savedEmpty { --rm-hover: v1=undefined | v2=#c0552d }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --rm-hover: v1=undefined | v2=#c0552d }
 
-== computed-style diff, dark (16 differing values) ==
+== computed-style diff, dark (37 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --rm-hover: v1=undefined | v2=#e0766a }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --rm-hover: v1=undefined | v2=#e0766a }
 .suite-link { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.suite-link { --rm-hover: v1=undefined | v2=#e0766a }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --rm-hover: v1=undefined | v2=#e0766a }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --rm-hover: v1=undefined | v2=#e0766a }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --rm-hover: v1=undefined | v2=#e0766a }
 .search { outline-color: v1=rgb(231, 229, 224) | v2=rgb(111, 181, 174) }
 .search { outline-offset: v1=0px | v2=2px }
 .search { outline-style: v1=none | v2=solid }
 .search { outline-width: v1=3px | v2=2px }
 .search { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.search { --rm-hover: v1=undefined | v2=#e0766a }
+.mode.on { caret-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.mode.on { color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.mode.on { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.mode.on { outline-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.mode.on { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.mode.on { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.mode.on { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 .mode.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.mode.on { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.mode.on { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.mode.on { --rm-hover: v1=undefined | v2=#e0766a }
 #status { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#status { --rm-hover: v1=undefined | v2=#e0766a }
 section.saved h2 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+section.saved h2 { --rm-hover: v1=undefined | v2=#e0766a }
 #savedEmpty { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#savedEmpty { --rm-hover: v1=undefined | v2=#e0766a }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --rm-hover: v1=undefined | v2=#e0766a }
 
