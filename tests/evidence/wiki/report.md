@@ -153,3 +153,76 @@ assigned `""`).
 - The stale-note additions under the two feed panels are new UI text (policy-driven); if the
   reviewer judges them scope creep, deleting the two `if (staleT) box.append(...)` lines
   restores exact v1 silence.
+
+## Phase 4 escaping audit (line-by-line)
+
+Auditor: Phase 4 EA agent, 2026-07-16. Scope: every dynamic-markup/scriptable sink in
+`tools/wiki.html`. Line numbers refer to the post-fix file.
+
+### Site inventory
+
+| # | Site (post-fix lines) | Sink | Data + provenance | Verdict |
+|---|---|---|---|---|
+| 1 | `articleEl.innerHTML = ""` and the 8 other `innerHTML = ""` (145, 154, 161, 208, 234, 243, 262, 268, 297, 303, 330) | innerHTML | constant `""` — clear-only, no data | SAFE |
+| 2 | Loading / error card text (146, 156, 235, 244, 263, 270, 298, 305, 332) | `el()` → textContent | title (user input or remote feed title) + fixed strings | SAFE |
+| 3 | Article h2 / desc / extract (169–171) | `el()` → textContent | remote: `title`, `description`, `extract` | SAFE — plain-text field, see ruling below |
+| 4 | Article thumbnail (163–167) | `img.src` property + `img.alt` property | remote: `thumbnail.source`, `title` | SAFE — img.src is a non-scripting sink (`javascript:` never executes in an img; probe confirms ERR_UNKNOWN_URL_SCHEME → error listener removes the img); dist CSP img-src pins the host. alt is a property write, not markup |
+| 5 | **Read-full-article href (174–182)** | `a.href` | remote: `content_urls.desktop.page` | **UNSAFE in v1 and pre-audit v2 — FIXED.** A hostile summary could plant `javascript:`/`data:` behind the link. Now scheme-guarded: only `^https?://` accepted, anything else falls back to the constructed `https://en.wikipedia.org/wiki/<encoded title>` URL. Real API values are always https → zero behavior change |
+| 6 | Save button label (182–183) | textContent | remote title (fixed label strings) | SAFE |
+| 7 | Stale-cache note (188) | `el()` → textContent | local `Date` | SAFE |
+| 8 | Suggestion rows (209–215) | `el()` span/small → textContent; `qEl.value` property | remote: search `title`, `description`, `key` | SAFE (`p.key` flows only into `encodeURIComponent`) |
+| 9 | Random-roll cache write (240) | localStorage key `suite.cache.wiki.s:<title>` | remote title | SAFE — fixed prefix, title cannot escape the key namespace; not a markup sink |
+| 10 | Featured mini-card (271–279) | `img.src` property; b/small → textContent | remote: `tfa.thumbnail.source`, `normalizedtitle`, `title`, `description` | SAFE (same reasoning as #4/#3) |
+| 11 | On-this-day items (306–312) | `el()` span + `createTextNode` | remote: `year`, `text`, `pages[0].title` | SAFE (`target.title` flows to openArticle → encodeURIComponent + textContent) |
+| 12 | Reading-list rows (331–338) | `el()` → textContent; `setAttribute("aria-label", …)` | stored titles (originally remote) | SAFE — setAttribute writes an attribute value, no markup parsing |
+| 13 | URL construction (150, 205, 180) | fetch URL / href | user or remote titles | SAFE — always through `encodeURIComponent` |
+
+### The extract_html ruling
+
+The REST `page/summary` response carries both a plain-text `extract` and a markup-bearing
+`extract_html` (plus `displaytitle`). **v1 renders only the plain `extract`, via textContent —
+it never reads `extract_html`.** v2 preserves this exactly, so v1's rendering fidelity is kept
+byte-for-byte and no sanitizer is needed: there is no remote HTML to sanitize because none is
+ever parsed as HTML. The hostile fields sit inert inside the cached JSON envelope, same as v1.
+This ruling is now documented in the SECURITY NOTE at the top of the tool's script. (Had the
+tool rendered `extract_html`, the mandated choice would have been a small local allowlist
+sanitizer; the plain-text field makes that moot while matching v1 output exactly.)
+
+### Fixes applied
+
+1. `renderArticle`: scheme guard on the Read-full-article href (site #5) — the only UNSAFE
+   site found. Non-`http(s)` values from `content_urls.desktop.page` now fall back to the
+   constructed wiki URL. v1 had the same flaw; behavior is unchanged for every genuine API
+   response.
+2. SECURITY NOTE comment extended with the Phase 4 extract_html ruling and the href/img.src
+   sink analysis. No other code changed.
+
+### Adversarial probe (tests/interactions/wiki.mjs, appended to `interact()`)
+
+`page/summary/**` route-fulfilled with a hostile payload: `<script>` + `<img onerror>` in
+`extract`, `description`, `displaytitle` AND `extract_html`; `javascript:` URLs in
+`thumbnail.source` and `content_urls.desktop.page`; `alert`/`confirm`/`prompt` trapped to a
+`window.__xssFired` flag; the probe throws if anything renders non-inert. Result
+(interaction.txt lines 22–27, escape-probe.png):
+
+- extract rendered as literal text (`<script>`/`onerror` visible as characters), 0 element
+  children, 0 injected script/img nodes anywhere in `#article`
+- read-link href with `javascript:` supplied → `https://en.wikipedia.org/wiki/Escape%20Probe`
+  (scheme guard proven live)
+- `javascript:` thumbnail: 0 imgs remaining (load fails with net::ERR_UNKNOWN_URL_SCHEME —
+  the net::-classified, non-hard console line — and the error listener removes the node)
+- `window.__xssFired === false`; no pageerror
+- probe cleans up after itself: route unrouted, `suite.cache.wiki.s:Escape Probe` removed,
+  Ada Lovelace view restored from cache → localStorage parity diff unchanged (still exactly
+  the two random-roll keys)
+
+### Harness
+
+`node verify-tool.mjs wiki` → exit 0 (2026-07-16). Console: 5× net::ERR_FAILED (the
+deliberate offline-path aborts, as in Batch B) + 1× net::ERR_UNKNOWN_URL_SCHEME (the probe's
+hostile thumbnail) — all net::-classified, no hard issues.
+
+### Allowlist
+
+No entries needed, none requested: `tests/escape-allowlist.json` has no wiki entries and the
+tool still contains zero interpolations into innerHTML.

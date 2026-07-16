@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-Yj/NpFn8BmEYo6cpUbU+pADYpA3TPtLJOfgSLd4albw='; style-src 'unsafe-inline'; img-src data: https://en.wikipedia.org https://upload.wikimedia.org; media-src https://en.wikipedia.org https://upload.wikimedia.org; connect-src https://en.wikipedia.org https://upload.wikimedia.org; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-ea9HDXC53xyZTdW2brBMMQMjVEAonbfln8xbg7Am+hQ='; style-src 'unsafe-inline'; img-src data: https://en.wikipedia.org https://upload.wikimedia.org; media-src https://en.wikipedia.org https://upload.wikimedia.org; connect-src https://en.wikipedia.org https://upload.wikimedia.org; worker-src 'self'; manifest-src 'self'">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Wikipedia Reader · Local Suite</title>
 <style>
@@ -417,7 +417,13 @@ Suite.theme.init();
    SECURITY NOTE (QUALITY.md §1.3, "ea" flag): every remote string this tool renders
    (titles, descriptions, extracts, feed text) is inserted via el()'s textContent /
    createElement — never interpolated into innerHTML. innerHTML is only ever assigned
-   "" to clear a container. This is the v1 mechanism, preserved verbatim. */
+   "" to clear a container. This is the v1 mechanism, preserved verbatim.
+   Phase 4 ruling on the summary endpoint's HTML-bearing fields: this tool renders the
+   plain-text `extract` field, exactly as v1 did; `extract_html` and `displaytitle`
+   (which DO contain markup) are never read, so no sanitizer is needed here. The one
+   remote value that reaches a scriptable sink — content_urls → href — is scheme-checked
+   in renderArticle. Thumbnail URLs go only into img.src, a non-scripting sink (and
+   dist's CSP img-src pins the host). */
 function el(tag, cls, txt){ const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
 
 /* keyboard path for clickable rows (a11y, QUALITY.md §2) */
@@ -470,7 +476,12 @@ function renderArticle(data, stale, t) {
   card.append(el("div", "extract", data.extract || "No summary available."));
 
   const actions = el("div", "actions");
-  const url = (data.content_urls && data.content_urls.desktop && data.content_urls.desktop.page) ||
+  /* Phase 4 escaping audit: content_urls arrives from the network — accept only http(s)
+     before assigning it to an href (a hostile response could otherwise plant a
+     javascript: URL behind "Read full article"). Real API values are always https,
+     so behavior is unchanged; anything else falls back to the constructed wiki URL. */
+  const apiUrl = data.content_urls && data.content_urls.desktop && data.content_urls.desktop.page;
+  const url = (typeof apiUrl === "string" && /^https?:\/\//i.test(apiUrl)) ? apiUrl :
               ("https://en.wikipedia.org/wiki/" + encodeURIComponent(data.title || ""));
   const readA = el("a", "btn", "Read full article →");
   readA.href = url; readA.target = "_blank"; readA.rel = "noopener";

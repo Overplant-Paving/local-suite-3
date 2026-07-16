@@ -150,6 +150,64 @@ export async function interact({ page, log, evidenceDir }) {
   await page.reload();
   await articleReady(page);
   log(`restored (fresh cache, no refetch): h2="${(await page.textContent("#article .article h2")).trim()}"`);
+
+  /* ---- Phase 4 adversarial escaping probe ----
+     Route-fulfil the summary endpoint with a hostile payload: script/onerror markup in
+     every text field (including extract_html, which the tool must never render),
+     javascript: URLs in thumbnail.source and content_urls.desktop.page. Prove:
+     (1) markup renders inert as literal text, (2) no element is ever created from
+     remote strings, (3) the Read-full-article href is scheme-guarded, (4) no payload
+     executes (alert/confirm/prompt trapped + harness pageerror listener). */
+  await page.evaluate(() => {
+    window.__xssFired = false;
+    for (const f of ["alert", "confirm", "prompt"]) window[f] = () => { window.__xssFired = true; };
+  });
+  const HOSTILE = {
+    title: "Escape Probe",
+    displaytitle: "<script>window.__xssFired=true</scr" + "ipt>Escape Probe",
+    description: "<img src=x onerror=\"window.__xssFired=true\"> hostile description",
+    extract: "<script>window.__xssFired=true</scr" + "ipt><img src=x onerror=\"window.__xssFired=true\"> plain-field payload",
+    extract_html: "<p><script>window.__xssFired=true</scr" + "ipt><img src=x onerror=\"window.__xssFired=true\"> rich-field payload</p>",
+    thumbnail: { source: "javascript:window.__xssFired=true" },
+    content_urls: { desktop: { page: "javascript:window.__xssFired=true" } }
+  };
+  await page.context().route("**/api/rest_v1/page/summary/**", r => r.fulfill({
+    status: 200, contentType: "application/json", body: JSON.stringify(HOSTILE)
+  }));
+  await page.evaluate(() => openArticle("Escape Probe"));
+  await articleTitled(page, "Escape Probe");
+  await page.waitForTimeout(500);   /* let any onerror/img fallout settle */
+  const probe = await page.evaluate(() => {
+    const extract = document.querySelector("#article .article .extract");
+    const a = document.querySelector("#article .article .actions a");
+    return {
+      h2: document.querySelector("#article .article h2").textContent,
+      extractText: extract.textContent,
+      extractElementChildren: extract.children.length,
+      injectedNodes: document.querySelectorAll(
+        "#article script, #article .extract img, #article .desc img").length,
+      readHref: a ? a.href : "(missing)",
+      thumbCount: document.querySelectorAll("#article img.thumb").length,
+      xssFired: window.__xssFired
+    };
+  });
+  log(`escape probe: h2="${probe.h2}"`);
+  log(`  extract rendered as literal text: ${probe.extractText.includes("<script>") && probe.extractText.includes("onerror")} (element children: ${probe.extractElementChildren}, injected script/img nodes: ${probe.injectedNodes})`);
+  log(`  read-link href (javascript: supplied): "${probe.readHref}" — scheme-guarded: ${probe.readHref.startsWith("https://en.wikipedia.org/wiki/")}`);
+  log(`  javascript: thumbnail imgs remaining: ${probe.thumbCount}`);
+  log(`  payload executed (alert/confirm/prompt trap): ${probe.xssFired}`);
+  if (probe.xssFired || probe.injectedNodes > 0 || probe.extractElementChildren > 0 ||
+      !probe.readHref.startsWith("https://en.wikipedia.org/wiki/"))
+    throw new Error("ESCAPE PROBE FAILED: hostile payload was not rendered inert");
+  await page.screenshot({ path: `${evidenceDir}/escape-probe.png`, fullPage: true });
+
+  /* cleanup: unroute, drop the probe's cache entry (keeps localStorage parity clean),
+     and restore the Ada Lovelace view from fresh cache (no refetch) */
+  await page.context().unroute("**/api/rest_v1/page/summary/**");
+  await page.evaluate(() => localStorage.removeItem("suite.cache.wiki.s:Escape Probe"));
+  await page.evaluate(() => openArticle("Ada Lovelace"));
+  await articleTitled(page, "Ada Lovelace");
+  log(`post-probe restore: h2="${(await page.textContent("#article .article h2")).trim()}"`);
 }
 
 /* Same state-writing actions on v1 so localStorage parity compares equal key sets:
