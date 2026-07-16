@@ -153,7 +153,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 55 | elevation.html | local | cors | — | B | | ✅ `tests/evidence/elevation/` |
 | 56 | network.html | local | cors | — | B | ipapi.co 1k/day | ✅ `tests/evidence/network/` |
 | 57 | apod.html | space | key | nasa (demo) | C | RL (DEMO_KEY 30/hr) | ⬜ |
-| 58 | nutrition.html | health | key | usda (demo) | C | RL | ⬜ |
+| 58 | nutrition.html | health | key | usda (demo) | C | RL | ✅ `tests/evidence/nutrition/` |
 | 59 | congress.html | civic | key | congress | C | | ⬜ |
 | 60 | gas.html | money | key | eia | C | | ⬜ |
 | 61 | parks.html | civic | key | nps | C | | ✅ `tests/evidence/parks/` |

@@ -1,0 +1,24 @@
+key state on load: "DEMO_KEY"
+demo nudge visible: true · text="— using the shared demo key, get your free key" · signup href=https://fdc.nal.usda.gov/api-key-signup.html
+keybox opened: aria-expanded=true, visible=true
+after save: keyState="your key ✓" nudgeHidden=true stored=TEST-KEY-NOT-REAL
+after clear: keyState="DEMO_KEY" nudgeHidden=false stored=null
+Escape closes keybox: visible=false, focus on=keyToggle
+live USDA response: HTTP 200 · 477384 bytes · url=https://api.nal.usda.gov/fdc/v1/foods/search?query=banana&pageSize=20&dataType=Foundation%2CSR%20Legacy%2CBranded&api_key=DEMO_KEY
+results rendered: 20 rows · stamp="USDA search · live · put foods in A / B to compare"
+  row 1: "Banana" (Wonder Natural Foods Corp · 312 kcal/100g)
+  row 2: "Banana" (Kid Vids Educational Entertainment · 336 kcal/100g)
+cache envelope written: suite.cache.nutrition.banana|d · t=1784174163505 · 20 slimmed foods
+slot buttons: A aria-pressed=true, B aria-pressed=true
+compare grid two-up: compare two
+  card A: "Banana" · 312 kcal per 100 g · 21 table rows
+  card B: "Banana" · 336 kcal per 100 g · 21 table rows
+basis toggle "per serving (32 g, 2 Tbsp)": "312 kcal per 100 g" -> "100 kcal per serving" (aria-pressed=true)
+removed slot B: 1 card(s) left, grid class="compare"
+re-added slot B: 2 cards
+offline stale note: "Offline — cached results from Jun 30, 10:56 PM."
+offline stale rows still render: 20 · stamp="USDA search · offline — cached Jun 30, 10:56 PM · put foods in A / B to compare"
+restored from fresh cache (no refetch): stamp="USDA search · cached · put foods in A / B to compare" · 2 compare cards
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED

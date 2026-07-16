@@ -1,0 +1,6 @@
+seeded from archived live response (route-fulfilled 200): 20-row render, stamp="USDA search · live · put foods in A / B to compare", api hits so far=1
+cache back-dated 8 days (7d < 8d < 14d)
+429 with cache: note="USDA is rate-limiting — showing cached results from Jul 7, 10:56 PM."
+  rows still render: 20 · stamp="USDA search · rate-limited — cached Jul 7, 10:56 PM · put foods in A / B to compare" · api hits=2
+backoff: re-search after 429 -> stamp="USDA search · cached · put foods in A / B to compare" · new api requests=0 (0 expected: 8d-old cache fresh under doubled 14d TTL)
+429 without cache: error card="Rate limit reached. The shared DEMO_KEY is limited (about 50/day). Add your own free key above — it takes a minute."

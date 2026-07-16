@@ -1195,6 +1195,33 @@
       "flags": []
     },
     {
+      "id": "nutrition",
+      "file": "nutrition.html",
+      "name": "Nutrition Lookup",
+      "cat": "health",
+      "cx": "M",
+      "desc": "Search a food, get calories and nutrients; compare two foods.",
+      "network": "keyed",
+      "key": {
+        "name": "usda",
+        "signup": "https://fdc.nal.usda.gov/api-key-signup.html",
+        "demo": true
+      },
+      "endpoints": [
+        "https://api.nal.usda.gov"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.key.usda",
+        "suite.cache.nutrition.*"
+      ],
+      "cacheTtlMin": 10080,
+      "since": "v1",
+      "flags": [
+        "rl"
+      ]
+    },
+    {
       "id": "parks",
       "file": "parks.html",
       "name": "National Parks Companion",

@@ -1,0 +1,32 @@
+== computed-style diff, light (14 differing values) ==
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { float: v1=none | v2=right }
+.theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+form { -webkit-font-smoothing: v1=auto | v2=antialiased }
+input[type=search] { outline-offset: v1=0px | v2=2px }
+input[type=search] { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.go { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.keyrow { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#keyState { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+
+== computed-style diff, dark (14 differing values) ==
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { float: v1=none | v2=right }
+.theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+form { -webkit-font-smoothing: v1=auto | v2=antialiased }
+input[type=search] { outline-offset: v1=0px | v2=2px }
+input[type=search] { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.go { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.keyrow { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#keyState { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+
