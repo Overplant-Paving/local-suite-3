@@ -1292,6 +1292,28 @@
       "cacheTtlMin": null,
       "since": "v1",
       "flags": []
+    },
+    {
+      "id": "inflation",
+      "file": "inflation.html",
+      "name": "Cost-of-Living Tracker (CPI)",
+      "cat": "money",
+      "cx": "M",
+      "desc": "Headline and core inflation, plus the categories that hit home.",
+      "network": "blocked",
+      "key": null,
+      "endpoints": [],
+      "storage": [
+        "suite.theme",
+        "suite.data.cpi",
+        "suite.relay.url",
+        "suite.relay"
+      ],
+      "cacheTtlMin": null,
+      "since": "v1",
+      "flags": [
+        "embedded-data"
+      ]
     }
   ]
 }

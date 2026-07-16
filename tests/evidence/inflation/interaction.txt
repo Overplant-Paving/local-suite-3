@@ -1,0 +1,19 @@
+stamp: "Data: June 2026 · refreshed monthly at build time"
+initial stats: headline +3.5% (Jun 2026 · year-over-year) | core +2.6% (Jun 2026 · ex food & energy)
+chartNote: "Last 36 months of year-over-year change. Latest embedded reading: Jun 2026."
+chart: 2 line paths, 6 gridlines rendered in the SVG
+categories: Food +3.0% | Energy +15.7% | Shelter +3.3%
+offline (all http(s) aborted) after reload: headline +3.5% (Jun 2026 · year-over-year) | core +2.6% — embedded data renders with zero network
+merge msg: "Merged 1 month into headline CPI."
+after merging 2026 M07 337.9 into headline: +4.6% (Jul 2026 · year-over-year)
+suite.data.cpi now: {"headline":{"2026-07":337.9}}
+clear msg: "Your updates were cleared. Showing embedded data only."
+after clear (embedded only again): +3.5% (Jun 2026 · year-over-year)
+suite.data.cpi after clear: null
+relay msg: "Live fetch merged 2 data points."
+relay request observed: https://relay.test/?url=https%3A%2F%2Fapi.bls.gov%2FpublicAPI%2Fv1%2Ftimeseries%2Fdata%2FCUUR0000SA0
+relay request observed: https://relay.test/?url=https%3A%2F%2Fapi.bls.gov%2FpublicAPI%2Fv1%2Ftimeseries%2Fdata%2FCUUR0000SA0L1E
+after relay merge: headline +4.7% (Jul 2026 · year-over-year) | core +3.2% (Jul 2026 · ex food & energy)
+suite.relay.url stored: https://relay.test
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)

@@ -206,5 +206,10 @@
     "rateLbl": "local-only expression, recorded verified-clean with reasoning in tests/evidence/treasury/report.md",
     "Number.isFinite(r.btc) ? r.btc.toFixed(2) + \"×\" : \"—\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/treasury/report.md",
     "Number.isFinite(r.offer) ? fmtAbbrev(r.offer) : \"—\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/treasury/report.md"
+  },
+  "inflation.html": {
+    "sparkline(s1, css(\"--accent\"))": "local-only expression, recorded verified-clean with reasoning in tests/evidence/inflation/report.md",
+    "sparkline(s2, css(\"--core\"))": "local-only expression, recorded verified-clean with reasoning in tests/evidence/inflation/report.md",
+    "c.v != null && c.v >= 0 ? \"up\" : \"down\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/inflation/report.md"
   }
 }
