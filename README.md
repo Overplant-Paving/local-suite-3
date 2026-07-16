@@ -1,8 +1,11 @@
 # Local Suite 2 — the v2 rebuild
 
-This folder is the home of **Local Suite v2**: the next generation of the single-file HTML tool
-suite that lives in `../Local Suite`. Right now it contains the complete planning document set;
-as the roadmap executes, it grows into the real repository described below.
+This is **Local Suite v2**: the next generation of the single-file HTML tool suite
+(v1 lives in `../Local Suite`, now a read-only archive).
+
+**To use the suite: open [`dist/index.html`](dist/index.html).** Everything in `dist/` is
+built and self-contained — double-click any file there. The `tools/` folder holds the
+*sources*, which don't link up until `python build.py` runs.
 
 ## What Local Suite is
 

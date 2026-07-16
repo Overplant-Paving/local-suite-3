@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-k0wYuMbvnAW2RU2V0Qsrnt8V0PvlSCSGd/DzPx/xFlw='; style-src 'unsafe-inline'; img-src data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-fyMfgY4FfrR7iVMh6z/wrAWRpSNl471lVQw9eA+gvxg='; style-src 'unsafe-inline'; img-src data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Local Suite · Command Center</title>
 <style>
@@ -504,6 +504,27 @@ function matches(t) {
 
 function render() {
   catsEl.textContent = "";
+  /* SOURCE-FILE GUARD: the tool list is injected into this marker at build time, so the
+     un-built source hub has no tools to link. Opening it directly must be a designed,
+     self-explanatory state — not a mysteriously empty page (a real user hit this). */
+  if (!TOOLS.length) {
+    const sec = document.createElement("section");
+    const card = document.createElement("article");
+    card.className = "card wip";
+    const h3 = document.createElement("h3");
+    h3.textContent = "This is the source hub — the built suite lives in dist/";
+    const d = document.createElement("p");
+    d.className = "desc";
+    d.textContent = "The tool list is injected by build.py, so this un-built file has no tool links. Open the built hub instead — every tool works from there, straight off the disk.";
+    const a = document.createElement("a");
+    a.href = "../dist/index.html";
+    a.textContent = "Open the built suite (dist/index.html) →";
+    card.append(h3, d, a);
+    sec.append(card);
+    catsEl.append(sec);
+    emptyEl.style.display = "none";
+    return;
+  }
   let shown = 0;
   for (const id of CATS) {
     const tools = TOOLS.filter(t => t.cat === id && matches(t));
