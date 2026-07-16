@@ -1,0 +1,23 @@
+fixed date 2026-07-29 -> word of the day: "candid" (independent FNV-1a recomputation predicts "candid")
+  label: "Word of the day · Wednesday, July 29"
+  pos: "adjective" def: "truthful and straightforward; frank..."
+  origin: "Origin. From Latin 'candidus', white, pure, sincere...."
+same-date reload -> "candid" (deterministic repeat)
+"Another word" with Math.random stubbed to 0.5 -> "anthology" (predicts "anthology", index 187 of 374)
+"Today's word" -> "candid" (back to the 2026-07-29 word)
+LIVE lookup "candid" -> phonetic: "/ˈkæn.dɪd/"
+  first sense: "noun — A spontaneous or unposed photograph. “His portraits looked stiff and formal but his candids s..."
+  cache envelope suite.cache.word.candid: {"t":1785344400279,"entries":1,"word":"candid"}
+suite.word.met after visits: ["candid","anthology","brocade"]
+after reload — met persisted: ["candid","anthology","brocade"]; chips: [candid, anthology, brocade]; count badge: "· 3"
+met chip "anthology" click -> card shows "anthology"
+clock advanced to 2026-07-30, "Today's word" -> "tundra" (independent recomputation predicts "tundra")
+route-abort (no cache) -> designed state note: "Couldn't reach the dictionary — the embedded origin above still stands."
+  embedded card still stands — def: "a vast, treeless arctic region..." origin: "Origin. From Russian, from a Sami word for an upla..."
+offline + stale cache -> cached sense renders: "noun — A spontaneous or unposed photograph. “His portraits l..."
+  stale note: "Offline — cached definition from Jul 28, 12:00 PM."
+restored (fresh cache, served without refetch): "candid" fuller present: true
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

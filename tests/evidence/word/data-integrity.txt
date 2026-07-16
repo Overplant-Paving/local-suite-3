@@ -1,0 +1,39 @@
+DATA-INTEGRITY — word.html embedded curated word list (Batch D byte-exact requirement)
+
+Segment: WORD_RAW — the curated word|pos|definition|origin list, 376 data lines
+         (374 words + 2 sentinel rows), including its template-literal delimiters.
+Boundaries: from the literal bytes  const WORD_RAW = `  (start marker, inclusive)
+            through the first following  `.trim();  (end marker, inclusive).
+            The file contains exactly 2 backtick bytes total, so the non-greedy
+            regex match is unambiguous in v1, v2 source, and dist.
+
+Extraction (replay verbatim against any of the three files; prints byte length
+and sha256 of the segment):
+
+python -c "import re,hashlib,sys; d=open(sys.argv[1],'rb').read(); m=re.search(rb'const WORD_RAW = \x60.*?\x60\.trim\(\);', d, re.S); s=m.group(0); print(len(s), hashlib.sha256(s).hexdigest())" "<file>"
+
+Files:
+  v1:  C:\Users\henry\Developement\Local Suite\word.html
+  v2:  C:\Users\henry\Developement\Local Suite 2\tools\word.html
+  dist: dist\word.html (orchestrator replays after integration)
+
+Results:
+  byte length : 39422 (both v1 and v2 source)
+  sha256(v1)          : 1a8cce2e751d488e60884cbd4af073549e65369a4077d6b5b6744be9fc4a7c0b
+  sha256(v2 source)   : 1a8cce2e751d488e60884cbd4af073549e65369a4077d6b5b6744be9fc4a7c0b
+  sha256(dist)        : (orchestrator appends post-build)
+
+VERDICT: MATCH — byte-exact. The v2 file was assembled programmatically as
+prefix-bytes + v1-segment-bytes + suffix-bytes (LF line endings throughout, 0 CRLF),
+so no editor pass ever touched the segment. All recipe changes (addEventListener
+conversion, Suite.store/Suite.fetchJSON, esc alias) stop at the segment boundary;
+the two sentinel rows (haleffect, susceptance) are preserved byte-for-byte.
+
+Functional proof on top of parity (see interaction.txt):
+  fixed clock 2026-07-29 -> "candid"; same-date reload -> "candid";
+  2026-07-30 -> "tundra"; Math.random=0.5 -> "anthology" (index 187 of 374).
+Independent recomputation (no browser, run against the v1 file):
+
+node -e "const s=require('fs').readFileSync('C:/Users/henry/Developement/Local Suite/word.html','utf8');const m=s.match(/const WORD_RAW = \x60\n([\s\S]*?)\x60\.trim\(\);/);let W=m[1].trim().split('\n').map(l=>{const p=l.split('|');return{word:p[0],origin:p[3]}}).filter(w=>w.origin&&!/sentinel|filtered out|never appear/i.test(w.origin));const h=t=>{let x=2166136261;for(let i=0;i<t.length;i++){x^=t.charCodeAt(i);x=Math.imul(x,16777619)}return x>>>0};console.log(W.length,W[h('2026-7-29')%W.length].word,W[h('2026-7-30')%W.length].word,W[Math.floor(.5*W.length)].word)"
+
+  prints: 374 candid tundra anthology  — matching the observed in-page values.

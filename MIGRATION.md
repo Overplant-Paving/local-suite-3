@@ -165,7 +165,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 67 | inflation.html | money | blocked | — | C | remove `.example` → embedded monthly BLS data | ✅ `tests/evidence/inflation/` |
 | 68 | transit.html | local | blocked/key | bart (new) | C | externalize BART key (v1 `transit.html:163`); custom feed → link-out card | ✅ `tests/evidence/transit/` |
 | 69 | password.html | util | off | — | D | LD (62 KB EFF wordlist — must survive build byte-exact) | ✅ `tests/evidence/password/` |
-| 70 | word.html | util/ref | cors | — | D | LD (embedded dictionary) · EA | ⬜ |
+| 70 | word.html | util/ref | cors | — | D | LD (embedded dictionary) · EA | ✅ `tests/evidence/word/` |
 | 71 | passes.html | space | cors | — | D | LD (SGP4 math + TLE handling) | ⬜ |
 
 New in v2 (not migrations): **settings.html** (Phase 4 — backup/restore, keys, relay config) and

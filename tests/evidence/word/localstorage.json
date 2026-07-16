@@ -1,0 +1,15 @@
+{
+  "v1": {
+    "suite.word.met": "[\"brocade\"]",
+    "suite.theme": "dark"
+  },
+  "v2": {
+    "suite.cache.word.candid": "{\"t\":1785430800000,\"v\":[{\"word\":\"candid\",\"phonetic\":\"/ˈkæn.dɪd/\",\"phonetics\":[{\"text\":\"/ˈkæn.dɪd/\",\"audio\":\"\"},{\"text\":\"/ˈkæn.dɪd/\",\"audio\":\"https://a…(1123 chars)",
+    "suite.word.met": "[\"candid\",\"tundra\",\"anthology\",\"brocade\"]",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": [
+    "suite.cache.word.candid"
+  ]
+}

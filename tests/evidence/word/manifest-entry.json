@@ -1,0 +1,15 @@
+{
+  "id": "word",
+  "file": "word.html",
+  "name": "Word of the Day",
+  "cat": "ref",
+  "cx": "S",
+  "desc": "A daily word with origin; keeps a “words I’ve met” list.",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": ["https://api.dictionaryapi.dev"],
+  "storage": ["suite.word.met", "suite.cache.word.*"],
+  "cacheTtlMin": 1440,
+  "since": "v1",
+  "flags": ["embedded-data", "ea"]
+}
