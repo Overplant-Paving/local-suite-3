@@ -1,0 +1,36 @@
+data-integrity — password.html (Batch D, embedded EFF large wordlist)
+=====================================================================
+
+Segment 1 of 1: EFF large wordlist string
+  Definition: the string literal content of the `const EFF_WORDS = "..."` statement —
+  every byte between the opening double-quote after `const EFF_WORDS = ` and the closing
+  double-quote before `.split(" ");`. One line in the source; contains no double-quote or
+  backslash bytes, so the [^"]* regex boundary is unambiguous.
+
+  Extraction (runnable verbatim against v1, tools/, or dist/ — POSIX sh quoting):
+
+    python -c 'import re,hashlib,sys; d=open(sys.argv[1],"rb").read(); m=re.search(rb"const EFF_WORDS = \"([^\"]*)\"\.split\(\" \"\);", d); s=m.group(1); print("bytes:",len(s),"sha256:",hashlib.sha256(s).hexdigest(),"words:",len(s.split(b" ")),"unique:",len(set(s.split(b" "))))' <file>
+
+  byte length:      62143
+  word count:       7776 (exactly the EFF large list size; 7776 unique — no duplicates)
+  sha256(v1)        c523ba7b5e0d3f77cc6cf0d83bed3f250143c0c90c255d6a646dd992f8453675
+                    (C:\Users\henry\Developement\Local Suite\password.html)
+  sha256(v2 source) c523ba7b5e0d3f77cc6cf0d83bed3f250143c0c90c255d6a646dd992f8453675
+                    (tools/password.html)
+  VERDICT:          EQUAL — byte-exact survival, v1 -> v2 source.
+
+  sha256(dist)      (orchestrator: replay the one-liner against dist/password.html after
+                    integration and append the hash + verdict here)
+
+Method note: the segment was never retyped or reflowed — the migrated file was written with a
+placeholder line and the entire v1 statement (62,175 bytes,
+`const EFF_WORDS = "..." .split(" ");`) was spliced in by a binary-mode Python replace, then
+re-extracted and re-hashed from the written file to produce the v2 hash above.
+
+Whole-statement cross-check (includes the JS framing around the string):
+  full statement bytes: 62175; the enclosing line is byte-identical to v1 line 212.
+
+Independent functional sanity (see interaction.txt / report.md):
+  - live page reports EFF_WORDS.length = 7776, Set size 7776
+  - 6-word passphrase entropy: tool displays 78 bits; recomputed 6 x log2(7776) = 77.5489 -> round 78
+  - deterministic-seed passphrases matched an independent re-implementation word-for-word

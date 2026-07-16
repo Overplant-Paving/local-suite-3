@@ -1,0 +1,24 @@
+EFF wordlist in page: length=7776 (expect 7776) unique=7776 first/mid/last=[abacus, massive, zoom]
+initial char pw (real crypto, pre-stub): "LYA7QDx-&6hIm{_R9YGQ" len=20 bits=129 strength=Overkill crack="7.8e15 millenniums" bar=100%/var(--good)
+char 20 (seed 0xC0FFEE): got "a=YD0oT:/kP7%^On{luh" predicted "a=YD0oT:/kP7%^On{luh" match=true
+char entropy: displayed=129 recomputed=20*log2(86)=128.53 roundMatches=true strength=Overkill (expect Overkill >=128)
+char 32 (seed 42): lenval="32" got "{Un!2U?k^)o@{&Z:Yq_G}V+&WHU5.jeP" len=32 predicted match=true bits=206 (recompute 206)
+char letters-only noAmbig (seed 7): got "uCyHygQhRxVdHJeaNCmxFwTGDrCRDehs" predicted match=true allInFilteredPool(45 chars)=true noLookalikes=true bits=176 (recompute 176)
+zero-set guard: clicking last active set -> toast="Keep at least one set" lower still on=true/true
+char 6 lowercase-only (noAmbig): "kvhatj" bits=28 (recompute 28 for 24-char pool) strength=Very weak crack="under a second" bar=12%
+tab switch: phrasePanel shown=true charPanel hidden=true tab aria-pressed=true
+phrase 6/dash (seed 2026): got "stillness-salsa-commode-setup-playpen-styling"
+  predicted "stillness-salsa-commode-setup-playpen-styling" match=true words=6 allInEFFList=true
+  entropy: displayed=78 recomputed=6*log2(7776)=77.5489 roundMatches=true strength=Strong crack="3.5 millenniums"
+phrase 4/space (seed 99): got "unmixed unified squint finlike" predicted match=true wordsval="4" bits=52 (recompute 52)
+phrase 4/dot cap+num (seed 555): got "Grimy.Print.Wheat.Distrust.2" predicted match=true capitalized=true endsWithDigit=true bits=55 (recompute 55.02 -> 55)
+phrase toggle aria-pressed after enable: cap=true
+keyboard: Enter on focused cap pill -> on/aria-pressed=false/false (was true/true)
+keyboard: Space on same pill -> on/aria-pressed=true/true
+copy (clipboard API): captured="stadium.tycoon.vista.husked" equalsDisplayed=true toast="Copied to clipboard" shown=true ariaLive=polite
+copy (fallback path, clipboard rejected): execCommand-copy-invoked toast="Copied to clipboard"
+crypto.getRandomValues stub served 536 Uint32 draws during the session
+final state for screenshot: phrase="prescribe.landline.finch.outthink"
+localStorage keys after full interaction: [suite.theme] (v1 writes only suite.theme)
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)

@@ -1,0 +1,40 @@
+== computed-style diff, light (18 differing values) ==
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.out .pw { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn.ghost { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.meter .bar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.meter .lbl { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tab { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tab.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#charPanel { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tg { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tg.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+select { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.hint { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+
+== computed-style diff, dark (18 differing values) ==
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.out .pw { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn.ghost { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.meter .bar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.meter .lbl { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tab { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tab.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#charPanel { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tg { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tg.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+select { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.hint { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+

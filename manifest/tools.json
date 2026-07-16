@@ -1508,6 +1508,25 @@
       "cacheTtlMin": 1,
       "since": "v1",
       "flags": []
+    },
+    {
+      "id": "password",
+      "file": "password.html",
+      "name": "Password & Passphrase Generator",
+      "cat": "util",
+      "cx": "S",
+      "desc": "crypto.getRandomValues + embedded EFF wordlist. Sayable passphrases.",
+      "network": "offline",
+      "key": null,
+      "endpoints": [],
+      "storage": [
+        "suite.theme"
+      ],
+      "cacheTtlMin": null,
+      "since": "v1",
+      "flags": [
+        "embedded-data"
+      ]
     }
   ]
 }
