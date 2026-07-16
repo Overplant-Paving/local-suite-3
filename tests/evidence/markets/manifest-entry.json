@@ -1,0 +1,29 @@
+{
+  "id": "markets",
+  "file": "markets.html",
+  "name": "Market Snapshot",
+  "cat": "money",
+  "cx": "M",
+  "desc": "Index levels once a day. Honest caveat: free keyless stock data doesn't exist.",
+  "network": "keyed",
+  "key": {
+    "name": "finnhub",
+    "signup": "https://finnhub.io/register",
+    "demo": false
+  },
+  "endpoints": [
+    "https://api.coingecko.com",
+    "https://finnhub.io"
+  ],
+  "storage": [
+    "suite.theme",
+    "suite.key.finnhub",
+    "suite.markets.tickers",
+    "suite.cache.markets.crypto",
+    "suite.cache.markets.stock.*",
+    "suite.cache.markets.throttle"
+  ],
+  "cacheTtlMin": 1440,
+  "since": "v1",
+  "flags": ["rl"]
+}

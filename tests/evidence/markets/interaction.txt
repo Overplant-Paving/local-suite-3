@@ -1,0 +1,24 @@
+crypto updated line: "Updated just now"
+live BTC tile: price=$64,558 change="-0.31% · 24h"
+cache envelope suite.cache.markets.crypto: t=1784174390911 bitcoin.usd=64558
+no-key state: keycard visible=true, stock card visible=false, signup link href=https://finnhub.io/register
+after key save: keycard visible=false, stock card visible=true
+AAPL tile (route-fulfilled quote c=212.33 pc=211.12 dp=0.5731): nm="prev close $211.12" px="$212.33" chg="+0.57% · +$1.21"
+stocks updated line: "Updated just now"
+added "vti": tiles=5 (uppercased id present: true), stored=["AAPL","MSFT","SPY","QQQ","VTI"]
+removed VTI: tiles=4, stored=["AAPL","MSFT","SPY","QQQ"]
+429 load (sibling page): coingecko hits=1 (expect 1), crypto updated line: "CoinGecko is rate-limiting — showing cached data · 25 h ago"
+429 load: BTC still rendered from cache: true
+throttle memory written: suite.cache.markets.throttle={"t":1784174391576,"v":true}
+backoff proof (cache 30h old, throttled -> effective TTL 48h): coingecko requests on reload=0, updated line: "Updated 30 h ago"
+offline stale: crypto updated line: "Offline — cached 72 h ago"
+offline stale: stocks updated line: "Offline — cached 72 h ago"
+offline stale: AAPL still priced from cache: "$212.33"
+restored (all from fresh cache, no refetch): crypto="Updated just now" stocks="Updated just now"
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
