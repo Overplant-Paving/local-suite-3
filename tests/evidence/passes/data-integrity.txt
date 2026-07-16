@@ -53,3 +53,7 @@ deterministic 30-sat fixture compute under page.clock at 2026-07-16T04:00:00Z
 independent Kepler+J2-secular recomputation of the CSS (TIANHE) pass
 (independent-recompute.txt: peak elevation delta 0.412 deg, peak time delta 0.0 s
 vs the tool's SGP4 — within the +/-2.5 deg / +/-120 s tolerance).
+
+Orchestrator dist replay (2026-07-16, post-integration build):
+  dist/passes.html -> 20115 bytes, sha256 4682299f24e60815894b37d021d9919e58ec0c0c604a298299b3d3f94566d030
+  VERDICT (final): EQUAL v1 == v2 source == dist — byte-exact through the build.

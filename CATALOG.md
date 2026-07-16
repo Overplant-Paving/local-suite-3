@@ -514,7 +514,7 @@ The short version of everything above. **CORS ✓** = documented/community-confi
 | EPA AirNow | `airnowapi.org` | free key (500/hr) | verify |
 | NASA APOD/NeoWs | `api.nasa.gov` | demo/free | ✓ |
 | JPL close approaches | `ssd-api.jpl.nasa.gov` | none | ✗ (dropped ACAO ~Jul 2026; asteroids re-sourced to NeoWs) |
-| CelesTrak TLEs | `celestrak.org` | none | verify |
+| CelesTrak TLEs | `celestrak.org` | none | ✓ (v2 live from file://, Jul 2026; keep their ≥2 h GP cache guidance) |
 | wheretheiss.at | `api.wheretheiss.at` | none (1/sec) | ✓ (community) |
 | Launch Library 2 | `ll.thespacedevs.com/2.3.0` | none (15/hr) | ✓ (v2 live, Jul 2026) |
 | aviationweather.gov | `aviationweather.gov/api/data` | none | ✗ |
