@@ -1,5 +1,12 @@
 # HANDOFF — continue the v2 build from here
 
+> **STATUS (2026-07-16, session 2): §Batch C is COMPLETE** — all 13 tasks recovered,
+> integrated, committed; `--refresh-data` implemented and live-verified; gates + smoke
+> 69/69 green (`tests/evidence/batchC/gates.txt`). The continuation procedure below is
+> historical. Still live: §Batch D, §Phase 2 exit, §Open items (plus: nearby's one live
+> Overpass query is deferred on an upstream outage — task chip pending; rerun
+> `verify-tool.mjs nearby` after recovery).
+
 Written 2026-07-15 by the session that executed Phase 0 through most of Phase 2. The session
 hit its model usage limit twice; the second cut killed all 13 in-flight Batch C subagents.
 Everything completed is committed and gate-green; this file is the exact continuation procedure.

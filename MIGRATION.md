@@ -134,7 +134,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 36 | snow.html | earth | cors | — | B | | ✅ `tests/evidence/snow/` |
 | 37 | wildlife.html | earth | cors | ebird opt. | B | eBird key onto `Suite.key()` | ✅ `tests/evidence/wildlife/` |
 | 38 | iss.html | space | cors | — | B | | ✅ `tests/evidence/iss/` |
-| 39 | asteroids.html | space | cors | — | B | upstream CORS regression: cad.api dropped ACAO ~Jul 2026 (v1 equally broken live); NeoWs re-source queued for Batch C | ✅ `tests/evidence/asteroids/` |
+| 39 | asteroids.html | space | key | nasa (demo) | B | re-sourced to NeoWs in Batch C (cad.api dropped ACAO ~Jul 2026, v1 equally broken live); 30-day view paged 4×7d; RL backoff | ✅ `tests/evidence/asteroids/` |
 | 40 | fedregister.html | civic | cors | — | B | | ✅ `tests/evidence/fedregister/` |
 | 41 | recalls.html | civic | cors | — | B | 3 sources | ✅ `tests/evidence/recalls/` |
 | 42 | treasury.html | civic | cors | — | B | | ✅ `tests/evidence/treasury/` |

@@ -151,19 +151,19 @@ Where the Space Station is right now on a world map, its ground speed, and when 
 
 ### 3.2 Astronomy Picture of the Day
 NASA's APOD with its explanation — a serene "new tab" page.
-- **Data:** `https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY` (demo tier: 30 req/hr, 50/day per IP — fine for one person; a free key raises it to 1,000/hr). CORS ✓.
+- **Data:** `https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY` (demo tier documented 30 req/hr, 50/day per IP — **observed headers said 10/hr, Jul 2026**; a free key raises it to 1,000/hr). CORS ✓ (v2 live from file://, Jul 2026). Image hosts: apod.nasa.gov; video days link out (thumbnails img.youtube.com / i.vimeocdn.com).
 - **Key:** demo tier / free key · **Local:** file:// ✅ · **Complexity:** S
 - **Suggested file:** `apod.html`
 
 ### 3.3 Near-Earth Asteroid Watch
 Today's close approaches: how big, how fast, how close (in lunar distances) — existential perspective with breakfast.
-- **Data:** JPL SSD close-approach API `https://ssd-api.jpl.nasa.gov/cad.api` — **CORS regression (verified Jul 2026): cad.api no longer sends ACAO for any origin; all browser fetches blocked. Re-source to NeoWs (api.nasa.gov, CORS ✓, demo tier) queued for Batch C.** `` (fully keyless); or NASA NeoWs `https://api.nasa.gov/neo/rest/v1/feed/today?api_key=DEMO_KEY`.
+- **Data:** JPL SSD close-approach API `https://ssd-api.jpl.nasa.gov/cad.api` — **CORS regression (verified Jul 2026): cad.api no longer sends ACAO for any origin; all browser fetches blocked. Re-sourced to NeoWs (api.nasa.gov/neo/rest/v1/feed, CORS ✓ live-verified Jul 2026, demo tier) in Batch C — 30-day view paged as 4×7-day requests; NeoWs miss_distance.lunar uses a flat 389 LD/AU (tool keeps 384,400 km LD, ~0.044% delta).** `` (fully keyless); or NASA NeoWs `https://api.nasa.gov/neo/rest/v1/feed/today?api_key=DEMO_KEY`.
 - **Key:** none (JPL) / demo tier (NeoWs) · **Local:** file:// ✅ · **Complexity:** S
 - **Suggested file:** `asteroids.html`
 
 ### 3.4 Rocket Launch Schedule
 Upcoming launches worldwide with countdowns, vehicle, pad, and mission blurbs.
-- **Data:** Launch Library 2 — current version is **2.3.0 with renamed routes**: `https://ll.thespacedevs.com/2.3.0/launches/upcoming/?limit=10&mode=list` (note `launches`, plural — the 2.2.0 `/launch/` path is legacy). Keyless, throttled 15 req/hr — cache in localStorage and refresh hourly.
+- **Data:** Launch Library 2 — current version is **2.3.0 with renamed routes**: `https://ll.thespacedevs.com/2.3.0/launches/upcoming/?limit=10&mode=list` (note `launches`, plural — the 2.2.0 `/launch/` path is legacy). Keyless, throttled 15 req/hr — cache in localStorage and refresh hourly. CORS ✓ (v2 live from file://, Jul 2026).
 - **Key:** none · **Local:** file:// ✅ (verify) · **Complexity:** S
 - **Suggested file:** `launches.html`
 
@@ -203,7 +203,7 @@ One board for the recalls that actually reach your household: food (FDA), vehicl
 
 ### 4.4 National Parks Companion
 Conditions, alerts (closures, fire restrictions), and events for parks you're planning to visit.
-- **Data:** NPS API `https://developer.nps.gov/api/v1/alerts?parkCode={code}&api_key={key}` (free instant key, 1,000 req/hr; client-side use with key in query string is common — verify once).
+- **Data:** NPS API `https://developer.nps.gov/api/v1/alerts?parkCode={code}&api_key={key}` (free instant key, 1,000 req/hr; client-side use with key in query string is common — CORS-open confirmed Jul 2026: keyless curl → 403 **with** ACAO:*).
 - **Key:** free key · **Local:** file:// ✅ (verify) · **Complexity:** S
 - **Suggested file:** `parks.html`
 
@@ -295,7 +295,7 @@ First-aid steps, poison control number (1-800-222-1222), CPR rhythm, emergency c
 
 ### 6.5 Nutrition Lookup
 Search a food, get calories/macros/nutrients; build a small "compare two foods" view.
-- **Data:** USDA FoodData Central `https://api.nal.usda.gov/fdc/v1/foods/search?query={q}&api_key=DEMO_KEY` (demo: 30/hr, 50/day; free instant key: 1,000/hr).
+- **Data:** USDA FoodData Central `https://api.nal.usda.gov/fdc/v1/foods/search?query={q}&api_key=DEMO_KEY` (demo: 30/hr, 50/day; free instant key: 1,000/hr). CORS ✓ (v2 live search from file://, Jul 2026).
 - **Key:** demo tier / free key · **Local:** verify · **Complexity:** M
 - **Suggested file:** `nutrition.html`
 
@@ -393,7 +393,7 @@ Generate a clean monthly calendar / weekly planner / habit tracker and print it 
 
 ### 9.1 Nearby Finder
 "Where's the nearest pharmacy / EV charger / playground / library?" — query OpenStreetMap around your saved location, results as a list with distances and a simple map.
-- **Data:** Overpass API `https://overpass-api.de/api/interpreter` (keyless, CORS ✓ in practice — overpass-turbo runs in the browser; fair use ~10k queries/day, mirror: overpass.kumi.systems). Map tiles `https://tile.openstreetmap.org/{z}/{x}/{y}.png` load as `<img>` via Leaflet — light personal use is within the tile policy; attribution required.
+- **Data:** Overpass API `https://overpass-api.de/api/interpreter` (keyless, CORS ✓ in practice — overpass-turbo runs in the browser; fair use ~10k queries/day, mirror: overpass.kumi.systems). **Outage Jul 16 2026: primary answered HTTP 406 to everything and kumi hung/429'd for hours — plan for both being down (v2 nearby: cache + designed error state); live re-verify pending (tests/evidence/nearby/overpass-outage.txt).** Map tiles `https://tile.openstreetmap.org/{z}/{x}/{y}.png` load as `<img>` via Leaflet — light personal use is within the tile policy; attribution required.
 - **Key:** none · **Local:** file:// ✅ · **Complexity:** M/L
 - **Suggested file:** `nearby.html`
 
@@ -509,14 +509,14 @@ The short version of everything above. **CORS ✓** = documented/community-confi
 | NASA FIRMS hotspots | `firms.modaps.eosdis.nasa.gov` | free MAP_KEY | verify |
 | US Drought Monitor | `usdmdataservices.unl.edu` | none | ✗ (use Esri Living Atlas `US_Drought_Intensity_v1`, CORS ✓) |
 | USDA SNOTEL (AWDB) | `wcc.sc.egov.usda.gov/awdbRestApi` | none | verify |
-| USDA FoodData Central | `api.nal.usda.gov/fdc` | demo/free | verify |
+| USDA FoodData Central | `api.nal.usda.gov/fdc` | demo/free | ✓ (v2 live, Jul 2026) |
 | EPA UV daily | `data.epa.gov/dmapservice` | none | verify |
 | EPA AirNow | `airnowapi.org` | free key (500/hr) | verify |
 | NASA APOD/NeoWs | `api.nasa.gov` | demo/free | ✓ |
-| JPL close approaches | `ssd-api.jpl.nasa.gov` | none | ✓ |
+| JPL close approaches | `ssd-api.jpl.nasa.gov` | none | ✗ (dropped ACAO ~Jul 2026; asteroids re-sourced to NeoWs) |
 | CelesTrak TLEs | `celestrak.org` | none | verify |
 | wheretheiss.at | `api.wheretheiss.at` | none (1/sec) | ✓ (community) |
-| Launch Library 2 | `ll.thespacedevs.com/2.3.0` | none (15/hr) | verify |
+| Launch Library 2 | `ll.thespacedevs.com/2.3.0` | none (15/hr) | ✓ (v2 live, Jul 2026) |
 | aviationweather.gov | `aviationweather.gov/api/data` | none | ✗ |
 | FAA NAS status | `nasstatus.faa.gov` | none | ✗ (likely; XML) |
 | USNO astronomy | `aa.usno.navy.mil/api` | none | ✗ (likely) |
@@ -535,7 +535,7 @@ The short version of everything above. **CORS ✓** = documented/community-confi
 | openFDA | `api.fda.gov` | none (1k/day) | ✓ |
 | NHTSA recalls/VIN | `api.nhtsa.gov`, `vpic.nhtsa.dot.gov` | none | ✓ (echoes Origin; verified Jul 2026) |
 | CPSC recalls | `saferproducts.gov/RestWebServices` | none | ✓ (verified Jul 2026) |
-| NPS parks | `developer.nps.gov/api/v1` | free key (1k/hr) | verify |
+| NPS parks | `developer.nps.gov/api/v1` | free key (1k/hr) | ✓ (CORS confirmed Jul 2026; render pipeline route-verified, first real key = first live render) |
 | Nager.Date holidays | `date.nager.at/api/v3` | none | ✓ |
 | Census geocoder | `geocoding.geo.census.gov` | none | ✗ fetch / ✓ JSONP |
 | Census data (ACS) | `api.census.gov/data` | none (500/day) | ✓ (community) |
@@ -545,7 +545,8 @@ The short version of everything above. **CORS ✓** = documented/community-confi
 | Zippopotam | `api.zippopotam.us` | none | ✓ |
 | restcountries | `restcountries.com/v3.1` | none | ✓ (`/all` needs `?fields=`) |
 | Nominatim | `nominatim.openstreetmap.org` | none (1/sec) | ✓ (identify yourself) |
-| Overpass | `overpass-api.de` | none (fair use) | ✓ (community) |
+| Overpass | `overpass-api.de` | none (fair use) | ✓ (community; Jul 16 2026 outage — see 9.1) |
+| BART real-time | `api.bart.gov/api` | public demo key / free | ✓ (v2 live ETDs, Jul 2026; key externalized to suite.key.bart) |
 | Open Library | `openlibrary.org` | none (1/sec) | ✓ (search; covers via `<img>`) |
 | Google Books | `googleapis.com/books/v1` | optional | ✓ |
 | Met Museum | `collectionapi.metmuseum.org` | none | ✗ (images via `<img>` fine) |
