@@ -82,3 +82,19 @@ Template-literal interpolations into `.innerHTML` left unwrapped, with reasons:
 6. **`Suite.fetchJSON` sends `Accept: application/json`** on the OSRM/EIA requests (v1 sent no header). Both APIs return JSON regardless; no observable difference, but it is a wire-level change.
 7. The two `net::ERR_FAILED` console errors in interaction.txt are the deliberately blocked OSRM/EIA requests (the offline-failure test), not defects; the harness classifies them as non-hard and exited 0.
 8. `--warn` accent variable is declared but unused, exactly as in v1 (only `--bad` is consumed by `.err`). Kept for source parity.
+## Phase 4 a11y audit
+
+QUALITY.md §2 re-verified against `tools/tripcost.html` from `file://`, light + dark
+(raw log: `phase4-a11y-audit.txt`). **Verdict: pass-as-was — no tool changes.**
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | icon-only controls named | pass | saved-vehicle chip `×` spans are role=button + tabindex=0 + aria-label "Remove <name>"; the load half likewise "Load <name> into Vehicle 1…" |
+| 2 | async regions aria-live | pass | `#ptsMsg` (routing/haversine result), `#eiaMsg` (EIA fetch), `#results`, `#winner`, and each `#vehNres` = polite |
+| 3 | keyboard paths | pass | keyboard-only drive: typed 120 mi + $4.25 → $36.43 / $22.67, winner "Vehicle B is cheaper by $13.76 (38% less)"; Enter on "From two points", typed both points, **Enter ran the offline estimate** ("≈ 434.3 mi road estimate", distance reflected); Enter on "Save this vehicle" → chip; **Enter on the chip span loaded it into Vehicle 1; Enter on its × removed it** — the custom role=button spans fully keyboard-operable; Enter in the EIA key field submits per source. No traps |
+| 4 | input labels | pass | 12/12 visible inputs/selects via `label[for]` (incl. generated per-vehicle fields) |
+| 5 | contrast both palettes | pass (tool-local) | `.err` `--bad` 4.6 (L #c0503f) / 5.4 (D #e0766a) on card; chips/buttons ≥5.83 (L); all dark tool pairs ≥6.19 |
+| 6 | focus visibility | pass | 2px accent outline on every stop, both themes |
+
+SUITE-WIDE flags: muted-on-`--bg` 4.36 light (footer); white-on-accent 2.36 dark
+(`.btn.primary`, `.seg button.on`).

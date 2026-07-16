@@ -117,3 +117,29 @@ None. Zero network — `Intl.DateTimeFormat` / the browser's IANA tz database on
 - The after-interaction screenshot shows the slider back at 12:00: the persistence check reloads
   the page, which re-runs v1's `initSlider()` (slider resets to the current reference hour by
   design — slider position was never persisted in v1 either).
+
+## Phase 4 a11y audit
+
+QUALITY.md §2 re-verified against `tools/worldclock.html` from `file://`, light + dark
+(raw log: `phase4-a11y-audit.txt`). **Verdict: fixed (1 contrast item).**
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | icon-only controls named | pass | every clock's `×` carries aria-label "Remove clock: <label>" |
+| 2 | async regions aria-live | pass | `#hourLabel` = polite announces the selected planner hour; `#clocks` deliberately NOT live (ticks every second — announcing would spam SRs); `#readout` repaints with the announced hour label |
+| 3 | keyboard paths | pass | keyboard-only drive: select type-ahead "Tokyo" + Enter on Add → clock added; typed Asia/Kolkata + **Enter submitted** the zone field; ArrowRight on the planner slider → "02:00 (2am) in Chicago" announced; Tab to a clock's × + Enter removed it; no traps |
+| 4 | input labels | pass | `#citySel`/`#freeZone` aria-label; `#refSel`/`#hourSlider` wrapping labels |
+| 5 | contrast both palettes | **fixed** | see below |
+| 6 | focus visibility | pass | outline (or input shadow) on every stop, both themes |
+
+Contrast fix (tool-local, all four theme contexts) — found by compositing the 16% day/night
+tint overlay the generic ancestor-walk can't see:
+- muted text on NIGHT-tinted cards in light theme (`.zone`, `.date`, `.time .sec`) was
+  **3.50**; new `--soft-muted` #59606c → measured **4.59** (night, light) with dark theme at
+  6.34 and day-tinted cards unchanged (4.64 L / 5.65 D, passing).
+Also measured: planner cells #1c1c1c on the fixed hour colors = 9.31 / 10.49 / 6.51 (both
+themes); day/night emoji (`.sun`) is a color emoji glyph — CSS color doesn't paint it, the
+1.72 scanner line is N/A.
+
+Harness: `node verify-tool.mjs worldclock` re-run after the fix — exit 0, console clean.
+SUITE-WIDE flags: muted-on-`--bg` 4.36 light (footer); white-on-accent 2.36 dark (`.btn`).

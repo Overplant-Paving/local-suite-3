@@ -118,3 +118,20 @@ None — `endpoints: []`. Zero fetches; the state-office / vote.gov / eac.gov / 
 - Curated content (STATES array, deadline copy, national cards) diffed byte-identical to v1 —
   deliberately **not** refreshed for the 2026 cycle; that is the tool's own refresh process, out
   of scope for migration.
+
+## Phase 4 a11y audit
+
+QUALITY.md §2 re-verified against `tools/voting.html` from `file://`, light + dark
+(raw log: `phase4-a11y-audit.txt`). **Verdict: fixed (1 contrast item).**
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | icon-only controls named | pass (n/a) | none; per-row pin buttons have text + aria-label ("Pin Texas" / "Texas is pinned") |
+| 2 | async regions aria-live | pass | `#pinned` = polite — announces the pinned-state card on select/pin (the tool's update surface); countdown/table render once at load or synchronously with the filter box |
+| 3 | keyboard paths | pass | keyboard-only drive: select type-ahead "Texas" pinned ★ Texas, typed "verm" in the filter → table filtered to 1 row, Tab to row pin button + Enter → ★ Vermont announced via the live region; no traps |
+| 4 | input labels | pass | `#stateSelect` via `label[for]`; `#search` via aria-label |
+| 5 | contrast both palettes | **fixed** | light `--warn` #b0752a→**#8a5a1e**: banner `<strong>` on `--warn-soft` was 3.04 → now **4.63**; dark untouched (6.2). All other pairs ≥4.63 (L) / ≥6.19 (D) |
+| 6 | focus visibility | pass | 2px accent outline on every stop, both themes |
+
+Harness: `node verify-tool.mjs voting` re-run after the fix — exit 0, console clean.
+SUITE-WIDE flag: muted-on-`--bg` 4.36 light (footer).

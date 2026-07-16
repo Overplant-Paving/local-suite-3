@@ -1,0 +1,72 @@
+# a11y audit — weather — 2026-07-16T06:11:47.407Z
+
+### scan — light theme
+icon-only controls without accessible name: (none)
+icon-only controls WITH name (0): (none)
+inputs without label/aria-label: (none) (labelled: 0)
+positive tabindex: (none)
+clickable-non-focusable heuristic (cursor:pointer, no role/tabindex): (none)
+aria-live containers in DOM: div#updated.updated=polite | div#alerts.alerts=polite | div#currentBody=polite | div#hourly.hourly-scroll=polite | div#daily.days=polite | div#radarBody.radar-wrap=polite | div#zipHint.hint=polite
+contrast pairs (13 unique fg/bg combos):
+  pass 3.22 (need 3) fg=#c47f2d bg=#fffdf9 120px/700 — span.deg "°F"
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 12.5px/400 — footer "Data: National Weather Service ·"
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 11.5px/400 — div.radar-note "Animated base reflectivity loop "
+  pass 4.93 (need 4.5) fg=#b53427 bg=#f6e5e0 10.5px/600 — span.sev "Severe"
+  pass 4.95 (need 4.5) fg=#2f6f6a bg=#e3efed 11px/400 — div.h-t "now"
+  pass 5.19 (need 4.5) fg=#59606c bg=#f6e5e0 11px/400 — time "Until Thu 10:00 PM"
+  pass 5.26 (need 4.5) fg=#2f6f6a bg=#f5f3ee 12.5px/600 — b "Los Angeles, CA"
+  pass 5.74 (need 4.5) fg=#2f6f6a bg=#fffdf9 11px/400 — a "full radar & satellite →"
+  pass 12.15 (need 4.5) fg=#23282e bg=#f6e5e0 18px/600 — h3 "Extreme Heat Warning"
+  pass 12.61 (need 4.5) fg=#23282e bg=#e3efed 21px/600 — div.h-tmp.disp "76°"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 27px/700 — h1 "Weather Station"
+  pass 14.61 (need 3) fg=#23282e bg=#fffdf9 120px/700 — div.temp.disp "75"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 21px/600 — div.h-tmp.disp "73°"
+focus visibility (30-Tab walk): all stops show an indicator
+  tab order: a.suite-link [outline] -> span#changeLoc.change [outline] -> button#themeBtn.btn-icon [outline] -> button#openSettings.btn-icon [outline] -> a [outline] -> (body) -> a.suite-link [outline] -> span#changeLoc.change [outline] -> button#themeBtn.btn-icon [outline] -> button#openSettings.btn-icon [outline] -> a [outline] -> (body) -> a.suite-link [outline] -> span#changeLoc.change [outline] -> button#themeBtn.btn-icon [outline] -> button#openSettings.btn-icon [outline] -> a [outline] -> (body) -> a.suite-link [outline] -> span#changeLoc.change [outline] -> button#themeBtn.btn-icon [outline] -> button#openSettings.btn-icon [outline] -> a [outline] -> (body) -> a.suite-link [outline] -> span#changeLoc.change [outline] -> button#themeBtn.btn-icon [outline] -> button#openSettings.btn-icon [outline] -> a [outline] -> a.suite-link [outline]
+
+### scan — dark theme
+icon-only controls without accessible name: (none)
+icon-only controls WITH name (0): (none)
+inputs without label/aria-label: (none) (labelled: 0)
+positive tabindex: (none)
+clickable-non-focusable heuristic (cursor:pointer, no role/tabindex): (none)
+aria-live containers in DOM: div#updated.updated=polite | div#alerts.alerts=polite | div#currentBody=polite | div#hourly.hourly-scroll=polite | div#daily.days=polite | div#radarBody.radar-wrap=polite | div#zipHint.hint=polite
+contrast pairs (14 unique fg/bg combos):
+  pass 4.76 (need 4.5) fg=#ec7560 bg=#362a2d 10.5px/600 — span.sev "Severe"
+  pass 5.22 (need 4.5) fg=#9aa0a8 bg=#362a2d 11px/400 — time "Until Thu 10:00 PM"
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 13.6px/400 — a.suite-link "← suite"
+  pass 6.3 (need 4.5) fg=#6fb5ae bg=#1f292b 11px/400 — div.h-t "now"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 12.5px/400 — footer "Data: National Weather Service ·"
+  pass 6.91 (need 4.5) fg=#6fb5ae bg=#1d2026 21px/600 — div.cur-desc "—"
+  pass 7.6 (need 4.5) fg=#6fb5ae bg=#15171b 12.5px/600 — b "Los Angeles, CA"
+  pass 8.06 (need 3) fg=#f2a65a bg=#1d2026 120px/700 — span.deg "°F"
+  pass 9.52 (need 4.5) fg=#66d6df bg=#1d2026 11.5px/400 — span.pop "1%"
+  pass 10.92 (need 4.5) fg=#e7e5e0 bg=#362a2d 18px/600 — h3 "Extreme Heat Warning"
+  pass 11.81 (need 4.5) fg=#e7e5e0 bg=#1f292b 21px/600 — div.h-tmp.disp "76°"
+  pass 12.96 (need 3) fg=#e7e5e0 bg=#1d2026 120px/700 — div.temp.disp "75"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 21px/600 — div.h-tmp.disp "73°"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 27px/700 — h1 "Weather Station"
+focus visibility (30-Tab walk): all stops show an indicator
+  tab order: a.suite-link [outline] -> span#changeLoc.change [outline] -> button#themeBtn.btn-icon [outline] -> button#openSettings.btn-icon [outline] -> a [outline] -> (body) -> a.suite-link [outline] -> span#changeLoc.change [outline] -> button#themeBtn.btn-icon [outline] -> button#openSettings.btn-icon [outline] -> a [outline] -> (body) -> a.suite-link [outline] -> span#changeLoc.change [outline] -> button#themeBtn.btn-icon [outline] -> button#openSettings.btn-icon [outline] -> a [outline] -> (body) -> a.suite-link [outline] -> span#changeLoc.change [outline] -> button#themeBtn.btn-icon [outline] -> button#openSettings.btn-icon [outline] -> a [outline] -> (body) -> a.suite-link [outline] -> span#changeLoc.change [outline] -> button#themeBtn.btn-icon [outline] -> button#openSettings.btn-icon [outline] -> a [outline] -> a.suite-link [outline]
+
+### keyboard-only primary-feature drive
+  Tab -> reached settings (⚙ setup) button (BUTTON#openSettings after 4 tab(s))
+  Enter -> modal open: true, focus moved to: inZip
+  Escape -> modal open: false (overlay closes on Esc)
+  Tab -> reached settings button (again) (BUTTON#openSettings after 4 tab(s))
+  Tab -> reached latitude input (INPUT#inLat after 3 tab(s))
+  Tab -> reached longitude input (INPUT#inLon after 1 tab(s))
+  Enter in lon field -> modal closed: true (Enter submits)
+  after save: station "New York, NY · OKX 33,42 · 40.713, -74.006 change" · updated "updated 1:11 AM"
+  Tab -> reached injected 'change' span (role=button) (SPAN#changeLoc after 2 tab(s))
+  Enter on 'change' span -> modal open: true
+
+### aria-live runtime check
+  #updated: aria-live=polite
+  #alerts: aria-live=polite
+  #currentBody: aria-live=polite
+  #hourly: aria-live=polite
+  #daily: aria-live=polite
+  #radarBody: aria-live=polite
+  #zipHint: aria-live=polite
+  #stationInfo: aria-live=(missing)

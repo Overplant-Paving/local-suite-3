@@ -1,0 +1,64 @@
+# a11y audit — printables — 2026-07-16T06:11:44.170Z
+
+### scan — light theme
+icon-only controls without accessible name: (none)
+icon-only controls WITH name (0): (none)
+inputs without label/aria-label: (none) (labelled: 5)
+positive tabindex: (none)
+clickable-non-focusable heuristic (cursor:pointer, no role/tabindex): (none)
+aria-live containers in DOM: div#sheet.sheet=polite
+contrast pairs (12 unique fg/bg combos):
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 13.6px/400 — footer.noprint "No network — everything happens "
+  pass 4.61 (need 4.5) fg=#757575 bg=#ffffff 15.2px/600 — div.dnum "26"
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 12.5px/400 — label "US federal holidays"
+  pass 5.26 (need 4.5) fg=#2f6f6a bg=#f5f3ee 14.4px/400 — a.back "← suite"
+  pass 5.74 (need 4.5) fg=#2f6f6a bg=#fffdf9 15.2px/600 — button#todayBtn.btn.ghost "Jump to today"
+  pass 5.83 (need 4.5) fg=#ffffff bg=#2f6f6a 15.2px/600 — button#printBtn.btn "🖨 Print"
+  pass 6.2 (need 4.5) fg=#bb2233 bg=#ffffff 9.9px/400 — div.hol "Independence Day"
+  pass 7.46 (need 4.5) fg=#555555 bg=#ffffff 11.5px/700 — th "Saturday"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 27.2px/700 — h1 "Printable Calendar & Planner Pag"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 17.4 (need 3) fg=#1a1a1a bg=#ffffff 27.2px/700 — div.sh-title "July 2026"
+  pass 17.4 (need 4.5) fg=#1a1a1a bg=#ffffff 15.2px/600 — div.dnum "1"
+focus visibility (30-Tab walk): FAIL on input#oMonth [NO-INDICATOR], input#oMonth [NO-INDICATOR]
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.on [outline] -> button [outline] -> button [outline] -> input#oMonth [outline] -> input#oMonth [outline] -> input#oMonth [NO-INDICATOR] -> select#oWeekStart [outline] -> input#oTitle [outline] -> select#oOrient [outline] -> input#oHol [outline] -> button#printBtn.btn [outline] -> button#todayBtn.btn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.on [outline] -> button [outline] -> button [outline] -> input#oMonth [outline] -> input#oMonth [outline] -> input#oMonth [NO-INDICATOR] -> select#oWeekStart [outline] -> input#oTitle [outline] -> select#oOrient [outline] -> input#oHol [outline] -> button#printBtn.btn [outline] -> button#todayBtn.btn [outline] -> (body)
+
+### scan — dark theme
+icon-only controls without accessible name: (none)
+icon-only controls WITH name (0): (none)
+inputs without label/aria-label: (none) (labelled: 5)
+positive tabindex: (none)
+clickable-non-focusable heuristic (cursor:pointer, no role/tabindex): (none)
+aria-live containers in DOM: div#sheet.sheet=polite
+contrast pairs (12 unique fg/bg combos):
+  FAIL 2.36 (need 4.5) fg=#ffffff bg=#6fb5ae 14.4px/400 — button.on "Monthly calendar"
+  pass 4.61 (need 4.5) fg=#757575 bg=#ffffff 15.2px/600 — div.dnum "26"
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 14.4px/400 — button "Weekly planner"
+  pass 6.2 (need 4.5) fg=#bb2233 bg=#ffffff 9.9px/400 — div.hol "Independence Day"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 13.6px/400 — footer.noprint "No network — everything happens "
+  pass 6.91 (need 4.5) fg=#6fb5ae bg=#1d2026 15.2px/600 — button#todayBtn.btn.ghost "Jump to today"
+  pass 7.46 (need 4.5) fg=#555555 bg=#ffffff 11.5px/700 — th "Saturday"
+  pass 7.6 (need 4.5) fg=#6fb5ae bg=#15171b 14.4px/400 — a.back "← suite"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 27.2px/700 — h1 "Printable Calendar & Planner Pag"
+  pass 17.4 (need 3) fg=#1a1a1a bg=#ffffff 27.2px/700 — div.sh-title "July 2026"
+  pass 17.4 (need 4.5) fg=#1a1a1a bg=#ffffff 15.2px/600 — div.dnum "1"
+focus visibility (30-Tab walk): FAIL on input#oMonth [NO-INDICATOR], input#oMonth [NO-INDICATOR]
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.on [outline] -> button [outline] -> button [outline] -> input#oMonth [outline] -> input#oMonth [outline] -> input#oMonth [NO-INDICATOR] -> select#oWeekStart [outline] -> input#oTitle [outline] -> select#oOrient [outline] -> input#oHol [outline] -> button#printBtn.btn [outline] -> button#todayBtn.btn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.on [outline] -> button [outline] -> button [outline] -> input#oMonth [outline] -> input#oMonth [outline] -> input#oMonth [NO-INDICATOR] -> select#oWeekStart [outline] -> input#oTitle [outline] -> select#oOrient [outline] -> input#oHol [outline] -> button#printBtn.btn [outline] -> button#todayBtn.btn [outline] -> (body)
+
+### keyboard-only primary-feature drive
+  Tab -> reached Weekly planner tab (BUTTON after 4 tab(s))
+  Enter on tab -> weekly sheet rendered
+  Tab -> reached week date input (INPUT#oWeekDate after 2 tab(s))
+  typed date -> sheet title "Week of June 28" · "June 28 – July 4, 2026"
+  Tab -> reached custom title input (INPUT#oTitle after 3 tab(s))
+  typed custom title -> "Family week"
+  Tab -> reached holidays checkbox (INPUT#oHol after 2 tab(s))
+  Space on checkbox -> holiday markers now: 0 (Jul 3 observed shown when on)
+  Tab -> reached Habit tracker tab (BUTTON after 8 tab(s))
+  Enter on Habit tracker -> habit grid rendered (orientation auto-flips to landscape)
+  Tab -> reached habits textarea (TEXTAREA#oHabits after 4 tab(s))
+  habits textarea reachable; print button is a labelled <button> (window.print not invoked in audit)
+
+### aria-live runtime check
+  #sheet: aria-live=polite

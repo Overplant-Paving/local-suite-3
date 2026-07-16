@@ -1,30 +1,148 @@
-== computed-style diff, light (13 differing values) ==
+== computed-style diff, light (87 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --warn: v1=#b0752a | v2=#8a5a1e }
+body { --soft-muted: v1=undefined | v2=#59606c }
+body { --bad: v1=undefined | v2=#a33d24 }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --warn: v1=#b0752a | v2=#8a5a1e }
+header h1 { --soft-muted: v1=undefined | v2=#59606c }
+header h1 { --bad: v1=undefined | v2=#a33d24 }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --warn: v1=#b0752a | v2=#8a5a1e }
+.theme-btn { --soft-muted: v1=undefined | v2=#59606c }
+.theme-btn { --bad: v1=undefined | v2=#a33d24 }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --warn: v1=#b0752a | v2=#8a5a1e }
+.back { --soft-muted: v1=undefined | v2=#59606c }
+.back { --bad: v1=undefined | v2=#a33d24 }
 .yearbar .yr { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.yearbar .yr { --warn: v1=#b0752a | v2=#8a5a1e }
+.yearbar .yr { --soft-muted: v1=undefined | v2=#59606c }
+.yearbar .yr { --bad: v1=undefined | v2=#a33d24 }
 #prevYear { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#prevYear { --warn: v1=#b0752a | v2=#8a5a1e }
+#prevYear { --soft-muted: v1=undefined | v2=#59606c }
+#prevYear { --bad: v1=undefined | v2=#a33d24 }
 .hero { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.hero { --warn: v1=#b0752a | v2=#8a5a1e }
+.hero { --soft-muted: v1=undefined | v2=#59606c }
+.hero { --bad: v1=undefined | v2=#a33d24 }
 .hero .big { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.hero .big { --warn: v1=#b0752a | v2=#8a5a1e }
+.hero .big { --soft-muted: v1=undefined | v2=#59606c }
+.hero .big { --bad: v1=undefined | v2=#a33d24 }
 #fedTable { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#fedTable { --warn: v1=#b0752a | v2=#8a5a1e }
+#fedTable { --soft-muted: v1=undefined | v2=#59606c }
+#fedTable { --bad: v1=undefined | v2=#a33d24 }
+.tag-obs { border-block-end-color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
+.tag-obs { border-block-start-color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
+.tag-obs { border-bottom-color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
+.tag-obs { border-inline-end-color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
+.tag-obs { border-inline-start-color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
+.tag-obs { border-left-color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
+.tag-obs { border-right-color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
+.tag-obs { border-top-color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
+.tag-obs { caret-color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
+.tag-obs { color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
+.tag-obs { column-rule-color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
+.tag-obs { outline-color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
+.tag-obs { row-rule-color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
+.tag-obs { text-decoration-color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
+.tag-obs { text-emphasis-color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
 .tag-obs { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tag-obs { -webkit-text-fill-color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
+.tag-obs { -webkit-text-stroke-color: v1=rgb(176, 117, 42) | v2=rgb(138, 90, 30) }
+.tag-obs { --warn: v1=#b0752a | v2=#8a5a1e }
+.tag-obs { --soft-muted: v1=undefined | v2=#59606c }
+.tag-obs { --bad: v1=undefined | v2=#a33d24 }
+.badge.closed { background-color: v1=color(srgb 0.752941 0.286275 0.176471 / 0.16) | v2=color(srgb 0.639216 0.239216 0.141176 / 0.16) }
+.badge.closed { border-block-end-color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
+.badge.closed { border-block-start-color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
+.badge.closed { border-bottom-color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
+.badge.closed { border-inline-end-color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
+.badge.closed { border-inline-start-color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
+.badge.closed { border-left-color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
+.badge.closed { border-right-color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
+.badge.closed { border-top-color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
+.badge.closed { caret-color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
+.badge.closed { color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
+.badge.closed { column-rule-color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
+.badge.closed { outline-color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
+.badge.closed { row-rule-color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
+.badge.closed { text-decoration-color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
+.badge.closed { text-emphasis-color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
 .badge.closed { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.badge.closed { -webkit-text-fill-color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
+.badge.closed { -webkit-text-stroke-color: v1=rgb(192, 73, 45) | v2=rgb(163, 61, 36) }
+.badge.closed { --warn: v1=#b0752a | v2=#8a5a1e }
+.badge.closed { --soft-muted: v1=undefined | v2=#59606c }
+.badge.closed { --bad: v1=undefined | v2=#a33d24 }
 .minicard { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.minicard { --warn: v1=#b0752a | v2=#8a5a1e }
+.minicard { --soft-muted: v1=undefined | v2=#59606c }
+.minicard { --bad: v1=undefined | v2=#a33d24 }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --warn: v1=#b0752a | v2=#8a5a1e }
+footer { --soft-muted: v1=undefined | v2=#59606c }
+footer { --bad: v1=undefined | v2=#a33d24 }
 
-== computed-style diff, dark (13 differing values) ==
+== computed-style diff, dark (57 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --soft-muted: v1=undefined | v2=#9aa0a8 }
+body { --bad: v1=undefined | v2=#ee8378 }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --soft-muted: v1=undefined | v2=#9aa0a8 }
+header h1 { --bad: v1=undefined | v2=#ee8378 }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --soft-muted: v1=undefined | v2=#9aa0a8 }
+.theme-btn { --bad: v1=undefined | v2=#ee8378 }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --soft-muted: v1=undefined | v2=#9aa0a8 }
+.back { --bad: v1=undefined | v2=#ee8378 }
 .yearbar .yr { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.yearbar .yr { --soft-muted: v1=undefined | v2=#9aa0a8 }
+.yearbar .yr { --bad: v1=undefined | v2=#ee8378 }
 #prevYear { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#prevYear { --soft-muted: v1=undefined | v2=#9aa0a8 }
+#prevYear { --bad: v1=undefined | v2=#ee8378 }
 .hero { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.hero { --soft-muted: v1=undefined | v2=#9aa0a8 }
+.hero { --bad: v1=undefined | v2=#ee8378 }
 .hero .big { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.hero .big { --soft-muted: v1=undefined | v2=#9aa0a8 }
+.hero .big { --bad: v1=undefined | v2=#ee8378 }
 #fedTable { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#fedTable { --soft-muted: v1=undefined | v2=#9aa0a8 }
+#fedTable { --bad: v1=undefined | v2=#ee8378 }
 .tag-obs { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tag-obs { --soft-muted: v1=undefined | v2=#9aa0a8 }
+.tag-obs { --bad: v1=undefined | v2=#ee8378 }
+.badge.closed { background-color: v1=color(srgb 0.752941 0.286275 0.176471 / 0.16) | v2=color(srgb 0.933333 0.513726 0.470588 / 0.16) }
+.badge.closed { border-block-end-color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
+.badge.closed { border-block-start-color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
+.badge.closed { border-bottom-color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
+.badge.closed { border-inline-end-color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
+.badge.closed { border-inline-start-color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
+.badge.closed { border-left-color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
+.badge.closed { border-right-color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
+.badge.closed { border-top-color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
+.badge.closed { caret-color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
+.badge.closed { color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
+.badge.closed { column-rule-color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
+.badge.closed { outline-color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
+.badge.closed { row-rule-color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
+.badge.closed { text-decoration-color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
+.badge.closed { text-emphasis-color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
 .badge.closed { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.badge.closed { -webkit-text-fill-color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
+.badge.closed { -webkit-text-stroke-color: v1=rgb(192, 73, 45) | v2=rgb(238, 131, 120) }
+.badge.closed { --soft-muted: v1=undefined | v2=#9aa0a8 }
+.badge.closed { --bad: v1=undefined | v2=#ee8378 }
 .minicard { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.minicard { --soft-muted: v1=undefined | v2=#9aa0a8 }
+.minicard { --bad: v1=undefined | v2=#ee8378 }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --soft-muted: v1=undefined | v2=#9aa0a8 }
+footer { --bad: v1=undefined | v2=#ee8378 }
 

@@ -102,12 +102,15 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 </style>
 <style>
   /* tool accents (3-layer, same pattern as core) */
-  :root { --near: #c0562b; --near-soft: color-mix(in srgb, #c0562b 15%, transparent); }
+  /* Phase 4 a11y audit: light --near darkened #c0562b -> #a04518 (hero label was 4.49:1
+     on the card and the PHA badge 3.41:1 on --near-soft; now 6.2:1 / 4.9:1).
+     --on-accent: keycard button label — dark ink on the light dark-mode accent fill. */
+  :root { --near: #a04518; --near-soft: color-mix(in srgb, #a04518 15%, transparent); --on-accent: #fff; }
   @media (prefers-color-scheme: dark) {
-    :root { --near: #e8895c; --near-soft: color-mix(in srgb, #e8895c 18%, transparent); }
+    :root { --near: #e8895c; --near-soft: color-mix(in srgb, #e8895c 18%, transparent); --on-accent: #15171b; }
   }
-  :root[data-theme="light"] { --near: #c0562b; --near-soft: color-mix(in srgb, #c0562b 15%, transparent); }
-  :root[data-theme="dark"] { --near: #e8895c; --near-soft: color-mix(in srgb, #e8895c 18%, transparent); }
+  :root[data-theme="light"] { --near: #a04518; --near-soft: color-mix(in srgb, #a04518 15%, transparent); --on-accent: #fff; }
+  :root[data-theme="dark"] { --near: #e8895c; --near-soft: color-mix(in srgb, #e8895c 18%, transparent); --on-accent: #15171b; }
 
   body { min-height: 100vh; }
   .topbar {
@@ -134,7 +137,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
     color: var(--ink); border-radius: 10px; padding: .45rem .7rem; font: inherit;
   }
   .keycard button {
-    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    border: 1px solid var(--accent); background: var(--accent); color: var(--on-accent);
     border-radius: 10px; padding: .45rem .9rem; cursor: pointer; font: inherit;
   }
   .keycard .note { color: var(--muted); margin-top: .5rem; }

@@ -124,3 +124,20 @@ verbatim from v1). `endpoints: []` in the manifest entry.
 - The stats grid being a live region means four cards re-announce on every
   location save; acceptable chattiness in my judgment, but easy to narrow to the
   first card if preferred.
+
+## Phase 4 a11y audit
+
+QUALITY.md §2 re-verified against `tools/daylight.html` from `file://`, light + dark
+(raw log: `phase4-a11y-audit.txt`). **Verdict: pass-as-was — no tool changes.**
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | icon-only controls named | pass (n/a) | none |
+| 2 | async regions aria-live | pass | `#stats` = polite announces recomputed daylight stats after a location change; `#tip` is a pointer/keyboard-following inspection tooltip (making it live would announce every arrow step twice — the moved-to value is the announcement); `#cap` repaints with the announced stats |
+| 3 | keyboard paths | pass | keyboard-only drive of the chart's dedicated keyboard path: Tab reaches the svg (tabindex=0), **ArrowRight/ArrowLeft step days** (tip "Jul 16 ↑7:53am ↓10:05pm 14h 12m"), **Home/End** jump to Jan 1/Dec 31, **Esc hides** the tip; then Enter on "change", coordinates typed, **Enter submitted** → recomputed for 64.2°N (Reykjavík). No traps |
+| 4 | input labels | pass | `#citySel`, `#inLat`, `#inLon` via `label[for]` (verified with the location card open) |
+| 5 | contrast both palettes | pass (tool-local) | chart svg text sits outside the plot rects on the card: month/hour labels muted 4.76 (L) / 6.19 (D), 12h markers accent 5.74 (L) / 6.91 (D); band/night rect fills are non-text; all other pairs ≥4.76 (L) / ≥6.19 (D) |
+| 6 | focus visibility | pass | 2px accent outline on every stop incl. the svg chart, both themes |
+
+SUITE-WIDE flag: muted-on-`--bg` 4.36 light (footer). (The first-run `.btn` shares the dark
+white-on-accent 2.36 suite pair.)

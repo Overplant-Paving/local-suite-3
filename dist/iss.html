@@ -102,12 +102,14 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 </style>
 <style>
   /* tool accents (3-layer, same pattern as core) */
-  :root { --iss: #d9534f; --land: #d9d3c4; --ocean: #eef2f0; --grid: #cfd6d3; --track: #2f6f6a; }
+  /* --err: error TEXT color — --iss (the marker red) fails AA as light-theme text,
+     so text uses this darker themed red instead (Phase 4 a11y audit) */
+  :root { --iss: #d9534f; --land: #d9d3c4; --ocean: #eef2f0; --grid: #cfd6d3; --track: #2f6f6a; --err: #c0392b; }
   @media (prefers-color-scheme: dark) {
-    :root { --iss: #f07167; --land: #2c3340; --ocean: #171b22; --grid: #333a45; --track: #6fb5ae; }
+    :root { --iss: #f07167; --land: #2c3340; --ocean: #171b22; --grid: #333a45; --track: #6fb5ae; --err: #f07167; }
   }
-  :root[data-theme="light"] { --iss: #d9534f; --land: #d9d3c4; --ocean: #eef2f0; --grid: #cfd6d3; --track: #2f6f6a; }
-  :root[data-theme="dark"] { --iss: #f07167; --land: #2c3340; --ocean: #171b22; --grid: #333a45; --track: #6fb5ae; }
+  :root[data-theme="light"] { --iss: #d9534f; --land: #d9d3c4; --ocean: #eef2f0; --grid: #cfd6d3; --track: #2f6f6a; --err: #c0392b; }
+  :root[data-theme="dark"] { --iss: #f07167; --land: #2c3340; --ocean: #171b22; --grid: #333a45; --track: #6fb5ae; --err: #f07167; }
 
   body { padding: 1.4rem 1.25rem 4rem; }
   .wrap { max-width: 1000px; margin: 0 auto; }
@@ -155,7 +157,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .dotk { width: .7rem; height: .7rem; border-radius: 50%; display: inline-block; }
   .vis { font-size: .82rem; color: var(--muted); }
   .vis b { color: var(--ink); }
-  .errbar { color: var(--iss); font-size: .85rem; margin-top: .6rem; min-height: 1.2em; }
+  .errbar { color: var(--err); font-size: .85rem; margin-top: .6rem; min-height: 1.2em; }
   footer { margin-top: 2.6rem; font-size: .82rem; }
 </style>
 </head>
@@ -174,7 +176,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
       <input id="zipInput" inputmode="numeric" placeholder="US ZIP" maxlength="5" aria-label="US ZIP code">
       <button class="btn" id="zipBtn">Look up ZIP</button>
       <button class="btn" id="geoBtn">Use my location</button>
-      <span id="locErr" style="color:var(--iss);font-size:.82rem"></span>
+      <span id="locErr" style="color:var(--err);font-size:.82rem"></span>
     </div>
   </header>
 

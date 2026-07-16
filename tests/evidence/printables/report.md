@@ -101,3 +101,29 @@ None. Fully offline; no fetch calls anywhere in the file.
 - `window.print` was stubbed for the print-button click (headless dialog would hang the
   harness); the stub only proves the listener fires, not the dialog.
 - `DOW_SHORT` and `todayY` are declared but unused — true in v1 as well; kept for parity.
+
+## Phase 4 a11y audit
+
+QUALITY.md §2 re-verified against `tools/printables.html` from `file://`, light + dark, on
+all three sheet types (raw log: `phase4-a11y-audit.txt`). **Verdict: fixed (sheet grays).**
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | icon-only controls named | pass (n/a) | none |
+| 2 | async regions aria-live | pass | `#sheet` = polite — the preview is the single result surface for every option change |
+| 3 | keyboard paths | pass | keyboard-only drive: Enter on "Weekly planner" tab → weekly sheet, typed a date → "Week of June 28 · June 28 – July 4, 2026", typed a custom title (live retitle), **Space toggled** the holidays checkbox (markers re-rendered), Enter on "Habit tracker" → grid + auto-landscape; habits textarea reachable. Print is a labelled `<button>` → `window.print()` (not invoked in the audit). No traps. Chrome's month input takes 2 Tabs for its MM/YYYY segments then exits — on the second segment the author outline is replaced by Chrome's native black focus ring (screenshot-verified visible; scanner's NO-INDICATOR line is a false positive) |
+| 4 | input labels | pass | all generated option controls get `label[for]` from the `o()` builder incl. the checkbox |
+| 5 | contrast both palettes | **fixed** | see below |
+| 6 | focus visibility | pass | outline/native ring on every stop, both themes |
+
+Contrast fixes (the sheet is always-white by design — print parity — so single values):
+- weekend day numbers `table.cal .wknd .dnum` #999→**#757575**: was **2.85** → 4.6.
+- weekly planner date `.dayblock .dh span` #888→**#757575**: was **3.54** → 4.6.
+- habit weekday letters `table.habit thead th.wd` #999→**#757575**: was **2.85** → 4.6.
+Other sheet grays measured and passing: `th` #555 = 7.46, `.sh-sub` #666 = 5.74, `.hol`
+#b23 = 6.2.
+
+Harness: `node verify-tool.mjs printables` re-run after the fix — exit 0 (print-media
+screenshot regenerated), console clean.
+SUITE-WIDE flags: muted-on-`--bg` 4.36 light (footer); white-on-accent 2.36 dark (`.tabs
+button.on`, `.btn`).

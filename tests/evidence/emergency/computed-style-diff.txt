@@ -1,28 +1,140 @@
-== computed-style diff, light (12 differing values) ==
+== computed-style diff, light (68 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --emerg: v1=#c0392b | v2=#b53427 }
+body { --emerg-deep: v1=undefined | v2=#b53427 }
+body { --soft-muted: v1=undefined | v2=#59606c }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --emerg: v1=#c0392b | v2=#b53427 }
+header h1 { --emerg-deep: v1=undefined | v2=#b53427 }
+header h1 { --soft-muted: v1=undefined | v2=#59606c }
+.call911 { background-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
 .call911 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.call911 { --emerg: v1=#c0392b | v2=#b53427 }
+.call911 { --emerg-deep: v1=undefined | v2=#b53427 }
+.call911 { --soft-muted: v1=undefined | v2=#59606c }
 .call911 .big a { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.call911 .big a { --emerg: v1=#c0392b | v2=#b53427 }
+.call911 .big a { --emerg-deep: v1=undefined | v2=#b53427 }
+.call911 .big a { --soft-muted: v1=undefined | v2=#59606c }
 .hotlines .hot { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.hotlines .hot { --emerg: v1=#c0392b | v2=#b53427 }
+.hotlines .hot { --emerg-deep: v1=undefined | v2=#b53427 }
+.hotlines .hot { --soft-muted: v1=undefined | v2=#59606c }
+.hot .num a { border-block-end-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.hot .num a { border-block-start-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.hot .num a { border-bottom-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.hot .num a { border-inline-end-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.hot .num a { border-inline-start-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.hot .num a { border-left-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.hot .num a { border-right-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.hot .num a { border-top-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.hot .num a { caret-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.hot .num a { color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.hot .num a { column-rule-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.hot .num a { outline-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.hot .num a { row-rule-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.hot .num a { text-decoration-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.hot .num a { text-emphasis-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
 .hot .num a { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.hot .num a { -webkit-text-fill-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.hot .num a { -webkit-text-stroke-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.hot .num a { --emerg: v1=#c0392b | v2=#b53427 }
+.hot .num a { --emerg-deep: v1=undefined | v2=#b53427 }
+.hot .num a { --soft-muted: v1=undefined | v2=#59606c }
 nav.jump a { -webkit-font-smoothing: v1=auto | v2=antialiased }
+nav.jump a { --emerg: v1=#c0392b | v2=#b53427 }
+nav.jump a { --emerg-deep: v1=undefined | v2=#b53427 }
+nav.jump a { --soft-muted: v1=undefined | v2=#59606c }
 section.topic { -webkit-font-smoothing: v1=auto | v2=antialiased }
+section.topic { --emerg: v1=#c0392b | v2=#b53427 }
+section.topic { --emerg-deep: v1=undefined | v2=#b53427 }
+section.topic { --soft-muted: v1=undefined | v2=#59606c }
+.callout { border-inline-start-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
+.callout { border-left-color: v1=rgb(192, 57, 43) | v2=rgb(181, 52, 39) }
 .callout { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.callout { --emerg: v1=#c0392b | v2=#b53427 }
+.callout { --emerg-deep: v1=undefined | v2=#b53427 }
+.callout { --soft-muted: v1=undefined | v2=#59606c }
 .metro { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.metro { --emerg: v1=#c0392b | v2=#b53427 }
+.metro { --emerg-deep: v1=undefined | v2=#b53427 }
+.metro { --soft-muted: v1=undefined | v2=#59606c }
 .metro button { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.metro button { --emerg: v1=#c0392b | v2=#b53427 }
+.metro button { --emerg-deep: v1=undefined | v2=#b53427 }
+.metro button { --soft-muted: v1=undefined | v2=#59606c }
 fieldset.card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+fieldset.card { --emerg: v1=#c0392b | v2=#b53427 }
+fieldset.card { --emerg-deep: v1=undefined | v2=#b53427 }
+fieldset.card { --soft-muted: v1=undefined | v2=#59606c }
 
-== computed-style diff, dark (12 differing values) ==
+== computed-style diff, dark (68 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --emerg: v1=#e0574a | v2=#ec7560 }
+body { --emerg-deep: v1=undefined | v2=#a83a2a }
+body { --soft-muted: v1=undefined | v2=#9aa0a8 }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --emerg: v1=#e0574a | v2=#ec7560 }
+header h1 { --emerg-deep: v1=undefined | v2=#a83a2a }
+header h1 { --soft-muted: v1=undefined | v2=#9aa0a8 }
+.call911 { background-color: v1=rgb(224, 87, 74) | v2=rgb(168, 58, 42) }
 .call911 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.call911 { --emerg: v1=#e0574a | v2=#ec7560 }
+.call911 { --emerg-deep: v1=undefined | v2=#a83a2a }
+.call911 { --soft-muted: v1=undefined | v2=#9aa0a8 }
 .call911 .big a { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.call911 .big a { --emerg: v1=#e0574a | v2=#ec7560 }
+.call911 .big a { --emerg-deep: v1=undefined | v2=#a83a2a }
+.call911 .big a { --soft-muted: v1=undefined | v2=#9aa0a8 }
 .hotlines .hot { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.hotlines .hot { --emerg: v1=#e0574a | v2=#ec7560 }
+.hotlines .hot { --emerg-deep: v1=undefined | v2=#a83a2a }
+.hotlines .hot { --soft-muted: v1=undefined | v2=#9aa0a8 }
+.hot .num a { border-block-end-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.hot .num a { border-block-start-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.hot .num a { border-bottom-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.hot .num a { border-inline-end-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.hot .num a { border-inline-start-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.hot .num a { border-left-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.hot .num a { border-right-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.hot .num a { border-top-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.hot .num a { caret-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.hot .num a { color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.hot .num a { column-rule-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.hot .num a { outline-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.hot .num a { row-rule-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.hot .num a { text-decoration-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.hot .num a { text-emphasis-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
 .hot .num a { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.hot .num a { -webkit-text-fill-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.hot .num a { -webkit-text-stroke-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.hot .num a { --emerg: v1=#e0574a | v2=#ec7560 }
+.hot .num a { --emerg-deep: v1=undefined | v2=#a83a2a }
+.hot .num a { --soft-muted: v1=undefined | v2=#9aa0a8 }
 nav.jump a { -webkit-font-smoothing: v1=auto | v2=antialiased }
+nav.jump a { --emerg: v1=#e0574a | v2=#ec7560 }
+nav.jump a { --emerg-deep: v1=undefined | v2=#a83a2a }
+nav.jump a { --soft-muted: v1=undefined | v2=#9aa0a8 }
 section.topic { -webkit-font-smoothing: v1=auto | v2=antialiased }
+section.topic { --emerg: v1=#e0574a | v2=#ec7560 }
+section.topic { --emerg-deep: v1=undefined | v2=#a83a2a }
+section.topic { --soft-muted: v1=undefined | v2=#9aa0a8 }
+.callout { border-inline-start-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
+.callout { border-left-color: v1=rgb(224, 87, 74) | v2=rgb(236, 117, 96) }
 .callout { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.callout { --emerg: v1=#e0574a | v2=#ec7560 }
+.callout { --emerg-deep: v1=undefined | v2=#a83a2a }
+.callout { --soft-muted: v1=undefined | v2=#9aa0a8 }
 .metro { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.metro { --emerg: v1=#e0574a | v2=#ec7560 }
+.metro { --emerg-deep: v1=undefined | v2=#a83a2a }
+.metro { --soft-muted: v1=undefined | v2=#9aa0a8 }
 .metro button { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.metro button { --emerg: v1=#e0574a | v2=#ec7560 }
+.metro button { --emerg-deep: v1=undefined | v2=#a83a2a }
+.metro button { --soft-muted: v1=undefined | v2=#9aa0a8 }
 fieldset.card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+fieldset.card { --emerg: v1=#e0574a | v2=#ec7560 }
+fieldset.card { --emerg-deep: v1=undefined | v2=#a83a2a }
+fieldset.card { --soft-muted: v1=undefined | v2=#9aa0a8 }
 

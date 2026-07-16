@@ -1,0 +1,67 @@
+# a11y audit — emergency — 2026-07-16T06:11:40.366Z
+
+### scan — light theme
+icon-only controls without accessible name: (none)
+icon-only controls WITH name (0): (none)
+inputs without label/aria-label: (none) (labelled: 11)
+positive tabindex: (none)
+clickable-non-focusable heuristic (cursor:pointer, no role/tabindex): (none)
+aria-live containers in DOM: span#savedMsg.saved=polite
+contrast pairs (15 unique fg/bg combos):
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 13.1px/400 — footer "No network — everything happens "
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 13.1px/400 — span "Other notes (utilities shutoffs,"
+  pass 4.92 (need 4.5) fg=#b53427 bg=#f7e4e1 14.7px/700 — b "time last known well"
+  pass 5.26 (need 4.5) fg=#2f6f6a bg=#f5f3ee 14.4px/400 — a.back "← suite"
+  pass 5.38 (need 4.5) fg=#59606c bg=#e3efed 14.4px/400 — div.lbl "Push to the beat —"
+  pass 5.74 (need 4.5) fg=#2f6f6a bg=#fffdf9 16px/700 — h3 "Infant (under 1)"
+  pass 5.83 (need 4.5) fg=#ffffff bg=#2f6f6a 14.7px/400 — button#saveBtn.primary "Save"
+  pass 5.93 (need 3) fg=#b53427 bg=#fffdf9 21.6px/700 — a "1-800-222-1222"
+  pass 6.03 (need 3) fg=#ffffff bg=#b53427 38.4px/800 — a "911"
+  pass 6.03 (need 4.5) fg=#ffffff bg=#b53427 16px/400 — div.txt "Life-threatening emergency? Call"
+  pass 12.12 (need 4.5) fg=#23282e bg=#f7e4e1 14.7px/400 — div.callout "— treatment options depend on it"
+  pass 12.61 (need 4.5) fg=#23282e bg=#e3efed 14.4px/700 — b "100–120 compressions/min"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 28px/700 — h1 "Emergency Quick-Reference"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 14.61 (need 3) fg=#23282e bg=#fffdf9 21.6px/700 — div.num "311 / local"
+focus visibility (30-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> a [outline] -> a [outline] -> a [outline] -> a [outline] -> a [outline] -> a [outline] -> a [outline] -> a [outline] -> a [outline] -> a [outline] -> button#metroBtn [outline] -> input#f_name.f [outline] -> input#f_addr.f [outline] -> input#f_ice1.f [outline] -> input#f_ice2.f [outline] -> input#f_doc.f [outline] -> input#f_hosp.f [outline] -> input#f_ins.f [outline] -> input#f_blood.f [outline] -> textarea#f_allergy.f [outline] -> textarea#f_meds.f [outline] -> textarea#f_notes.f [outline] -> button#saveBtn.primary [outline] -> button#printBtn [outline] -> button#clearBtn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline]
+
+### scan — dark theme
+icon-only controls without accessible name: (none)
+icon-only controls WITH name (0): (none)
+inputs without label/aria-label: (none) (labelled: 11)
+positive tabindex: (none)
+clickable-non-focusable heuristic (cursor:pointer, no role/tabindex): (none)
+aria-live containers in DOM: span#savedMsg.saved=polite
+contrast pairs (15 unique fg/bg combos):
+  FAIL 2.36 (need 4.5) fg=#ffffff bg=#6fb5ae 16px/600 — button#metroBtn "▶ Start 110 BPM"
+  pass 5.18 (need 4.5) fg=#ec7560 bg=#3a201d 14.7px/700 — b "Call 911 first"
+  pass 5.64 (need 4.5) fg=#9aa0a8 bg=#1f292b 14.4px/400 — div.lbl "Push to the beat —"
+  pass 5.66 (need 3) fg=#ec7560 bg=#1d2026 21.6px/700 — a "988"
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 13.1px/400 — div.name "Poison Control"
+  pass 6.36 (need 3) fg=#ffffff bg=#a83a2a 38.4px/800 — a "911"
+  pass 6.36 (need 4.5) fg=#ffffff bg=#a83a2a 16px/400 — div.txt "Life-threatening emergency? Call"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 13.1px/400 — footer "No network — everything happens "
+  pass 6.91 (need 4.5) fg=#6fb5ae bg=#1d2026 13.4px/400 — a "CPR"
+  pass 7.6 (need 4.5) fg=#6fb5ae bg=#15171b 14.4px/400 — a.back "← suite"
+  pass 11.81 (need 4.5) fg=#e7e5e0 bg=#1f292b 14.4px/700 — b "100–120 compressions/min"
+  pass 11.88 (need 4.5) fg=#e7e5e0 bg=#3a201d 14.7px/400 — div.callout "— treatment options depend on it"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 12.96 (need 3) fg=#e7e5e0 bg=#1d2026 21.6px/700 — div.num "311 / local"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 28px/700 — h1 "Emergency Quick-Reference"
+focus visibility (30-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> a [outline] -> a [outline] -> a [outline] -> a [outline] -> a [outline] -> a [outline] -> a [outline] -> a [outline] -> a [outline] -> a [outline] -> button#metroBtn [outline] -> input#f_name.f [outline] -> input#f_addr.f [outline] -> input#f_ice1.f [outline] -> input#f_ice2.f [outline] -> input#f_doc.f [outline] -> input#f_hosp.f [outline] -> input#f_ins.f [outline] -> input#f_blood.f [outline] -> textarea#f_allergy.f [outline] -> textarea#f_meds.f [outline] -> textarea#f_notes.f [outline] -> button#saveBtn.primary [outline] -> button#printBtn [outline] -> button#clearBtn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline]
+
+### keyboard-only primary-feature drive
+  Tab -> reached CPR metronome button (BUTTON#metroBtn after 13 tab(s))
+  Enter -> metronome: "■ Stop"
+  Enter again -> "▶ Start 110 BPM" (start/stop loop)
+  Tab -> reached household name field (INPUT#f_name after 1 tab(s))
+  Tab -> reached ICE contact field (INPUT#f_ice1 after 2 tab(s))
+  Tab -> reached Save button (BUTTON#saveBtn after 9 tab(s))
+  Enter on Save -> "Saved to this device ✓" (aria-live)
+  stored: {"name":"The Rivera family","addr":"","ice1":"Sam — 555-123-
+  in-page jump nav + tel: links are native <a> (keyboard for free); Clear uses confirm() (native, keyboard-accessible)
+
+### aria-live runtime check
+  #savedMsg: aria-live=polite

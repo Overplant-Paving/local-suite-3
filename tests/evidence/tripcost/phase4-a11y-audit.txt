@@ -1,0 +1,62 @@
+# a11y audit — tripcost — 2026-07-16T06:02:39.660Z
+
+### scan — light theme
+icon-only controls without accessible name: (none)
+icon-only controls WITH name (0): (none)
+inputs without label/aria-label: (none) (labelled: 12)
+positive tabindex: (none)
+clickable-non-focusable heuristic (cursor:pointer, no role/tabindex): (none)
+aria-live containers in DOM: span#ptsMsg.hint=polite | span#eiaMsg.hint=polite | div#veh0res=polite | div#veh1res=polite | div#results=polite | div#winner.winner=polite
+contrast pairs (8 unique fg/bg combos):
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 13.1px/400 — footer "demo server (be gentle)."
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 13.1px/400 — p.hint "Enter a one-way distance. Enter "
+  pass 5.74 (need 4.5) fg=#2f6f6a bg=#fffdf9 13.1px/400 — a "eia.gov/opendata"
+  pass 5.83 (need 4.5) fg=#ffffff bg=#2f6f6a 13.6px/400 — button.on "Enter distance"
+  pass 12.58 (need 4.5) fg=#23282e bg=#efece4 14.4px/400 — button.btn "Save this vehicle"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 27.2px/700 — h1 "Trip Cost Estimator"
+  pass 13.39 (need 4.5) fg=#23282e bg=#f5f3ee 15.2px/700 — span "Vehicle 2"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+focus visibility (30-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.on [outline] -> button [outline] -> input#dist [outline] -> select#distUnit [outline] -> input#price [outline] -> select#priceUnit [outline] -> summary [outline] -> input#people [outline] -> input#veh0name [outline] -> input#veh0eff [outline] -> select#veh0unit [outline] -> button.btn [outline] -> input#veh1name [outline] -> input#veh1eff [outline] -> select#veh1unit [outline] -> button.btn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.on [outline] -> button [outline] -> input#dist [outline] -> select#distUnit [outline] -> input#price [outline] -> select#priceUnit [outline] -> summary [outline] -> input#people [outline] -> input#veh0name [outline]
+
+### scan — dark theme
+icon-only controls without accessible name: (none)
+icon-only controls WITH name (0): (none)
+inputs without label/aria-label: (none) (labelled: 12)
+positive tabindex: (none)
+clickable-non-focusable heuristic (cursor:pointer, no role/tabindex): (none)
+aria-live containers in DOM: span#ptsMsg.hint=polite | span#eiaMsg.hint=polite | div#veh0res=polite | div#veh1res=polite | div#results=polite | div#winner.winner=polite
+contrast pairs (8 unique fg/bg combos):
+  FAIL 2.36 (need 4.5) fg=#ffffff bg=#6fb5ae 13.6px/400 — button.on "Enter distance"
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 12.5px/600 — h2 "Distance"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 13.1px/400 — footer "demo server (be gentle)."
+  pass 6.91 (need 4.5) fg=#6fb5ae bg=#1d2026 14.1px/400 — summary "Fill from the national average ("
+  pass 11.44 (need 4.5) fg=#e7e5e0 bg=#262a31 14.4px/400 — button#eiaFetch.btn "Fetch latest US average"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 27.2px/700 — h1 "Trip Cost Estimator"
+  pass 14.25 (need 4.5) fg=#e7e5e0 bg=#15171b 15.2px/700 — span "Vehicle 1"
+focus visibility (30-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.on [outline] -> button [outline] -> input#dist [outline] -> select#distUnit [outline] -> input#price [outline] -> select#priceUnit [outline] -> summary [outline] -> input#people [outline] -> input#veh0name [outline] -> input#veh0eff [outline] -> select#veh0unit [outline] -> button.btn [outline] -> input#veh1name [outline] -> input#veh1eff [outline] -> select#veh1unit [outline] -> button.btn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.on [outline] -> button [outline] -> input#dist [outline] -> select#distUnit [outline] -> input#price [outline] -> select#priceUnit [outline] -> summary [outline] -> input#people [outline] -> input#veh0name [outline]
+
+### keyboard-only primary-feature drive
+  Tab -> reached distance input (INPUT#dist after 5 tab(s))
+  Tab -> reached price input (INPUT#price after 2 tab(s))
+  keyboard-entered trip -> costs: $36.43 / $22.67
+  winner line: "Vehicle B is cheaper by $13.76 round trip (38% less)."
+  Tab -> reached two-points mode button (BUTTON after 16 tab(s))
+  Tab -> reached start point input (INPUT#p1 after 1 tab(s))
+  Tab -> reached end point input (INPUT#p2 after 1 tab(s))
+  Enter in p2 -> offline estimate "≈ 434.3 mi road estimate", distance field = 434.3 mi
+  Tab -> reached save-vehicle button (BUTTON after 10 tab(s))
+  Enter on Save this vehicle -> chip created
+  Tab -> reached saved-vehicle chip (role=button span) (SPAN after 5 tab(s))
+  Enter on chip -> loaded into Vehicle 1: "Vehicle A"
+  Tab -> reached chip × remove (role=button span) (SPAN after 2 tab(s))
+  Enter on chip × -> removed (keyboard-only chip management)
+
+### aria-live runtime check
+  #ptsMsg: aria-live=polite
+  #eiaMsg: aria-live=polite
+  #results: aria-live=polite
+  #winner: aria-live=polite
+  #veh0res: aria-live=polite

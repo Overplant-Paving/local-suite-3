@@ -1,28 +1,52 @@
-== computed-style diff, light (12 differing values) ==
+== computed-style diff, light (24 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --soft-muted: v1=undefined | v2=#59606c }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --soft-muted: v1=undefined | v2=#59606c }
 #citySel { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#citySel { --soft-muted: v1=undefined | v2=#59606c }
 #addCity { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#addCity { --soft-muted: v1=undefined | v2=#59606c }
 #freeZone { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#freeZone { --soft-muted: v1=undefined | v2=#59606c }
 .clock { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.clock { --soft-muted: v1=undefined | v2=#59606c }
 .clock .time { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.clock .time { --soft-muted: v1=undefined | v2=#59606c }
 .gridwrap { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.gridwrap { --soft-muted: v1=undefined | v2=#59606c }
 table.grid { -webkit-font-smoothing: v1=auto | v2=antialiased }
+table.grid { --soft-muted: v1=undefined | v2=#59606c }
 #hourSlider { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#hourSlider { --soft-muted: v1=undefined | v2=#59606c }
 .readout .r { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.readout .r { --soft-muted: v1=undefined | v2=#59606c }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --soft-muted: v1=undefined | v2=#59606c }
 
-== computed-style diff, dark (12 differing values) ==
+== computed-style diff, dark (24 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --soft-muted: v1=undefined | v2=#9aa0a8 }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --soft-muted: v1=undefined | v2=#9aa0a8 }
 #citySel { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#citySel { --soft-muted: v1=undefined | v2=#9aa0a8 }
 #addCity { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#addCity { --soft-muted: v1=undefined | v2=#9aa0a8 }
 #freeZone { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#freeZone { --soft-muted: v1=undefined | v2=#9aa0a8 }
 .clock { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.clock { --soft-muted: v1=undefined | v2=#9aa0a8 }
 .clock .time { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.clock .time { --soft-muted: v1=undefined | v2=#9aa0a8 }
 .gridwrap { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.gridwrap { --soft-muted: v1=undefined | v2=#9aa0a8 }
 table.grid { -webkit-font-smoothing: v1=auto | v2=antialiased }
+table.grid { --soft-muted: v1=undefined | v2=#9aa0a8 }
 #hourSlider { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#hourSlider { --soft-muted: v1=undefined | v2=#9aa0a8 }
 .readout .r { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.readout .r { --soft-muted: v1=undefined | v2=#9aa0a8 }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --soft-muted: v1=undefined | v2=#9aa0a8 }
 

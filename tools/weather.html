@@ -7,17 +7,20 @@
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
   /* tool accents (3-layer, same pattern as core) */
+  /* --alert darkened (light) / lightened (dark) and --alert-muted added in the Phase 4
+     a11y audit: alert-card text vs the 12%-alert-tinted background was 3.99–4.48 (< 4.5) */
   :root {
     --data: #2f6f6a;   /* instrument highlight */
     --warm: #c47f2d;   /* temperature / sun */
-    --alert: #c0392b;  /* warnings */
+    --alert: #b53427;  /* warnings */
+    --alert-muted: #59606c; /* body text on the alert-tinted card */
     --good: #3a7d44;   /* all-clear */
   }
   @media (prefers-color-scheme: dark) {
-    :root { --data: #66d6df; --warm: #f2a65a; --alert: #e8654f; --good: #7dc487; }
+    :root { --data: #66d6df; --warm: #f2a65a; --alert: #ec7560; --alert-muted: #9aa0a8; --good: #7dc487; }
   }
-  :root[data-theme="light"] { --data: #2f6f6a; --warm: #c47f2d; --alert: #c0392b; --good: #3a7d44; }
-  :root[data-theme="dark"] { --data: #66d6df; --warm: #f2a65a; --alert: #e8654f; --good: #7dc487; }
+  :root[data-theme="light"] { --data: #2f6f6a; --warm: #c47f2d; --alert: #b53427; --alert-muted: #59606c; --good: #3a7d44; }
+  :root[data-theme="dark"] { --data: #66d6df; --warm: #f2a65a; --alert: #ec7560; --alert-muted: #9aa0a8; --good: #7dc487; }
 
   html, body { min-height: 100%; }
   body { padding: clamp(14px, 2vw, 28px); }
@@ -75,8 +78,8 @@
     padding: 2px 7px; border-radius: 5px;
   }
   .alert h3 { font-weight: 600; font-size: 18px; letter-spacing: .01em; }
-  .alert p { color: var(--muted); font-size: 13.5px; margin-top: 6px; line-height: 1.5; max-width: 90ch; }
-  .alert time { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 11px; color: var(--muted); }
+  .alert p { color: var(--alert-muted); font-size: 13.5px; margin-top: 6px; line-height: 1.5; max-width: 90ch; }
+  .alert time { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 11px; color: var(--alert-muted); }
 
   /* ---- grids ---- */
   .grid { margin-top: 16px; display: grid; grid-template-columns: minmax(290px, 1fr) 2fr; gap: 16px; }
@@ -326,6 +329,10 @@ const currentBody = Suite.liveRegion($("#currentBody"));
 const obsStationEl = $("#obsStation");
 const hourlyEl = Suite.liveRegion($("#hourly"));
 const dailyEl = Suite.liveRegion($("#daily"));
+/* Phase 4 a11y audit: these two also repaint after async work (radar image load,
+   ZIP lookup / geolocation) and were the only result containers without aria-live */
+Suite.liveRegion($("#radarBody"));
+Suite.liveRegion($("#zipHint"));
 const backdrop = $("#backdrop");
 
 /* ---------- unit + format helpers ---------- */

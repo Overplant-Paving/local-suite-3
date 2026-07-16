@@ -103,3 +103,29 @@ it does not.
   harness's theme-toggle probe runs before the shot — harness ordering, not a defect.
 - Computed-style diff: only `-webkit-font-smoothing` (pre-approved), 13 selectors, both themes.
   Nothing else differs.
+
+## Phase 4 a11y audit
+
+QUALITY.md §2 re-verified against `tools/holidays.html` from `file://`, light + dark
+(raw log: `phase4-a11y-audit.txt`). **Verdict: fixed (3 contrast items).**
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | icon-only controls named | pass | `‹`/`›` year buttons carry aria-label "Previous year"/"Next year" |
+| 2 | async regions aria-live | pass | `#yearLabel` = polite announces every year change that re-renders all sections (the tool's one update trigger); hero/tables repaint with it |
+| 3 | keyboard paths | pass | keyboard-only drive: Enter on ‹ 2026→2025, Enter ×2 on › →2027 (11 fed rows, 12 market rows re-rendered), Enter on "this year" →2026; no traps, no positive tabindex |
+| 4 | input labels | pass (n/a) | tool has no inputs |
+| 5 | contrast both palettes | **fixed** | see below |
+| 6 | focus visibility | pass | 2px accent outline on every stop, both themes |
+
+Contrast fixes (tool-local, all four theme contexts):
+- `--warn` light #b0752a→**#8a5a1e**: `.badge.early` / `.tag-obs` text on `--warn-soft` was
+  3.04 → now **4.63**; dark #d9a05a untouched (6.2).
+- `.badge.closed` hardcoded #c0492d (3.91 L / **2.87** D — no dark variant) → new `--bad`
+  var (#a33d24 L / #ee8378 D) for both text and its 16% color-mix background → **4.98 (L) /
+  4.87 (D)**.
+- new `--soft-muted` for `.dow` inside the highlighted `tr.next` row (muted on accent-soft
+  was 4.11 L) → **5.38 (L)**, dark unchanged 5.64.
+
+Harness: `node verify-tool.mjs holidays` re-run after the fix — exit 0, console clean.
+SUITE-WIDE flag: muted-on-`--bg` 4.36 light (footer, section notes).

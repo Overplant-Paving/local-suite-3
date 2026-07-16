@@ -1,0 +1,66 @@
+# a11y audit — worldclock — 2026-07-16T06:11:44.171Z
+
+### scan — light theme
+icon-only controls without accessible name: (none)
+icon-only controls WITH name (1): button.rm text="×" name="Remove clock: Chicago (local)"
+inputs without label/aria-label: (none) (labelled: 4)
+positive tabindex: (none)
+clickable-non-focusable heuristic (cursor:pointer, no role/tabindex): (none)
+aria-live containers in DOM: b#hourLabel=polite
+contrast pairs (14 unique fg/bg combos):
+  FAIL 1.72 (need 4.5) fg=#b9c4e0 bg=#fffdf9 19.2px/400 — div.sun "🌙"
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 13.6px/400 — footer#foot "No network — everything happens "
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 11.8px/400 — div.rd "Thu 07/16"
+  pass 5.26 (need 4.5) fg=#2f6f6a bg=#f5f3ee 14.4px/400 — a.back "← suite"
+  pass 5.74 (need 4.5) fg=#2f6f6a bg=#fffdf9 14.4px/400 — button#addFree.btn.ghost "Add zone"
+  pass 5.83 (need 4.5) fg=#ffffff bg=#2f6f6a 14.4px/400 — button#addCity.btn "Add"
+  pass 6.24 (need 4.5) fg=#59606c bg=#fffdf9 13.6px/400 — div.date "Thu 07/16 · GMT-5"
+  pass 6.51 (need 4.5) fg=#1c1c1c bg=#d98b8b 11.5px/500 — td.cell "23"
+  pass 9.31 (need 4.5) fg=#1c1c1c bg=#8fce9b 11.5px/500 — td.cell "16"
+  pass 10.49 (need 4.5) fg=#1c1c1c bg=#e6c96a 11.5px/500 — td.cell "07"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 27.2px/700 — h1 "World Clock & Meeting Planner"
+  pass 13.39 (need 4.5) fg=#23282e bg=#f5f3ee 17.6px/700 — h2 "Meeting planner"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 14.61 (need 3) fg=#23282e bg=#fffdf9 38.4px/600 — div.time "01:11"
+focus visibility (30-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> select#citySel [outline] -> button#addCity.btn [outline] -> input#freeZone [shadow] -> button#addFree.btn [outline] -> button.rm [outline] -> select#refSel [outline] -> input#hourSlider [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> select#citySel [outline] -> button#addCity.btn [outline] -> input#freeZone [shadow] -> button#addFree.btn [outline] -> button.rm [outline] -> select#refSel [outline] -> input#hourSlider [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> select#citySel [outline] -> button#addCity.btn [outline] -> input#freeZone [shadow] -> button#addFree.btn [outline] -> button.rm [outline] -> select#refSel [outline] -> input#hourSlider [outline] -> (body)
+
+### scan — dark theme
+icon-only controls without accessible name: (none)
+icon-only controls WITH name (1): button.rm text="×" name="Remove clock: Chicago (local)"
+inputs without label/aria-label: (none) (labelled: 4)
+positive tabindex: (none)
+clickable-non-focusable heuristic (cursor:pointer, no role/tabindex): (none)
+aria-live containers in DOM: b#hourLabel=polite
+contrast pairs (13 unique fg/bg combos):
+  FAIL 2.36 (need 4.5) fg=#ffffff bg=#6fb5ae 14.4px/400 — button#addCity.btn "Add"
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 16px/400 — button.rm "×"
+  pass 6.51 (need 4.5) fg=#1c1c1c bg=#d98b8b 11.5px/500 — td.cell "23"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 13.6px/400 — footer#foot "No network — everything happens "
+  pass 6.91 (need 4.5) fg=#6fb5ae bg=#1d2026 14.4px/400 — button#addFree.btn.ghost "Add zone"
+  pass 7.6 (need 4.5) fg=#6fb5ae bg=#15171b 14.4px/400 — a.back "← suite"
+  pass 9.31 (need 4.5) fg=#1c1c1c bg=#8fce9b 11.5px/500 — td.cell "16"
+  pass 9.35 (need 4.5) fg=#b9c4e0 bg=#1d2026 19.2px/400 — div.sun "🌙"
+  pass 10.49 (need 4.5) fg=#1c1c1c bg=#e6c96a 11.5px/500 — td.cell "07"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 12.96 (need 3) fg=#e7e5e0 bg=#1d2026 38.4px/600 — div.time "01:11"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 27.2px/700 — h1 "World Clock & Meeting Planner"
+  pass 14.25 (need 4.5) fg=#e7e5e0 bg=#15171b 17.6px/700 — h2 "Your clocks"
+focus visibility (30-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> select#citySel [outline] -> button#addCity.btn [outline] -> input#freeZone [shadow] -> button#addFree.btn [outline] -> button.rm [outline] -> select#refSel [outline] -> input#hourSlider [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> select#citySel [outline] -> button#addCity.btn [outline] -> input#freeZone [shadow] -> button#addFree.btn [outline] -> button.rm [outline] -> select#refSel [outline] -> input#hourSlider [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> select#citySel [outline] -> button#addCity.btn [outline] -> input#freeZone [shadow] -> button#addFree.btn [outline] -> button.rm [outline] -> select#refSel [outline] -> input#hourSlider [outline] -> (body)
+
+### keyboard-only primary-feature drive
+  Tab -> reached city select (SELECT#citySel after 3 tab(s))
+  Tab -> reached Add button (BUTTON#addCity after 1 tab(s))
+  type-ahead Tokyo + Enter on Add -> clocks 1 -> 2
+  Tab -> reached IANA zone input (INPUT#freeZone after 1 tab(s))
+  Enter in zone field -> clock added (Enter submits the text+button pair)
+  Tab -> reached planner hour slider (INPUT#hourSlider after 6 tab(s))
+  ArrowRight on slider -> "02:00 (2am) in Chicago (local)" (aria-live label)
+  Tab -> reached clock × remove button (BUTTON after 8 tab(s))
+  Enter on × -> clock removed (keyboard-only removal)
+
+### aria-live runtime check
+  #hourLabel: aria-live=polite
+  #clocks: aria-live=(missing)
+  #readout: aria-live=(missing)

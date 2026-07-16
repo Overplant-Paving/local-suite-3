@@ -1,16 +1,36 @@
-== computed-style diff, light (12 differing values) ==
+== computed-style diff, light (32 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --warn: v1=#b0752a | v2=#8a5a1e }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --warn: v1=#b0752a | v2=#8a5a1e }
 .countdown .big { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.countdown .big { --warn: v1=#b0752a | v2=#8a5a1e }
+.banner { border-block-end-color: v1=color(srgb 0.690196 0.458824 0.164706 / 0.4) | v2=color(srgb 0.541176 0.352941 0.117647 / 0.4) }
+.banner { border-block-start-color: v1=color(srgb 0.690196 0.458824 0.164706 / 0.4) | v2=color(srgb 0.541176 0.352941 0.117647 / 0.4) }
+.banner { border-bottom-color: v1=color(srgb 0.690196 0.458824 0.164706 / 0.4) | v2=color(srgb 0.541176 0.352941 0.117647 / 0.4) }
+.banner { border-inline-end-color: v1=color(srgb 0.690196 0.458824 0.164706 / 0.4) | v2=color(srgb 0.541176 0.352941 0.117647 / 0.4) }
+.banner { border-inline-start-color: v1=color(srgb 0.690196 0.458824 0.164706 / 0.4) | v2=color(srgb 0.541176 0.352941 0.117647 / 0.4) }
+.banner { border-left-color: v1=color(srgb 0.690196 0.458824 0.164706 / 0.4) | v2=color(srgb 0.541176 0.352941 0.117647 / 0.4) }
+.banner { border-right-color: v1=color(srgb 0.690196 0.458824 0.164706 / 0.4) | v2=color(srgb 0.541176 0.352941 0.117647 / 0.4) }
+.banner { border-top-color: v1=color(srgb 0.690196 0.458824 0.164706 / 0.4) | v2=color(srgb 0.541176 0.352941 0.117647 / 0.4) }
 .banner { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.banner { --warn: v1=#b0752a | v2=#8a5a1e }
 #stateSelect { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#stateSelect { --warn: v1=#b0752a | v2=#8a5a1e }
 .search { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.search { --warn: v1=#b0752a | v2=#8a5a1e }
 .national .ncard { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.national .ncard { --warn: v1=#b0752a | v2=#8a5a1e }
 .btnlink { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btnlink { --warn: v1=#b0752a | v2=#8a5a1e }
 #stateTable th { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#stateTable th { --warn: v1=#b0752a | v2=#8a5a1e }
 #stateTable td.st { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#stateTable td.st { --warn: v1=#b0752a | v2=#8a5a1e }
 .pinbtn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.pinbtn { --warn: v1=#b0752a | v2=#8a5a1e }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --warn: v1=#b0752a | v2=#8a5a1e }
 
 == computed-style diff, dark (12 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }

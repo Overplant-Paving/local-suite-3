@@ -124,3 +124,20 @@ the pre-approved core diff. Nothing else (computed-style-diff.txt).
   interaction), so the filled calculator panels appear only in interaction.txt, not the shot.
 - v1's `alert` and the "1 weeks" pluralization quirk are preserved deliberately (no behavior
   changes allowed); polishing them would be a v2.x decision.
+
+## Phase 4 a11y audit
+
+QUALITY.md §2 re-verified against `tools/dates.html` from `file://`, light + dark
+(raw log: `phase4-a11y-audit.txt`). **Verdict: pass-as-was — no tool changes.**
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | icon-only controls named | pass | countdown `×` buttons carry aria-label "Remove countdown: <name>" |
+| 2 | async regions aria-live | pass | all five result surfaces polite: `#duOut`, `#asOut`, `#ageOut`, `#wbOut`, `#countdowns` |
+| 3 | keyboard paths | pass | keyboard-only drive: typed name+date, **Enter saved** the countdown ("Launch", 168 days), typed a days-until date → announced result, Enter on "Business days" (aria-pressed=true) → +30 business days recomputed, Tab to countdown × + Enter removed it. The walk's "trap" on `#cdDate` is the Chrome date-segment false positive (verified: Tab 1-3 = MM/DD/YYYY segments, Tab 4 → `#cdAdd`) |
+| 4 | input labels | pass | 10/10 inputs/selects via `label[for]` |
+| 5 | contrast both palettes | pass (tool-local) | all tool pairs ≥4.76 (L) / ≥6.19 (D); `.seg button.on` white-on-accent 5.83 passes light, fails dark only via the suite-wide pair |
+| 6 | focus visibility | pass | 2px accent outline on every stop, both themes |
+
+SUITE-WIDE flags: muted-on-`--bg` 4.36 light (footer); white-on-accent 2.36 dark (`.btn`,
+`.seg button.on`).

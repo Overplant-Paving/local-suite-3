@@ -73,3 +73,27 @@ Classification stays `offline` per the burn-down table; flagged for the orchestr
 - Arc caption/sunset label overlap near right edge — present in v1 identically.
 - v1/v2 screenshots capture the first-run screen (fresh profile); populated view evidenced
   by `v2-after-interaction.png` (dark theme — theme probe runs before the shot).
+
+## Phase 4 a11y audit
+
+QUALITY.md §2 re-verified against `tools/almanac.html` from `file://`, light + dark
+(raw log: `phase4-a11y-audit.txt`). **Verdict: fixed (2 contrast items).**
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | icon-only controls named | pass (n/a) | none; sun-arc SVG and moon canvas carry `role=img` + aria-label |
+| 2 | async regions aria-live | pass | `#frErr` (the tool's only fetch result — ZIP lookup) = polite; date-change recomputes are synchronous responses to the date input the user just operated |
+| 3 | keyboard paths | pass | keyboard-only drive: typed 12/21/2026 into the date input → sun card recomputed (sunrise 8:55 AM… 9h 53m), Enter on "today" restored, Enter on "change" opened first-run, ZIP typed + Enter fired lookup (blocked network → live error announced via `#frErr`). Note: the walk's "trap" flag on `#dateIn` is a false positive — Chrome date inputs consume 3 Tabs for MM/DD/YYYY segments, then focus moves on (verified: 4th Tab lands on `#todayBtn`) |
+| 4 | input labels | pass | `#zipIn` aria-label; `#dateIn` wrapping label; lat/lon fields n/a (tool has none — geo/ZIP only) |
+| 5 | contrast both palettes | **fixed** | see below |
+| 6 | focus visibility | pass | 2px accent outline on every stop, both themes |
+
+Contrast fixes (tool-local, all four theme contexts):
+- new `--soft-muted` (#59606c L / #9aa0a8 D) for `.count .cl/.cw` (season-card captions on
+  `--accent-soft`): was 4.11 (L) → now **5.38 (L)**, dark unchanged at 5.64.
+- `.err` was hardcoded #b0472f with no dark value (2.94 on the dark card): now `var(--err)`
+  (#b0472f L / #e07a6a D) → measured **5.46 (L) / 5.57 (D)** on the first-run card.
+
+Harness: `node verify-tool.mjs almanac` re-run after the fix — exit 0, console clean.
+SUITE-WIDE flags: muted-on-`--bg` 4.36 light (footer); dark white-on-accent pair present
+on the first-run `.btn` (hidden in the seeded scans, same suite-wide 2.36 pair).

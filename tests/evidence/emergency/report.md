@@ -96,3 +96,32 @@ none — zero-network by design. `tel:` links are user-agent dial-out, not fetch
   byte-identical to v1), not by ear.
 - `printShots` was enabled even though the burn-down table doesn't flag emergency as a print-CSS
   tool — it has a real `@media print` block (the wallet/fridge card). Evidence, not a behavior change.
+
+## Phase 4 a11y audit
+
+QUALITY.md §2 re-verified against `tools/emergency.html` from `file://`, light + dark
+(raw log: `phase4-a11y-audit.txt`). **Verdict: fixed (4 contrast items).**
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | icon-only controls named | pass (n/a) | none; section icons are `aria-hidden` spans beside heading text |
+| 2 | async regions aria-live | pass | `#savedMsg` = polite (save/import feedback — the tool's only async surface); verified live during the keyboard drive |
+| 3 | keyboard paths | pass | keyboard-only drive: Enter started the CPR metronome ("■ Stop"), Enter stopped it; card fields typed via Tab; Enter on Save → "Saved to this device ✓" announced; store round-trip confirmed. Jump nav + `tel:` hotlines are native `<a>`; Clear uses native `confirm()` |
+| 4 | input labels | pass | 11/11 fields via wrapping `<label class=fld>` |
+| 5 | contrast both palettes | **fixed** | see below |
+| 6 | focus visibility | pass | 2px accent outline on every stop, both themes |
+
+Contrast fixes (tool-local; `--emerg` split because it served as both text and a background
+under white — irreconcilable in dark with one value):
+- `--emerg` (text uses: hotline numbers, callout `<b>`, borders): #c0392b→**#b53427** (L),
+  #e0574a→**#ec7560** (D). Callout `<b>` on `--emerg-soft` was 4.44 (L) / 4.01 (D) → now
+  **4.92 / 5.18**; 988 hotline on dark card was 4.38-for-large → now 5.66.
+- new `--emerg-deep` (background uses: `.call911`, `.metro button.stop`): #b53427 (L) /
+  **#a83a2a** (D). White 1rem text on the 911 banner was **3.73** (D) → now **6.36** (and
+  6.03 L).
+- `.metro .lbl` muted on accent-soft was 4.11 (L) → `--soft-muted` #59606c → **5.38**.
+
+Harness: `node verify-tool.mjs emergency` re-run after the fix — exit 0, console clean
+(print-media shot regenerated; print styles force black-on-white and are unaffected).
+SUITE-WIDE flags: muted-on-`--bg` 4.36 light (footer); white-on-accent 2.36 dark
+(`.metro button` start state, `.cardactions .primary`).

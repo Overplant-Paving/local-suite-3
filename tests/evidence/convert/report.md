@@ -101,3 +101,19 @@ none — fully offline, embedded tables only. `endpoints: []`.
 - `tests/interactions/` did not exist before this migration (the pilots pre-date the
   shared harness modules); this tool's module is the first file in it — created as a
   deliverable, no existing files touched.
+
+## Phase 4 a11y audit
+
+QUALITY.md §2 re-verified against `tools/convert.html` from `file://`, light + dark
+(raw log: `phase4-a11y-audit.txt`). **Verdict: pass-as-was — no tool changes.**
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | icon-only controls named | pass (n/a) | none (scale buttons "× ½" etc. read as text and carry aria-pressed) |
+| 2 | async regions aria-live | pass | `#genResults`, `#cookResults`, `#cookDensity` = polite; `#recipeOut` is a readonly textarea (form field — readable on focus, not a live region by design) |
+| 3 | keyboard paths | pass | keyboard-only drive: Enter on Temperature pill (aria-pressed=true), typed 100 + ArrowDown to °F → 37.77778 °C / 310.92778 K announced; Enter on Recipe-scaler pill, Enter on ×2 → "4 cups all-purpose flour", custom ×1.5 → "3 cups"; no traps |
+| 4 | input labels | pass | all inputs/selects via `label[for]` or aria-label (`#recipeIn`) |
+| 5 | contrast both palettes | pass (tool-local) | all tool pairs ≥4.76 (L) / ≥6.19 (D); only the two suite-wide pairs below fail |
+| 6 | focus visibility | pass | 2px accent outline on every stop, both themes |
+
+SUITE-WIDE flags: muted-on-`--bg` 4.36 light (footer); white-on-accent 2.36 dark (`.pill.on`).

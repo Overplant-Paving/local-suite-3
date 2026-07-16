@@ -1,4 +1,4 @@
-countdown at load: "111 DAYS TO ELECTION DAY Midterm general election Tuesday, November 3, 2026 · polls set by your state Primaries and local elections happen on other dates — check your state office for those."
+countdown at load: "110 DAYS TO ELECTION DAY Midterm general election Tuesday, November 3, 2026 · polls set by your state Primaries and local elections happen on other dates — check your state office for those."
 state table rows: 51 (v1 list = 50 states + DC = 51)
 picked CA -> pinned card h2: "★ California"
   office link: https://www.sos.ca.gov/elections

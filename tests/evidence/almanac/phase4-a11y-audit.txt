@@ -1,0 +1,60 @@
+# a11y audit — almanac — 2026-07-16T06:11:40.337Z
+
+### scan — light theme
+icon-only controls without accessible name: (none)
+icon-only controls WITH name (0): (none)
+inputs without label/aria-label: (none) (labelled: 1)
+positive tabindex: (none)
+clickable-non-focusable heuristic (cursor:pointer, no role/tabindex): (none)
+aria-live containers in DOM: div#frErr.err=polite
+contrast pairs (10 unique fg/bg combos):
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 13.1px/400 — footer "No network — everything happens "
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 12.5px/600 — h2 "Seasons ahead"
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 [layer above bg: verify manually] [svg-fill] 10px/400 — text "set"
+  pass 4.95 (need 4.5) fg=#2f6f6a bg=#e3efed 21.6px/600 — div.cd "68 days"
+  pass 5.38 (need 4.5) fg=#59606c bg=#e3efed 12.8px/400 — div.cl "Autumn Equinox"
+  pass 5.74 (need 4.5) fg=#2f6f6a bg=#fffdf9 13.6px/600 — span#moonPct.moon-pct "10%"
+  pass 5.74 (need 4.5) fg=#2f6f6a bg=#fffdf9 [layer above bg: verify manually] [svg-fill] 11px/400 — text "noon"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 27.2px/700 — h1 "Sun & Moon Almanac"
+  pass 13.39 (need 4.5) fg=#23282e bg=#f5f3ee 14.4px/600 — b#locLabel "Los Angeles, CA"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+focus visibility (30-Tab walk): all stops show an indicator — KEYBOARD TRAP at input#dateIn.datepick
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#changeLoc.mini [outline] -> input#dateIn.datepick [outline] -> input#dateIn.datepick [outline] -> input#dateIn.datepick [outline]
+
+### scan — dark theme
+icon-only controls without accessible name: (none)
+icon-only controls WITH name (0): (none)
+inputs without label/aria-label: (none) (labelled: 1)
+positive tabindex: (none)
+clickable-non-focusable heuristic (cursor:pointer, no role/tabindex): (none)
+aria-live containers in DOM: div#frErr.err=polite
+contrast pairs (10 unique fg/bg combos):
+  pass 5.64 (need 4.5) fg=#9aa0a8 bg=#1f292b 12.8px/400 — div.cl "Autumn Equinox"
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 14.4px/400 — a.back "← suite"
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 [layer above bg: verify manually] [svg-fill] 12px/400 — text "7:54 AM"
+  pass 6.3 (need 4.5) fg=#6fb5ae bg=#1f292b 21.6px/600 — div.cd "340 days"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 13.1px/400 — footer "No network — everything happens "
+  pass 6.91 (need 4.5) fg=#6fb5ae bg=#1d2026 12.8px/400 — button#changeLoc.mini "change"
+  pass 6.91 (need 4.5) fg=#6fb5ae bg=#1d2026 [layer above bg: verify manually] [svg-fill] 11px/400 — text "noon"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 27.2px/700 — h1 "Sun & Moon Almanac"
+  pass 14.25 (need 4.5) fg=#e7e5e0 bg=#15171b 14.4px/600 — b#locLabel "Los Angeles, CA"
+focus visibility (30-Tab walk): all stops show an indicator — KEYBOARD TRAP at input#dateIn.datepick
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#changeLoc.mini [outline] -> input#dateIn.datepick [outline] -> input#dateIn.datepick [outline] -> input#dateIn.datepick [outline]
+
+### keyboard-only primary-feature drive
+  Tab -> reached date input (INPUT#dateIn after 4 tab(s))
+  typed 12/21/2026 -> sun card label "December 21, 2026"
+  recomputed: Sunrise8:55 AMSolar noon1:52 PMSunset6:48 PMDay length9h 53m
+  Tab -> reached today button (BUTTON#todayBtn after 2 tab(s))
+  Enter on today -> "July 16, 2026"
+  Tab -> reached change-location button (BUTTON#changeLoc after 4 tab(s))
+  Enter on change -> first-run form visible: true
+  Tab -> reached ZIP input (INPUT#zipIn after 4 tab(s))
+  Enter in ZIP field (network blocked) -> live error: "Looking up…"
+
+### aria-live runtime check
+  #frErr: aria-live=polite
+  #sunKeyRows: aria-live=(missing)
+  #moonRows: aria-live=(missing)
+  #seasonGrid: aria-live=(missing)

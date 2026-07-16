@@ -102,12 +102,16 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 </style>
 <style>
   /* tool accents: recall class + hazard palette (3-layer, same pattern as core) */
-  :root { --c1: #c0392b; --c2: #c07f2d; --c3: #6b7280; --danger: #c0392b; }
+  /* Phase 4 a11y audit: light --c2 darkened #c07f2d -> #a2661f (white badge text was
+     3.33:1, now 4.7:1). --on-accent: badge/primary-button text — dark palette fills are
+     light pastels, so dark ink there (white was 2.5-3.3:1). --cc-ink: the car-count
+     line on the accent-soft header (muted was 4.11:1 in light). */
+  :root { --c1: #c0392b; --c2: #a2661f; --c3: #6b7280; --danger: #c0392b; --on-accent: #fff; --cc-ink: #5a6068; }
   @media (prefers-color-scheme: dark) {
-    :root { --c1: #e0685a; --c2: #d09a53; --c3: #9aa0a8; --danger: #e0685a; }
+    :root { --c1: #e0685a; --c2: #d09a53; --c3: #9aa0a8; --danger: #e0685a; --on-accent: #15171b; --cc-ink: #9aa0a8; }
   }
-  :root[data-theme="light"] { --c1: #c0392b; --c2: #c07f2d; --c3: #6b7280; --danger: #c0392b; }
-  :root[data-theme="dark"] { --c1: #e0685a; --c2: #d09a53; --c3: #9aa0a8; --danger: #e0685a; }
+  :root[data-theme="light"] { --c1: #c0392b; --c2: #a2661f; --c3: #6b7280; --danger: #c0392b; --on-accent: #fff; --cc-ink: #5a6068; }
+  :root[data-theme="dark"] { --c1: #e0685a; --c2: #d09a53; --c3: #9aa0a8; --danger: #e0685a; --on-accent: #15171b; --cc-ink: #9aa0a8; }
 
   body { padding: 1.4rem 1.25rem 4rem; }
   .wrap { max-width: 940px; margin: 0 auto; }
@@ -134,7 +138,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .rec .top { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
   .badge {
     display: inline-block; font-size: .68rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: .03em; color: #fff; border-radius: 6px; padding: .1rem .45rem;
+    letter-spacing: .03em; color: var(--on-accent); border-radius: 6px; padding: .1rem .45rem;
   }
   .badge.c1 { background: var(--c1); } .badge.c2 { background: var(--c2); } .badge.c3 { background: var(--c3); }
   .badge.park { background: var(--danger); }
@@ -148,13 +152,13 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .carblock { border: 1px solid var(--line); border-radius: 14px; background: var(--card); box-shadow: var(--shadow); overflow: hidden; }
   .carhead { display: flex; align-items: center; gap: .6rem; padding: .7rem 1rem; background: var(--accent-soft); }
   .carhead .cn { font-weight: 600; font-size: .95rem; color: var(--ink); }
-  .carhead .cc { font-size: .8rem; color: var(--muted); }
+  .carhead .cc { font-size: .8rem; color: var(--cc-ink); }
   .carhead button { margin-left: auto; }
   .carbody { padding: .6rem 1rem 1rem; display: flex; flex-direction: column; gap: .6rem; }
   .addcar { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .8rem; align-items: center; }
   .addcar input[type=text] { width: 130px; } .addcar input[type=number] { width: 90px; }
   button.primary {
-    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    border: 1px solid var(--accent); background: var(--accent); color: var(--on-accent);
     border-radius: 10px; padding: .45rem .9rem; cursor: pointer; font: inherit; font-size: .88rem;
   }
   button.x {

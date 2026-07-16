@@ -7,12 +7,18 @@
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
   /* tool accents: sun/moon palette (3-layer, same pattern as core) */
-  :root{ --sun:#d98a2b; --moon:#f0ead6; --night:#20242c; --dawn:#c98a63; }
+  /* --soft-muted and --err added in the Phase 4 a11y audit: muted text on the
+     accent-soft season cards was 4.11 (< 4.5) in light; the .err red had no dark value */
+  :root{ --sun:#d98a2b; --moon:#f0ead6; --night:#20242c; --dawn:#c98a63;
+    --soft-muted:#59606c; --err:#b0472f; }
   @media (prefers-color-scheme: dark){
-    :root{ --sun:#e6a24d; --moon:#f0ead6; --night:#0d0f14; --dawn:#c98a63; }
+    :root{ --sun:#e6a24d; --moon:#f0ead6; --night:#0d0f14; --dawn:#c98a63;
+      --soft-muted:#9aa0a8; --err:#e07a6a; }
   }
-  :root[data-theme="light"]{ --sun:#d98a2b; --moon:#f0ead6; --night:#20242c; --dawn:#c98a63; }
-  :root[data-theme="dark"]{ --sun:#e6a24d; --moon:#f0ead6; --night:#0d0f14; --dawn:#c98a63; }
+  :root[data-theme="light"]{ --sun:#d98a2b; --moon:#f0ead6; --night:#20242c; --dawn:#c98a63;
+    --soft-muted:#59606c; --err:#b0472f; }
+  :root[data-theme="dark"]{ --sun:#e6a24d; --moon:#f0ead6; --night:#0d0f14; --dawn:#c98a63;
+    --soft-muted:#9aa0a8; --err:#e07a6a; }
 
   body{ padding:1.4rem 1.25rem 4rem; }
   .wrap{ max-width:1000px; margin:0 auto; }
@@ -56,8 +62,8 @@
   .count-grid{ display:grid; grid-template-columns:1fr 1fr; gap:.7rem; }
   .count{ background:var(--accent-soft); border-radius:10px; padding:.7rem .8rem; }
   .count .cd{ font-size:1.35rem; font-weight:600; color:var(--accent); line-height:1.05; }
-  .count .cl{ font-size:.8rem; color:var(--muted); margin-top:.15rem; }
-  .count .cw{ font-size:.72rem; color:var(--muted); margin-top:.15rem; }
+  .count .cl{ font-size:.8rem; color:var(--soft-muted); margin-top:.15rem; }
+  .count .cw{ font-size:.72rem; color:var(--soft-muted); margin-top:.15rem; }
   footer{ margin-top:2.5rem; font-size:.82rem; padding-top:1rem; }
   .firstrun{ background:var(--card); border:1px solid var(--line); border-radius:14px;
     padding:1.4rem; box-shadow:var(--shadow); max-width:460px; margin:1.5rem auto; }
@@ -69,7 +75,7 @@
   .btn{ border:none; border-radius:9px; padding:.6rem .9rem; cursor:pointer; font-weight:600;
     font-size:.9rem; background:var(--accent); color:#fff; }
   .btn.ghost{ background:transparent; border:1px solid var(--line); color:var(--ink); }
-  .err{ color:#b0472f; font-size:.85rem; margin-top:.3rem; min-height:1.1em; }
+  .err{ color:var(--err); font-size:.85rem; margin-top:.3rem; min-height:1.1em; }
   .hidden{ display:none; }
 </style>
 </head>
