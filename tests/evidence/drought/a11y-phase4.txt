@@ -1,0 +1,48 @@
+Phase 4 accessibility audit — raw measurements (drought)
+Agent a11y-3, 2026-07-16. Tool exercised from file:// with ALL network
+route-fulfilled by fixtures (no live requests); primary feature driven with page.keyboard only.
+
+== keyboard-only drive of the primary feature ==
+  tab-to #zip: true
+  ZIP -> Enter -> hero "D2 · Severe Drought" for "Los Angeles, CA"
+  trend bars: 52
+
+== icon/symbol-only buttons & links (programmatic enumeration) ==
+  (none found)
+
+== inputs & labels ==
+
+== aria-live regions present at runtime ==
+  #app aria-live=polite
+
+== positive tabindex ==
+  (none)
+
+== focus visibility (real Tab focus; computed outline/box-shadow focused vs blurred) ==
+  button#changeLoc.linkbtn: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(47, 111, 106) -> visible indicator: true
+  a.back: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(107, 114, 128) -> visible indicator: true
+  button#themeBtn.theme-btn: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(35, 40, 46) -> visible indicator: true
+  button#changeLoc.linkbtn: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(47, 111, 106) -> visible indicator: true
+
+== contrast, light theme (unique fg/bg pairs with rendered data; WCAG ratio vs requirement) ==
+  PASS    4.76 (req 4.5)  fg #6b7280 on bg #fffdf9  13.6px/400  a.back  "← suite"
+  PASS   14.61 (req 4.5)  fg #23282e on bg #fffdf9  13.6px/400  button#themeBtn.theme-btn  "◐ theme"
+  PASS   13.39 (req 3)  fg #23282e on bg #f5f3ee  25.6px/700  h1  "🌵 Drought Monitor"
+  FAIL    4.36 (req 4.5)  fg #6b7280 on bg #f5f3ee  14.7px/400  p.tag  "Your county's U.S. Drought Mon"
+  PASS   13.39 (req 4.5)  fg #23282e on bg #f5f3ee  14.4px/600  b#locLabel  "Los Angeles, CA"
+  PASS    5.26 (req 4.5)  fg #2f6f6a on bg #f5f3ee  13.6px/400  button#changeLoc.linkbtn  "change"
+  PASS    5.18 (req 4.5)  fg #5c3d00 on bg #ffaa00  11.5px/400  div.cat-lbl  "Current U.S. Drought Monitor c"
+  PASS    5.18 (req 3)  fg #5c3d00 on bg #ffaa00  32px/700  div.cat  "· Severe Drought"
+  PASS    4.76 (req 4.5)  fg #6b7280 on bg #fffdf9  9px/400  svg text  "Jul 25"
+
+== contrast, dark theme (unique fg/bg pairs with rendered data; WCAG ratio vs requirement) ==
+  PASS    6.19 (req 4.5)  fg #9aa0a8 on bg #1d2026  13.6px/400  a.back  "← suite"
+  PASS   12.96 (req 4.5)  fg #e7e5e0 on bg #1d2026  13.6px/400  button#themeBtn.theme-btn  "◐ theme"
+  PASS   14.25 (req 3)  fg #e7e5e0 on bg #15171b  25.6px/700  h1  "🌵 Drought Monitor"
+  PASS    6.81 (req 4.5)  fg #9aa0a8 on bg #15171b  14.7px/400  p.tag  "Your county's U.S. Drought Mon"
+  PASS   14.25 (req 4.5)  fg #e7e5e0 on bg #15171b  14.4px/600  b#locLabel  "Los Angeles, CA"
+  PASS    7.60 (req 4.5)  fg #6fb5ae on bg #15171b  13.6px/400  button#changeLoc.linkbtn  "change"
+  PASS    5.18 (req 4.5)  fg #5c3d00 on bg #ffaa00  11.5px/400  div.cat-lbl  "Current U.S. Drought Monitor c"
+  PASS    5.18 (req 3)  fg #5c3d00 on bg #ffaa00  32px/700  div.cat  "· Severe Drought"
+  PASS    6.19 (req 4.5)  fg #9aa0a8 on bg #1d2026  9px/400  svg text  "Jul 25"
+

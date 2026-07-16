@@ -6,13 +6,16 @@
 <title>Wildfire Watchboard · Local Suite</title>
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
-  /* tool accents: fire / containment (3-layer, same pattern as core) */
-  :root{ --fire:#c94f2b; --fire-soft:#f3e2d8; --contain:#3a7d44; }
+  /* tool accents: fire / containment (3-layer, same pattern as core).
+     Phase 4 a11y: light --fire nudged #c94f2b -> #c74e2b (the bold acreage figure sat
+     at 4.46:1, a hair under WCAG AA 4.5); --stale / --errsoft are theme-split status
+     colors (single hexes failed AA in one theme). */
+  :root{ --fire:#c74e2b; --fire-soft:#f3e2d8; --contain:#3a7d44; --stale:#986424; --errsoft:#b65b37; }
   @media (prefers-color-scheme:dark){
-    :root{ --fire:#e07a54; --fire-soft:#2e2019; --contain:#7dc487; }
+    :root{ --fire:#e07a54; --fire-soft:#2e2019; --contain:#7dc487; --stale:#c07f2d; --errsoft:#c6704e; }
   }
-  :root[data-theme="light"]{ --fire:#c94f2b; --fire-soft:#f3e2d8; --contain:#3a7d44; }
-  :root[data-theme="dark"]{ --fire:#e07a54; --fire-soft:#2e2019; --contain:#7dc487; }
+  :root[data-theme="light"]{ --fire:#c74e2b; --fire-soft:#f3e2d8; --contain:#3a7d44; --stale:#986424; --errsoft:#b65b37; }
+  :root[data-theme="dark"]{ --fire:#e07a54; --fire-soft:#2e2019; --contain:#7dc487; --stale:#c07f2d; --errsoft:#c6704e; }
 
   body{padding:1.4rem 1.25rem 4rem;}
   .wrap{max-width:1060px;margin:0 auto}
@@ -60,7 +63,7 @@
   .msg .big{font-size:1.15rem;color:var(--ink);margin-bottom:.4rem}
   .msg.calm .big{color:var(--contain)}
   .stamp{font-size:.78rem;color:var(--muted);margin:.7rem 0}
-  .stamp.err{color:#c07f2d}
+  .stamp.err{color:var(--stale)}
   footer{margin-top:2.6rem;font-size:.82rem;padding-top:1rem}
   .setup{max-width:440px;margin:2rem auto;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.2rem;box-shadow:var(--shadow)}
   .setup h2{font-size:1.2rem;margin-bottom:.3rem}
@@ -71,7 +74,7 @@
   .btn{border:none;border-radius:9px;padding:.55rem .9rem;cursor:pointer;font-size:.9rem;font-weight:600}
   .btn.primary{background:var(--accent);color:#fff}
   .btn.ghost{background:var(--card);border:1px solid var(--line);color:var(--ink)}
-  .err-inline{color:#c0603a;font-size:.82rem;min-height:1.1rem}
+  .err-inline{color:var(--errsoft);font-size:.82rem;min-height:1.1rem}
 </style>
 </head>
 <body>

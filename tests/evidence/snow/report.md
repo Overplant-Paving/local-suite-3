@@ -145,3 +145,23 @@ Both hosts are in the manifest entry so CSP `connect-src` covers them; no image 
 - The stale-stamp wording ("Offline — showing cached data from Jul 14, 3:24 PM") is new text —
   v1 had no stale state for readings at all. I matched the suite's offline phrasing convention
   and included the date, since a time alone is misleading for day-old data.
+
+## Phase 4 a11y audit
+
+Re-verification of the QUALITY.md §2 per-tool checklist (agent a11y-3, 2026-07-16). Runtime
+checks against tools/snow.html from file:// in both themes, both AWDB endpoints + zippopotam
+route-fulfilled with an 8-station fixture spanning the three %-of-median bands; raw
+measurements in [a11y-phase4.txt](a11y-phase4.txt).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only buttons named | pass | the ★ `.star` is the tool's one symbol-only control — per-station `aria-label` ("Follow/Unfollow <name>") + `aria-pressed` (all eight instances enumerated and verified) |
+| 2 | aria-live on async containers | pass | the whole `#main` is `Suite.liveRegion` (cards + updated/offline stamp); first-run error div gets `Suite.liveRegion` too |
+| 3 | Keyboard paths | pass | keyboard-only: ZIP + Enter → station cards; Tab → `.star` + Enter follows a station ("Following" section renders, aria-pressed=true) |
+| 4 | Input labels | pass | the ZIP input gets `aria-label="US ZIP code"` |
+| 5 | Contrast, both palettes | **fixed** | unstarred ★ was `var(--line)` — **1.3:1** (invisible) → `var(--muted)` (4.8/6.8:1); starred light `--star` #d9a521 2.2:1 → #b88c1c **3.04:1** (graphical control: state also in `aria-pressed` + label text, so the 3:1 non-text minimum applies); light `--low` below-median bar fill #c99a1e vs its `--bar` track ≈ 2.1:1 → #a37d18 (≥3:1, and the % is also printed as text); `.err` #c0392b = 3.0:1 on the dark card → theme-split `--err` (dark #cf695e 4.5:1). Reading values (--snow on chip) pass both themes (3.7:1 at 24px / 5.7:1) |
+| 6 | Focus visibility | pass | core `:focus-visible` outline confirmed via real-Tab probe (incl. star buttons) |
+
+Suite-wide flags (not fixed locally): `--muted` on `--bg` = 4.36:1; `--muted` on `--chip`
+(reading captions) = **4.10:1** — core-palette pairs. No behavior change; re-verified with
+`node verify-tool.mjs snow` — exit 0, evidence files in this directory regenerated 2026-07-16.

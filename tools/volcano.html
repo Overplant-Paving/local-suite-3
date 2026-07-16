@@ -6,20 +6,26 @@
 <title>Volcano Status Board · Local Suite</title>
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
-  /* tool accents: the aviation color-code scale (3-layer, same pattern as core) */
+  /* tool accents: the aviation color-code scale (3-layer, same pattern as core).
+     Phase 4 a11y: --on-* are per-code badge text inks — plain white failed WCAG AA
+     on yellow/orange/gray in light theme and on every (pastel) code color in dark. */
   :root {
     --green: #3a7d44; --yellow: #c99a1e; --orange: #d97b2b; --red: #c0392b; --gray: #8a8f98;
+    --on-green: #fff; --on-yellow: #15181c; --on-orange: #15181c; --on-red: #fff; --on-gray: #15181c;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --green: #7dc487; --yellow: #e0be55; --orange: #e6994f; --red: #e06a58; --gray: #9aa0a8;
+      --on-green: #15181c; --on-yellow: #15181c; --on-orange: #15181c; --on-red: #15181c; --on-gray: #15181c;
     }
   }
   :root[data-theme="light"] {
     --green: #3a7d44; --yellow: #c99a1e; --orange: #d97b2b; --red: #c0392b; --gray: #8a8f98;
+    --on-green: #fff; --on-yellow: #15181c; --on-orange: #15181c; --on-red: #fff; --on-gray: #15181c;
   }
   :root[data-theme="dark"] {
     --green: #7dc487; --yellow: #e0be55; --orange: #e6994f; --red: #e06a58; --gray: #9aa0a8;
+    --on-green: #15181c; --on-yellow: #15181c; --on-orange: #15181c; --on-red: #15181c; --on-gray: #15181c;
   }
   body { padding: 1.4rem 1.25rem 4rem; }
   .wrap { max-width: 960px; margin: 0 auto; }
@@ -76,12 +82,11 @@
     font-size: .74rem; font-weight: 600; padding: .2rem .6rem; border-radius: 999px;
     text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; border: 1px solid transparent;
   }
-  .badge.color { color: #fff; }
-  .b-green { background: var(--green); }
-  .b-yellow { background: var(--yellow); }
-  .b-orange { background: var(--orange); }
-  .b-red { background: var(--red); }
-  .b-gray { background: var(--gray); }
+  .b-green { background: var(--green); color: var(--on-green); }
+  .b-yellow { background: var(--yellow); color: var(--on-yellow); }
+  .b-orange { background: var(--orange); color: var(--on-orange); }
+  .b-red { background: var(--red); color: var(--on-red); }
+  .b-gray { background: var(--gray); color: var(--on-gray); }
   .badge.alert { background: var(--chip); color: var(--ink); border-color: var(--line); }
   .vmeta { grid-column: 1 / -1; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;
     font-size: .82rem; color: var(--muted); margin-top: .2rem; }
@@ -392,6 +397,7 @@ function vcard(v, loc) {
 
 /* ---------- boot ---------- */
 Suite.liveRegion($("#summary"));
+Suite.liveRegion($("#main")); /* Phase 4 a11y: the board + its offline/cached stamp render async */
 renderLocBar();
 render();
 document.addEventListener("visibilitychange", () => { if (!document.hidden) render(); });

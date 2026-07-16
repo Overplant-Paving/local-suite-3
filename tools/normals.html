@@ -6,13 +6,16 @@
 <title>Climate Normals Comparator · Local Suite</title>
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
-  /* tool accents: anomaly / chart palette (3-layer, same pattern as core) */
-  :root{ --warm:#c65f3f; --cool:#3a6ea8; --high:#c65f3f; --low:#3a6ea8; --normal:#8a8f98; }
+  /* tool accents: anomaly / chart palette (3-layer, same pattern as core).
+     Phase 4 a11y: light --normal darkened #8a8f98 -> #838890 (large "normal high/low"
+     values on the accent-soft tiles needed 3:1); --err split per theme (one hex failed
+     WCAG AA on the dark card). */
+  :root{ --warm:#c65f3f; --cool:#3a6ea8; --high:#c65f3f; --low:#3a6ea8; --normal:#838890; --err:#b0472f; }
   @media (prefers-color-scheme: dark){
-    :root{ --warm:#e07a58; --cool:#6b9dd6; --high:#e07a58; --low:#6b9dd6; --normal:#8a8f98; }
+    :root{ --warm:#e07a58; --cool:#6b9dd6; --high:#e07a58; --low:#6b9dd6; --normal:#8a8f98; --err:#c2715f; }
   }
-  :root[data-theme="light"]{ --warm:#c65f3f; --cool:#3a6ea8; --high:#c65f3f; --low:#3a6ea8; --normal:#8a8f98; }
-  :root[data-theme="dark"]{ --warm:#e07a58; --cool:#6b9dd6; --high:#e07a58; --low:#6b9dd6; --normal:#8a8f98; }
+  :root[data-theme="light"]{ --warm:#c65f3f; --cool:#3a6ea8; --high:#c65f3f; --low:#3a6ea8; --normal:#838890; --err:#b0472f; }
+  :root[data-theme="dark"]{ --warm:#e07a58; --cool:#6b9dd6; --high:#e07a58; --low:#6b9dd6; --normal:#8a8f98; --err:#c2715f; }
 
   body{ padding:1.4rem 1.25rem 4rem; }
   .wrap{ max-width:960px; margin:0 auto; }
@@ -71,7 +74,7 @@
   .st:hover{ background:var(--accent-soft); border-color:var(--line); }
   .st .sn{ font-weight:500; } .st .sd{ color:var(--muted); font-size:.82rem; }
   .listlabel{ font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:.3rem 0; }
-  .err{ color:#b0472f; font-size:.85rem; min-height:1.1em; margin-top:.3rem; }
+  .err{ color:var(--err); font-size:.85rem; min-height:1.1em; margin-top:.3rem; }
   .hidden{ display:none; }
 </style>
 </head>

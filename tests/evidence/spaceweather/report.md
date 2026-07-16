@@ -82,3 +82,24 @@ All remote scalar text is `Suite.esc()`'d (verdict/sub, G-label, kpWhen, scale l
 - **Fresh-within-TTL serve** is the one observable behavior change vs v1 (reopening within 10 min shows "updated N min ago" instead of refetching) — the enforced good-citizen policy, flagged as required.
 - **computed-style-diff:** only `-webkit-font-smoothing` (pre-approved), `.theme-btn float: right` from core (inert — the button is a flex item inside `.topbar`, so float doesn't affect layout; screenshots pixel-match), and `.field input outline-offset: 2px` from the core focus-visible rule (invisible — the kept v1 `outline: none` focus rule wins on outline itself; the harness captures the page with the ZIP field auto-focused).
 - `v2-after-interaction.png` is dark-mode because the harness's theme-toggle probe runs before that shot; it doubles as a dark-theme capture of the fully rendered stale state.
+
+## Phase 4 a11y audit
+
+Re-verification of the QUALITY.md §2 per-tool checklist (agent a11y-3, 2026-07-16). Runtime
+checks against tools/spaceweather.html from file:// in both themes, all four SWPC feeds +
+zippopotam route-fulfilled with fixtures (Kp 4.33 → the "Active"/--unsettled band, R1/S0/G2
+scales); raw measurements in [a11y-phase4.txt](a11y-phase4.txt).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only buttons named | pass | zero symbol-only buttons/links; gauge/sparkline SVGs are `aria-hidden` with adjacent text |
+| 2 | aria-live on async containers | pass | `#main` + `#updated` are `Suite.liveRegion` |
+| 3 | Keyboard paths | pass | ZIP auto-focus + Enter renders the full station keyboard-only; no overlays |
+| 4 | Input labels | pass | `<label for="zip">` |
+| 5 | Contrast, both palettes | **fixed** | the tool's severity-ramp vars color TEXT (Kp value 2.8rem/800, G-label 1rem/700, scale letters 1.5rem/800). Light values failed on the card: --quiet #4caf50 2.7:1, --unsettled #cbb733 **2.0:1**, --minor #e08b2f 2.6:1, --storm #d34a3d 4.36:1, --severe #8e63c0 4.47:1. Light ramp darkened to #39833c/#827521/#a66723/#cd483b/#8b61bc (all ≥ 4.5:1); dark ramp unchanged (measured 4.9–9.1:1). First-run error note → theme-split `--errnote` |
+| 6 | Focus visibility | pass | core `:focus-visible` outline confirmed via real-Tab probe |
+
+`tests/interactions/spaceweather.mjs` needs no change — it resolves expected colors from the CSS
+variables at runtime. Suite-wide flag (not fixed locally): `--muted` on `--bg` = 4.36:1.
+
+No behavior change; re-verified with `node verify-tool.mjs spaceweather` — exit 0, evidence files in this directory regenerated 2026-07-16.

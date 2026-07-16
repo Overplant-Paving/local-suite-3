@@ -1,30 +1,69 @@
-== computed-style diff, light (13 differing values) ==
+== computed-style diff, light (39 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --low: v1=#b0752a | v2=#9e6926 }
+body { --err: v1=undefined | v2=#b0472f }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --low: v1=#b0752a | v2=#9e6926 }
+.topbar { --err: v1=undefined | v2=#b0472f }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --low: v1=#b0752a | v2=#9e6926 }
+.back { --err: v1=undefined | v2=#b0472f }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --low: v1=#b0752a | v2=#9e6926 }
+.theme-btn { --err: v1=undefined | v2=#b0472f }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --low: v1=#b0752a | v2=#9e6926 }
+header h1 { --err: v1=undefined | v2=#b0472f }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --low: v1=#b0752a | v2=#9e6926 }
+header .tag { --err: v1=undefined | v2=#b0472f }
 .stationbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.stationbar { --low: v1=#b0752a | v2=#9e6926 }
+.stationbar { --err: v1=undefined | v2=#b0472f }
 .mini { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.mini { --low: v1=#b0752a | v2=#9e6926 }
+.mini { --err: v1=undefined | v2=#b0472f }
 #content .card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#content .card { --low: v1=#b0752a | v2=#9e6926 }
+#content .card { --err: v1=undefined | v2=#b0472f }
 .msg { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.msg { --low: v1=#b0752a | v2=#9e6926 }
+.msg { --err: v1=undefined | v2=#b0472f }
 .modal { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.modal { --low: v1=#b0752a | v2=#9e6926 }
+.modal { --err: v1=undefined | v2=#b0472f }
 .btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { --low: v1=#b0752a | v2=#9e6926 }
+.btn { --err: v1=undefined | v2=#b0472f }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --low: v1=#b0752a | v2=#9e6926 }
+footer { --err: v1=undefined | v2=#b0472f }
 
-== computed-style diff, dark (13 differing values) ==
+== computed-style diff, dark (26 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --err: v1=undefined | v2=#c2715f }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --err: v1=undefined | v2=#c2715f }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --err: v1=undefined | v2=#c2715f }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --err: v1=undefined | v2=#c2715f }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --err: v1=undefined | v2=#c2715f }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --err: v1=undefined | v2=#c2715f }
 .stationbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.stationbar { --err: v1=undefined | v2=#c2715f }
 .mini { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.mini { --err: v1=undefined | v2=#c2715f }
 #content .card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#content .card { --err: v1=undefined | v2=#c2715f }
 .msg { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.msg { --err: v1=undefined | v2=#c2715f }
 .modal { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.modal { --err: v1=undefined | v2=#c2715f }
 .btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { --err: v1=undefined | v2=#c2715f }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --err: v1=undefined | v2=#c2715f }
 

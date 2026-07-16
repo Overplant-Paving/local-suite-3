@@ -1,0 +1,54 @@
+Phase 4 accessibility audit — raw measurements (wildfire)
+Agent a11y-3, 2026-07-16. Tool exercised from file:// with ALL network
+route-fulfilled by fixtures (no live requests); primary feature driven with page.keyboard only.
+
+== keyboard-only drive of the primary feature ==
+  tab-to #zip: true
+  ZIP -> Enter -> 4 fires, stats "4 WITHIN 250 KM 17,571 TOTAL ACRES 40 km NEAREST"
+  tab-to #rad slider: true
+  radius ArrowRight -> "275 km", fires now 4
+  tab-to #sortSel: true
+  sort via ArrowDown -> size
+
+== icon/symbol-only buttons & links (programmatic enumeration) ==
+  (none found)
+
+== inputs & labels ==
+  <input type=range id=rad> label-for=true wrapped=false aria-label=null -> OK
+  <select type=select-one id=sortSel> label-for=true wrapped=false aria-label=null -> OK
+
+== aria-live regions present at runtime ==
+  #stats aria-live=polite
+  #stamp aria-live=polite
+
+== positive tabindex ==
+  (none)
+
+== focus visibility (real Tab focus; computed outline/box-shadow focused vs blurred) ==
+  a.back: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(107, 114, 128) -> visible indicator: true
+  button#themeBtn.theme-btn: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(35, 40, 46) -> visible indicator: true
+  button#changeLoc.linkbtn: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(47, 111, 106) -> visible indicator: true
+  input#rad: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(16, 16, 16) -> visible indicator: true
+
+== contrast, light theme (unique fg/bg pairs with rendered data; WCAG ratio vs requirement) ==
+  PASS    4.76 (req 4.5)  fg #6b7280 on bg #fffdf9  13.6px/400  a.back  "← suite"
+  PASS   14.61 (req 4.5)  fg #23282e on bg #fffdf9  13.6px/400  button#themeBtn.theme-btn  "◐ theme"
+  PASS   13.39 (req 3)  fg #23282e on bg #f5f3ee  25.6px/700  h1  "🔥 Wildfire Watchboard"
+  FAIL    4.36 (req 4.5)  fg #6b7280 on bg #f5f3ee  14.7px/400  p.tag  "Active wildfire incidents near"
+  PASS   13.39 (req 4.5)  fg #23282e on bg #f5f3ee  14.4px/600  b#locLabel  "Los Angeles, CA"
+  PASS    5.26 (req 4.5)  fg #2f6f6a on bg #f5f3ee  13.6px/400  button#changeLoc.linkbtn  "change"
+  PASS    4.16 (req 3)  fg #c74e2b on bg #f5f3ee  24px/700  b  "4"
+  PASS    4.54 (req 4.5)  fg #c74e2b on bg #fffdf9  18.4px/700  b.acres  "15,800"
+  PASS   14.61 (req 3)  fg #23282e on bg #fffdf9  21.6px/700  b  "116"
+
+== contrast, dark theme (unique fg/bg pairs with rendered data; WCAG ratio vs requirement) ==
+  PASS    6.19 (req 4.5)  fg #9aa0a8 on bg #1d2026  13.6px/400  a.back  "← suite"
+  PASS   12.96 (req 4.5)  fg #e7e5e0 on bg #1d2026  13.6px/400  button#themeBtn.theme-btn  "◐ theme"
+  PASS   14.25 (req 3)  fg #e7e5e0 on bg #15171b  25.6px/700  h1  "🔥 Wildfire Watchboard"
+  PASS    6.81 (req 4.5)  fg #9aa0a8 on bg #15171b  14.7px/400  p.tag  "Active wildfire incidents near"
+  PASS   14.25 (req 4.5)  fg #e7e5e0 on bg #15171b  14.4px/600  b#locLabel  "Los Angeles, CA"
+  PASS    7.60 (req 4.5)  fg #6fb5ae on bg #15171b  13.6px/400  button#changeLoc.linkbtn  "change"
+  PASS    6.05 (req 3)  fg #e07a54 on bg #15171b  24px/700  b  "4"
+  PASS    5.50 (req 4.5)  fg #e07a54 on bg #1d2026  18.4px/700  b.acres  "15,800"
+  PASS   12.96 (req 3)  fg #e7e5e0 on bg #1d2026  21.6px/700  b  "116"
+

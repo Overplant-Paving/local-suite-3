@@ -1,20 +1,20 @@
 {
   "v1": {
-    "suite.cache.normals.USW00023188": "{\"t\":1784146694664,\"v\":{\"station\":{\"id\":\"USW00023188\",\"n\":\"San Diego Intl\",\"s\":\"CA\",\"lat\":32.7336,\"lon\":-117.1831,\"name\":\"SAN DIEGO INTERNATIONAL AIRP…(11269 chars)",
+    "suite.cache.normals.USW00023188": "{\"t\":1784182335668,\"v\":{\"station\":{\"id\":\"USW00023188\",\"n\":\"San Diego Intl\",\"s\":\"CA\",\"lat\":32.7336,\"lon\":-117.1831,\"name\":\"SAN DIEGO INTERNATIONAL AIRP…(11269 chars)",
     "suite.normals.station": "{\"id\":\"USW00023188\",\"n\":\"San Diego Intl\",\"s\":\"CA\",\"lat\":32.7336,\"lon\":-117.1831}",
-    "suite.cache.normals.USW00093134": "{\"t\":1784146693558,\"v\":{\"station\":{\"id\":\"USW00093134\",\"n\":\"Los Angeles Downtown\",\"s\":\"CA\",\"lat\":34.0236,\"lon\":-118.2911,\"name\":\"LOS ANGELES DOWNTOWN U…(11249 chars)",
+    "suite.cache.normals.USW00093134": "{\"t\":1784182334550,\"v\":{\"station\":{\"id\":\"USW00093134\",\"n\":\"Los Angeles Downtown\",\"s\":\"CA\",\"lat\":34.0236,\"lon\":-118.2911,\"name\":\"LOS ANGELES DOWNTOWN U…(11249 chars)",
     "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
     "suite.theme": "dark"
   },
   "v2": {
-    "suite.cache.normals.USW00023188": "{\"t\":1783455490587,\"v\":[{\"DLY-TMIN-NORMAL\":\"48.2\",\"DATE\":\"01-01\",\"STATION\":\"USW00023188\",\"LONGITUDE\":\"-117.1831\",\"ELEVATION\":\"4.6\",\"DLY-TMAX-NORMAL\":\"…(73957 chars)",
-    "suite.cache.normals.USW00093134": "{\"t\":1783455490588,\"v\":[{\"DLY-TMIN-NORMAL\":\"47.3\",\"DATE\":\"01-01\",\"STATION\":\"USW00093134\",\"LONGITUDE\":\"-118.2911\",\"ELEVATION\":\"54.6\",\"DLY-TMAX-NORMAL\":…(71761 chars)",
+    "suite.cache.normals.USW00023188": "{\"t\":1783491131562,\"v\":[{\"DLY-TMIN-NORMAL\":\"48.2\",\"DATE\":\"01-01\",\"STATION\":\"USW00023188\",\"LONGITUDE\":\"-117.1831\",\"ELEVATION\":\"4.6\",\"DLY-TMAX-NORMAL\":\"…(73957 chars)",
+    "suite.cache.normals.USW00093134": "{\"t\":1783491131563,\"v\":[{\"DLY-TMIN-NORMAL\":\"47.3\",\"DATE\":\"01-01\",\"STATION\":\"USW00093134\",\"LONGITUDE\":\"-118.2911\",\"ELEVATION\":\"54.6\",\"DLY-TMAX-NORMAL\":…(71761 chars)",
     "suite.normals.station": "{\"id\":\"USW00023188\",\"n\":\"San Diego Intl\",\"s\":\"CA\",\"lat\":32.7336,\"lon\":-117.1831}",
     "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
-    "suite.cache.normals.actual.34.02,-118.29": "{\"t\":1783455490588,\"v\":{\"latitude\":34.022007,\"longitude\":-118.29036,\"generationtime_ms\":12.567639350891113,\"utc_offset_seconds\":-25200,\"timezone\":\"Ame…(672 chars)",
-    "suite.cache.normals.actual.32.73,-117.18": "{\"t\":1783455490588,\"v\":{\"latitude\":32.740623,\"longitude\":-117.188896,\"generationtime_ms\":0.06365776062011719,\"utc_offset_seconds\":-25200,\"timezone\":\"A…(677 chars)",
-    "suite.cache.normals.archive.33.94,-118.39": "{\"t\":1783455490588,\"v\":{\"source\":\"Open-Meteo archive (1991–2020, ERA5)\",\"byDate\":{\"01-01\":{\"hi\":64.14333333333335,\"lo\":43.36333333333334},\"01-02\":{\"hi…(19476 chars)",
-    "suite.cache.normals.actual.33.94,-118.39": "{\"t\":1783455490588,\"v\":{\"latitude\":33.94541,\"longitude\":-118.40222,\"generationtime_ms\":0.06783008575439453,\"utc_offset_seconds\":-25200,\"timezone\":\"Ame…(676 chars)",
+    "suite.cache.normals.actual.34.02,-118.29": "{\"t\":1783491131563,\"v\":{\"latitude\":34.022007,\"longitude\":-118.29036,\"generationtime_ms\":0.0711679458618164,\"utc_offset_seconds\":-25200,\"timezone\":\"Ame…(676 chars)",
+    "suite.cache.normals.actual.32.73,-117.18": "{\"t\":1783491131563,\"v\":{\"latitude\":32.740623,\"longitude\":-117.188896,\"generationtime_ms\":0.15306472778320312,\"utc_offset_seconds\":-25200,\"timezone\":\"A…(681 chars)",
+    "suite.cache.normals.archive.33.94,-118.39": "{\"t\":1783491131563,\"v\":{\"source\":\"Open-Meteo archive (1991–2020, ERA5)\",\"byDate\":{\"01-01\":{\"hi\":64.14333333333335,\"lo\":43.36333333333334},\"01-02\":{\"hi…(19476 chars)",
+    "suite.cache.normals.actual.33.94,-118.39": "{\"t\":1783491131563,\"v\":{\"latitude\":33.94541,\"longitude\":-118.40222,\"generationtime_ms\":0.08749961853027344,\"utc_offset_seconds\":-25200,\"timezone\":\"Ame…(672 chars)",
     "suite.theme": "dark"
   },
   "keysOnlyInV1": [],

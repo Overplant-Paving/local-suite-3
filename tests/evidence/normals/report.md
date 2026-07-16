@@ -175,3 +175,22 @@ NCEI). No image hosts.
 6. Console shows five `net::ERR_FAILED` resource errors in `interaction.txt` — all from the
    deliberately blocked NCEI/full-network phases; the harness classifies them as soft and the
    tool rendered its fallback/stale states instead of failing.
+## Phase 4 a11y audit
+
+Re-verification of the QUALITY.md §2 per-tool checklist (agent a11y-3, 2026-07-16). Runtime
+checks against tools/normals.html from file:// in both themes, NCEI + Open-Meteo forecast
+route-fulfilled with fixtures ("12° warmer than normal" verdict); raw measurements in
+[a11y-phase4.txt](a11y-phase4.txt).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only buttons named | pass | zero symbol-only buttons/links |
+| 2 | aria-live on async containers | pass | `#content`, `#updated`, `#pickErr` are `Suite.liveRegion` |
+| 3 | Keyboard paths | pass | picker auto-opens with `#idIn` focused (`role=dialog`, `aria-modal`), **Esc closes** (verified), reopened via Tab→"change station"→Enter, typed a GHCND ID + Enter → verdict + year chart rendered; station rows are `tabindex=0` + Enter/Space |
+| 4 | Input labels | pass | `#idIn` has `aria-label="GHCND station ID"` |
+| 5 | Contrast, both palettes | **fixed** | light `--normal` #8a8f98 colored the 1.7rem "normal high/low" values on the accent-soft tiles at **2.76:1** (3:1 req) → darkened to #838890 (3.03:1; dark theme unchanged, 4.6:1); `.err` #b0472f = 2.95:1 on the dark card → theme-split `--err` (dark #c2715f). Verdict headline colors pass as large text (warm 4.0, cool 5.2 light; 5.5/6.9 dark) |
+| 6 | Focus visibility | pass | core `:focus-visible` outline confirmed via real-Tab probe |
+
+Suite-wide flags (not fixed locally): `--muted` on `--bg` = 4.36:1 and `--muted` on
+`--accent-soft` = **4.11:1** (the small tile captions) — both are core-palette pairs.
+No behavior change; re-verified with `node verify-tool.mjs normals` — exit 0, evidence files in this directory regenerated 2026-07-16.

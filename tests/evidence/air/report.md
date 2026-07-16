@@ -71,3 +71,30 @@ All remote scalar values are wrapped in `Suite.esc()` (AQI/UV numbers, all six p
 - **Fresh-within-TTL serve** is a small observable behavior change vs v1 (v1 always refetched on load): reopening the tool within 10 min shows "updated N min ago" instead of "updated just now". This is the enforced good-citizen policy, flagged as required.
 - **CO displays in ug/m3** — preserved exactly as v1 labels it; flagged only in case a data-accuracy pass is ever wanted.
 - The `v2-after-interaction.png` is in dark mode because the harness's theme-toggle probe runs before that screenshot; it doubles as a dark-theme shot of the fully rendered stale state.
+## Phase 4 a11y audit
+
+Re-verification of the QUALITY.md §2 per-tool checklist (agent a11y-3, 2026-07-16). Runtime
+checks against tools/air.html from file:// in both themes, Open-Meteo + zippopotam
+route-fulfilled with fixtures spanning five AQI bands; raw measurements in
+[a11y-phase4.txt](a11y-phase4.txt).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only buttons named | pass | zero symbol-only buttons/links found |
+| 2 | aria-live on async containers | pass | `#main` and `#updated` are `Suite.liveRegion`; first-run `#locMsg` sits inside the `#main` live subtree |
+| 3 | Keyboard paths | pass | first-run ZIP field auto-focused, typed 90012 + Enter renders the full dashboard (keyboard-only log) |
+| 4 | Input labels | pass | `<label for="zip">` |
+| 5 | Contrast, both palettes | **fixed** | see table below — EPA band colors used as text/badges failed AA |
+| 6 | Focus visibility | pass | core `:focus-visible` outline confirmed on link/buttons via real-Tab probe |
+
+Contrast fixes (the EPA scale gradient, pin, and pill backgrounds keep the exact EPA colors):
+- Hero AQI number/category text: raw band colors on the card failed (e.g. #cbb733 "Moderate" = **2.0:1**, #4caf50 = 2.7:1). Now theme-aware text variants `--t-good…--t-hazardous` (light: #39833c/#827521/#a66723/#cd483b/#8b61bc/#7a3b45, all ≥ 4.5:1 on the card; dark: #5cb85c/#d6c34a/#e2a24f/#e0685a/#a17bd6/#a67c82, all ≥ 4.5:1).
+- Outlook badges (11px bold on colored chips): white ink failed on every band ≤ 300 (2.0–4.36:1). Now per-band ink — dark #1e2418 on Good/Moderate/USG (5.7–7.8:1), white on the rest; the two mid-tone bands where neither ink reached 4.5 got a nudged badge bg: Unhealthy #d34a3d→#cb473b (white 4.66:1), Very Unhealthy #8e63c0→#8d62be (white 4.54:1).
+- UV pill (38px, 3:1 required): white on #cbb733/#e08b2f failed (2.0/2.7) → dark ink on those two bands, white elsewhere.
+- First-run error note: `#c0392b` both themes → theme-split `--errnote` (dark #cf695e, 4.5:1).
+
+`tests/interactions/air.mjs` updated accordingly: the EPA band check now models the hero TEXT
+variant (`text` field, light-theme values) while the UV pill background check still asserts the
+exact EPA color. (Also fixed in air.mjs while here: the scale-pin check now compares numerically — the old string compare false-MISMATCHed on any AQI whose percentage exceeds the browser's ~6-digit style serialization.) Suite-wide flag (not fixed locally): `--muted` on `--bg` = 4.36:1.
+
+No behavior change; re-verified with `node verify-tool.mjs air` — exit 0, evidence files in this directory regenerated 2026-07-16.

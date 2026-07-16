@@ -195,3 +195,21 @@ embedded, same as v1.
   a URL via `encodeURIComponent`, and the synthesized name "Station <id>" reaches the DOM via
   `textContent`. No concern; noted because it is the only user-supplied value that reaches a
   request URL.
+
+## Phase 4 a11y audit
+
+Re-verification of the QUALITY.md §2 per-tool checklist (agent a11y-3, 2026-07-16). Runtime
+checks against tools/tides.html from file:// in both themes, CO-OPS predictions/curve/water-temp
+route-fulfilled with fixtures; raw measurements in [a11y-phase4.txt](a11y-phase4.txt).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only buttons named | pass | zero symbol-only buttons/links (▲/▼ arrows are decorative spans beside "High/Low tide" text; `#statusDot` is `aria-hidden`) |
+| 2 | aria-live on async containers | pass | `#content`, `#updated`, `#pickErr` are `Suite.liveRegion` |
+| 3 | Keyboard paths | pass | keyboard-only: Tab→"change station"→Enter opens the picker (`role=dialog`, `aria-modal`, `#idIn` auto-focus), **Esc closes it** (verified), station rows are `tabindex=0` with Enter/Space handlers — picked one via Enter, board reloaded |
+| 4 | Input labels | pass | `#idIn` has `aria-label="NOAA station ID"` |
+| 5 | Contrast, both palettes | **fixed** | light `--low` #b0752a colored small text (10px SVG hi/lo time labels, low-tide ▼) at **3.8:1** → darkened to #9e6926 (4.6:1); `.err` was #b0472f both themes → 2.95:1 on the dark card → theme-split `--err` (light #b0472f 5.4:1 / dark #c2715f 4.5:1). Passing values logged: --water 2.6rem 4.0:1 (3:1 req), --tide values 5.85:1, chart muted labels 4.8:1 on card |
+| 6 | Focus visibility | pass | core `:focus-visible` outline confirmed via real-Tab probe |
+
+Suite-wide flag (not fixed locally): `--muted` on `--bg` = 4.36:1 (header tag, station meta).
+No behavior change; re-verified with `node verify-tool.mjs tides` — exit 0, evidence files in this directory regenerated 2026-07-16.

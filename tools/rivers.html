@@ -6,11 +6,14 @@
 <title>River &amp; Streamflow Gauges · Local Suite</title>
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
-  /* tool accents (3-layer, same pattern as core) */
-  :root{ --water:#2f6f9a; --star:#d9a521; }
-  @media (prefers-color-scheme:dark){ :root{ --water:#66a9d6; --star:#e0b64a; } }
-  :root[data-theme="light"]{ --water:#2f6f9a; --star:#d9a521; }
-  :root[data-theme="dark"]{ --water:#66a9d6; --star:#e0b64a; }
+  /* tool accents (3-layer, same pattern as core).
+     Phase 4 a11y: light --star darkened #d9a521 -> #b88c1c (the ★ glyph needs 3:1
+     against the card); --stale / --errsoft are theme-split status colors (single
+     hexes failed WCAG AA in one theme). */
+  :root{ --water:#2f6f9a; --star:#b88c1c; --stale:#986424; --errsoft:#b65b37; }
+  @media (prefers-color-scheme:dark){ :root{ --water:#66a9d6; --star:#e0b64a; --stale:#c07f2d; --errsoft:#c6704e; } }
+  :root[data-theme="light"]{ --water:#2f6f9a; --star:#b88c1c; --stale:#986424; --errsoft:#b65b37; }
+  :root[data-theme="dark"]{ --water:#66a9d6; --star:#e0b64a; --stale:#c07f2d; --errsoft:#c6704e; }
 
   body{padding:1.4rem 1.25rem 4rem;}
   .wrap{max-width:1060px;margin:0 auto}
@@ -34,7 +37,8 @@
   .gauge .g-top{display:flex;gap:.5rem;align-items:flex-start}
   .gauge h3{font-size:.95rem;font-weight:600;line-height:1.3;flex:1}
   .gauge h3 a{text-decoration:none}
-  .starbtn{background:none;border:none;cursor:pointer;font-size:1.15rem;line-height:1;color:var(--line);flex:none;padding:0}
+  /* Phase 4 a11y: the unstarred ☆ was var(--line) (~1.3:1 vs the card — invisible); muted passes 3:1 */
+  .starbtn{background:none;border:none;cursor:pointer;font-size:1.15rem;line-height:1;color:var(--muted);flex:none;padding:0}
   .starbtn.on{color:var(--star)}
   .g-sub{font-size:.76rem;color:var(--muted)}
   .readings{display:flex;gap:1.4rem;margin-top:.15rem}
@@ -43,12 +47,12 @@
   .reading span{font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
   .reading.none b{color:var(--muted);font-size:1.05rem}
   .g-time{font-size:.72rem;color:var(--muted)}
-  .g-time.stale{color:#c07f2d}
+  .g-time.stale{color:var(--stale)}
   .msg{padding:2.2rem 1rem;text-align:center;color:var(--muted);
     background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
   .msg .big{font-size:1.1rem;color:var(--ink);margin-bottom:.4rem}
   .stamp{font-size:.78rem;color:var(--muted);margin:.7rem 0}
-  .stamp.err{color:#c07f2d}
+  .stamp.err{color:var(--stale)}
   .note{font-size:.8rem;color:var(--muted);background:var(--chip);border-radius:9px;padding:.6rem .8rem;margin-top:.8rem}
   .skel{background:var(--chip);border-radius:14px;height:120px;animation:pulse 1.3s infinite}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
@@ -63,7 +67,7 @@
   .btn{border:none;border-radius:9px;padding:.55rem .9rem;cursor:pointer;font-size:.9rem;font-weight:600}
   .btn.primary{background:var(--accent);color:#fff}
   .btn.ghost{background:var(--card);border:1px solid var(--line);color:var(--ink)}
-  .err-inline{color:#c0603a;font-size:.82rem;min-height:1.1rem}
+  .err-inline{color:var(--errsoft);font-size:.82rem;min-height:1.1rem}
 </style>
 </head>
 <body>

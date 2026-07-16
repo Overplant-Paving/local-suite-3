@@ -171,3 +171,22 @@ returns the raw remote value when non-numeric), `esc(distTxt)` (new), `esc(timeT
    visible offline-behavior difference from v1.
 6. Evidence console log shows only `net::ERR_FAILED` entries from the deliberate offline pass
    (harness-classified as non-hard); the live run is console-clean.
+
+## Phase 4 a11y audit
+
+Re-verification of the QUALITY.md §2 per-tool checklist (agent a11y-3, 2026-07-16). Runtime
+checks against tools/rivers.html from file:// in both themes, the USGS OGC API + zippopotam
+route-fulfilled with a 4-gauge fixture; raw measurements in [a11y-phase4.txt](a11y-phase4.txt).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only buttons named | pass | the ★/☆ `.starbtn` is the tool's one symbol-only control — carries `aria-label="Toggle favorite"`, state `title`, and `aria-pressed` (all five instances enumerated and verified) |
+| 2 | aria-live on async containers | pass | `#stamp` (data/offline announcements) + first-run `#setupErr` are `Suite.liveRegion`; the gauge grids are deliberately not live (bulk content) |
+| 3 | Keyboard paths | pass | keyboard-only: ZIP + Enter → gauge board; Tab → `.starbtn` + Enter starred a gauge (aria-pressed=true, Favorites section rendered, `suite.rivers.favs` written) |
+| 4 | Input labels | pass | `#zip` has `aria-label="US ZIP code"` |
+| 5 | Contrast, both palettes | **fixed** | unstarred ☆ was `var(--line)` — **1.3:1** (invisible) → `var(--muted)` (4.8/6.8:1); starred ★ light `--star` #d9a521 2.2:1 → #b88c1c **3.04:1** — the star is a graphical control (state also in glyph shape ★/☆ + `aria-pressed`), so the 3:1 non-text minimum is the applied criterion; `.stamp.err`/`.g-time.stale` #c07f2d = 3.1:1 on light → theme-split `--stale` (#986424 / #c07f2d); `.err-inline` → theme-split `--errsoft`. Reading values (--water) pass both themes (5.4/6.5:1) |
+| 6 | Focus visibility | pass | core `:focus-visible` outline confirmed via real-Tab probe (incl. star buttons) |
+
+Suite-wide flags (not fixed locally): `--muted` on `--bg` = 4.36:1; `--muted` on `--chip`
+(the .note box) = **4.10:1** — core-palette pairs. No behavior change; re-verified with
+`node verify-tool.mjs rivers` — exit 0, evidence files in this directory regenerated 2026-07-16.

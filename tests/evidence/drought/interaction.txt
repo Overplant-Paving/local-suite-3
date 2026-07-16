@@ -5,9 +5,9 @@ LIVE drought category (Los Angeles): hero="No Drought", county line="Los Angeles
 USDM category check: raw dm=-1 -> expected "No Drought" #e9ecec (rgb(233, 236, 236)); rendered "No Drought" bg rgb(233, 236, 236) -> MATCH
 FCC county check: cache county="Los Angeles County, CA" (FIPS 06037); hero county line "Los Angeles County, CA" -> MATCH (rendered from FCC)
 trend chart: 52 bars for 52 weeks -> MATCH; last bar fill=#e9ecec expected #e9ecec -> MATCH; last tooltip "Jul 7, 2026 — No drought"
-legend: None D0 D1 D2 D3 D4; stamp: "Data from 3:10 PM · USDM updates weekly (Thursdays)"
+legend: None D0 D1 D2 D3 D4; stamp: "Data from 1:15 AM · USDM updates weekly (Thursdays)"
 change-location button -> setup card again: "Set your location"
-STALE PATH (network blocked, cache aged 24h): hero still renders "No Drought" from cache; stamp [stamp err]: "Data from 3:10 PM · USDM updates weekly (Thursdays) · connection issue: Failed to fetch"
+STALE PATH (network blocked, cache aged 24h): hero still renders "No Drought" from cache; stamp [stamp err]: "Data from 1:15 AM · USDM updates weekly (Thursdays) · connection issue: Failed to fetch"
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
   console.error: Failed to load resource: net::ERR_FAILED

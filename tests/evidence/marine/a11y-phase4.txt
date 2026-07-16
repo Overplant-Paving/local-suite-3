@@ -1,0 +1,53 @@
+Phase 4 accessibility audit — raw measurements (marine)
+Agent a11y-3, 2026-07-16. Tool exercised from file:// with ALL network
+route-fulfilled by fixtures (no live requests); primary feature driven with page.keyboard only.
+
+== keyboard-only drive of the primary feature ==
+  tab-to #zipIn: true
+  ZIP -> Enter -> tiles: wave "2.5 ft", wind "8 kn", SST "67°F"
+
+== icon/symbol-only buttons & links (programmatic enumeration) ==
+  (none found)
+
+== inputs & labels ==
+
+== aria-live regions present at runtime ==
+  #frErr aria-live=polite
+  #updated aria-live=polite
+  #content aria-live=polite
+
+== positive tabindex ==
+  (none)
+
+== focus visibility (real Tab focus; computed outline/box-shadow focused vs blurred) ==
+  button#changeLoc.mini: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(47, 111, 106) -> visible indicator: true
+  a: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(47, 111, 106) -> visible indicator: true
+  a.back: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(107, 114, 128) -> visible indicator: true
+  button#themeBtn.theme-btn: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(35, 40, 46) -> visible indicator: true
+
+== contrast, light theme (unique fg/bg pairs with rendered data; WCAG ratio vs requirement) ==
+  PASS    4.76 (req 4.5)  fg #6b7280 on bg #fffdf9  14.4px/400  a.back  "← suite"
+  PASS   14.61 (req 4.5)  fg #23282e on bg #fffdf9  13.6px/400  button#themeBtn.theme-btn  "◐ theme"
+  PASS   13.39 (req 3)  fg #23282e on bg #f5f3ee  27.2px/700  h1  "Buoy & Marine Conditions"
+  FAIL    4.36 (req 4.5)  fg #6b7280 on bg #f5f3ee  15.2px/400  p.tag  "Wave height, period and direct"
+  PASS   13.39 (req 4.5)  fg #23282e on bg #f5f3ee  16px/400  span  "📍"
+  PASS    5.74 (req 4.5)  fg #2f6f6a on bg #fffdf9  12.8px/400  button#changeLoc.mini  "change"
+  PASS    4.01 (req 3)  fg #3a86a8 on bg #fffdf9  32px/600  div.v  "2.5"
+  PASS    5.74 (req 3)  fg #2f6f6a on bg #fffdf9  25.6px/600  div.v  "1.8 ft"
+  PASS    4.33 (req 3)  fg #7a6cc4 on bg #fffdf9  25.6px/600  div.v  "8 kn"
+  PASS    3.40 (req 3)  fg #c07a3a on bg #fffdf9  32px/600  div.v  "67°"
+  PASS    4.76 (req 4.5)  fg #6b7280 on bg #fffdf9  10px/400  svg text  "0"
+
+== contrast, dark theme (unique fg/bg pairs with rendered data; WCAG ratio vs requirement) ==
+  PASS    6.19 (req 4.5)  fg #9aa0a8 on bg #1d2026  14.4px/400  a.back  "← suite"
+  PASS   12.96 (req 4.5)  fg #e7e5e0 on bg #1d2026  13.6px/400  button#themeBtn.theme-btn  "◐ theme"
+  PASS   14.25 (req 3)  fg #e7e5e0 on bg #15171b  27.2px/700  h1  "Buoy & Marine Conditions"
+  PASS    6.81 (req 4.5)  fg #9aa0a8 on bg #15171b  15.2px/400  p.tag  "Wave height, period and direct"
+  PASS   14.25 (req 4.5)  fg #e7e5e0 on bg #15171b  16px/400  span  "📍"
+  PASS    6.91 (req 4.5)  fg #6fb5ae on bg #1d2026  12.8px/400  button#changeLoc.mini  "change"
+  PASS    7.22 (req 3)  fg #6bb6d6 on bg #1d2026  32px/600  div.v  "2.5"
+  PASS    6.91 (req 3)  fg #6fb5ae on bg #1d2026  25.6px/600  div.v  "1.8 ft"
+  PASS    6.62 (req 3)  fg #a99ce0 on bg #1d2026  25.6px/600  div.v  "8 kn"
+  PASS    6.78 (req 3)  fg #d99a5a on bg #1d2026  32px/600  div.v  "67°"
+  PASS    6.19 (req 4.5)  fg #9aa0a8 on bg #1d2026  10px/400  svg text  "0"
+

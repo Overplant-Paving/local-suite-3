@@ -185,3 +185,23 @@ table above (with `suite.cache.quakes.*` as the wildcard).
   (`,0` vs `, 0`). No geometry, color, or layout deltas.
 - Map dots (273) exceed list rows (250) because the list caps at 250 — v1's cap, preserved
   (lines 11, 14).
+
+## Phase 4 a11y audit
+
+Re-verification of the QUALITY.md §2 per-tool checklist (agent a11y-3, 2026-07-16). Runtime
+checks against tools/quakes.html from file:// in both themes, the USGS feed + zippopotam
+route-fulfilled with a 7-quake fixture spanning all magnitude bands; raw measurements in
+[a11y-phase4.txt](a11y-phase4.txt).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only buttons named | pass | zero symbol-only buttons/links |
+| 2 | aria-live on async containers | pass | `#stats` + `#stamp` are `Suite.liveRegion` (the designed announcements: counts/largest/nearest and the data/offline stamp); the 250-row `#list` and map are deliberately not live — announcing them wholesale would flood a screen reader. First-run `#setupErr` is live |
+| 3 | Keyboard paths | pass | keyboard-only: ZIP + Enter → dashboard; magnitude/distance range sliders respond to arrow keys with live value labels (logged); feed `<select>` native; no overlays |
+| 4 | Input labels | pass | `#zip` aria-label; feed/sliders have `<label for=>` |
+| 5 | Contrast, both palettes | **fixed** | magnitude badges: white ink failed on the four lighter bands (#6a9e57 3.2, #c9a227 **2.4**, #e08a2e 2.7, #d9622b 3.7) → new `magInk()`: dark #16191d ink below M6 (4.8–7.3:1), white on M6+ (5.3/7.6:1); band colors themselves unchanged. `tsunami` marker #c23b3b = 3.1:1 on the dark card → theme-split `--tsu` (dark #e0685a 4.9:1). `.stamp.err` #c07f2d = 3.1:1 on the light bg → theme-split `--stale` (light #986424 4.5:1); `.err-inline` #c0603a (4.16/3.86) → theme-split `--errsoft` (#b65b37 / #c6704e, both ≥ 4.5:1) |
+| 6 | Focus visibility | pass | core `:focus-visible` outline confirmed via real-Tab probe |
+
+Note: map quake dots keep the USGS-ish band colors — magnitude is triple-encoded (dot size,
+badge text, list) so the dots are not the sole conveyor. Suite-wide flag (not fixed locally):
+`--muted` on `--bg` = 4.36:1. No behavior change; re-verified with `node verify-tool.mjs quakes` — exit 0, evidence files in this directory regenerated 2026-07-16.

@@ -1,0 +1,53 @@
+Phase 4 accessibility audit — raw measurements (spaceweather)
+Agent a11y-3, 2026-07-16. Tool exercised from file:// with ALL network
+route-fulfilled by fixtures (no live requests); primary feature driven with page.keyboard only.
+
+== keyboard-only drive of the primary feature ==
+  #zip auto-focused: true
+  ZIP -> Enter -> Kp rendered: 4.33 / 9 Kp "Active"
+  aurora verdict: "Aurora very unlikely here"
+
+== icon/symbol-only buttons & links (programmatic enumeration) ==
+  (none found)
+
+== inputs & labels ==
+
+== aria-live regions present at runtime ==
+  #updated aria-live=polite
+  #main aria-live=polite
+
+== positive tabindex ==
+  (none)
+
+== focus visibility (real Tab focus; computed outline/box-shadow focused vs blurred) ==
+  a.back: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(107, 114, 128) -> visible indicator: true
+  button#themeBtn.theme-btn: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(35, 40, 46) -> visible indicator: true
+  button#changeLoc.linklike: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(47, 111, 106) -> visible indicator: true
+  a.back: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(107, 114, 128) -> visible indicator: true
+
+== contrast, light theme (unique fg/bg pairs with rendered data; WCAG ratio vs requirement) ==
+  FAIL    4.36 (req 4.5)  fg #6b7280 on bg #f5f3ee  14.4px/400  a.back  "← suite"
+  PASS   14.61 (req 4.5)  fg #23282e on bg #fffdf9  13.6px/400  button#themeBtn.theme-btn  "◐ theme"
+  PASS   13.39 (req 3)  fg #23282e on bg #f5f3ee  25.6px/700  h1  "Space Weather & Aurora Station"
+  PASS   13.39 (req 4.5)  fg #23282e on bg #f5f3ee  14.4px/600  span#locLabel.loclabel  "Los Angeles, CA 90012"
+  PASS    5.26 (req 4.5)  fg #2f6f6a on bg #f5f3ee  13.6px/400  button#changeLoc.linklike  "change"
+  PASS   14.61 (req 3)  fg #23282e on bg #fffdf9  41.6px/400  div.emoji  "🌙"
+  PASS    4.76 (req 4.5)  fg #6b7280 on bg #fffdf9  14.4px/400  div.sub  "At 34.1° you're too far from t"
+  PASS    4.58 (req 3)  fg #827521 on bg #fffdf9  44.8px/800  div.kp  "4.33"
+  PASS    4.58 (req 4.5)  fg #827521 on bg #fffdf9  16px/700  div.glabel  "Active"
+  PASS    4.61 (req 3)  fg #39833c on bg #fffdf9  24px/800  div.lv  "S0"
+  PASS    4.51 (req 3)  fg #a66723 on bg #fffdf9  24px/800  div.lv  "G2"
+
+== contrast, dark theme (unique fg/bg pairs with rendered data; WCAG ratio vs requirement) ==
+  PASS    6.81 (req 4.5)  fg #9aa0a8 on bg #15171b  14.4px/400  a.back  "← suite"
+  PASS   12.96 (req 4.5)  fg #e7e5e0 on bg #1d2026  13.6px/400  button#themeBtn.theme-btn  "◐ theme"
+  PASS   14.25 (req 3)  fg #e7e5e0 on bg #15171b  25.6px/700  h1  "Space Weather & Aurora Station"
+  PASS   14.25 (req 4.5)  fg #e7e5e0 on bg #15171b  14.4px/600  span#locLabel.loclabel  "Los Angeles, CA 90012"
+  PASS    7.60 (req 4.5)  fg #6fb5ae on bg #15171b  13.6px/400  button#changeLoc.linklike  "change"
+  PASS   12.96 (req 3)  fg #e7e5e0 on bg #1d2026  41.6px/400  div.emoji  "🌙"
+  PASS    6.19 (req 4.5)  fg #9aa0a8 on bg #1d2026  14.4px/400  div.sub  "At 34.1° you're too far from t"
+  PASS    9.14 (req 3)  fg #d6c34a on bg #1d2026  44.8px/800  div.kp  "4.33"
+  PASS    9.14 (req 4.5)  fg #d6c34a on bg #1d2026  16px/700  div.glabel  "Active"
+  PASS    6.58 (req 3)  fg #5cb85c on bg #1d2026  24px/800  div.lv  "S0"
+  PASS    7.39 (req 3)  fg #e2a24f on bg #1d2026  24px/800  div.lv  "G2"
+

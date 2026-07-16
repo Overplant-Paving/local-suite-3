@@ -1,52 +1,134 @@
-== computed-style diff, light (24 differing values) ==
+== computed-style diff, light (65 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
 body { --shadow: v1=0 1px 2px rgba(40,35,25,.06),0 4px 14px rgba(40,35,25,.05) | v2=0 1px 2px rgba(40,35,25,.06), 0 4px 14px rgba(40,35,25,.05) }
+body { --errsoft: v1=undefined | v2=#b65b37 }
+body { --stale: v1=undefined | v2=#986424 }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .topbar { --shadow: v1=0 1px 2px rgba(40,35,25,.06),0 4px 14px rgba(40,35,25,.05) | v2=0 1px 2px rgba(40,35,25,.06), 0 4px 14px rgba(40,35,25,.05) }
+.topbar { --errsoft: v1=undefined | v2=#b65b37 }
+.topbar { --stale: v1=undefined | v2=#986424 }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .back { --shadow: v1=0 1px 2px rgba(40,35,25,.06),0 4px 14px rgba(40,35,25,.05) | v2=0 1px 2px rgba(40,35,25,.06), 0 4px 14px rgba(40,35,25,.05) }
+.back { --errsoft: v1=undefined | v2=#b65b37 }
+.back { --stale: v1=undefined | v2=#986424 }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .theme-btn { --shadow: v1=0 1px 2px rgba(40,35,25,.06),0 4px 14px rgba(40,35,25,.05) | v2=0 1px 2px rgba(40,35,25,.06), 0 4px 14px rgba(40,35,25,.05) }
+.theme-btn { --errsoft: v1=undefined | v2=#b65b37 }
+.theme-btn { --stale: v1=undefined | v2=#986424 }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
 header h1 { --shadow: v1=0 1px 2px rgba(40,35,25,.06),0 4px 14px rgba(40,35,25,.05) | v2=0 1px 2px rgba(40,35,25,.06), 0 4px 14px rgba(40,35,25,.05) }
+header h1 { --errsoft: v1=undefined | v2=#b65b37 }
+header h1 { --stale: v1=undefined | v2=#986424 }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
 header .tag { --shadow: v1=0 1px 2px rgba(40,35,25,.06),0 4px 14px rgba(40,35,25,.05) | v2=0 1px 2px rgba(40,35,25,.06), 0 4px 14px rgba(40,35,25,.05) }
+header .tag { --errsoft: v1=undefined | v2=#b65b37 }
+header .tag { --stale: v1=undefined | v2=#986424 }
 .setup { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .setup { --shadow: v1=0 1px 2px rgba(40,35,25,.06),0 4px 14px rgba(40,35,25,.05) | v2=0 1px 2px rgba(40,35,25,.06), 0 4px 14px rgba(40,35,25,.05) }
+.setup { --errsoft: v1=undefined | v2=#b65b37 }
+.setup { --stale: v1=undefined | v2=#986424 }
 input[type=text] { -webkit-font-smoothing: v1=auto | v2=antialiased }
 input[type=text] { --shadow: v1=0 1px 2px rgba(40,35,25,.06),0 4px 14px rgba(40,35,25,.05) | v2=0 1px 2px rgba(40,35,25,.06), 0 4px 14px rgba(40,35,25,.05) }
+input[type=text] { --errsoft: v1=undefined | v2=#b65b37 }
+input[type=text] { --stale: v1=undefined | v2=#986424 }
 .btn.primary { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .btn.primary { --shadow: v1=0 1px 2px rgba(40,35,25,.06),0 4px 14px rgba(40,35,25,.05) | v2=0 1px 2px rgba(40,35,25,.06), 0 4px 14px rgba(40,35,25,.05) }
+.btn.primary { --errsoft: v1=undefined | v2=#b65b37 }
+.btn.primary { --stale: v1=undefined | v2=#986424 }
 .btn.ghost { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .btn.ghost { --shadow: v1=0 1px 2px rgba(40,35,25,.06),0 4px 14px rgba(40,35,25,.05) | v2=0 1px 2px rgba(40,35,25,.06), 0 4px 14px rgba(40,35,25,.05) }
+.btn.ghost { --errsoft: v1=undefined | v2=#b65b37 }
+.btn.ghost { --stale: v1=undefined | v2=#986424 }
+.err-inline { border-block-end-color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
+.err-inline { border-block-start-color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
+.err-inline { border-bottom-color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
+.err-inline { border-inline-end-color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
+.err-inline { border-inline-start-color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
+.err-inline { border-left-color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
+.err-inline { border-right-color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
+.err-inline { border-top-color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
+.err-inline { caret-color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
+.err-inline { color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
+.err-inline { column-rule-color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
+.err-inline { outline-color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
+.err-inline { row-rule-color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
+.err-inline { text-decoration-color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
+.err-inline { text-emphasis-color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
 .err-inline { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.err-inline { -webkit-text-fill-color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
+.err-inline { -webkit-text-stroke-color: v1=rgb(192, 96, 58) | v2=rgb(182, 91, 55) }
 .err-inline { --shadow: v1=0 1px 2px rgba(40,35,25,.06),0 4px 14px rgba(40,35,25,.05) | v2=0 1px 2px rgba(40,35,25,.06), 0 4px 14px rgba(40,35,25,.05) }
+.err-inline { --errsoft: v1=undefined | v2=#b65b37 }
+.err-inline { --stale: v1=undefined | v2=#986424 }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
 footer { --shadow: v1=0 1px 2px rgba(40,35,25,.06),0 4px 14px rgba(40,35,25,.05) | v2=0 1px 2px rgba(40,35,25,.06), 0 4px 14px rgba(40,35,25,.05) }
+footer { --errsoft: v1=undefined | v2=#b65b37 }
+footer { --stale: v1=undefined | v2=#986424 }
 
-== computed-style diff, dark (24 differing values) ==
+== computed-style diff, dark (65 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
 body { --shadow: v1=0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25) | v2=0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25) }
+body { --errsoft: v1=undefined | v2=#c6704e }
+body { --stale: v1=undefined | v2=#c07f2d }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .topbar { --shadow: v1=0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25) | v2=0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25) }
+.topbar { --errsoft: v1=undefined | v2=#c6704e }
+.topbar { --stale: v1=undefined | v2=#c07f2d }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .back { --shadow: v1=0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25) | v2=0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25) }
+.back { --errsoft: v1=undefined | v2=#c6704e }
+.back { --stale: v1=undefined | v2=#c07f2d }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .theme-btn { --shadow: v1=0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25) | v2=0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25) }
+.theme-btn { --errsoft: v1=undefined | v2=#c6704e }
+.theme-btn { --stale: v1=undefined | v2=#c07f2d }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
 header h1 { --shadow: v1=0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25) | v2=0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25) }
+header h1 { --errsoft: v1=undefined | v2=#c6704e }
+header h1 { --stale: v1=undefined | v2=#c07f2d }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
 header .tag { --shadow: v1=0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25) | v2=0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25) }
+header .tag { --errsoft: v1=undefined | v2=#c6704e }
+header .tag { --stale: v1=undefined | v2=#c07f2d }
 .setup { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .setup { --shadow: v1=0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25) | v2=0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25) }
+.setup { --errsoft: v1=undefined | v2=#c6704e }
+.setup { --stale: v1=undefined | v2=#c07f2d }
 input[type=text] { -webkit-font-smoothing: v1=auto | v2=antialiased }
 input[type=text] { --shadow: v1=0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25) | v2=0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25) }
+input[type=text] { --errsoft: v1=undefined | v2=#c6704e }
+input[type=text] { --stale: v1=undefined | v2=#c07f2d }
 .btn.primary { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .btn.primary { --shadow: v1=0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25) | v2=0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25) }
+.btn.primary { --errsoft: v1=undefined | v2=#c6704e }
+.btn.primary { --stale: v1=undefined | v2=#c07f2d }
 .btn.ghost { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .btn.ghost { --shadow: v1=0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25) | v2=0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25) }
+.btn.ghost { --errsoft: v1=undefined | v2=#c6704e }
+.btn.ghost { --stale: v1=undefined | v2=#c07f2d }
+.err-inline { border-block-end-color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
+.err-inline { border-block-start-color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
+.err-inline { border-bottom-color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
+.err-inline { border-inline-end-color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
+.err-inline { border-inline-start-color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
+.err-inline { border-left-color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
+.err-inline { border-right-color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
+.err-inline { border-top-color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
+.err-inline { caret-color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
+.err-inline { color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
+.err-inline { column-rule-color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
+.err-inline { outline-color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
+.err-inline { row-rule-color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
+.err-inline { text-decoration-color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
+.err-inline { text-emphasis-color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
 .err-inline { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.err-inline { -webkit-text-fill-color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
+.err-inline { -webkit-text-stroke-color: v1=rgb(192, 96, 58) | v2=rgb(198, 112, 78) }
 .err-inline { --shadow: v1=0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25) | v2=0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25) }
+.err-inline { --errsoft: v1=undefined | v2=#c6704e }
+.err-inline { --stale: v1=undefined | v2=#c07f2d }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
 footer { --shadow: v1=0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25) | v2=0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25) }
+footer { --errsoft: v1=undefined | v2=#c6704e }
+footer { --stale: v1=undefined | v2=#c07f2d }
 

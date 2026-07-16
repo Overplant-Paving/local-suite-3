@@ -1,29 +1,29 @@
 locbar chip (no location yet): "📍 Set location for distances"
-live stat: 4 AT ELEVATED ALERT
+live stat: 5 AT ELEVATED ALERT
 live stat: Orange HIGHEST COLOR
-live groups: ORANGE — WATCH · 2 | YELLOW — ADVISORY · 2
-live volcano cards rendered: 4
+live groups: ORANGE — WATCH · 1 | YELLOW — ADVISORY · 4
+live volcano cards rendered: 5
 live first card: name="Great Sitkin" badges=[ORANGE, WATCH] obs="Alaska Volcano Observatory"
-live first card meta: "Notice Jul 14, 4:22 PM High Threat Activity notice →"
-stamp: "Data from moments ago · 3:10 PM"
-live HANS elevated feed: 4 volcanoes in cache envelope (cached at 2026-07-15T20:10:53.594Z)
+live first card meta: "Notice Jul 15, 3:19 PM High Threat Activity notice →"
+stamp: "Data from moments ago · 1:13 AM"
+live HANS elevated feed: 5 volcanoes in cache envelope (cached at 2026-07-16T06:13:40.018Z)
 sample volcano: "Great Sitkin" — color ORANGE, alert WATCH (vnum 311120)
-live vsc coordinate feed: 4 volcanoes with coords/threat
+live vsc coordinate feed: 5 volcanoes with coords/threat
 chip click -> form open: true, aria-expanded=true
 Esc -> form closed: true, aria-expanded=false
 ZIP 90012 lookup (Enter key) -> suite.location = {"lat":34.0614,"lon":-118.2385,"label":"Los Angeles, CA"}
 locbar after ZIP: "📍 Los Angeles, CA distances measured from here"
 form closed after ZIP save: true
-seeded-LA stat: 4 AT ELEVATED ALERT
+seeded-LA stat: 5 AT ELEVATED ALERT
 seeded-LA stat: Orange HIGHEST COLOR
-seeded-LA groups: ORANGE — WATCH · 2 | YELLOW — ADVISORY · 2
-seeded-LA volcano cards rendered: 4
+seeded-LA groups: ORANGE — WATCH · 1 | YELLOW — ADVISORY · 4
+seeded-LA volcano cards rendered: 5
 seeded-LA first card: name="Great Sitkin" badges=[ORANGE, WATCH] obs="Alaska Volcano Observatory"
-seeded-LA first card meta: "Notice Jul 14, 4:22 PM High Threat 3,079 mi away Activity notice →"
-cards showing a distance from LA (vsc coords matched): 4 of 4
+seeded-LA first card meta: "Notice Jul 15, 3:19 PM High Threat 3,079 mi away Activity notice →"
+cards showing a distance from LA (vsc coords matched): 5 of 5
 locbar note: "📍 Los Angeles, CA distances measured from here"
-offline stale stamp: "Offline — cached data from 24 h ago · 3:10 PM"
-offline: board still renders 4 cached cards (allquiet: 0), summary stats: 4 AT ELEVATED ALERT / Orange HIGHEST COLOR
+offline stale stamp: "Offline — cached data from 24 h ago · 1:13 AM"
+offline: board still renders 5 cached cards (allquiet: 0), summary stats: 5 AT ELEVATED ALERT / Orange HIGHEST COLOR
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
   console.error: Failed to load resource: net::ERR_FAILED

@@ -6,11 +6,14 @@
 <title>Earthquake Monitor · Local Suite</title>
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
-  /* tool accent: ocean backdrop for the map (3-layer, same pattern as core) */
-  :root{ --ocean:#eae6dc; }
-  @media (prefers-color-scheme:dark){ :root{ --ocean:#12151a; } }
-  :root[data-theme="light"]{ --ocean:#eae6dc; }
-  :root[data-theme="dark"]{ --ocean:#12151a; }
+  /* tool accents (3-layer, same pattern as core): ocean backdrop for the map, plus
+     Phase 4 a11y theme-split status colors (single hexes failed WCAG AA in one theme):
+     --tsu tsunami marker, --stale the amber "connection issue" stamp, --errsoft the
+     inline setup error. */
+  :root{ --ocean:#eae6dc; --tsu:#c23b3b; --stale:#986424; --errsoft:#b65b37; }
+  @media (prefers-color-scheme:dark){ :root{ --ocean:#12151a; --tsu:#e0685a; --stale:#c07f2d; --errsoft:#c6704e; } }
+  :root[data-theme="light"]{ --ocean:#eae6dc; --tsu:#c23b3b; --stale:#986424; --errsoft:#b65b37; }
+  :root[data-theme="dark"]{ --ocean:#12151a; --tsu:#e0685a; --stale:#c07f2d; --errsoft:#c6704e; }
 
   body{padding:1.4rem 1.25rem 4rem;}
   .wrap{max-width:1060px;margin:0 auto}
@@ -64,7 +67,7 @@
   .msg{padding:2.4rem 1rem;text-align:center;color:var(--muted)}
   .msg .big{font-size:1.15rem;color:var(--ink);margin-bottom:.4rem}
   .stamp{font-size:.78rem;color:var(--muted);margin-top:.3rem}
-  .stamp.err{color:#c07f2d}
+  .stamp.err{color:var(--stale)}
   footer{margin-top:2.6rem;font-size:.82rem;padding-top:1rem}
   /* first-run location card */
   .setup{max-width:440px;margin:2rem auto}
@@ -75,7 +78,7 @@
   .btn{border:none;border-radius:9px;padding:.55rem .9rem;cursor:pointer;font-size:.9rem;font-weight:600}
   .btn.primary{background:var(--accent);color:#fff}
   .btn.ghost{background:var(--card);border:1px solid var(--line);color:var(--ink)}
-  .err-inline{color:#c0603a;font-size:.82rem;min-height:1.1rem}
+  .err-inline{color:var(--errsoft);font-size:.82rem;min-height:1.1rem}
 </style>
 </head>
 <body>
@@ -132,6 +135,9 @@ function magColor(m){
   if(m<7)   return "#c23b3b";
   return "#8f2d6b";
 }
+/* Phase 4 a11y: badge text ink per band — white text failed WCAG AA (4.5:1) on the
+   four lighter band colors, dark ink passes on all of them; white stays on M6+. */
+function magInk(m){ return (m!=null && m>=6) ? "#fff" : "#16191d"; }
 
 /* ---------- app state ---------- */
 const TTL = 5*60*1000; // manifest cacheTtlMin: 5 — the quakes-class good-citizen interval
@@ -373,10 +379,10 @@ function renderList(quakes, listEl){
     const depthTxt=isFinite(q.depth)?`${Math.round(q.depth)} km deep`:"";
     const distTxt=(q.dist!=null)?`${Math.round(q.dist).toLocaleString()} km away`:"";
     const meta=[depthTxt,distTxt].filter(Boolean).join(" · ");
-    const tsu=q.tsunami?` · <span style="color:#c23b3b">tsunami</span>`:"";
+    const tsu=q.tsunami?` · <span style="color:var(--tsu)">tsunami</span>`:"";
     const isNew=q.isNew&&firstRenderDone;
     return `<div class="q${isNew?" new":""}">
-      <div class="badge" style="background:${col}"><small>M</small>${magTxt}</div>
+      <div class="badge" style="background:${col};color:${magInk(q.mag)}"><small>M</small>${magTxt}</div>
       <div>
         <div class="place">${q.url?`<a href="${esc(q.url)}" target="_blank" rel="noopener">${esc(q.place)||"Unknown location"}</a>`:esc(q.place)||"Unknown location"}${isNew?`<span class="newtag">NEW</span>`:""}</div>
         <div class="meta">${meta}${tsu}</div>

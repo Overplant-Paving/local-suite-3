@@ -139,3 +139,24 @@ All interpolations of remote/user-influenced data are `Suite.esc()`'d (`esc(loc.
 - **GOES-19 dependency**: sector/product availability is NOAA's (e.g. some product x sector
   combos legitimately 404 -> the v1 error card). All four exercised combinations loaded live
   today; nothing to fix, just an external-availability note.
+
+## Phase 4 a11y audit
+
+Re-verification of the QUALITY.md §2 per-tool checklist (agent a11y-3, 2026-07-16). Runtime
+checks executed against tools/radar.html from file:// in both themes, all network
+route-fulfilled with fixtures; raw measurements in [a11y-phase4.txt](a11y-phase4.txt).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only buttons named | pass | programmatic enumeration found zero symbol-only buttons/links ("↻ Refresh", "◐ theme" carry text) |
+| 2 | aria-live on async containers | pass | `#main` is `Suite.liveRegion` — every view (radar, satellite, first-run incl. `#locMsg`) renders inside it |
+| 3 | Keyboard paths | pass | primary feature driven keyboard-only: Tab→change→Enter, ZIP+Enter sets location, station `<select>` via ArrowDown, tab switch + sector switch via Enter/arrows (log in a11y-phase4.txt); no overlays, so no Esc path needed |
+| 4 | Input labels | pass | `<label for="zip">`; both selects wrapped in `<label class="fld">` |
+| 5 | Contrast, both palettes | fixed | one tool-local fail: the conditional first-run error note was `#c0392b` in both themes → 3.0:1 on the dark card. Now `var(--errnote)` (#c0392b light 5.4:1 / #cf695e dark 4.5:1). `.imgwrap` load/err text on the fixed #0b1420 backdrop: 12.4:1 / 7.9:1 |
+| 6 | Focus visibility | pass | core `:focus-visible` outline (2px accent) confirmed by real-Tab probe on tabs, selects, buttons, links |
+
+Suite-wide failures observed here but NOT fixed locally (core palette — flagged to the auditor):
+- `--muted` #6b7280 on `--bg` #f5f3ee = **4.36:1** (< 4.5) — back link, hints, captions; every tool shares this pair.
+- white text on `--accent` in **dark** theme (#fff on #6fb5ae) = **2.36:1** — `.tab.on` here, and the `.btn`/`.btn.primary` filled-button pattern suite-wide. Light theme passes (5.85:1).
+
+Fix delta: theme-split `--errnote` variable + one inline style swap. No behavior change; re-verified with `node verify-tool.mjs radar` — exit 0, evidence files in this directory regenerated 2026-07-16.

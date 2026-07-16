@@ -1,0 +1,57 @@
+Phase 4 accessibility audit — raw measurements (volcano)
+Agent a11y-3, 2026-07-16. Tool exercised from file:// with ALL network
+route-fulfilled by fixtures (no live requests); primary feature driven with page.keyboard only.
+
+== keyboard-only drive of the primary feature ==
+  board rendered: 5 volcano cards, summary "5 AT ELEVATED ALERT Red HIGHEST COLOR"
+  tab-to .locchip: true
+  chip Enter -> form open: true, aria-expanded=true
+  Esc closes form: true
+  tab-to #zipInput: true
+  ZIP -> Enter -> chip "📍 Los Angeles, CA", distances rendered: true
+
+== icon/symbol-only buttons & links (programmatic enumeration) ==
+  (none found)
+
+== inputs & labels ==
+
+== aria-live regions present at runtime ==
+  #locErr aria-live=polite
+  #summary aria-live=polite
+  #main aria-live=polite
+
+== positive tabindex ==
+  (none)
+
+== focus visibility (real Tab focus; computed outline/box-shadow focused vs blurred) ==
+  a: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(47, 111, 106) -> visible indicator: true
+  a: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(47, 111, 106) -> visible indicator: true
+  a: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(47, 111, 106) -> visible indicator: true
+  a: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(47, 111, 106) -> visible indicator: true
+
+== contrast, light theme (unique fg/bg pairs with rendered data; WCAG ratio vs requirement) ==
+  FAIL    4.36 (req 4.5)  fg #6b7280 on bg #f5f3ee  14.4px/400  a.back  "← suite"
+  PASS   14.61 (req 4.5)  fg #23282e on bg #fffdf9  13.6px/400  button#themeBtn.theme-btn  "◐ theme"
+  PASS   13.39 (req 3)  fg #23282e on bg #f5f3ee  27.2px/700  h1  "Volcano Status Board"
+  PASS    5.44 (req 4.5)  fg #ffffff on bg #c0392b  11.8px/600  span.badge.color  "RED"
+  PASS   12.58 (req 4.5)  fg #23282e on bg #efece4  11.8px/600  span.badge.alert  "WARNING"
+  PASS    4.76 (req 4.5)  fg #6b7280 on bg #fffdf9  13.6px/400  div.vobs  "Hawaiian Volcano Observatory"
+  PASS    5.74 (req 4.5)  fg #2f6f6a on bg #fffdf9  13.1px/400  a  "Activity notice →"
+  PASS    5.78 (req 4.5)  fg #15181c on bg #d97b2b  11.8px/600  span.badge.color  "ORANGE"
+  PASS    6.89 (req 4.5)  fg #15181c on bg #c99a1e  11.8px/600  span.badge.color  "YELLOW"
+  PASS    5.00 (req 4.5)  fg #ffffff on bg #3a7d44  11.8px/600  span.badge.color  "GREEN"
+  PASS    5.48 (req 4.5)  fg #15181c on bg #8a8f98  11.8px/600  span.badge.color  "—"
+
+== contrast, dark theme (unique fg/bg pairs with rendered data; WCAG ratio vs requirement) ==
+  PASS    6.81 (req 4.5)  fg #9aa0a8 on bg #15171b  14.4px/400  a.back  "← suite"
+  PASS   12.96 (req 4.5)  fg #e7e5e0 on bg #1d2026  13.6px/400  button#themeBtn.theme-btn  "◐ theme"
+  PASS   14.25 (req 3)  fg #e7e5e0 on bg #15171b  27.2px/700  h1  "Volcano Status Board"
+  PASS    5.40 (req 4.5)  fg #15181c on bg #e06a58  11.8px/600  span.badge.color  "RED"
+  PASS   11.44 (req 4.5)  fg #e7e5e0 on bg #262a31  11.8px/600  span.badge.alert  "WARNING"
+  PASS    6.19 (req 4.5)  fg #9aa0a8 on bg #1d2026  13.6px/400  div.vobs  "Hawaiian Volcano Observatory"
+  PASS    6.91 (req 4.5)  fg #6fb5ae on bg #1d2026  13.1px/400  a  "Activity notice →"
+  PASS    7.66 (req 4.5)  fg #15181c on bg #e6994f  11.8px/600  span.badge.color  "ORANGE"
+  PASS    9.89 (req 4.5)  fg #15181c on bg #e0be55  11.8px/600  span.badge.color  "YELLOW"
+  PASS    8.58 (req 4.5)  fg #15181c on bg #7dc487  11.8px/600  span.badge.color  "GREEN"
+  PASS    6.76 (req 4.5)  fg #15181c on bg #9aa0a8  11.8px/600  span.badge.color  "—"
+

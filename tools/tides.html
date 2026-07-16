@@ -6,13 +6,16 @@
 <title>Tides &amp; Currents Board · Local Suite</title>
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
-  /* tool accents (3-layer, same pattern as core) */
-  :root{ --tide:#2f6f6a; --high:#2f6f6a; --low:#b0752a; --water:#3a86a8; }
+  /* tool accents (3-layer, same pattern as core).
+     Phase 4 a11y: light --low darkened #b0752a -> #9e6926 (it colors small text: chart
+     time labels, low-tide arrows) to reach WCAG AA on the card; --err split per theme
+     (one hex failed AA on the dark card). */
+  :root{ --tide:#2f6f6a; --high:#2f6f6a; --low:#9e6926; --water:#3a86a8; --err:#b0472f; }
   @media (prefers-color-scheme: dark){
-    :root{ --tide:#6fb5ae; --high:#6fb5ae; --low:#d19a4e; --water:#6bb6d6; }
+    :root{ --tide:#6fb5ae; --high:#6fb5ae; --low:#d19a4e; --water:#6bb6d6; --err:#c2715f; }
   }
-  :root[data-theme="light"]{ --tide:#2f6f6a; --high:#2f6f6a; --low:#b0752a; --water:#3a86a8; }
-  :root[data-theme="dark"]{ --tide:#6fb5ae; --high:#6fb5ae; --low:#d19a4e; --water:#6bb6d6; }
+  :root[data-theme="light"]{ --tide:#2f6f6a; --high:#2f6f6a; --low:#9e6926; --water:#3a86a8; --err:#b0472f; }
+  :root[data-theme="dark"]{ --tide:#6fb5ae; --high:#6fb5ae; --low:#d19a4e; --water:#6bb6d6; --err:#c2715f; }
 
   body{ padding:1.4rem 1.25rem 4rem; }
   .wrap{ max-width:960px; margin:0 auto; }
@@ -84,7 +87,7 @@
   .st:hover{ background:var(--accent-soft); border-color:var(--line); }
   .st .sn{ font-weight:500; } .st .sd{ color:var(--muted); font-size:.82rem; }
   .st.near{ background:var(--accent-soft); }
-  .err{ color:#b0472f; font-size:.85rem; min-height:1.1em; margin-top:.3rem; }
+  .err{ color:var(--err); font-size:.85rem; min-height:1.1em; margin-top:.3rem; }
   .listlabel{ font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:.3rem 0; }
   .hidden{ display:none; }
 </style>

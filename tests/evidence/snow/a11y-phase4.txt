@@ -1,0 +1,53 @@
+Phase 4 accessibility audit — raw measurements (snow)
+Agent a11y-3, 2026-07-16. Tool exercised from file:// with ALL network
+route-fulfilled by fixtures (no live requests); primary feature driven with page.keyboard only.
+
+== keyboard-only drive of the primary feature ==
+  tab-to ZIP input: true
+  ZIP -> Enter -> 8 station cards
+  tab-to .star: true
+  star via Enter -> following section: true, aria-pressed on first star=true
+
+== icon/symbol-only buttons & links (programmatic enumeration) ==
+  <button class="star on"> text="★" aria-label="Unfollow Mount Baldy" title="Follow this station"
+  <button class="star"> text="★" aria-label="Follow Green Valley Lake" title="Follow this station"
+  <button class="star"> text="★" aria-label="Follow Snow Valley" title="Follow this station"
+  <button class="star"> text="★" aria-label="Follow Big Bear Lake" title="Follow this station"
+  <button class="star"> text="★" aria-label="Follow Kern River" title="Follow this station"
+  <button class="star"> text="★" aria-label="Follow Onion Valley" title="Follow this station"
+  <button class="star"> text="★" aria-label="Follow Leavitt Meadows" title="Follow this station"
+  <button class="star"> text="★" aria-label="Follow Heavenly Valley" title="Follow this station"
+
+== inputs & labels ==
+
+== aria-live regions present at runtime ==
+  #main aria-live=polite
+
+== positive tabindex ==
+  (none)
+
+== focus visibility (real Tab focus; computed outline/box-shadow focused vs blurred) ==
+  button.star: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(184, 140, 28) -> visible indicator: true
+  button.star: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(107, 114, 128) -> visible indicator: true
+  button.star: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(107, 114, 128) -> visible indicator: true
+  button.star: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(107, 114, 128) -> visible indicator: true
+  button.star: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(107, 114, 128) -> visible indicator: true
+
+== contrast, light theme (unique fg/bg pairs with rendered data; WCAG ratio vs requirement) ==
+  FAIL    4.36 (req 4.5)  fg #6b7280 on bg #f5f3ee  14.4px/400  a.back  "← suite"
+  PASS   14.61 (req 4.5)  fg #23282e on bg #fffdf9  13.6px/400  button#themeBtn.theme-btn  "◐ theme"
+  PASS   13.39 (req 3)  fg #23282e on bg #f5f3ee  27.2px/700  h1  "Snowpack & SNOTEL"
+  PASS    4.76 (req 4.5)  fg #6b7280 on bg #fffdf9  12.8px/400  div.sub  "38 mi · CA · 8,400 ft"
+  FAIL    3.04 (req 4.5)  fg #b88c1c on bg #fffdf9  18.4px/400  button.star.on  "★"
+  FAIL    4.10 (req 4.5)  fg #6b7280 on bg #efece4  11.5px/400  div.k  "Snow depth"
+  PASS    3.67 (req 3)  fg #3f7cbf on bg #efece4  24px/600  div.v  "42"
+
+== contrast, dark theme (unique fg/bg pairs with rendered data; WCAG ratio vs requirement) ==
+  PASS    6.81 (req 4.5)  fg #9aa0a8 on bg #15171b  14.4px/400  a.back  "← suite"
+  PASS   12.96 (req 4.5)  fg #e7e5e0 on bg #1d2026  13.6px/400  button#themeBtn.theme-btn  "◐ theme"
+  PASS   14.25 (req 3)  fg #e7e5e0 on bg #15171b  27.2px/700  h1  "Snowpack & SNOTEL"
+  PASS    6.19 (req 4.5)  fg #9aa0a8 on bg #1d2026  12.8px/400  div.sub  "38 mi · CA · 8,400 ft"
+  PASS    9.07 (req 4.5)  fg #e0be55 on bg #1d2026  18.4px/400  button.star.on  "★"
+  PASS    5.47 (req 4.5)  fg #9aa0a8 on bg #262a31  11.5px/400  div.k  "Snow depth"
+  PASS    5.39 (req 3)  fg #6aa3d9 on bg #262a31  24px/600  div.v  "42"
+

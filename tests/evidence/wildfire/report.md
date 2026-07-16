@@ -81,3 +81,21 @@ All remote-data interpolations (`f.name`, `f.state`, `f.type`, ZIP place fields)
 - **Footer text changed** (15 -> 30 minutes) to match the declared TTL — the one visible content diff in the side-by-side screenshots; everything else is pixel-equal.
 - **"null% contained" in a log line** is the harness printing a raw cache field, not a UI defect — the UI renders "Containment not reported" / "—" for null containment (v1 behavior, confirmed in the after-interaction screenshot).
 - Console during verification: only `net::ERR_FAILED` resource errors from the deliberate offline abort; the harness classifies those as non-hard, zero other console output.
+## Phase 4 a11y audit
+
+Re-verification of the QUALITY.md §2 per-tool checklist (agent a11y-3, 2026-07-16). Runtime
+checks against tools/wildfire.html from file:// in both themes, WFIGS + zippopotam
+route-fulfilled with a 5-incident fixture (incl. an Rx burn and a null containment); raw
+measurements in [a11y-phase4.txt](a11y-phase4.txt).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only buttons named | pass | zero symbol-only buttons/links |
+| 2 | aria-live on async containers | pass | `#stats` + `#stamp` are `Suite.liveRegion`; first-run `#setupErr` live; the incident list is deliberately not live (bulk content, stamp announces updates) |
+| 3 | Keyboard paths | pass | keyboard-only: ZIP + Enter → board; radius slider responds to arrows with live "km" label; sort `<select>` via arrows (logged) |
+| 4 | Input labels | pass | `#zip` aria-label; radius/sort have `<label for=>` |
+| 5 | Contrast, both palettes | **fixed** | the bold acreage figure (18.4px/700 → 4.5:1 required) in light `--fire` #c94f2b measured **4.46:1** — nudged to #c74e2b (4.54:1; dark unchanged at 5.5:1); `.stamp.err` → theme-split `--stale`, `.err-inline` → theme-split `--errsoft` (same failing pairs as quakes/rivers). Containment bar #3a7d44 vs chip track 4.3:1 (≥3), fire card border-left 4.2:1 |
+| 6 | Focus visibility | pass | core `:focus-visible` outline confirmed via real-Tab probe |
+
+Suite-wide flag (not fixed locally): `--muted` on `--bg` = 4.36:1. No behavior change;
+re-verified with `node verify-tool.mjs wildfire` — exit 0, evidence files in this directory regenerated 2026-07-16.

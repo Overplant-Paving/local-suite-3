@@ -1,14 +1,14 @@
 first-run card (no suite.location): "Set your location"
-LIVE response (suite.cache.air, key=34.052,-118.244): current={"time":"2026-07-15T10:00","interval":3600,"us_aqi":70,"pm2_5":26.1,"pm10":33.4,"ozone":57,"nitrogen_dioxide":33.8,"sulphur_dioxide":5.1,"carbon_monoxide":162,"uv_index":5.9}
-LIVE AQI (Los Angeles): rendered value=70, category="Moderate", hero color=rgb(203, 183, 51), scale pin left=20%
-EPA band check: raw AQI 70 -> expected "Moderate" #cbb733 (rgb(203, 183, 51)); rendered category "Moderate", color rgb(203, 183, 51) -> MATCH
-scale pin check: expected left=20% for raw AQI 70; rendered 20% -> MATCH
-LIVE pollutants: PM2.5=26.1 µg/m³ · PM10=33.4 µg/m³ · Ozone=57 µg/m³ · NO₂=34 µg/m³ · SO₂=5 µg/m³ · CO=162 µg/m³
-LIVE UV: rendered value=6 (raw 5.9), category="High", pill background=rgb(224, 139, 47)
-UV band check: raw UV 5.9 -> expected "High" rgb(224, 139, 47) -> MATCH
+LIVE response (suite.cache.air, key=34.052,-118.244): current={"time":"2026-07-15T23:00","interval":3600,"us_aqi":73,"pm2_5":18.8,"pm10":22.5,"ozone":16,"nitrogen_dioxide":59.7,"sulphur_dioxide":3.2,"carbon_monoxide":158,"uv_index":0}
+LIVE AQI (Los Angeles): rendered value=73, category="Moderate", hero color=rgb(130, 117, 33), scale pin left=20.8571%
+EPA band check: raw AQI 73 -> expected "Moderate", text color #827521 (rgb(130, 117, 33)); rendered category "Moderate", color rgb(130, 117, 33) -> MATCH
+scale pin check: expected left=20.857142857142858% for raw AQI 73; rendered 20.8571% -> MATCH
+LIVE pollutants: PM2.5=18.8 µg/m³ · PM10=22.5 µg/m³ · Ozone=16 µg/m³ · NO₂=60 µg/m³ · SO₂=3 µg/m³ · CO=158 µg/m³
+LIVE UV: rendered value=0 (raw 0), category="Low", pill background=rgb(76, 175, 80)
+UV band check: raw UV 0 -> expected "Low" rgb(76, 175, 80) -> MATCH
 multi-day outlook rows (AQI+UV): 10; updated line: "updated just now"
-LIVE zippopotam: ZIP 90012 -> locLabel "Los Angeles, CA 90012"; re-fetched AQI=70 (location-keyed cache was purged and refilled)
-STALE PATH (network blocked, cache aged 24h): rendered AQI=70 from cache; updated line: "offline · last data Jul 14, 12 PM"
+LIVE zippopotam: ZIP 90012 -> locLabel "Los Angeles, CA 90012"; re-fetched AQI=73 (location-keyed cache was purged and refilled)
+STALE PATH (network blocked, cache aged 24h): rendered AQI=73 from cache; updated line: "offline · last data Jul 15, 1 AM"
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
   console.error: Failed to load resource: net::ERR_FAILED

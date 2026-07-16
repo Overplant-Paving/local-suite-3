@@ -3,7 +3,7 @@ seeded suite.location = {"lat":34.0522,"lon":-118.2437,"label":"Los Angeles, CA"
 nearest-station hint: "Nearest to Los Angeles, CA: KSOX (62 km)"
 auto-selected station (nearest to LA): KSOX; suite.radar.station=KSOX
 radar loop KSOX (radar.weather.gov): LOADED 600x550 px — alt="Radar loop for Santa Ana Mts (KSOX)" src=https://radar.weather.gov/ridge/standard/KSOX_loop.gif
-radar caption: "Santa Ana Mts · KSOX" · "animated ~1-hour loop · loaded 3:10 PM"
+radar caption: "Santa Ana Mts · KSOX" · "animated ~1-hour loop · loaded 1:11 AM"
 switched station to KOKX; suite.radar.station=KOKX
 radar loop KOKX after station switch: LOADED 600x550 px — alt="Radar loop for New York City (KOKX)" src=https://radar.weather.gov/ridge/standard/KOKX_loop.gif
 radar caption after switch: "New York City · KOKX"

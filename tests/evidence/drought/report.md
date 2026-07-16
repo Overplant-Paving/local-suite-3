@@ -76,3 +76,22 @@ Verified in source (MIGRATION.md row 34 confirmed — data comes via the Living 
 - **`latestPeriod` renders as "Week of July 7, 2026" (a Tuesday)** — the period value is whatever layer 2 publishes; v1 formatted it the same way. Not a v2 defect.
 - **The fresh-cache short-circuit changes visibility-change behavior**: v1 refetched on every tab focus; v2 only refetches when the composite cache is older than 24 h. This is the policy-mandated good-citizen change (documented above); the rendered data is identical because the source updates weekly.
 - The live LA run returned `dm=-1` (No Drought), so the colored-hero path for an active drought category (D0-D4 backgrounds, white ink on D3/D4) is proven only indirectly: the trend bars render all historical categories with the correct CATS colors (D2 `#ffaa00` weeks visible in the screenshots), and hero coloring uses the same `cat()` lookup and inline-style mechanism verified by the category MATCH check.
+
+## Phase 4 a11y audit
+
+Re-verification of the QUALITY.md §2 per-tool checklist (agent a11y-3, 2026-07-16). Runtime
+checks against tools/drought.html from file:// in both themes, the Esri Living Atlas layers +
+FCC + zippopotam route-fulfilled with fixtures (D2 current, 52-week trend across all six
+categories); raw measurements in [a11y-phase4.txt](a11y-phase4.txt).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only buttons named | pass | zero symbol-only buttons/links |
+| 2 | aria-live on async containers | pass | the whole `#app` is `Suite.liveRegion` (hero, trend, stamp, and setup errors all render inside it) |
+| 3 | Keyboard paths | pass | keyboard-only: ZIP + Enter → hero + 52-bar trend; no overlays |
+| 4 | Input labels | pass | `#zip` has `aria-label="US ZIP code"` |
+| 5 | Contrast, both palettes | mostly pass / fixed | the USDM hero already ships per-category `ink` pairs — all six measured ≥ 4.85:1 (e.g. #5a5400 on #ffff00 = 7.2:1, white on #e60000 = 4.85:1), a pattern this audit adopted for other tools. Fixed: `.stamp.err` #c07f2d = 3.1:1 on light bg → theme-split `--stale`; `.err-inline` #c0603a (4.16/3.86) → theme-split `--errsoft` |
+| 6 | Focus visibility | pass | core `:focus-visible` outline confirmed via real-Tab probe |
+
+Suite-wide flag (not fixed locally): `--muted` on `--bg` = 4.36:1. No behavior change;
+re-verified with `node verify-tool.mjs drought` — exit 0, evidence files in this directory regenerated 2026-07-16.

@@ -1,17 +1,17 @@
 {
   "v1": {
     "suite.rivers.favs": "[{\"id\":\"USGS-11102300\",\"name\":\"Rio Hondo below Whittier Narrows Dam Ca\",\"lat\":34.0166788086788,\"lon\":-118.088401840919}]",
-    "suite.cache.rivers.near_34.06_-118.24": "{\"t\":1784146492826,\"v\":[{\"id\":\"USGS-11102300\",\"name\":\"Rio Hondo below Whittier Narrows Dam Ca\",\"lon\":-118.088401840919,\"lat\":34.0166788086788,\"q\":{\"v\"…(9280 chars)",
+    "suite.cache.rivers.near_34.06_-118.24": "{\"t\":1784182359654,\"v\":[{\"id\":\"USGS-11102300\",\"name\":\"Rio Hondo below Whittier Narrows Dam Ca\",\"lon\":-118.088401840919,\"lat\":34.0166788086788,\"q\":{\"v\"…(9280 chars)",
     "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
-    "suite.cache.rivers.near_34.05_-118.24": "{\"t\":1784146495812,\"v\":[{\"id\":\"USGS-11102300\",\"name\":\"Rio Hondo below Whittier Narrows Dam Ca\",\"lon\":-118.088401840919,\"lat\":34.0166788086788,\"q\":{\"v\"…(9565 chars)",
+    "suite.cache.rivers.near_34.05_-118.24": "{\"t\":1784182361569,\"v\":[{\"id\":\"USGS-11102300\",\"name\":\"Rio Hondo below Whittier Narrows Dam Ca\",\"lon\":-118.088401840919,\"lat\":34.0166788086788,\"q\":{\"v\"…(9564 chars)",
     "suite.theme": "dark"
   },
   "v2": {
     "suite.rivers.favs": "[{\"id\":\"USGS-11102300\",\"name\":\"Rio Hondo below Whittier Narrows Dam Ca\",\"lat\":34.0166788086788,\"lon\":-118.088401840919}]",
-    "suite.cache.rivers.near_34.06_-118.24": "{\"t\":1784060088570,\"v\":[{\"id\":\"USGS-11102300\",\"name\":\"Rio Hondo below Whittier Narrows Dam Ca\",\"lon\":-118.088401840919,\"lat\":34.0166788086788,\"q\":{\"v\"…(9280 chars)",
-    "suite.cache.rivers.near_34.05_-118.24": "{\"t\":1784060088570,\"v\":[{\"id\":\"USGS-11102300\",\"name\":\"Rio Hondo below Whittier Narrows Dam Ca\",\"lon\":-118.088401840919,\"lat\":34.0166788086788,\"q\":{\"v\"…(9565 chars)",
+    "suite.cache.rivers.near_34.06_-118.24": "{\"t\":1784095956689,\"v\":[{\"id\":\"USGS-11102300\",\"name\":\"Rio Hondo below Whittier Narrows Dam Ca\",\"lon\":-118.088401840919,\"lat\":34.0166788086788,\"q\":{\"v\"…(9280 chars)",
+    "suite.cache.rivers.near_34.05_-118.24": "{\"t\":1784095956689,\"v\":[{\"id\":\"USGS-11102300\",\"name\":\"Rio Hondo below Whittier Narrows Dam Ca\",\"lon\":-118.088401840919,\"lat\":34.0166788086788,\"q\":{\"v\"…(9564 chars)",
     "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
-    "suite.cache.rivers.fav_USGS-11102300": "{\"t\":1784060088570,\"v\":{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\",\"properties\":{\"time_series_id\":\"c71a0d34fbab4aab8d68d7cb3dca6e6c\",\"mo…(2227 chars)",
+    "suite.cache.rivers.fav_USGS-11102300": "{\"t\":1784095956689,\"v\":{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\",\"properties\":{\"time_series_id\":\"c71a0d34fbab4aab8d68d7cb3dca6e6c\",\"mo…(2227 chars)",
     "suite.theme": "dark"
   },
   "keysOnlyInV1": [],

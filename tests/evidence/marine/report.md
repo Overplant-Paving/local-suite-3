@@ -158,3 +158,20 @@ stale. v1's own focus-refresh threshold (10 min, kept) still governs how eagerly
    its ZIP lookup uncached — suggest deciding suite-wide which way Batch B tools should go.
 5. Not live-verified: geolocation button (headless), inland card, no-cache error card — all
    preserved verbatim from v1 and inspected; the surrounding branches were live-driven.
+## Phase 4 a11y audit
+
+Re-verification of the QUALITY.md §2 per-tool checklist (agent a11y-3, 2026-07-16). Runtime
+checks against tools/marine.html from file:// in both themes, Open-Meteo marine/forecast +
+zippopotam route-fulfilled with fixtures; raw measurements in [a11y-phase4.txt](a11y-phase4.txt).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only buttons named | pass | zero symbol-only buttons/links (📍/🛟 emoji sit inside labeled text; direction ↑ arrows are `aria-hidden` beside compass text) |
+| 2 | aria-live on async containers | pass | `#content`, `#updated`, `#frErr` are `Suite.liveRegion` |
+| 3 | Keyboard paths | pass | first-run driven keyboard-only: Tab→ZIP input, 90012 + Enter renders the tile dashboard |
+| 4 | Input labels | pass | `#zipIn` has `aria-label="US ZIP code"` |
+| 5 | Contrast, both palettes | **fixed** | all four tile accents pass 3:1 as large text in both themes (wave 4.0, swell 5.85, wind 4.3, temp 3.4 on the light card; 5.5–7 dark); one fix: `.err` #b0472f = 2.95:1 on the dark card → theme-split `--err` (dark #c2715f, 4.5:1) |
+| 6 | Focus visibility | pass | core `:focus-visible` outline confirmed via real-Tab probe |
+
+Suite-wide flag (not fixed locally): `--muted` on `--bg` = 4.36:1 (header tag, meta rows).
+No behavior change; re-verified with `node verify-tool.mjs marine` — exit 0, evidence files in this directory regenerated 2026-07-16.

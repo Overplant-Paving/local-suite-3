@@ -1,0 +1,59 @@
+Phase 4 accessibility audit — raw measurements (tides)
+Agent a11y-3, 2026-07-16. Tool exercised from file:// with ALL network
+route-fulfilled by fixtures (no live requests); primary feature driven with page.keyboard only.
+
+== keyboard-only drive of the primary feature ==
+  auto station: "Santa Monica" (CA · station 9410840)
+  tab-to #changeStation: true
+  picker modal open; #idIn focused: true
+  Esc closes modal: true
+  tab-to station row (.st tabindex=0): true
+  station row via Enter -> "Santa Monica" (row said "Santa Monica CA")
+  events rendered: 8, water temp: "68°F"
+
+== icon/symbol-only buttons & links (programmatic enumeration) ==
+  (none found)
+
+== inputs & labels ==
+
+== aria-live regions present at runtime ==
+  #updated aria-live=polite
+  #content aria-live=polite
+  #pickErr aria-live=polite
+
+== positive tabindex ==
+  (none)
+
+== focus visibility (real Tab focus; computed outline/box-shadow focused vs blurred) ==
+  a.back: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(107, 114, 128) -> visible indicator: true
+  button#themeBtn.theme-btn: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(35, 40, 46) -> visible indicator: true
+  button#changeStation.mini: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(47, 111, 106) -> visible indicator: true
+
+== contrast, light theme (unique fg/bg pairs with rendered data; WCAG ratio vs requirement) ==
+  PASS    4.76 (req 4.5)  fg #6b7280 on bg #fffdf9  14.4px/400  a.back  "← suite"
+  PASS   14.61 (req 4.5)  fg #23282e on bg #fffdf9  13.6px/400  button#themeBtn.theme-btn  "◐ theme"
+  PASS   13.39 (req 3)  fg #23282e on bg #f5f3ee  27.2px/700  h1  "Tides & Currents Board"
+  FAIL    4.36 (req 4.5)  fg #6b7280 on bg #f5f3ee  15.2px/400  p.tag  "Next highs and lows, today's t"
+  PASS   13.39 (req 4.5)  fg #23282e on bg #f5f3ee  16.8px/600  span#stName.name  "Santa Monica"
+  PASS    5.74 (req 4.5)  fg #2f6f6a on bg #fffdf9  12.8px/400  button#changeStation.mini  "change station"
+  PASS    4.01 (req 3)  fg #3a86a8 on bg #fffdf9  41.6px/600  div.big  "68°F"
+  PASS    4.95 (req 4.5)  fg #2f6f6a on bg #e3efed  10.9px/600  span.badge  "next"
+  PASS    4.59 (req 4.5)  fg #9e6926 on bg #fffdf9  20.8px/400  span.arrow.L  "▼"
+  PASS    4.76 (req 4.5)  fg #6b7280 on bg #fffdf9  10px/400  svg text  "0.0"
+  PASS    5.74 (req 4.5)  fg #2f6f6a on bg #fffdf9  10px/400  svg text  "2:12 AM"
+  PASS    4.59 (req 4.5)  fg #9e6926 on bg #fffdf9  10px/400  svg text  "8:24 AM"
+
+== contrast, dark theme (unique fg/bg pairs with rendered data; WCAG ratio vs requirement) ==
+  PASS    6.19 (req 4.5)  fg #9aa0a8 on bg #1d2026  14.4px/400  a.back  "← suite"
+  PASS   12.96 (req 4.5)  fg #e7e5e0 on bg #1d2026  13.6px/400  button#themeBtn.theme-btn  "◐ theme"
+  PASS   14.25 (req 3)  fg #e7e5e0 on bg #15171b  27.2px/700  h1  "Tides & Currents Board"
+  PASS    6.81 (req 4.5)  fg #9aa0a8 on bg #15171b  15.2px/400  p.tag  "Next highs and lows, today's t"
+  PASS   14.25 (req 4.5)  fg #e7e5e0 on bg #15171b  16.8px/600  span#stName.name  "Santa Monica"
+  PASS    6.91 (req 4.5)  fg #6fb5ae on bg #1d2026  12.8px/400  button#changeStation.mini  "change station"
+  PASS    7.22 (req 3)  fg #6bb6d6 on bg #1d2026  41.6px/600  div.big  "68°F"
+  PASS    6.30 (req 4.5)  fg #6fb5ae on bg #1f292b  10.9px/600  span.badge  "next"
+  PASS    6.56 (req 4.5)  fg #d19a4e on bg #1d2026  20.8px/400  span.arrow.L  "▼"
+  PASS    6.19 (req 4.5)  fg #9aa0a8 on bg #1d2026  10px/400  svg text  "0.0"
+  PASS    6.91 (req 4.5)  fg #6fb5ae on bg #1d2026  10px/400  svg text  "2:12 AM"
+  PASS    6.56 (req 4.5)  fg #d19a4e on bg #1d2026  10px/400  svg text  "8:24 AM"
+

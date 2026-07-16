@@ -149,3 +149,23 @@ itself.
 - `notice_url` from the API is assigned to `a.href` exactly as v1 did (DOM property, no HTML
   injection possible; a hostile `javascript:` URL from USGS is the theoretical residual — kept
   at v1 parity rather than adding validation).
+
+## Phase 4 a11y audit
+
+Re-verification of the QUALITY.md §2 per-tool checklist (agent a11y-3, 2026-07-16). Runtime
+checks against tools/volcano.html from file:// in both themes, HANS + vsc + zippopotam
+route-fulfilled with a 5-volcano fixture covering every color code (RED/ORANGE/YELLOW/GREEN/
+unassigned); raw measurements in [a11y-phase4.txt](a11y-phase4.txt).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only buttons named | pass | zero symbol-only buttons/links (the 📍 chip carries its location text) |
+| 2 | aria-live on async containers | **fixed** | `#summary` and `#locErr` were live, but `#main` — where the board AND the "Offline — cached data from …" stamp render — was not; added `Suite.liveRegion($("#main"))` (matches the snow/air pattern) |
+| 3 | Keyboard paths | pass | keyboard-only: Tab→location chip→Enter opens the form (`aria-expanded` kept in sync), **Esc closes it** (verified), ZIP + Enter sets the location and distances render |
+| 4 | Input labels | pass | `#zipInput` has `aria-label="US ZIP code"` |
+| 5 | Contrast, both palettes | **fixed** | aviation color-code badges: white ink failed on yellow (**2.58**), orange (3.08) and gray (3.25) in light, and on ALL five pastel codes in dark (1.8–3.3) → new per-code inks `--on-green/-yellow/-orange/-red/-gray` (light: white on green/red 5.0/5.4, dark ink #15181c on yellow/orange/gray 5.5–6.9; dark theme: dark ink on all, 5.4–9.9). Code colors themselves unchanged; `.locErr` already used `var(--red)` (5.4/5.0) |
+| 6 | Focus visibility | pass | core `:focus-visible` outline confirmed via real-Tab probe |
+
+Note: the vcard's colored left border (yellow 2.5:1 vs card) is redundant with the textual
+badge, which now passes — border kept as-is. Suite-wide flag (not fixed locally): `--muted`
+on `--bg` = 4.36:1. Re-verified with `node verify-tool.mjs volcano` — exit 0, evidence files in this directory regenerated 2026-07-16.

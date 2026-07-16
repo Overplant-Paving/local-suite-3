@@ -6,6 +6,12 @@
 <title>Radar & Satellite Viewer · Local Suite</title>
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
+  /* tool accent: first-run error note (3-layer, same pattern as core) —
+     Phase 4 a11y: one hex for both themes failed WCAG AA on the dark card */
+  :root { --errnote: #c0392b; }
+  @media (prefers-color-scheme: dark) { :root { --errnote: #cf695e; } }
+  :root[data-theme="light"] { --errnote: #c0392b; }
+  :root[data-theme="dark"] { --errnote: #cf695e; }
   body { padding: 1.4rem 1.25rem 4rem; }
   .wrap { max-width: 1000px; margin: 0 auto; }
   .topbar { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
@@ -266,7 +272,7 @@ function renderFirstRun(msg) {
     `<div class="panel"><div class="card-msg">
       <div class="big">Set your location</div>
       Radar auto-suggests the nearest NWS station once it knows where you are. (Satellite works without it.)
-      ${msg ? `<div class="notice" style="color:#c0392b">${esc(msg)}</div>` : ""}
+      ${msg ? `<div class="notice" style="color:var(--errnote)">${esc(msg)}</div>` : ""}
       <div class="field"><label for="zip">US ZIP code</label>
         <input id="zip" inputmode="numeric" placeholder="e.g. 10001" maxlength="5"></div>
       <div class="row" style="justify-content:center">

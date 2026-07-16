@@ -1,28 +1,76 @@
-== computed-style diff, light (12 differing values) ==
+== computed-style diff, light (48 differing values) ==
+body { --star: v1=#d9a521 | v2=#b88c1c }
+body { --low: v1=#c99a1e | v2=#a37d18 }
+body { --err: v1=undefined | v2=#c0392b }
 body { --built: v1=undefined | v2=#3a7d44 }
+.topbar { --star: v1=#d9a521 | v2=#b88c1c }
+.topbar { --low: v1=#c99a1e | v2=#a37d18 }
+.topbar { --err: v1=undefined | v2=#c0392b }
 .topbar { --built: v1=undefined | v2=#3a7d44 }
+.back { --star: v1=#d9a521 | v2=#b88c1c }
+.back { --low: v1=#c99a1e | v2=#a37d18 }
+.back { --err: v1=undefined | v2=#c0392b }
 .back { --built: v1=undefined | v2=#3a7d44 }
+.theme-btn { --star: v1=#d9a521 | v2=#b88c1c }
+.theme-btn { --low: v1=#c99a1e | v2=#a37d18 }
+.theme-btn { --err: v1=undefined | v2=#c0392b }
 .theme-btn { --built: v1=undefined | v2=#3a7d44 }
+header h1 { --star: v1=#d9a521 | v2=#b88c1c }
+header h1 { --low: v1=#c99a1e | v2=#a37d18 }
+header h1 { --err: v1=undefined | v2=#c0392b }
 header h1 { --built: v1=undefined | v2=#3a7d44 }
+header .tag { --star: v1=#d9a521 | v2=#b88c1c }
+header .tag { --low: v1=#c99a1e | v2=#a37d18 }
+header .tag { --err: v1=undefined | v2=#c0392b }
 header .tag { --built: v1=undefined | v2=#3a7d44 }
+.firstrun { --star: v1=#d9a521 | v2=#b88c1c }
+.firstrun { --low: v1=#c99a1e | v2=#a37d18 }
+.firstrun { --err: v1=undefined | v2=#c0392b }
 .firstrun { --built: v1=undefined | v2=#3a7d44 }
+.firstrun h2 { --star: v1=#d9a521 | v2=#b88c1c }
+.firstrun h2 { --low: v1=#c99a1e | v2=#a37d18 }
+.firstrun h2 { --err: v1=undefined | v2=#c0392b }
 .firstrun h2 { --built: v1=undefined | v2=#3a7d44 }
+input.txt { --star: v1=#d9a521 | v2=#b88c1c }
+input.txt { --low: v1=#c99a1e | v2=#a37d18 }
+input.txt { --err: v1=undefined | v2=#c0392b }
 input.txt { --built: v1=undefined | v2=#3a7d44 }
+.btn.primary { --star: v1=#d9a521 | v2=#b88c1c }
+.btn.primary { --low: v1=#c99a1e | v2=#a37d18 }
+.btn.primary { --err: v1=undefined | v2=#c0392b }
 .btn.primary { --built: v1=undefined | v2=#3a7d44 }
+.btn { --star: v1=#d9a521 | v2=#b88c1c }
+.btn { --low: v1=#c99a1e | v2=#a37d18 }
+.btn { --err: v1=undefined | v2=#c0392b }
 .btn { --built: v1=undefined | v2=#3a7d44 }
+footer { --star: v1=#d9a521 | v2=#b88c1c }
+footer { --low: v1=#c99a1e | v2=#a37d18 }
+footer { --err: v1=undefined | v2=#c0392b }
 footer { --built: v1=undefined | v2=#3a7d44 }
 
-== computed-style diff, dark (12 differing values) ==
+== computed-style diff, dark (24 differing values) ==
+body { --err: v1=undefined | v2=#cf695e }
 body { --built: v1=undefined | v2=#7dc487 }
+.topbar { --err: v1=undefined | v2=#cf695e }
 .topbar { --built: v1=undefined | v2=#7dc487 }
+.back { --err: v1=undefined | v2=#cf695e }
 .back { --built: v1=undefined | v2=#7dc487 }
+.theme-btn { --err: v1=undefined | v2=#cf695e }
 .theme-btn { --built: v1=undefined | v2=#7dc487 }
+header h1 { --err: v1=undefined | v2=#cf695e }
 header h1 { --built: v1=undefined | v2=#7dc487 }
+header .tag { --err: v1=undefined | v2=#cf695e }
 header .tag { --built: v1=undefined | v2=#7dc487 }
+.firstrun { --err: v1=undefined | v2=#cf695e }
 .firstrun { --built: v1=undefined | v2=#7dc487 }
+.firstrun h2 { --err: v1=undefined | v2=#cf695e }
 .firstrun h2 { --built: v1=undefined | v2=#7dc487 }
+input.txt { --err: v1=undefined | v2=#cf695e }
 input.txt { --built: v1=undefined | v2=#7dc487 }
+.btn.primary { --err: v1=undefined | v2=#cf695e }
 .btn.primary { --built: v1=undefined | v2=#7dc487 }
+.btn { --err: v1=undefined | v2=#cf695e }
 .btn { --built: v1=undefined | v2=#7dc487 }
+footer { --err: v1=undefined | v2=#cf695e }
 footer { --built: v1=undefined | v2=#7dc487 }
 

@@ -1,0 +1,54 @@
+Phase 4 accessibility audit — raw measurements (radar)
+Agent a11y-3, 2026-07-16. Tool exercised from file:// with ALL network
+route-fulfilled by fixtures (no live requests); primary feature driven with page.keyboard only.
+
+== keyboard-only drive of the primary feature ==
+  tab-to #changeLoc: true
+  first-run card open; #zip auto-focused: true
+  ZIP set via Enter -> locLabel="Los Angeles, CA 90012"
+  tab-to #stnSel: true
+  station select via ArrowDown: KSOX -> KSRX (suite.radar.station=KSRX)
+  tab-to #tabSat: true
+  satellite view via Enter: aria-pressed tabSat=true
+  tab-to #secSel: true
+  sector via ArrowDown -> ne; caption="Northeast · GeoColor (true-ish color)"
+  tab-to #tabRadar: true
+
+== icon/symbol-only buttons & links (programmatic enumeration) ==
+  (none found)
+
+== inputs & labels ==
+  <select type=select-one id=stnSel> label-for=false wrapped=true aria-label=null -> OK
+
+== aria-live regions present at runtime ==
+  #main aria-live=polite
+
+== positive tabindex ==
+  (none)
+
+== focus visibility (real Tab focus; computed outline/box-shadow focused vs blurred) ==
+  button#tabSat.tab: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(107, 114, 128) -> visible indicator: true
+  select#stnSel: focused=none 3px rgb(35, 40, 46) | unfocused=none 3px rgb(35, 40, 46) -> visible indicator: true
+  button#refreshR.btn: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(35, 40, 46) -> visible indicator: true
+  a.back: focused=solid 2px rgb(47, 111, 106) | unfocused=none 3px rgb(107, 114, 128) -> visible indicator: true
+
+== contrast, light theme (unique fg/bg pairs with rendered data; WCAG ratio vs requirement) ==
+  FAIL    4.36 (req 4.5)  fg #6b7280 on bg #f5f3ee  14.4px/400  a.back  "← suite"
+  PASS   14.61 (req 4.5)  fg #23282e on bg #fffdf9  13.6px/400  button#themeBtn.theme-btn  "◐ theme"
+  PASS   13.39 (req 3)  fg #23282e on bg #f5f3ee  25.6px/700  h1  "Radar & Satellite Viewer"
+  PASS   13.39 (req 4.5)  fg #23282e on bg #f5f3ee  14.4px/600  span#locLabel.loclabel  "Los Angeles, CA 90012"
+  PASS    5.26 (req 4.5)  fg #2f6f6a on bg #f5f3ee  13.6px/400  button#changeLoc.linklike  "change"
+  PASS    5.83 (req 4.5)  fg #ffffff on bg #2f6f6a  14.4px/400  button#tabRadar.tab.on  "Radar loop"
+  PASS    4.76 (req 4.5)  fg #6b7280 on bg #fffdf9  14.4px/400  button#tabSat.tab  "GOES satellite"
+  PASS    7.58 (req 4.5)  fg #ec8c7c on bg #0b1420  14.4px/400  div.err  "Couldn't load the KSRX radar l"
+
+== contrast, dark theme (unique fg/bg pairs with rendered data; WCAG ratio vs requirement) ==
+  PASS    6.81 (req 4.5)  fg #9aa0a8 on bg #15171b  14.4px/400  a.back  "← suite"
+  PASS   12.96 (req 4.5)  fg #e7e5e0 on bg #1d2026  13.6px/400  button#themeBtn.theme-btn  "◐ theme"
+  PASS   14.25 (req 3)  fg #e7e5e0 on bg #15171b  25.6px/700  h1  "Radar & Satellite Viewer"
+  PASS   14.25 (req 4.5)  fg #e7e5e0 on bg #15171b  14.4px/600  span#locLabel.loclabel  "Los Angeles, CA 90012"
+  PASS    7.60 (req 4.5)  fg #6fb5ae on bg #15171b  13.6px/400  button#changeLoc.linklike  "change"
+  FAIL    2.36 (req 4.5)  fg #ffffff on bg #6fb5ae  14.4px/400  button#tabRadar.tab.on  "Radar loop"
+  PASS    6.19 (req 4.5)  fg #9aa0a8 on bg #1d2026  14.4px/400  button#tabSat.tab  "GOES satellite"
+  PASS    7.58 (req 4.5)  fg #ec8c7c on bg #0b1420  14.4px/400  div.err  "Couldn't load the KSRX radar l"
+

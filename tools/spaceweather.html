@@ -6,13 +6,15 @@
 <title>Space Weather &amp; Aurora Station · Local Suite</title>
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
-  /* tool accents (3-layer, same pattern as core) — the Kp/NOAA-scale severity ramp */
-  :root { --quiet: #4caf50; --unsettled: #cbb733; --minor: #e08b2f; --storm: #d34a3d; --severe: #8e63c0; }
+  /* tool accents (3-layer, same pattern as core) — the Kp/NOAA-scale severity ramp.
+     Phase 4 a11y: light-theme values darkened to WCAG AA (4.5:1) against the card;
+     these vars color TEXT (Kp value, G-label, scale letters), not just graphics. */
+  :root { --quiet: #39833c; --unsettled: #827521; --minor: #a66723; --storm: #cd483b; --severe: #8b61bc; --errnote: #c0392b; }
   @media (prefers-color-scheme: dark) {
-    :root { --quiet: #5cb85c; --unsettled: #d6c34a; --minor: #e2a24f; --storm: #e0685a; --severe: #a17bd6; }
+    :root { --quiet: #5cb85c; --unsettled: #d6c34a; --minor: #e2a24f; --storm: #e0685a; --severe: #a17bd6; --errnote: #cf695e; }
   }
-  :root[data-theme="light"] { --quiet: #4caf50; --unsettled: #cbb733; --minor: #e08b2f; --storm: #d34a3d; --severe: #8e63c0; }
-  :root[data-theme="dark"] { --quiet: #5cb85c; --unsettled: #d6c34a; --minor: #e2a24f; --storm: #e0685a; --severe: #a17bd6; }
+  :root[data-theme="light"] { --quiet: #39833c; --unsettled: #827521; --minor: #a66723; --storm: #cd483b; --severe: #8b61bc; --errnote: #c0392b; }
+  :root[data-theme="dark"] { --quiet: #5cb85c; --unsettled: #d6c34a; --minor: #e2a24f; --storm: #e0685a; --severe: #a17bd6; --errnote: #cf695e; }
 
   body { padding: 1.4rem 1.25rem 4rem; }
   .wrap { max-width: 920px; margin: 0 auto; }
@@ -349,7 +351,7 @@ function renderFirstRun(msg) {
     `<div class="panel"><div class="card-msg">
       <div class="big">Set your location</div>
       Your latitude decides whether the aurora could reach you. Space-weather numbers themselves are global.
-      ${msg ? `<div class="notice" style="color:#c0392b">${esc(msg)}</div>` : ""}
+      ${msg ? `<div class="notice" style="color:var(--errnote)">${esc(msg)}</div>` : ""}
       <div class="field"><label for="zip">US ZIP code</label>
         <input id="zip" inputmode="numeric" placeholder="e.g. 10001" maxlength="5"></div>
       <div class="row">

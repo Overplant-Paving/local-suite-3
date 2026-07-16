@@ -6,6 +6,20 @@
 <title>Air Quality &amp; UV Panel · Local Suite</title>
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
+  /* tool accents (3-layer, same pattern as core) — Phase 4 a11y: EPA band colors used
+     as TEXT need theme-aware variants (the raw scale colors fail WCAG AA as text on the
+     card in one theme or the other); the scale gradient, pin, and pill/badge backgrounds
+     keep the exact EPA colors. --errnote: the first-run error note. */
+  :root { --t-good: #39833c; --t-moderate: #827521; --t-usg: #a66723; --t-unhealthy: #cd483b;
+    --t-veryunhealthy: #8b61bc; --t-hazardous: #7a3b45; --errnote: #c0392b; }
+  @media (prefers-color-scheme: dark) {
+    :root { --t-good: #5cb85c; --t-moderate: #d6c34a; --t-usg: #e2a24f; --t-unhealthy: #e0685a;
+      --t-veryunhealthy: #a17bd6; --t-hazardous: #a67c82; --errnote: #cf695e; }
+  }
+  :root[data-theme="light"] { --t-good: #39833c; --t-moderate: #827521; --t-usg: #a66723;
+    --t-unhealthy: #cd483b; --t-veryunhealthy: #8b61bc; --t-hazardous: #7a3b45; --errnote: #c0392b; }
+  :root[data-theme="dark"] { --t-good: #5cb85c; --t-moderate: #d6c34a; --t-usg: #e2a24f;
+    --t-unhealthy: #e0685a; --t-veryunhealthy: #a17bd6; --t-hazardous: #a67c82; --errnote: #cf695e; }
   body { padding: 1.4rem 1.25rem 4rem; }
   .wrap { max-width: 920px; margin: 0 auto; }
   .topbar { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
@@ -125,22 +139,25 @@ function relTime(ms) {
 }
 
 /* ---------- scales ---------- */
+/* Phase 4 a11y: col = the EPA scale color (gradient/pin/pill backgrounds, unchanged);
+   tcol = theme-aware TEXT variant (hero number/category); badgeBg/badgeInk = the small
+   outlook badge, its bg nudged only where neither white nor dark ink could reach AA. */
 const AQI = [
-  { max: 50,  cat: "Good",                            col: "#4caf50", advice: "Air quality is satisfactory; enjoy your usual outdoor activities." },
-  { max: 100, cat: "Moderate",                         col: "#cbb733", advice: "Acceptable. Unusually sensitive people may consider limiting prolonged outdoor exertion." },
-  { max: 150, cat: "Unhealthy for Sensitive Groups",   col: "#e08b2f", advice: "Sensitive groups (heart/lung conditions, kids, older adults) should reduce prolonged outdoor exertion." },
-  { max: 200, cat: "Unhealthy",                         col: "#d34a3d", advice: "Everyone may begin to feel effects; sensitive groups should avoid prolonged outdoor exertion." },
-  { max: 300, cat: "Very Unhealthy",                    col: "#8e63c0", advice: "Health alert: the risk of effects is increased for everyone. Limit time outdoors." },
-  { max: 9999,cat: "Hazardous",                         col: "#7a3b45", advice: "Emergency conditions. Everyone should avoid outdoor exertion; stay indoors." }
+  { max: 50,  cat: "Good",                            col: "#4caf50", tcol: "var(--t-good)",          badgeBg: "#4caf50", badgeInk: "#1e2418", pillInk: "#fff",    advice: "Air quality is satisfactory; enjoy your usual outdoor activities." },
+  { max: 100, cat: "Moderate",                         col: "#cbb733", tcol: "var(--t-moderate)",      badgeBg: "#cbb733", badgeInk: "#1e2418", pillInk: "#1e2418", advice: "Acceptable. Unusually sensitive people may consider limiting prolonged outdoor exertion." },
+  { max: 150, cat: "Unhealthy for Sensitive Groups",   col: "#e08b2f", tcol: "var(--t-usg)",           badgeBg: "#e08b2f", badgeInk: "#1e2418", pillInk: "#1e2418", advice: "Sensitive groups (heart/lung conditions, kids, older adults) should reduce prolonged outdoor exertion." },
+  { max: 200, cat: "Unhealthy",                         col: "#d34a3d", tcol: "var(--t-unhealthy)",     badgeBg: "#cb473b", badgeInk: "#fff",    pillInk: "#fff",    advice: "Everyone may begin to feel effects; sensitive groups should avoid prolonged outdoor exertion." },
+  { max: 300, cat: "Very Unhealthy",                    col: "#8e63c0", tcol: "var(--t-veryunhealthy)", badgeBg: "#8d62be", badgeInk: "#fff",    pillInk: "#fff",    advice: "Health alert: the risk of effects is increased for everyone. Limit time outdoors." },
+  { max: 9999,cat: "Hazardous",                         col: "#7a3b45", tcol: "var(--t-hazardous)",     badgeBg: "#7a3b45", badgeInk: "#fff",    pillInk: "#fff",    advice: "Emergency conditions. Everyone should avoid outdoor exertion; stay indoors." }
 ];
 function aqiBand(v) { return AQI.find(b => v <= b.max) || AQI[AQI.length-1]; }
 
 const UVB = [
-  { max: 2,   cat: "Low",       col: "#4caf50", advice: "No protection needed." },
-  { max: 5,   cat: "Moderate",  col: "#cbb733", advice: "Seek shade near midday; hat and sunscreen." },
-  { max: 7,   cat: "High",      col: "#e08b2f", advice: "Protection required — SPF 30+, hat, sunglasses." },
-  { max: 10,  cat: "Very High", col: "#d34a3d", advice: "Extra protection; avoid the sun 10am–4pm." },
-  { max: 99,  cat: "Extreme",   col: "#8e63c0", advice: "Take all precautions; unprotected skin can burn quickly." }
+  { max: 2,   cat: "Low",       col: "#4caf50", badgeBg: "#4caf50", badgeInk: "#1e2418", pillInk: "#fff",    advice: "No protection needed." },
+  { max: 5,   cat: "Moderate",  col: "#cbb733", badgeBg: "#cbb733", badgeInk: "#1e2418", pillInk: "#1e2418", advice: "Seek shade near midday; hat and sunscreen." },
+  { max: 7,   cat: "High",      col: "#e08b2f", badgeBg: "#e08b2f", badgeInk: "#1e2418", pillInk: "#1e2418", advice: "Protection required — SPF 30+, hat, sunglasses." },
+  { max: 10,  cat: "Very High", col: "#d34a3d", badgeBg: "#cb473b", badgeInk: "#fff",    pillInk: "#fff",    advice: "Extra protection; avoid the sun 10am–4pm." },
+  { max: 99,  cat: "Extreme",   col: "#8e63c0", badgeBg: "#8d62be", badgeInk: "#fff",    pillInk: "#fff",    advice: "Take all precautions; unprotected skin can burn quickly." }
 ];
 function uvBand(v) { return UVB.find(b => v <= b.max) || UVB[UVB.length-1]; }
 
@@ -195,7 +212,7 @@ function render(data, stampMs) {
     return `<div class="day">
       <span class="dn">${isToday(day) ? "Today" : esc(dayName(day))}</span>
       <span class="bar"><span style="width:${pct}%;background:${b.col}"></span></span>
-      <span class="val"><span class="badge" style="background:${b.col}">${esc(v)}</span></span>
+      <span class="val"><span class="badge" style="background:${b.badgeBg};color:${b.badgeInk}">${esc(v)}</span></span>
     </div>`;
   }).join("");
 
@@ -208,7 +225,7 @@ function render(data, stampMs) {
     return `<div class="day">
       <span class="dn">${isToday(day) ? "Today" : esc(dayName(day))}</span>
       <span class="bar"><span style="width:${pct}%;background:${b.col}"></span></span>
-      <span class="val"><span class="badge" style="background:${b.col}">${esc(rv)}</span> ${esc(b.cat)}</span>
+      <span class="val"><span class="badge" style="background:${b.badgeBg};color:${b.badgeInk}">${esc(rv)}</span> ${esc(b.cat)}</span>
     </div>`;
   }).join("");
 
@@ -218,8 +235,8 @@ function render(data, stampMs) {
         <div class="p-label">Air quality · US AQI</div>
         ${band ? `
         <div class="hero">
-          <div class="num" style="color:${band.col}">${esc(Math.round(aqi))}</div>
-          <div class="cat" style="color:${band.col}">${esc(band.cat)}<small>US AQI</small></div>
+          <div class="num" style="color:${band.tcol}">${esc(Math.round(aqi))}</div>
+          <div class="cat" style="color:${band.tcol}">${esc(band.cat)}<small>US AQI</small></div>
         </div>
         <div class="scale"><div class="pin" style="left:${pinPct}%"></div></div>
         <div class="scale-lbls"><span>0</span><span>50</span><span>100</span><span>150</span><span>200</span><span>300+</span></div>
@@ -231,7 +248,7 @@ function render(data, stampMs) {
         <div class="p-label">UV index · now</div>
         ${uvb ? `
         <div class="uv-hero">
-          <div class="uv-pill" style="background:${uvb.col}">${esc(Math.round(uv))}</div>
+          <div class="uv-pill" style="background:${uvb.col};color:${uvb.pillInk}">${esc(Math.round(uv))}</div>
           <div class="uv-cat">${esc(uvb.cat)}<small>${esc(uvb.advice)}</small></div>
         </div>` : `<div class="card-msg">UV data unavailable.</div>`}
       </div>
@@ -302,7 +319,7 @@ function renderFirstRun(msg) {
     `<div class="panel"><div class="card-msg">
       <div class="big">Set your location</div>
       Air quality and UV are computed for your exact coordinates (works worldwide).
-      ${msg ? `<div class="notice" style="color:#c0392b">${esc(msg)}</div>` : ""}
+      ${msg ? `<div class="notice" style="color:var(--errnote)">${esc(msg)}</div>` : ""}
       <div class="field"><label for="zip">US ZIP code</label>
         <input id="zip" inputmode="numeric" placeholder="e.g. 10001" maxlength="5"></div>
       <div class="row">
