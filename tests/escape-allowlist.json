@@ -101,7 +101,9 @@
     "pinPct": "local-only expression, recorded verified-clean with reasoning in tests/evidence/air/report.md",
     "uvb.col": "local-only expression, recorded verified-clean with reasoning in tests/evidence/air/report.md",
     "aqiOutlook || '<div class=\"card-msg\">No forecast.</div>'": "local-only expression, recorded verified-clean with reasoning in tests/evidence/air/report.md",
-    "uvOutlook": "local-only expression, recorded verified-clean with reasoning in tests/evidence/air/report.md"
+    "uvOutlook": "local-only expression, recorded verified-clean with reasoning in tests/evidence/air/report.md",
+    "band.tcol": "orchestrator-reviewed (Phase 4 a11y follow-up): literal CSS var name from the tool's embedded BANDS constant table (air.html:146-151), selected by numeric AQI — never remote/user data",
+    "uvb.pillInk": "orchestrator-reviewed (Phase 4 a11y follow-up): literal color string from the tool's embedded UV band table (air.html:156-160), selected by numeric UV index — never remote/user data"
   },
   "currency.html": {},
   "quakes.html": {
