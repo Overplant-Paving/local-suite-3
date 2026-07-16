@@ -1,0 +1,475 @@
+===== AUDIT text =====
+{
+ "tool": "text",
+ "themes": {
+  "light": {
+   "stages": [
+    {
+     "name": "stats + diff rendered",
+     "contrast": [
+      {
+       "sel": "header .tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".tab.on",
+       "desc": "active tab (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#2f6f6a",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.83,
+       "pass": true
+      },
+      {
+       "sel": ".tab:not(.on)",
+       "desc": "inactive tab (muted on card)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".stat b",
+       "desc": "stat number (accent on card)",
+       "fg": "#2f6f6a",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 20,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 5.74,
+       "pass": true
+      },
+      {
+       "sel": ".stat span",
+       "desc": "stat label (muted, .74rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 11.84,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".grp h4",
+       "desc": "group heading (muted uppercase)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".b",
+       "desc": "op button (ink on card)",
+       "fg": "#23282e",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.76,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 14.61,
+       "pass": true
+      },
+      {
+       "sel": "#runDiff",
+       "desc": "Compare (.b.primary white on accent)",
+       "fg": "#ffffff",
+       "bg": "#2f6f6a",
+       "bgLabel": "computed",
+       "size": 13.76,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.83,
+       "pass": true
+      },
+      {
+       "sel": ".hint",
+       "desc": "hint (muted on card)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".diff .del",
+       "desc": "diff deleted line (del-ink on del-bg)",
+       "fg": "#a3372a",
+       "bg": "#fbe6e2",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.58,
+       "pass": true
+      },
+      {
+       "sel": ".diff .ins",
+       "desc": "diff inserted line (ins-ink on ins-bg)",
+       "fg": "#2f6f3a",
+       "bg": "#e2f0e4",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.16,
+       "pass": true
+      },
+      {
+       "sel": ".diff .ln:not(.del):not(.ins) .gutter",
+       "desc": "gutter on plain line (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".diff .del .gutter",
+       "desc": "gutter on deleted line",
+       "fg": "#a3372a",
+       "bg": "#fbe6e2",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.58,
+       "pass": true
+      },
+      {
+       "sel": ".diff .ins .gutter",
+       "desc": "gutter on inserted line",
+       "fg": "#2f6f3a",
+       "bg": "#e2f0e4",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.16,
+       "pass": true
+      },
+      {
+       "sel": "label.inl",
+       "desc": "diff labels (muted on card)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.76,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  },
+  "dark": {
+   "stages": [
+    {
+     "name": "stats + diff rendered",
+     "contrast": [
+      {
+       "sel": "header .tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".tab.on",
+       "desc": "active tab (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#6fb5ae",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 2.36,
+       "pass": false
+      },
+      {
+       "sel": ".tab:not(.on)",
+       "desc": "inactive tab (muted on card)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".stat b",
+       "desc": "stat number (accent on card)",
+       "fg": "#6fb5ae",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 20,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 6.91,
+       "pass": true
+      },
+      {
+       "sel": ".stat span",
+       "desc": "stat label (muted, .74rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 11.84,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".grp h4",
+       "desc": "group heading (muted uppercase)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".b",
+       "desc": "op button (ink on card)",
+       "fg": "#e7e5e0",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.76,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 12.96,
+       "pass": true
+      },
+      {
+       "sel": "#runDiff",
+       "desc": "Compare (.b.primary white on accent)",
+       "fg": "#ffffff",
+       "bg": "#6fb5ae",
+       "bgLabel": "computed",
+       "size": 13.76,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 2.36,
+       "pass": false
+      },
+      {
+       "sel": ".hint",
+       "desc": "hint (muted on card)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".diff .del",
+       "desc": "diff deleted line (del-ink on del-bg)",
+       "fg": "#e88a7c",
+       "bg": "#3a2320",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.8,
+       "pass": true
+      },
+      {
+       "sel": ".diff .ins",
+       "desc": "diff inserted line (ins-ink on ins-bg)",
+       "fg": "#85c893",
+       "bg": "#1f3325",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.85,
+       "pass": true
+      },
+      {
+       "sel": ".diff .ln:not(.del):not(.ins) .gutter",
+       "desc": "gutter on plain line (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".diff .del .gutter",
+       "desc": "gutter on deleted line",
+       "fg": "#e88a7c",
+       "bg": "#3a2320",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.8,
+       "pass": true
+      },
+      {
+       "sel": ".diff .ins .gutter",
+       "desc": "gutter on inserted line",
+       "fg": "#85c893",
+       "bg": "#1f3325",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.85,
+       "pass": true
+      },
+      {
+       "sel": "label.inl",
+       "desc": "diff labels (muted on card)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.76,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  }
+ },
+ "keyboard": [
+  "typed; stats: 3 WORDS 13 CHARACTERS 11 NO SPACES 1 LINES 1 SENTENCES 1 PARAGRAPHS <1 min READ TIME",
+  "UPPERCASE via Enter; value: MAKE ME SHOUT",
+  "diff via keyboard; summary: 1 line added, 1 removed."
+ ],
+ "iconButtons": [],
+ "labels": [
+  {
+   "tag": "textarea",
+   "type": "textarea",
+   "id": "text",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "textarea",
+   "type": "textarea",
+   "id": "encIn",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "textarea",
+   "type": "textarea",
+   "id": "diffA",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "textarea",
+   "type": "textarea",
+   "id": "diffB",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "checkbox",
+   "id": "wordDiff",
+   "visible": true,
+   "how": "wrapping label",
+   "pass": true
+  }
+ ],
+ "tabindex": [],
+ "live": [
+  {
+   "sel": "#toast",
+   "present": true,
+   "ariaLive": "polite"
+  },
+  {
+   "sel": "#opHint",
+   "present": true,
+   "ariaLive": "polite"
+  },
+  {
+   "sel": "#encOut",
+   "present": true,
+   "ariaLive": "polite"
+  },
+  {
+   "sel": "#diffSummary",
+   "present": true,
+   "ariaLive": "polite"
+  }
+ ],
+ "focus": {
+  "pass": true,
+  "el": "BUTTON",
+  "focused": {
+   "outlineWidth": "2px",
+   "outlineStyle": "solid",
+   "outlineColor": "rgb(47, 111, 106)",
+   "boxShadow": "none"
+  },
+  "blurred": {
+   "outlineWidth": "3px",
+   "outlineStyle": "none",
+   "outlineColor": "rgb(107, 114, 128)",
+   "boxShadow": "none"
+  }
+ },
+ "grep": null,
+ "keyboardConsole": []
+}

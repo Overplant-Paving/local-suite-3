@@ -53,3 +53,26 @@ None. endpoints: [].
 - for= label fixes are edits inside v1 markup — re-diff recommended (orchestrator does).
 - aria-live on role=img container may be silent on some SRs (no worse than v1).
 - Dot-grid node-count perf ceiling inherited from v1.
+
+## Phase 4 a11y audit
+
+Audited 2026-07-16 from `file://`, both themes (`tests/a11y-phase4-set2.mjs`;
+raw: `phase4-a11y-audit.txt`).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only controls named | pass | ink swatch buttons have `aria-label="Ink color #…"`; the "0" full-bleed button has `aria-label="No margins — full bleed"` |
+| 2 | aria-live | pass | `#preview` is the result container: liveRegion + `role=img` with an aria-label rebuilt on every render ("Preview: <type> paper, <size>, <orientation>") — verified changing at runtime |
+| 3 | Keyboard path | pass | keyboard-only: paper type via select ArrowDown → preview label changed to "Dot grid"; orientation via Enter on the segmented button → "landscape"; margins via ArrowUp then full-bleed via Enter → 0. Print/Download are plain buttons. No overlays |
+| 4 | Inputs labeled | pass | every field `label[for]` (type select + ink color: aria-label; orientation group: `aria-labelledby`) |
+| 5 | Contrast | pass locally / suite flags | see below |
+| 6 | Focus visibility | pass | core 2px accent outline (buttons, selects, number inputs) |
+
+Contrast: `.btn.ghost`/accent-on-card 5.74/6.91, section headings and field labels on card
+4.76/6.19, `.note b` 13.39-class. The SVG preview itself is user-configured ink on white
+(the tool's whole point) — n/a.
+**SUITE-WIDE flags (no paper-local color fails)**: light muted-on-bg 4.36 (tagline, idle
+segmented buttons on `--bg`, print note, hints); dark #fff-on-accent 2.36 (active segmented
+button, `.btn`). Core-palette pairs.
+
+No changes made to paper.html — **pass as was**.

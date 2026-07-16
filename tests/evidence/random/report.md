@@ -116,3 +116,30 @@ none — zero network (`crypto.getRandomValues` only). `endpoints: []` in manife
   before the shot — expected harness behavior, not a defect.
 - `--warn` is defined but unused in v1 and v2 alike; preserved to stay faithful. Could be
   dropped suite-wide later if you prefer dead-CSS removal.
+
+## Phase 4 a11y audit
+
+Audited 2026-07-16 from `file://`, both themes (`tests/a11y-phase4-set2.mjs`;
+raw: `phase4-a11y-audit.txt`). Re-verified with `node verify-tool.mjs random` → exit 0.
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only controls named | pass | tabs carry emoji + text ("🎲 Dice"); no unnamed symbol-only controls found by enumeration |
+| 2 | aria-live | pass | `#diceTotal`, `#coinTally`, `#spinResult`, `#pickResult`, `#numResult` liveRegion (runtime confirmed). Results log intentionally not live (source comment: would double-announce) |
+| 3 | Keyboard path | pass | keyboard-only: dice count typed + Enter-in-input triggers Roll (total announced); Number tab via Enter, min typed, Enter → pick; Coin tab + Flip via Enter → tally updated. Spinner canvas has `role=img` aria-label and its result lands in the live `#spinResult` |
+| 4 | Inputs labeled | pass | all inputs `label[for]`; `#noRepeat` label[for] |
+| 5 | Contrast | **fixed** | see below |
+| 6 | Focus visibility | pass | core 2px accent outline on buttons; inputs swap border to accent |
+
+Contrast — **fixed: the coin face** — "H"/"T"/"?" was #fff on the gold radial gradient:
+**1.62–2.72:1** (needs 3.0 even as large text), both themes (gradient is hardcoded).
+Changed `.coin` ink to the streak-dot brown #4a3800 → **6.96:1** (light stop) / **4.15:1**
+(dark stop) on heads; passes on the silver tails face too. Other passes: `.die` 4.95/6.30
+(large), `.result-big` 5.74/6.91, `.picked-list li` 4.95/6.30, `button.go` on accent 5.83 light.
+Wheel-canvas labels are painted pixels (not DOM text) — the winning label is announced via
+the live `#spinResult`, so n/a for text contrast.
+**SUITE-WIDE flags**: light muted-on-bg 4.36 (tagline, log kinds/timestamps, log heading);
+dark #fff-on-accent 2.36 (`.tab.on`, `button.go`).
+
+Fix made: `.coin { color: #4a3800 }` (tool-local, both themes by design — the gradient is
+theme-invariant). No behavior change; no storage.

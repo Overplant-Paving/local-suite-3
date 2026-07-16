@@ -1,0 +1,500 @@
+===== AUDIT random =====
+{
+ "tool": "random",
+ "themes": {
+  "light": {
+   "stages": [
+    {
+     "name": "dice rolled, coin flipped, picks made",
+     "contrast": [
+      {
+       "sel": ".tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".tab.on",
+       "desc": "active tab (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#2f6f6a",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.83,
+       "pass": true
+      },
+      {
+       "sel": "#p-dice label",
+       "desc": "field label (muted uppercase)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": "button.go",
+       "desc": "go button (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#2f6f6a",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 5.83,
+       "pass": true
+      },
+      {
+       "sel": "button.mini",
+       "desc": "mini button (ink on bg)",
+       "fg": "#23282e",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 13.39,
+       "pass": true
+      },
+      {
+       "sel": ".result-big",
+       "desc": "big result (accent on card, large)",
+       "fg": "#2f6f6a",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 73.6,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 5.74,
+       "pass": true
+      },
+      {
+       "sel": ".result-sub",
+       "desc": "sub result (muted on card)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".die",
+       "desc": "die face (accent on accent-soft, 1.4rem bold)",
+       "fg": "#2f6f6a",
+       "bg": "#e3efed",
+       "bgLabel": "computed",
+       "size": 22.4,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 4.95,
+       "pass": true
+      },
+      {
+       "sel": "#coin",
+       "desc": "coin H/T (white on gold gradient)",
+       "fg": "#4a3800",
+       "bg": "#f0c65a",
+       "bgLabel": "#f0c65a",
+       "size": 38.4,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 6.96,
+       "pass": true
+      },
+      {
+       "sel": "#coin",
+       "desc": "coin H/T (white on gold gradient)",
+       "fg": "#4a3800",
+       "bg": "#c69518",
+       "bgLabel": "#c69518",
+       "size": 38.4,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 4.15,
+       "pass": true
+      },
+      {
+       "sel": ".streak span.h",
+       "desc": "streak H (#4a3800 on gold)",
+       "bgColors": [
+        "#f0c65a"
+       ],
+       "missing": true
+      },
+      {
+       "sel": ".picked-list li",
+       "desc": "picked item (accent on accent-soft)",
+       "fg": "#2f6f6a",
+       "bg": "#e3efed",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 4.95,
+       "pass": true
+      },
+      {
+       "sel": ".log h2",
+       "desc": "log heading (muted)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".log li .kind",
+       "desc": "log kind (muted .75rem)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".log li time",
+       "desc": "log time (muted .78rem)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  },
+  "dark": {
+   "stages": [
+    {
+     "name": "dice rolled, coin flipped, picks made",
+     "contrast": [
+      {
+       "sel": ".tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".tab.on",
+       "desc": "active tab (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#6fb5ae",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 2.36,
+       "pass": false
+      },
+      {
+       "sel": "#p-dice label",
+       "desc": "field label (muted uppercase)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": "button.go",
+       "desc": "go button (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#6fb5ae",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 2.36,
+       "pass": false
+      },
+      {
+       "sel": "button.mini",
+       "desc": "mini button (ink on bg)",
+       "fg": "#e7e5e0",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 14.25,
+       "pass": true
+      },
+      {
+       "sel": ".result-big",
+       "desc": "big result (accent on card, large)",
+       "fg": "#6fb5ae",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 73.6,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 6.91,
+       "pass": true
+      },
+      {
+       "sel": ".result-sub",
+       "desc": "sub result (muted on card)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".die",
+       "desc": "die face (accent on accent-soft, 1.4rem bold)",
+       "fg": "#6fb5ae",
+       "bg": "#1f292b",
+       "bgLabel": "computed",
+       "size": 22.4,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 6.3,
+       "pass": true
+      },
+      {
+       "sel": "#coin",
+       "desc": "coin H/T (white on gold gradient)",
+       "fg": "#4a3800",
+       "bg": "#f0c65a",
+       "bgLabel": "#f0c65a",
+       "size": 38.4,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 6.96,
+       "pass": true
+      },
+      {
+       "sel": "#coin",
+       "desc": "coin H/T (white on gold gradient)",
+       "fg": "#4a3800",
+       "bg": "#c69518",
+       "bgLabel": "#c69518",
+       "size": 38.4,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 4.15,
+       "pass": true
+      },
+      {
+       "sel": ".streak span.h",
+       "desc": "streak H (#4a3800 on gold)",
+       "fg": "#4a3800",
+       "bg": "#f0c65a",
+       "bgLabel": "#f0c65a",
+       "size": 12.8,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 6.96,
+       "pass": true
+      },
+      {
+       "sel": ".picked-list li",
+       "desc": "picked item (accent on accent-soft)",
+       "fg": "#6fb5ae",
+       "bg": "#1f292b",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 6.3,
+       "pass": true
+      },
+      {
+       "sel": ".log h2",
+       "desc": "log heading (muted)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".log li .kind",
+       "desc": "log kind (muted .75rem)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".log li time",
+       "desc": "log time (muted .78rem)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  }
+ },
+ "keyboard": [
+  "dice via Enter-in-input; total: 9; sub: 3d4 · total of 3 dice",
+  "number pick via Enter: 93",
+  "coin flip via Enter; tally: Heads 0 · Tails 1"
+ ],
+ "iconButtons": [],
+ "labels": [
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "diceCount",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "select",
+   "type": "select-one",
+   "id": "diceSides",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "textarea",
+   "type": "textarea",
+   "id": "spinLabels",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "textarea",
+   "type": "textarea",
+   "id": "pickList",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "pickN",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "checkbox",
+   "id": "noRepeat",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "numMin",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "numMax",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  }
+ ],
+ "tabindex": [],
+ "live": [
+  {
+   "sel": "#diceTotal",
+   "present": true,
+   "ariaLive": "polite"
+  },
+  {
+   "sel": "#coinTally",
+   "present": true,
+   "ariaLive": "polite"
+  },
+  {
+   "sel": "#spinResult",
+   "present": true,
+   "ariaLive": "polite"
+  },
+  {
+   "sel": "#pickResult",
+   "present": true,
+   "ariaLive": "polite"
+  },
+  {
+   "sel": "#numResult",
+   "present": true,
+   "ariaLive": "polite"
+  }
+ ],
+ "focus": {
+  "pass": true,
+  "el": "BUTTON",
+  "focused": {
+   "outlineWidth": "2px",
+   "outlineStyle": "solid",
+   "outlineColor": "rgb(47, 111, 106)",
+   "boxShadow": "none"
+  },
+  "blurred": {
+   "outlineWidth": "3px",
+   "outlineStyle": "none",
+   "outlineColor": "rgb(255, 255, 255)",
+   "boxShadow": "none"
+  }
+ },
+ "grep": null,
+ "keyboardConsole": []
+}

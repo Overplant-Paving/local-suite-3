@@ -1,0 +1,472 @@
+===== AUDIT timers =====
+{
+ "tool": "timers",
+ "themes": {
+  "light": {
+   "stages": [
+    {
+     "name": "one ringing timer + laps",
+     "contrast": [
+      {
+       "sel": "header .tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".tab.on",
+       "desc": "active tab (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#2f6f6a",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.83,
+       "pass": true
+      },
+      {
+       "sel": ".btn",
+       "desc": "add button (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#2f6f6a",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.83,
+       "pass": true
+      },
+      {
+       "sel": ".preset",
+       "desc": "preset chip (ink on card)",
+       "fg": "#23282e",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 14.61,
+       "pass": true
+      },
+      {
+       "sel": ".timer.ringing .big",
+       "desc": "ringing display (--alarm on card, large)",
+       "fg": "#993636",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 54.4,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 7.04,
+       "pass": true
+      },
+      {
+       "sel": ".timer .x",
+       "desc": "remove ✕ (muted on card)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 17.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": "#timerEmpty",
+       "desc": "empty state (muted)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": "footer",
+       "desc": "footer (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      }
+     ]
+    },
+    {
+     "name": "stopwatch laps",
+     "contrast": [
+      {
+       "sel": ".sw-face .big",
+       "desc": "stopwatch display (ink, large)",
+       "fg": "#23282e",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 88,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 14.61,
+       "pass": true
+      },
+      {
+       "sel": ".sw-face .ms",
+       "desc": "centiseconds (accent, large)",
+       "fg": "#2f6f6a",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 48.4,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 5.74,
+       "pass": true
+      },
+      {
+       "sel": ".laps th",
+       "desc": "laps header (muted .78rem)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 500,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".laps tr.best td",
+       "desc": "best lap (--built on card)",
+       "fg": "#3a7d44",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.51,
+       "pass": true
+      },
+      {
+       "sel": ".laps tr.worst td",
+       "desc": "worst lap (--alarm on card)",
+       "fg": "#993636",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.45,
+       "pass": true
+      },
+      {
+       "sel": ".laps .tag.best",
+       "desc": "fastest chip (--built on built-mix)",
+       "fg": "#2c5f36",
+       "bg": "#d0dbcc",
+       "bgLabel": "computed",
+       "size": 11.52,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.26,
+       "pass": true
+      },
+      {
+       "sel": ".laps .tag.worst",
+       "desc": "slowest chip (--alarm on alarm-mix)",
+       "fg": "#993636",
+       "bg": "#e3cdc9",
+       "bgLabel": "computed",
+       "size": 11.52,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.72,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  },
+  "dark": {
+   "stages": [
+    {
+     "name": "one ringing timer + laps",
+     "contrast": [
+      {
+       "sel": "header .tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".tab.on",
+       "desc": "active tab (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#6fb5ae",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 2.36,
+       "pass": false
+      },
+      {
+       "sel": ".btn",
+       "desc": "add button (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#6fb5ae",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 2.36,
+       "pass": false
+      },
+      {
+       "sel": ".preset",
+       "desc": "preset chip (ink on card)",
+       "fg": "#e7e5e0",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 12.96,
+       "pass": true
+      },
+      {
+       "sel": ".timer.ringing .big",
+       "desc": "ringing display (--alarm on card, large)",
+       "fg": "#e07a7a",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 54.4,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 5.62,
+       "pass": true
+      },
+      {
+       "sel": ".timer .x",
+       "desc": "remove ✕ (muted on card)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 17.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": "#timerEmpty",
+       "desc": "empty state (muted)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": "footer",
+       "desc": "footer (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      }
+     ]
+    },
+    {
+     "name": "stopwatch laps",
+     "contrast": [
+      {
+       "sel": ".sw-face .big",
+       "desc": "stopwatch display (ink, large)",
+       "fg": "#e7e5e0",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 88,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 12.96,
+       "pass": true
+      },
+      {
+       "sel": ".sw-face .ms",
+       "desc": "centiseconds (accent, large)",
+       "fg": "#6fb5ae",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 48.4,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 6.91,
+       "pass": true
+      },
+      {
+       "sel": ".laps th",
+       "desc": "laps header (muted .78rem)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 500,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".laps tr.best td",
+       "desc": "best lap (--built on card)",
+       "fg": "#7dc487",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 8.65,
+       "pass": true
+      },
+      {
+       "sel": ".laps tr.worst td",
+       "desc": "worst lap (--alarm on card)",
+       "fg": "#e07a7a",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.18,
+       "pass": true
+      },
+      {
+       "sel": ".laps .tag.best",
+       "desc": "fastest chip (--built on built-mix)",
+       "fg": "#7dc487",
+       "bg": "#2a3a31",
+       "bgLabel": "computed",
+       "size": 11.52,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.82,
+       "pass": true
+      },
+      {
+       "sel": ".laps .tag.worst",
+       "desc": "slowest chip (--alarm on alarm-mix)",
+       "fg": "#e07a7a",
+       "bg": "#3e2b2e",
+       "bgLabel": "computed",
+       "size": 11.52,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.57,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  }
+ },
+ "keyboard": [
+  "timer added via Enter; card: Keyboard egg 00:02",
+  "after fastForward: display=Time! ringing=true",
+  "dismissed via Enter; display: 00:02",
+  "lap via keyboard; rows: 1; display: 00:01.50"
+ ],
+ "iconButtons": [
+  {
+   "tag": "button",
+   "id": null,
+   "cls": "x",
+   "text": "✕",
+   "name": "Remove timer Timer",
+   "pass": true
+  }
+ ],
+ "labels": [
+  {
+   "tag": "input",
+   "type": "text",
+   "id": "tName",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "tH",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "tM",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "tS",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  }
+ ],
+ "tabindex": [],
+ "live": [
+  {
+   "sel": "#announce",
+   "present": true,
+   "ariaLive": "polite"
+  }
+ ],
+ "focus": {
+  "pass": true,
+  "el": "BUTTON#swReset",
+  "focused": {
+   "outlineWidth": "2px",
+   "outlineStyle": "solid",
+   "outlineColor": "rgb(47, 111, 106)",
+   "boxShadow": "none"
+  },
+  "blurred": {
+   "outlineWidth": "3px",
+   "outlineStyle": "none",
+   "outlineColor": "rgb(47, 111, 106)",
+   "boxShadow": "none"
+  }
+ },
+ "grep": null,
+ "keyboardConsole": []
+}

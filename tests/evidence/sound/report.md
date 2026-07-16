@@ -103,3 +103,26 @@ None. Zero-network tool; all audio synthesized via Web Audio API. `endpoints: []
 - Sound cards keep `role="button"` + `aria-pressed` rather than being replaced with real
   `<button>` elements, to preserve v1's DOM/CSS exactly (a `<button>` would change computed
   styles and the card layout). Semantics-equivalent for AT.
+
+## Phase 4 a11y audit
+
+Audited 2026-07-16 from `file://`, both themes (`tests/a11y-phase4-set2.mjs`;
+raw: `phase4-a11y-audit.txt`).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only controls named | pass | `▶/⏸` master button has `aria-label="Play or pause"` + `aria-pressed`; sound-card emojis are `aria-hidden` with the name as the card's aria-label |
+| 2 | aria-live | pass | `#timerStatus` liveRegion (runtime confirmed) — the one async region (countdown/fade state). Card on/off state is announced via `aria-pressed` on the card itself |
+| 3 | Keyboard path | pass | keyboard-only: master play via Enter (`aria-pressed` → true, glyph → ⏸); master volume ArrowLeft; sound card toggled via Enter (cards are `role=button` tabindex 0, `aria-pressed` tracked); per-sound slider arrows adjust volume **without** toggling the card (keydown stopPropagation verified); sleep timer via Enter → "Stopping in 30:00" announced |
+| 4 | Inputs labeled | pass | master volume `aria-labelledby`; per-sound sliders `aria-label="<name> volume"` |
+| 5 | Contrast | pass locally / suite flags | see below |
+| 6 | Focus visibility | pass | core 2px accent outline on buttons, cards, and range inputs |
+
+Contrast: `.snd.on .state` on accent-soft **4.95/6.69**, timer countdown `b` 5.74/6.91,
+idle timer buttons 13.39/14.25, master label 4.76/6.19 (on card).
+**SUITE-WIDE flags (no sound-local color fails)**: light muted-on-bg 4.36 (tagline, hint)
+and muted on accent-soft 4.11 (active-card description); dark #fff-on-accent 2.36 — here the
+`▶` glyph (needs 3.0 as UI) and the active sleep-timer pill. Same core-palette pair as every
+tool's primary buttons.
+
+No changes made to sound.html — **pass as was**.

@@ -6,13 +6,15 @@
 <title>Color Studio · Local Suite</title>
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
-  /* tool accents: pass/fail palette (3-layer, same pattern as core) */
-  :root { --good: #3a7d44; --bad: #c0492d; }
+  /* tool accents: pass/fail palette (3-layer, same pattern as core)
+     Phase 4 a11y: deepened so the PASS/FAIL badge text meets AA (4.5:1) on its
+     own color-mix background in both themes (was 3.86/3.97 light, 4.2 dark). */
+  :root { --good: #2f6337; --bad: #ad3a20; }
   @media (prefers-color-scheme: dark) {
-    :root { --good: #7dc487; --bad: #e0705a; }
+    :root { --good: #7dc487; --bad: #e67d68; }
   }
-  :root[data-theme="light"] { --good: #3a7d44; --bad: #c0492d; }
-  :root[data-theme="dark"] { --good: #7dc487; --bad: #e0705a; }
+  :root[data-theme="light"] { --good: #2f6337; --bad: #ad3a20; }
+  :root[data-theme="dark"] { --good: #7dc487; --bad: #e67d68; }
 
   body { padding: 1.4rem 1.25rem 4rem; }
   .wrap { max-width: 860px; margin: 0 auto; }

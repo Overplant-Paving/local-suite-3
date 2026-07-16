@@ -6,24 +6,28 @@
 <title>Severe Weather Alert Board · Local Suite</title>
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
-  /* tool accents: the severity color scale (3-layer, same pattern as core) */
+  /* tool accents: the severity color scale (3-layer, same pattern as core)
+     Phase 4 a11y: light --moderate/--minor/--unknown deepened so white badge text
+     meets AA (were 2.91/2.42/3.87); in dark the severity colors must stay light
+     (they double as text on the card), so the badge/count ink flips dark instead
+     via --sev-ink (white text was 1.85–3.23 on the dark severity colors). */
   :root {
-    --extreme: #b5179e; --severe: #d1341f; --moderate: #d98324;
-    --minor: #c9a227; --unknown: #7a8290; --clear: #3a7d44;
+    --extreme: #b5179e; --severe: #d1341f; --moderate: #a35f08;
+    --minor: #85690a; --unknown: #626a78; --clear: #3a7d44; --sev-ink: #fff;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --extreme: #e05bc8; --severe: #ec6a55; --moderate: #e2a24f;
-      --minor: #d9bd52; --unknown: #8b93a1; --clear: #7dc487;
+      --minor: #d9bd52; --unknown: #8b93a1; --clear: #7dc487; --sev-ink: #15171b;
     }
   }
   :root[data-theme="light"] {
-    --extreme: #b5179e; --severe: #d1341f; --moderate: #d98324;
-    --minor: #c9a227; --unknown: #7a8290; --clear: #3a7d44;
+    --extreme: #b5179e; --severe: #d1341f; --moderate: #a35f08;
+    --minor: #85690a; --unknown: #626a78; --clear: #3a7d44; --sev-ink: #fff;
   }
   :root[data-theme="dark"] {
     --extreme: #e05bc8; --severe: #ec6a55; --moderate: #e2a24f;
-    --minor: #d9bd52; --unknown: #8b93a1; --clear: #7dc487;
+    --minor: #d9bd52; --unknown: #8b93a1; --clear: #7dc487; --sev-ink: #15171b;
   }
   body { padding: 1.4rem 1.25rem 4rem; }
   .wrap { max-width: 900px; margin: 0 auto; }
@@ -54,7 +58,7 @@
   .banner .big { font-size: 1.15rem; font-weight: 700; letter-spacing: -.01em; }
   .banner .count {
     font-size: 1.9rem; font-weight: 800; line-height: 1; padding: .1rem .7rem;
-    border-radius: 12px; color: #fff; flex: none;
+    border-radius: 12px; color: var(--sev-ink); flex: none;
   }
   .banner .sub { color: var(--muted); font-size: .88rem; margin-top: .15rem; }
   .cards { display: flex; flex-direction: column; gap: .8rem; }
@@ -70,7 +74,7 @@
   .alert summary::-webkit-details-marker { display: none; }
   .sev-badge {
     font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
-    color: #fff; padding: .2rem .5rem; border-radius: 6px; flex: none; margin-top: .15rem;
+    color: var(--sev-ink); padding: .2rem .5rem; border-radius: 6px; flex: none; margin-top: .15rem;
   }
   .a-main { flex: 1; min-width: 0; }
   .a-event { font-size: 1.05rem; font-weight: 700; letter-spacing: -.01em; }

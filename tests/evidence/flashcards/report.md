@@ -81,3 +81,28 @@ None. Zero network; `endpoints: []`.
 - v1's `showGrades`/`grade`/`renderDone` declare an unused `d` variable; kept verbatim for diff-minimalism rather than cleaned up.
 - The v1 `G` array's third element (`"&lt;10 min"`) is dead (destructured with a hole; `preview(g)` supplies the text); kept verbatim.
 - The harness's v2 localStorage value is longer than v1's (1149 vs 201 chars) only because the v2 interaction creates 4 cards + a re-imported deck while v1Interact mirrors a minimal subset — key sets and shapes are identical.
+## Phase 4 a11y audit
+
+Audited 2026-07-16 from `file://`, both themes (`tests/a11y-phase4-set2.mjs`;
+raw: `phase4-a11y-audit.txt`). Re-verified with `node verify-tool.mjs flashcards` → exit 0.
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only controls named | pass | card-row `✕` has `aria-label="Delete card"`; deck cards and the flashcard are labeled `role=button` elements |
+| 2 | aria-live | pass | `#deckStats` and `#studyBody` liveRegion (runtime confirmed) — stats announce after add/import, the study flow announces each new card and the session-complete state |
+| 3 | Keyboard path | pass | full keyboard-only run: deck created via Enter; deck opened via Enter on the tabbable deck card; card added via Ctrl+Enter from the Back field; study via Enter on Study-due; **Space flips** (documented shortcut, verified), **number key 3 grades** → "Session complete" announced. Grade buttons also plain buttons with visible key hints |
+| 4 | Inputs labeled | pass | new-deck aria-label, front/back `label[for]`, both hidden file inputs aria-labeled |
+| 5 | Contrast | **fixed** | see below |
+| 6 | Focus visibility | pass | core 2px accent outline (buttons, deck cards, flashcard, textareas swap border) |
+
+Contrast — **fixed: light grade colors** — `.grade.again b` #c05a5a **4.26** and
+`.grade.hard b` #c07f2d **3.27** on the card. Deepened light `--again`→#b04545, `--hard`→#9a6110
+→ **5.46 / 5.05**; Good 4.93 / Easy 5.74 already passed; dark grades pass unchanged
+(5.62–7.86). Other passes: face content 14.61/12.96, `.grade .k` key hints (.66rem!) 4.76/6.19
+on card, deck meta/due 4.76/5.74-class, `.iconbtn` 4.36 vs 3.0 UI threshold.
+**SUITE-WIDE flags**: light muted-on-bg 4.36 (tagline, prompt hint, stat labels, card-row
+back text + state badges — the card list sits on the page background); dark #fff-on-accent
+2.36 (`.btn`).
+
+Fixes made: light `--again`/`--hard` (both light contexts). SM-2 scheduling, storage
+(`suite.flashcards.v1`) and behavior untouched.

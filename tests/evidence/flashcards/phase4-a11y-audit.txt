@@ -1,0 +1,607 @@
+===== AUDIT flashcards =====
+{
+ "tool": "flashcards",
+ "themes": {
+  "light": {
+   "stages": [
+    {
+     "name": "deck + study grades visible",
+     "contrast": [
+      {
+       "sel": "header .tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".crumb a",
+       "desc": "breadcrumb link (accent on bg)",
+       "fg": "#2f6f6a",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.26,
+       "pass": true
+      },
+      {
+       "sel": ".face .lbl",
+       "desc": "face label (muted .72rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 11.52,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".face .content",
+       "desc": "card text (ink on card, 1.5rem)",
+       "fg": "#23282e",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 24,
+       "weight": 400,
+       "threshold": 3,
+       "ratio": 14.61,
+       "pass": true
+      },
+      {
+       "sel": ".grade.again b",
+       "desc": "Again (--again on card)",
+       "fg": "#b04545",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 5.46,
+       "pass": true
+      },
+      {
+       "sel": ".grade.hard b",
+       "desc": "Hard (--hard on card)",
+       "fg": "#9a6110",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 5.05,
+       "pass": true
+      },
+      {
+       "sel": ".grade.good b",
+       "desc": "Good (--good on card)",
+       "fg": "#3a7d44",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 4.93,
+       "pass": true
+      },
+      {
+       "sel": ".grade.easy b",
+       "desc": "Easy (--easy on card)",
+       "fg": "#2f6f6a",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 5.74,
+       "pass": true
+      },
+      {
+       "sel": ".grade span",
+       "desc": "grade interval (muted .72rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 11.52,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".grade .k",
+       "desc": "key hint (muted .66rem!)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 10.56,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".prompt-hint",
+       "desc": "prompt hint (muted .85rem)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      }
+     ]
+    },
+    {
+     "name": "deck list + editor",
+     "contrast": [
+      {
+       "sel": ".deck .meta",
+       "desc": "deck meta (muted .82rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".deck .due",
+       "desc": "due count (accent on card)",
+       "fg": "#2f6f6a",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 5.74,
+       "pass": true
+      },
+      {
+       "sel": ".stat b",
+       "desc": "stat number (accent on card)",
+       "fg": "#2f6f6a",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 22.4,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 5.26,
+       "pass": true
+      },
+      {
+       "sel": ".stat span",
+       "desc": "stat label (muted .74rem)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 11.84,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".cardrow .back-t",
+       "desc": "card back (muted .92rem)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".cardrow .badge",
+       "desc": "state badge (muted .68rem!)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 10.88,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".iconbtn",
+       "desc": "Edit/✕ (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 3,
+       "ratio": 4.36,
+       "pass": true
+      },
+      {
+       "sel": ".btn",
+       "desc": "primary button (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#2f6f6a",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.83,
+       "pass": true
+      },
+      {
+       "sel": ".btn.ghost",
+       "desc": "ghost (accent on card)",
+       "fg": "#2f6f6a",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.74,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  },
+  "dark": {
+   "stages": [
+    {
+     "name": "deck + study grades visible",
+     "contrast": [
+      {
+       "sel": "header .tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".crumb a",
+       "desc": "breadcrumb link (accent on bg)",
+       "fg": "#6fb5ae",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 7.6,
+       "pass": true
+      },
+      {
+       "sel": ".face .lbl",
+       "desc": "face label (muted .72rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 11.52,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".face .content",
+       "desc": "card text (ink on card, 1.5rem)",
+       "fg": "#e7e5e0",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 24,
+       "weight": 400,
+       "threshold": 3,
+       "ratio": 12.96,
+       "pass": true
+      },
+      {
+       "sel": ".grade.again b",
+       "desc": "Again (--again on card)",
+       "fg": "#e07a7a",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 5.62,
+       "pass": true
+      },
+      {
+       "sel": ".grade.hard b",
+       "desc": "Hard (--hard on card)",
+       "fg": "#d9a153",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 7.13,
+       "pass": true
+      },
+      {
+       "sel": ".grade.good b",
+       "desc": "Good (--good on card)",
+       "fg": "#7dc487",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 7.86,
+       "pass": true
+      },
+      {
+       "sel": ".grade.easy b",
+       "desc": "Easy (--easy on card)",
+       "fg": "#6fb5ae",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 6.91,
+       "pass": true
+      },
+      {
+       "sel": ".grade span",
+       "desc": "grade interval (muted .72rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 11.52,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".grade .k",
+       "desc": "key hint (muted .66rem!)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 10.56,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".prompt-hint",
+       "desc": "prompt hint (muted .85rem)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      }
+     ]
+    },
+    {
+     "name": "deck list + editor",
+     "contrast": [
+      {
+       "sel": ".deck .meta",
+       "desc": "deck meta (muted .82rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".deck .due",
+       "desc": "due count (accent on card)",
+       "fg": "#6fb5ae",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 6.91,
+       "pass": true
+      },
+      {
+       "sel": ".stat b",
+       "desc": "stat number (accent on card)",
+       "fg": "#6fb5ae",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 22.4,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 7.6,
+       "pass": true
+      },
+      {
+       "sel": ".stat span",
+       "desc": "stat label (muted .74rem)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 11.84,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".cardrow .back-t",
+       "desc": "card back (muted .92rem)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".cardrow .badge",
+       "desc": "state badge (muted .68rem!)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 10.88,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".iconbtn",
+       "desc": "Edit/✕ (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 3,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".btn",
+       "desc": "primary button (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#6fb5ae",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 2.36,
+       "pass": false
+      },
+      {
+       "sel": ".btn.ghost",
+       "desc": "ghost (accent on card)",
+       "fg": "#6fb5ae",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.91,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  }
+ },
+ "keyboard": [
+  "deck created via Enter; decks: 1",
+  "deck opened via Enter on card; title: KB deck",
+  "card added via Ctrl+Enter; stats: 1 CARDS 1 DUE NOW 1 NEW 0 LEARNED",
+  "study started; hint: Press space or tap the card to flip.",
+  "Space flips; flipped: true",
+  "graded 3 via number key; session: ✓ Session complete Nothing left due in this deck. Nicely done. Back to deck"
+ ],
+ "iconButtons": [
+  {
+   "tag": "button",
+   "id": null,
+   "cls": "iconbtn",
+   "text": "✕",
+   "name": "Delete card",
+   "pass": true
+  }
+ ],
+ "labels": [
+  {
+   "tag": "input",
+   "type": "text",
+   "id": "newDeck",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "file",
+   "id": "fileJson",
+   "visible": false,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "textarea",
+   "type": "textarea",
+   "id": "cardFront",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "textarea",
+   "type": "textarea",
+   "id": "cardBack",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "file",
+   "id": "fileCsv",
+   "visible": false,
+   "how": "aria-label",
+   "pass": true
+  }
+ ],
+ "tabindex": [],
+ "live": [
+  {
+   "sel": "#deckStats",
+   "present": true,
+   "ariaLive": "polite"
+  },
+  {
+   "sel": "#studyBody",
+   "present": true,
+   "ariaLive": "polite"
+  }
+ ],
+ "focus": {
+  "pass": true,
+  "el": "A",
+  "focused": {
+   "outlineWidth": "2px",
+   "outlineStyle": "solid",
+   "outlineColor": "rgb(47, 111, 106)",
+   "boxShadow": "none"
+  },
+  "blurred": {
+   "outlineWidth": "3px",
+   "outlineStyle": "none",
+   "outlineColor": "rgb(47, 111, 106)",
+   "boxShadow": "none"
+  }
+ },
+ "grep": null,
+ "keyboardConsole": []
+}

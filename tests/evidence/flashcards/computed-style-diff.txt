@@ -1,15 +1,37 @@
-== computed-style diff, light (11 differing values) ==
+== computed-style diff, light (33 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --hard: v1=#c07f2d | v2=#9a6110 }
+body { --again: v1=#c05a5a | v2=#b04545 }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --hard: v1=#c07f2d | v2=#9a6110 }
+header h1 { --again: v1=#c05a5a | v2=#b04545 }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --hard: v1=#c07f2d | v2=#9a6110 }
+header .tag { --again: v1=#c05a5a | v2=#b04545 }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --hard: v1=#c07f2d | v2=#9a6110 }
+.back { --again: v1=#c05a5a | v2=#b04545 }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --hard: v1=#c07f2d | v2=#9a6110 }
+.theme-btn { --again: v1=#c05a5a | v2=#b04545 }
 .toolbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.toolbar { --hard: v1=#c07f2d | v2=#9a6110 }
+.toolbar { --again: v1=#c05a5a | v2=#b04545 }
 #newDeck { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#newDeck { --hard: v1=#c07f2d | v2=#9a6110 }
+#newDeck { --again: v1=#c05a5a | v2=#b04545 }
 .btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { --hard: v1=#c07f2d | v2=#9a6110 }
+.btn { --again: v1=#c05a5a | v2=#b04545 }
 .btn.ghost { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn.ghost { --hard: v1=#c07f2d | v2=#9a6110 }
+.btn.ghost { --again: v1=#c05a5a | v2=#b04545 }
 .empty { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.empty { --hard: v1=#c07f2d | v2=#9a6110 }
+.empty { --again: v1=#c05a5a | v2=#b04545 }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --hard: v1=#c07f2d | v2=#9a6110 }
+footer { --again: v1=#c05a5a | v2=#b04545 }
 
 == computed-style diff, dark (11 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }

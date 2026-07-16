@@ -119,3 +119,31 @@ None. Offline tool; the chime is synthesized with WebAudio. `endpoints: []`.
    byte-level state parity, though it is mildly untidy.
 5. The escaping-heuristic entries above will need to be added to `tests/escape-allowlist.json`
    (orchestrator-owned file) when this tool goes through `build.py --check`.
+
+## Phase 4 a11y audit
+
+Audited 2026-07-16 from `file://`, both themes, time driven with `page.clock`
+(`tests/a11y-phase4-set2.mjs`; raw: `phase4-a11y-audit.txt`). Re-verified with
+`node verify-tool.mjs timers` → exit 0 (the existing page.clock interaction module).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only controls named | pass | card `✕` has `aria-label="Remove timer <name>"`; tabs have emoji+text and `aria-pressed` |
+| 2 | aria-live | **fixed** | the migration deferred live regions ("countdown would flood") — the audit adds the missing piece without the flood: a visually-hidden `#announce` liveRegion that speaks **timer added** ("Keyboard egg timer started, 00:02"), **completion** ("Time! Keyboard egg finished.") and **laps** ("Lap 1 — split 00:01.26") — all three verified at runtime. The per-second countdown remains non-live by design |
+| 3 | Keyboard path | pass | keyboard-only: name + duration typed, Enter adds the timer; clock fast-forwarded → card rings ("Time!", `.ringing`); Dismiss via Enter; Stopwatch tab via Enter, Start/Lap via Enter (lap row rendered). Enter-to-add wired on all four creation inputs |
+| 4 | Inputs labeled | pass | all four creation inputs aria-labeled (from migration; re-verified) |
+| 5 | Contrast | **fixed** | see below |
+| 6 | Focus visibility | pass | core 2px accent outline (buttons/inputs); inputs swap border to accent |
+
+Contrast — **fixed (light theme):** `--alarm` #c05a5a failed as slowest-lap text (**3.90**)
+and on its own chip mix (**3.07**); core `--built` failed on the fastest-lap chip mix
+(**3.51**). Deepened light `--alarm` → #993636 and introduced `--built-deep` #2c5f36 for the
+best-lap **chip only** (row text keeps core `--built`, which passes at 4.51). Post-fix:
+worst td **6.45**, worst chip **4.72**, best chip **5.26**, ringing "Time!" **7.04** (large);
+dark all pass unchanged (5.62–8.65). Stopwatch face 14.61/12.96, `.ms` accent 5.74/6.91 (large).
+**SUITE-WIDE flags**: light muted-on-bg 4.36 (tagline, empty state, footer, laps header);
+dark #fff-on-accent 2.36 (`.tab.on`, `.btn`).
+
+Fixes made: tool-local CSS accents (all four theme contexts) + the `#announce` sr-only live
+region (3 announcement call sites; a11y-only, no functional change). `suite.timers.v1`
+format untouched — verified by the harness localStorage snapshot.

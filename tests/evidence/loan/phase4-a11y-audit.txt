@@ -1,0 +1,585 @@
+===== AUDIT loan =====
+{
+ "tool": "loan",
+ "themes": {
+  "light": {
+   "stages": [
+    {
+     "name": "loan + extra + refi (bad verdict)",
+     "contrast": [
+      {
+       "sel": "header .tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".tab.on",
+       "desc": "active tab (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#2f6f6a",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.83,
+       "pass": true
+      },
+      {
+       "sel": ".card h2",
+       "desc": "card heading (muted .82rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".field label",
+       "desc": "field label (muted .78rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".field .in span",
+       "desc": "unit affix (muted .9rem on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".stat b",
+       "desc": "stat value (accent on card, large)",
+       "fg": "#2f6f6a",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 24.8,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 5.74,
+       "pass": true
+      },
+      {
+       "sel": ".stat span",
+       "desc": "stat label (muted .76rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 12.16,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".legend",
+       "desc": "legend (muted .82rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".btn.ghost",
+       "desc": "CSV export (accent on card)",
+       "fg": "#2f6f6a",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.74,
+       "pass": true
+      },
+      {
+       "sel": "table.sched th",
+       "desc": "schedule header (muted .74rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 11.84,
+       "weight": 500,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": "table.sched tr.yearend td",
+       "desc": "year-end row (ink on accent-soft)",
+       "fg": "#23282e",
+       "bg": "#e3efed",
+       "bgLabel": "computed",
+       "size": 13.76,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 12.61,
+       "pass": true
+      },
+      {
+       "sel": "#view-refi .compare > div:first-child > div",
+       "desc": "'Current' heading (--interest on card)",
+       "fg": "#875510",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": "#view-refi .compare > div:last-child > div",
+       "desc": "'New' heading (--principal on card)",
+       "fg": "#2f6f6a",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 5.74,
+       "pass": true
+      },
+      {
+       "sel": ".verdict.bad",
+       "desc": "bad verdict (--interest on interest-mix)",
+       "fg": "#875510",
+       "bg": "#ece2d4",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.91,
+       "pass": true
+      },
+      {
+       "sel": ".kv span",
+       "desc": "kv label (ink on card)",
+       "fg": "#23282e",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 14.61,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  },
+  "dark": {
+   "stages": [
+    {
+     "name": "loan + extra + refi (bad verdict)",
+     "contrast": [
+      {
+       "sel": "header .tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".tab.on",
+       "desc": "active tab (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#6fb5ae",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 2.36,
+       "pass": false
+      },
+      {
+       "sel": ".card h2",
+       "desc": "card heading (muted .82rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".field label",
+       "desc": "field label (muted .78rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".field .in span",
+       "desc": "unit affix (muted .9rem on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".stat b",
+       "desc": "stat value (accent on card, large)",
+       "fg": "#6fb5ae",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 24.8,
+       "weight": 700,
+       "threshold": 3,
+       "ratio": 6.91,
+       "pass": true
+      },
+      {
+       "sel": ".stat span",
+       "desc": "stat label (muted .76rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 12.16,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".legend",
+       "desc": "legend (muted .82rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".btn.ghost",
+       "desc": "CSV export (accent on card)",
+       "fg": "#6fb5ae",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.91,
+       "pass": true
+      },
+      {
+       "sel": "table.sched th",
+       "desc": "schedule header (muted .74rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 11.84,
+       "weight": 500,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": "table.sched tr.yearend td",
+       "desc": "year-end row (ink on accent-soft)",
+       "fg": "#e7e5e0",
+       "bg": "#1f292b",
+       "bgLabel": "computed",
+       "size": 13.76,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 11.81,
+       "pass": true
+      },
+      {
+       "sel": "#view-refi .compare > div:first-child > div",
+       "desc": "'Current' heading (--interest on card)",
+       "fg": "#d9a153",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 7.13,
+       "pass": true
+      },
+      {
+       "sel": "#view-refi .compare > div:last-child > div",
+       "desc": "'New' heading (--principal on card)",
+       "fg": "#6fb5ae",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 6.91,
+       "pass": true
+      },
+      {
+       "sel": ".verdict.bad",
+       "desc": "bad verdict (--interest on interest-mix)",
+       "fg": "#d9a153",
+       "bg": "#3b352d",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.31,
+       "pass": true
+      },
+      {
+       "sel": ".kv span",
+       "desc": "kv label (ink on card)",
+       "fg": "#e7e5e0",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 12.96,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  }
+ },
+ "keyboard": [
+  "principal typed: P&I $2,275.44 -> $1,580.17 (changed: true)",
+  "extra via keyboard; savings: You'd save $125,514 in interest and be debt-free 10 yr 4 mo sooner — payoff moves from Jun 2056 to Feb 2046.",
+  "csv button reachable by Tab: true",
+  "wrapped input focus-within border: {\"on\":\"rgb(47, 111, 106)\",\"off\":\"rgb(228, 224, 214)\",\"changed\":true}",
+  "bare month input focus outline: solid 2px",
+  "select focus outline: solid 2px"
+ ],
+ "iconButtons": [],
+ "labels": [
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "principal",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "apr",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "term",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "month",
+   "id": "start",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "tax",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "ins",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "hoa",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "pmi",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "exMonthly",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "exLump",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "exLumpAt",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "select",
+   "type": "select-one",
+   "id": "exBiweekly",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "rCurBal",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "rCurApr",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "rCurTerm",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "rNewBal",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "rNewApr",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "rNewTerm",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "rCosts",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  }
+ ],
+ "tabindex": [],
+ "live": [
+  {
+   "sel": "#stats",
+   "present": true,
+   "ariaLive": "polite"
+  },
+  {
+   "sel": "#exSavings",
+   "present": true,
+   "ariaLive": "polite"
+  },
+  {
+   "sel": "#refiVerdict",
+   "present": true,
+   "ariaLive": "polite"
+  }
+ ],
+ "focus": {
+  "pass": false,
+  "el": "INPUT#rNewTerm",
+  "focused": {
+   "outlineWidth": "3px",
+   "outlineStyle": "none",
+   "outlineColor": "rgb(35, 40, 46)",
+   "boxShadow": "none"
+  },
+  "blurred": {
+   "outlineWidth": "3px",
+   "outlineStyle": "none",
+   "outlineColor": "rgb(35, 40, 46)",
+   "boxShadow": "none"
+  }
+ },
+ "grep": null,
+ "keyboardConsole": []
+}

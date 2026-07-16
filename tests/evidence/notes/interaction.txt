@@ -8,7 +8,7 @@ note list after reload: ["Migration test note","Welcome"]
 editor content after reload matches typed body: true (174 chars)
 title input after reload: "Migration test note"
 export .md: suggested="Migration test note.md", 174 bytes, content matches editor: true
-export all: suggested="notes-2026-07-15.json", 2 notes, titles=["Welcome","Migration test note"]
+export all: suggested="notes-2026-07-16.json", 2 notes, titles=["Welcome","Migration test note"]
 note list after import: ["Migration test note","Welcome","Imported fixture note"]
 note list after delete: ["Migration test note","Welcome"]
 keyboard-selected note title: "Welcome"

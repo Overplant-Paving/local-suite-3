@@ -1,11 +1,11 @@
 seeded suite.location = {"lat":34.0522,"lon":-118.2437,"label":"Los Angeles, CA"}
 live #locLabel: "Los Angeles, CA"
 live #updated: "updated just now"
-live #main (first 300 chars): "1 1 active alert Most serious: Severe · Los Angeles, CA Severe Extreme Heat Warning Until Thu 10:00 PMLikelyExpected Extreme Heat Warning issued July 14 at 10:20AM PDT until July 16 at 8:00PM PDT by NWS Los Angeles/Oxnard CA ▶ What to doDrink plenty of fluids, stay in an air-conditioned room, stay o"
+live #main (first 300 chars): "1 1 active alert Most serious: Severe · Los Angeles, CA Severe Extreme Heat Warning Until 10:00 PMLikelyExpected Extreme Heat Warning issued July 15 at 3:56PM PDT until July 16 at 8:00PM PDT by NWS Los Angeles/Oxnard CA ▶ What to doDrink plenty of fluids, stay in an air-conditioned room, stay out of"
 live alert cards: 1; all-clear banner rendered: false
 live severity badge order (top banner first excluded; must be non-increasing rank): Severe
 first card expanded via summary click, .a-body (first 200 chars): "What to doDrink plenty of fluids, stay in an air-conditioned room, stay out of the sun, and check up on relatives and neighbors. Do not leave young children and pets in unattended vehicles. Car interi"
-suite.cache.alerts envelope after live load: {"t":1784136469273,"key":"34.052,-118.244","payload":"object"}
+suite.cache.alerts envelope after live load: {"t":1784182322156,"key":"34.052,-118.244","payload":"object"}
 synthetic sort: expected Extreme, Severe, Moderate, Minor, Unknown (Bogus->Unknown); observed: Extreme, Severe, Moderate, Minor, Unknown
 synthetic banner: "5 5 active alerts Most serious: Extreme · Los Angeles, CA"
 escaping: severe card event textContent = "Storm <b>"markup&test"</b> Warning"; injected <b> markup inert in DOM: true
@@ -15,11 +15,11 @@ invalid ZIP "123": #locMsg="Enter a 5-digit ZIP code."
 after ZIP 90012 (Enter key): #locLabel="Los Angeles, CA 90012"
   suite.location={"lat":34.0614,"lon":-118.2385,"label":"Los Angeles, CA 90012"}
   #updated="updated just now"
-  #main (first 200 chars): "1 1 active alert Most serious: Severe · Los Angeles, CA 90012 Severe Extreme Heat Warning Until Thu 10:00 PMLikelyExpected Extreme Heat Warning issued July 14 at 10:20AM PDT until July 16 at 8:00PM PD"
+  #main (first 200 chars): "1 1 active alert Most serious: Severe · Los Angeles, CA 90012 Severe Extreme Heat Warning Until 10:00 PMLikelyExpected Extreme Heat Warning issued July 15 at 3:56PM PDT until July 16 at 8:00PM PDT by "
 offline reload (cache aged 24h, network blocked):
-  #updated="offline · last data Jul 14, 12:27 PM"
-  #main (first 200 chars): "1 1 active alert Most serious: Severe · Los Angeles, CA 90012 Severe Extreme Heat Warning Until Thu 10:00 PMLikelyExpected Extreme Heat Warning issued July 14 at 10:20AM PDT until July 16 at 8:00PM PD"
-back online: #updated="updated just now", #main (first 150): "1 1 active alert Most serious: Severe · Los Angeles, CA 90012 Severe Extreme Heat Warning Until Thu 10:00 PMLikelyExpected Extreme Heat Warning issued"
+  #updated="offline · last data Jul 15, 1:12 AM"
+  #main (first 200 chars): "1 1 active alert Most serious: Severe · Los Angeles, CA 90012 Severe Extreme Heat Warning Until 10:00 PMLikelyExpected Extreme Heat Warning issued July 15 at 3:56PM PDT until July 16 at 8:00PM PDT by "
+back online: #updated="updated just now", #main (first 150): "1 1 active alert Most serious: Severe · Los Angeles, CA 90012 Severe Extreme Heat Warning Until 10:00 PMLikelyExpected Extreme Heat Warning issued Jul"
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
   console.error: Failed to load resource: net::ERR_FAILED

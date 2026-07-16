@@ -103,3 +103,28 @@ None. Zero network; hashing is local WebCrypto, randomness is local `crypto.getR
   script reaches the screenshot within the toast's 1.4 s auto-hide window. Timing, not a bug.
 - `sentences`/`read time` heuristics, title-case small-words list, and the LCS diff are copied
   verbatim from v1 (no behavior change intended or made).
+
+## Phase 4 a11y audit
+
+Audited 2026-07-16 from `file://`, both themes (`tests/a11y-phase4-set2.mjs`;
+raw: `phase4-a11y-audit.txt`). Re-verified with `node verify-tool.mjs text` → exit 0.
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only controls named | pass | only symbol-ish control is theme-btn (has text + core aria-label) |
+| 2 | aria-live | pass | `#toast`, `#opHint`, `#encOut` (static attr), `#diffSummary` — runtime `polite` confirmed. `#stats` deliberately not live (updates per keystroke — would flood; diff/encode results announce via their live lines) |
+| 3 | Keyboard path | pass | keyboard-only drive: typed → stats updated; UPPERCASE via Enter ("MAKE ME SHOUT"); Diff tab via Enter, both textareas typed, Compare via Enter → "1 line added, 1 removed". Enter-in-textarea correctly inserts newlines (Compare reachable by Tab). No overlays |
+| 4 | Inputs labeled | pass | `#text`/`#encIn` aria-label, `#diffA`/`#diffB` label[for], `#wordDiff` wrapping label |
+| 5 | Contrast | **fixed** | see below |
+| 6 | Focus visibility | pass | core 2px accent outline on buttons; textareas swap border to accent |
+
+Contrast: diff palette passes both themes (del **5.58/5.80**, ins **5.16/6.85**).
+**Fixed:** `.diff .del/.ins .gutter` — the semantic +/- marker was `--muted` on the tinted
+row backgrounds (≈4.0:1 light); now inherits the row ink → **5.58/5.16 light, 5.80/6.85 dark**.
+Other passes: `.b` 14.61/12.96, `.b.primary`/`.tab.on` on accent 5.83 light, stats/hints
+(muted on card) 4.76/6.19.
+**SUITE-WIDE flags**: light muted-on-bg 4.36 (tagline, gutter on plain lines); dark
+#fff-on-accent 2.36 (`.tab.on`, `#runDiff`).
+
+Fix made: one tool-local CSS rule (`.diff .del .gutter, .diff .ins .gutter { color: inherit }`).
+No behavior change; localStorage untouched.

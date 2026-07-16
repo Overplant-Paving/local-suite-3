@@ -1,20 +1,20 @@
-dice roll 1: 5d6 -> [3, 6, 2, 4, 1] total shown=16 sum=16 allIn1..6=true totalMatches=true
-dice roll 2: 5d6 -> [3, 2, 5, 5, 4] total shown=19 sum=19 allIn1..6=true totalMatches=true
-dice roll 3: 5d6 -> [6, 1, 6, 5, 2] total shown=20 sum=20 allIn1..6=true totalMatches=true
-dice roll 4: 1d20 -> 8 in1..20=true
+dice roll 1: 5d6 -> [6, 5, 4, 6, 6] total shown=27 sum=27 allIn1..6=true totalMatches=true
+dice roll 2: 5d6 -> [6, 3, 3, 5, 1] total shown=18 sum=18 allIn1..6=true totalMatches=true
+dice roll 3: 5d6 -> [1, 5, 4, 4, 5] total shown=19 sum=19 allIn1..6=true totalMatches=true
+dice roll 4: 1d20 -> 19 in1..20=true
 dice sub line: "1d20"
-coin flips: [H, T, H, H, T] tally="Heads 3 · Tails 2" streak="HTHHT" facesValid=true tallySumsTo5=true streakLen5=true
+coin flips: [T, T, H, T, H] tally="Heads 2 · Tails 3" streak="TTHTH" facesValid=true tallySumsTo5=true streakLen5=true
 coin after reset: face="?" tally="Heads 0 · Tails 0" streakDots=0
-spinner: labels=[Red, Green, Blue, Yellow] result="🎉 Red" winnerInList=true
-pick 3 (no repeats): [Mercury, Jupiter, Venus] count=3 allFromList=true unique=true
+spinner: labels=[Red, Green, Blue, Yellow] result="🎉 Yellow" winnerInList=true
+pick 3 (no repeats): [Jupiter, Mars, Venus] count=3 allFromList=true unique=true
 pick 9-clamped: input now=5 got=5 unique=true
-pick 8 (repeats allowed): [Mars, Venus, Mars, Jupiter, Mercury, Jupiter, Mercury, Earth] count=8 allFromList=true
-number 10..20 x5: [18, 17, 17, 12, 14] allInRange=true
+pick 8 (repeats allowed): [Venus, Mars, Mars, Jupiter, Jupiter, Earth, Earth, Mars] count=8 allFromList=true
+number 10..20 x5: [10, 18, 20, 12, 20] allInRange=true
 number swapped bounds 30/25 -> 29 in25..30=true
 Enter in #numMin triggers pick: result=30 in25..30=true
-results log: 20 entries, newest="Number30  (25–30)12:03:58 PM"
+results log: 20 entries, newest="Number30  (25–30)01:11:10 AM"
 log after clear: "Nothing yet." (1 placeholder row)
-final state for screenshot: dice panel, 3d6 total=5
+final state for screenshot: dice panel, 3d6 total=12
 localStorage keys after full interaction: [suite.theme] (expect only suite.theme)
 theme toggle: light -> dark, aria-pressed=true
 console: clean (no errors)

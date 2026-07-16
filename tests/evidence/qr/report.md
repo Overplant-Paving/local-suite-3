@@ -109,3 +109,24 @@ are only encoded into pixels).
   byte-exact per the migration notes) — do not "clean it up" later.
 - Manifest entry not added to `manifest/tools.json` (hard rule: orchestrator applies it from
   `manifest-entry.json`).
+
+## Phase 4 a11y audit
+
+Audited 2026-07-16 against the running tool from `file://` in both themes
+(harness: `tests/a11y-phase4-set2.mjs`, raw output: `phase4-a11y-audit.txt`).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only controls named | pass | enumerated programmatically: theme-btn ("◐ theme", core aria-label) and sheet `✕` (`aria-label="Remove from sheet"`) — all named |
+| 2 | aria-live on result regions | pass | `#meta`, `#err`, `#toast` all `Suite.liveRegion` (grep + runtime `aria-live="polite"` confirmed) |
+| 3 | Keyboard path | pass | primary feature driven keyboard-only: typed payload into `#fText` → meta announced "Version 2 · 25×25 · EC M"; EC level via Enter; Add-to-sheet via Enter (toast "Added to sheet"); WiFi preset tab via Enter. No positive tabindex; no overlays needing Esc (toast is `pointer-events:none`) |
+| 4 | Inputs labeled | pass | all 9 inputs have `label[for]` (fHidden: wrapping label) |
+| 5 | Contrast, both palettes | pass locally / suite flags | see below — no qr-local color fails; two suite-palette pairs flagged |
+| 6 | Focus visibility | pass | Tab-focused button shows core 2px accent outline (none when blurred); text inputs swap border to accent on focus |
+
+Contrast measurements (fg, effective bg, ratio — threshold 4.5 normal / 3 large-UI):
+- light: `.tab.on`/`.btn` #fff on #2f6f6a **5.83 pass** · `#meta` 4.76 · `#err`/`.x` #c0492d on card **4.88** · `.btn.ghost` 5.74
+- dark: `#meta` 6.19 · `#err`/`.x` #e0705a on card **5.16** · `.btn.ghost` 6.91
+- **SUITE-WIDE (not fixed locally)**: light `--muted` on `--bg` 4.36 (tagline, footer); dark `#fff` on `--accent` 2.36 (`.tab.on`, `.seg .on`, `.btn`). Both are core-palette pairs — see the audit's suite-wide flag.
+
+No changes made to qr.html — **pass as was**.

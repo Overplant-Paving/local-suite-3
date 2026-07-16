@@ -139,3 +139,29 @@ None. Zero-network tool; no fetch calls of any kind. `endpoints: []` in the mani
   parity issue (both versions compute it the same way).
 - The interaction's after-screenshot is in dark theme because the harness toggles the theme
   before shooting — that is what proves the chart-redraw-on-toggle behavior survived.
+
+## Phase 4 a11y audit
+
+Audited 2026-07-16 from `file://`, both themes (`tests/a11y-phase4-set2.mjs`;
+raw: `phase4-a11y-audit.txt`). Re-verified with `node verify-tool.mjs loan` → exit 0.
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only controls named | pass | no symbol-only controls (all buttons have text); theme-btn from core |
+| 2 | aria-live | pass | `#stats`, `#exSavings`, `#refiVerdict` liveRegion (runtime confirmed) — each tab's recomputed headline result announces. Schedule table/chart not live (stats is the announcing summary; chart has `role=img` + aria-label) |
+| 3 | Keyboard path | pass | keyboard-only: principal typed → P&I stat changed ($2,275.44 → $1,580.17, announced via live `#stats`); Extra tab via Enter, extra-monthly typed → savings sentence announced; CSV button reachable by Tab |
+| 4 | Inputs labeled | pass | every field `label[for]` (18 inputs + selects) |
+| 5 | Contrast | **fixed** | see below |
+| 6 | Focus visibility | **fixed** | tool CSS suppresses the core outline on `.field` inputs/selects. Wrapped inputs keep v1's indicator — `.in:focus-within` border flips line→accent (verified: rgb(228,224,214) → rgb(47,111,106)). But the bare month input (`#start`) and the selects had **no indicator at all** — added a tool-local `:focus-visible` outline for exactly those (verified at runtime: "solid 2px" on both). Buttons/tabs keep the core outline |
+
+Contrast — **fixed: light `--interest`** — #c07f2d failed as the "Current loan" heading on
+the card (**3.27**) and in `.verdict.bad` on its color-mix background (**2.77**). Deepened to
+#875510 → **6.19 / 4.91**. Dark passes unchanged (7.13 / 5.31). Chart lines redraw from the
+same variables (line contrast vs card now ≥3 in both themes). Other passes: stats 5.74/6.91
+(large) with 4.76/6.19 labels, schedule th 4.76/6.19, year-end rows 12.61/11.81,
+verdict-good on accent-soft (accent 4.95-class).
+**SUITE-WIDE flags**: light muted-on-bg 4.36 (tagline, $ / % / yrs affixes on `--bg`);
+dark #fff-on-accent 2.36 (`.tab.on`).
+
+Fixes made: light `--interest` (both light contexts) + the `:focus-visible` rule. No
+behavior change; `suite.loan.v1` untouched.

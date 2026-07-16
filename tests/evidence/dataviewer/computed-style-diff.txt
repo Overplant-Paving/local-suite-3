@@ -1,16 +1,28 @@
-== computed-style diff, light (12 differing values) ==
+== computed-style diff, light (24 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --t-bool: v1=#9a5cc0 | v2=#8a53ae }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --t-bool: v1=#9a5cc0 | v2=#8a53ae }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --t-bool: v1=#9a5cc0 | v2=#8a53ae }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --t-bool: v1=#9a5cc0 | v2=#8a53ae }
 .drop { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.drop { --t-bool: v1=#9a5cc0 | v2=#8a53ae }
 #pick { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#pick { --t-bool: v1=#9a5cc0 | v2=#8a53ae }
 .sample { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sample { --t-bool: v1=#9a5cc0 | v2=#8a53ae }
 .filebar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.filebar { --t-bool: v1=#9a5cc0 | v2=#8a53ae }
 #search { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#search { --t-bool: v1=#9a5cc0 | v2=#8a53ae }
 .tbl-scroll { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tbl-scroll { --t-bool: v1=#9a5cc0 | v2=#8a53ae }
 .tree { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tree { --t-bool: v1=#9a5cc0 | v2=#8a53ae }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --t-bool: v1=#9a5cc0 | v2=#8a53ae }
 
 == computed-style diff, dark (12 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }

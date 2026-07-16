@@ -1,0 +1,506 @@
+===== AUDIT dataviewer =====
+{
+ "tool": "dataviewer",
+ "themes": {
+  "light": {
+   "stages": [
+    {
+     "name": "CSV table",
+     "contrast": [
+      {
+       "sel": ".tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".filebar .meta",
+       "desc": "file meta (muted .85rem)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": "#closeFile",
+       "desc": "close button (ink on card)",
+       "fg": "#23282e",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 14.61,
+       "pass": true
+      },
+      {
+       "sel": "#modes button.on",
+       "desc": "active mode (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#2f6f6a",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.83,
+       "pass": true
+      },
+      {
+       "sel": "thead th",
+       "desc": "table header (ink on card)",
+       "fg": "#23282e",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 14.61,
+       "pass": true
+      },
+      {
+       "sel": "thead th .stat",
+       "desc": "column stats (muted .68rem!)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 10.88,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": "td.num",
+       "desc": "numeric cell (--t-num on card)",
+       "fg": "#2f6f6a",
+       "bg": "#e3efed",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.95,
+       "pass": true
+      },
+      {
+       "sel": ".rownum",
+       "desc": "row number (muted on card)",
+       "fg": "#6b7280",
+       "bg": "#e3efed",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.11,
+       "pass": false
+      },
+      {
+       "sel": ".tools .rows",
+       "desc": "row info (muted .85rem)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      }
+     ]
+    },
+    {
+     "name": "JSON tree",
+     "contrast": [
+      {
+       "sel": ".tree .k",
+       "desc": "JSON key (--t-key on card)",
+       "fg": "#b5544a",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.5,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.77,
+       "pass": true
+      },
+      {
+       "sel": ".tree .s",
+       "desc": "string (--t-str on card)",
+       "fg": "#3a7d44",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.5,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.93,
+       "pass": true
+      },
+      {
+       "sel": ".tree .n",
+       "desc": "number (--t-num on card)",
+       "fg": "#2f6f6a",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.5,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.74,
+       "pass": true
+      },
+      {
+       "sel": ".tree .b",
+       "desc": "boolean (--t-bool on card)",
+       "fg": "#8a53ae",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.5,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.26,
+       "pass": true
+      },
+      {
+       "sel": ".tree .nul",
+       "desc": "null (--t-null on card)",
+       "fg": "#a06a2a",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.5,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.5,
+       "pass": true
+      },
+      {
+       "sel": ".tree .tw",
+       "desc": "twisty (muted, ui)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.5,
+       "weight": 400,
+       "threshold": 3,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": "#expandAll",
+       "desc": "expand all (ink on card)",
+       "fg": "#23282e",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 14.61,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  },
+  "dark": {
+   "stages": [
+    {
+     "name": "CSV table",
+     "contrast": [
+      {
+       "sel": ".tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".filebar .meta",
+       "desc": "file meta (muted .85rem)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": "#closeFile",
+       "desc": "close button (ink on card)",
+       "fg": "#e7e5e0",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 12.96,
+       "pass": true
+      },
+      {
+       "sel": "#modes button.on",
+       "desc": "active mode (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#6fb5ae",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 2.36,
+       "pass": false
+      },
+      {
+       "sel": "thead th",
+       "desc": "table header (ink on card)",
+       "fg": "#e7e5e0",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 12.96,
+       "pass": true
+      },
+      {
+       "sel": "thead th .stat",
+       "desc": "column stats (muted .68rem!)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 10.88,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": "td.num",
+       "desc": "numeric cell (--t-num on card)",
+       "fg": "#6fb5ae",
+       "bg": "#1f292b",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.3,
+       "pass": true
+      },
+      {
+       "sel": ".rownum",
+       "desc": "row number (muted on card)",
+       "fg": "#9aa0a8",
+       "bg": "#1f292b",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.64,
+       "pass": true
+      },
+      {
+       "sel": ".tools .rows",
+       "desc": "row info (muted .85rem)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      }
+     ]
+    },
+    {
+     "name": "JSON tree",
+     "contrast": [
+      {
+       "sel": ".tree .k",
+       "desc": "JSON key (--t-key on card)",
+       "fg": "#e08a7d",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.5,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.3,
+       "pass": true
+      },
+      {
+       "sel": ".tree .s",
+       "desc": "string (--t-str on card)",
+       "fg": "#8fd39b",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.5,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 9.29,
+       "pass": true
+      },
+      {
+       "sel": ".tree .n",
+       "desc": "number (--t-num on card)",
+       "fg": "#6fb5ae",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.5,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.91,
+       "pass": true
+      },
+      {
+       "sel": ".tree .b",
+       "desc": "boolean (--t-bool on card)",
+       "fg": "#c69ae8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.5,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 7.14,
+       "pass": true
+      },
+      {
+       "sel": ".tree .nul",
+       "desc": "null (--t-null on card)",
+       "fg": "#d19a4e",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.5,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.56,
+       "pass": true
+      },
+      {
+       "sel": ".tree .tw",
+       "desc": "twisty (muted, ui)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.5,
+       "weight": 400,
+       "threshold": 3,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": "#expandAll",
+       "desc": "expand all (ink on card)",
+       "fg": "#e7e5e0",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 12.96,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  }
+ },
+ "keyboard": [
+  "sample CSV via Enter; meta: 5 rows · 4 cols · comma-separated",
+  "filter typed; rowInfo: 1 row match",
+  "th Enter sort; aria-sort states: ,ascending,none,none,none; focus retained on: TH",
+  "twisty Enter; collapsed nodes: 1 (aria-expanded=false)"
+ ],
+ "iconButtons": [
+  {
+   "tag": "span",
+   "id": null,
+   "cls": "tw",
+   "text": "▾",
+   "name": "Collapse",
+   "pass": true
+  },
+  {
+   "tag": "span",
+   "id": null,
+   "cls": "tw",
+   "text": "▾",
+   "name": "Collapse",
+   "pass": true
+  },
+  {
+   "tag": "span",
+   "id": null,
+   "cls": "tw",
+   "text": "▾",
+   "name": "Collapse",
+   "pass": true
+  },
+  {
+   "tag": "span",
+   "id": null,
+   "cls": "tw",
+   "text": "▾",
+   "name": "Collapse",
+   "pass": true
+  }
+ ],
+ "labels": [
+  {
+   "tag": "input",
+   "type": "search",
+   "id": "search",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  }
+ ],
+ "tabindex": [],
+ "live": [
+  {
+   "sel": "#notice",
+   "present": true,
+   "ariaLive": "polite"
+  },
+  {
+   "sel": "#rowInfo",
+   "present": true,
+   "ariaLive": "polite"
+  },
+  {
+   "sel": "#fmeta",
+   "present": true,
+   "ariaLive": "polite"
+  }
+ ],
+ "focus": {
+  "pass": true,
+  "el": "BUTTON",
+  "focused": {
+   "outlineWidth": "2px",
+   "outlineStyle": "solid",
+   "outlineColor": "rgb(47, 111, 106)",
+   "boxShadow": "none"
+  },
+  "blurred": {
+   "outlineWidth": "3px",
+   "outlineStyle": "none",
+   "outlineColor": "rgb(255, 255, 255)",
+   "boxShadow": "none"
+  }
+ },
+ "grep": null,
+ "keyboardConsole": []
+}

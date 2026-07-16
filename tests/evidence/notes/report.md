@@ -69,3 +69,30 @@ None. Zero network; nothing in the file references any external host. `endpoints
 - **`inlineMd` italic regex quirk inherited verbatim:** `/(^|[^*])\*([^*]+)\*/g` behaves identically to v1, including its known cross-`**` interactions. Not fixed (parity over polish).
 - **The U+E000 sentinels are invisible** in most editors/diff viewers — a future reformat could silently strip them and break inline code + mangle all digits in preview. A comment now marks them, but the reviewer should confirm their survival in the committed diff (bytes `EE 80 80`, twice, around lines 185 and 196).
 - v1's stale "Ctrl/Cmd+B new note" comment was dropped rather than implemented — confirm this reading (the keybinding never existed in v1 code, so nothing was removed).
+
+## Phase 4 a11y audit
+
+Audited 2026-07-16 from `file://`, both themes (`tests/a11y-phase4-set2.mjs`;
+raw: `phase4-a11y-audit.txt`). Re-verified with `node verify-tool.mjs notes` → exit 0.
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only controls named | pass | note-row `×` has `aria-label='Delete note "<title>"'`; 👁 preview button has visible text + `aria-pressed`; hidden import input has aria-label |
+| 2 | aria-live | pass | `#saved` (autosave state) liveRegion — runtime confirmed. Preview mirrors typing (not live by design); list/word-count are keystroke-synchronous |
+| 3 | Keyboard path | pass | keyboard-only: typed markdown → preview h1 rendered, autosave announced "saved ✓"; + New note via Enter; note switching via Enter on the tabbable `li` (tabindex 0 + Enter/Space handlers, delete button revealed on `:focus-within`); Ctrl+S flushes save. Delete confirm is a native dialog |
+| 4 | Inputs labeled | pass | title/editor/import-file aria-labels |
+| 5 | Contrast | **fixed** | see below |
+| 6 | Focus visibility | pass | core 2px accent outline on toolbar buttons/links; title input gets border+bg change on focus |
+
+Contrast — **fixed: `--warn`** — `.saved.dirty` referenced `var(--warn, #b0752a)` but the
+tool never defined `--warn`, so the fallback rode both themes: **3.81 light / 4.21 dark** on
+the card. Defined the 3-layer tool accent (light #9c6620, dark #d19a4e, matching the suite's
+warn family) → **4.77 / 6.56**. Other passes: `.tbtn` 14.61/12.96, `.side-top button` and
+active note name on accent-soft 4.95/6.30, editor 13.39/14.25, `.preview code` 12.58/11.44,
+footer-on-card 4.76/6.19. (Welcome note renders no blockquote, so that muted-on-bg pair is
+covered by the suite flag.)
+**SUITE-WIDE flags**: light muted on `--accent-soft` 4.11 (`.wc` word counts, `×` at rest on
+the selected row) and muted-on-bg 4.36 (editor-bar count); dark passes.
+
+Fix made: tool-local `--warn` definition (all four theme contexts). No behavior change;
+`suite.notes` format untouched.

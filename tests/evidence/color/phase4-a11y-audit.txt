@@ -1,0 +1,430 @@
+===== AUDIT color =====
+{
+ "tool": "color",
+ "themes": {
+  "light": {
+   "stages": [
+    {
+     "name": "picker + contrast tab with PASS and FAIL badges",
+     "contrast": [
+      {
+       "sel": "header .tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".tab.on",
+       "desc": "active tab (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#2f6f6a",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.83,
+       "pass": true
+      },
+      {
+       "sel": ".fmt .k",
+       "desc": "format key (muted .8rem on --bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".fmt .v",
+       "desc": "format value (ink on --bg)",
+       "fg": "#23282e",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 13.39,
+       "pass": true
+      },
+      {
+       "sel": ".sl label",
+       "desc": "slider label (muted on card)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.76,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".pal h4",
+       "desc": "palette heading (muted on card)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".sw .lab",
+       "desc": "swatch hex label (ink on card)",
+       "fg": "#23282e",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 11.52,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 14.61,
+       "pass": true
+      },
+      {
+       "sel": ".savebtn",
+       "desc": "save button (accent on card)",
+       "fg": "#2f6f6a",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.74,
+       "pass": true
+      },
+      {
+       "sel": "#tab-contrast .badge.pass",
+       "desc": "PASS badge (--good on good-mix)",
+       "fg": "#2f6337",
+       "bg": "#dae1d6",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.32,
+       "pass": true
+      },
+      {
+       "sel": "#tab-contrast .badge.fail",
+       "desc": "FAIL badge (--bad on bad-mix)",
+       "fg": "#ad3a20",
+       "bg": "#f3e0d8",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.83,
+       "pass": true
+      },
+      {
+       "sel": ".cc-field label",
+       "desc": "contrast field label (muted)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.44,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": "footer",
+       "desc": "footer (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  },
+  "dark": {
+   "stages": [
+    {
+     "name": "picker + contrast tab with PASS and FAIL badges",
+     "contrast": [
+      {
+       "sel": "header .tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".tab.on",
+       "desc": "active tab (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#6fb5ae",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 2.36,
+       "pass": false
+      },
+      {
+       "sel": ".fmt .k",
+       "desc": "format key (muted .8rem on --bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".fmt .v",
+       "desc": "format value (ink on --bg)",
+       "fg": "#e7e5e0",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 14.25,
+       "pass": true
+      },
+      {
+       "sel": ".sl label",
+       "desc": "slider label (muted on card)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.76,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".pal h4",
+       "desc": "palette heading (muted on card)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".sw .lab",
+       "desc": "swatch hex label (ink on card)",
+       "fg": "#e7e5e0",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 11.52,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 12.96,
+       "pass": true
+      },
+      {
+       "sel": ".savebtn",
+       "desc": "save button (accent on card)",
+       "fg": "#6fb5ae",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.91,
+       "pass": true
+      },
+      {
+       "sel": "#tab-contrast .badge.pass",
+       "desc": "PASS badge (--good on good-mix)",
+       "fg": "#7dc487",
+       "bg": "#2e3e37",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.46,
+       "pass": true
+      },
+      {
+       "sel": "#tab-contrast .badge.fail",
+       "desc": "FAIL badge (--bad on bad-mix)",
+       "fg": "#e67d68",
+       "bg": "#3b2e30",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.63,
+       "pass": true
+      },
+      {
+       "sel": ".cc-field label",
+       "desc": "contrast field label (muted)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.44,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": "footer",
+       "desc": "footer (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  }
+ },
+ "keyboard": [
+  "slider ArrowRight x10: HEX #2f6f6a -> #2f6a6f (changed: true)",
+  "fmt row Enter; toast: Copied #2f6a6f",
+  "drop zone focused (tabindex path): drop, aria: Choose an image file, or drop one here"
+ ],
+ "iconButtons": [],
+ "labels": [
+  {
+   "tag": "input",
+   "type": "color",
+   "id": "colorInput",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "range",
+   "id": "slH",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "range",
+   "id": "slS",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "range",
+   "id": "slL",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "color",
+   "id": "fgColor",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "text",
+   "id": "fgHex",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "color",
+   "id": "bgColor",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "text",
+   "id": "bgHex",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "file",
+   "id": "fileInput",
+   "visible": false,
+   "how": "wrapping label",
+   "pass": true
+  }
+ ],
+ "tabindex": [],
+ "live": [
+  {
+   "sel": "#toast",
+   "present": true,
+   "ariaLive": "polite"
+  },
+  {
+   "sel": "#ccRatio",
+   "present": true,
+   "ariaLive": "polite"
+  },
+  {
+   "sel": "#photoSwatches",
+   "present": true,
+   "ariaLive": "polite"
+  }
+ ],
+ "focus": {
+  "pass": true,
+  "el": "BUTTON",
+  "focused": {
+   "outlineWidth": "2px",
+   "outlineStyle": "solid",
+   "outlineColor": "rgb(47, 111, 106)",
+   "boxShadow": "none"
+  },
+  "blurred": {
+   "outlineWidth": "3px",
+   "outlineStyle": "none",
+   "outlineColor": "rgb(107, 114, 128)",
+   "boxShadow": "none"
+  }
+ },
+ "grep": null,
+ "keyboardConsole": []
+}

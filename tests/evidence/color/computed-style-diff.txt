@@ -1,28 +1,64 @@
-== computed-style diff, light (12 differing values) ==
+== computed-style diff, light (36 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --good: v1=#3a7d44 | v2=#2f6337 }
+body { --bad: v1=#c0492d | v2=#ad3a20 }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --good: v1=#3a7d44 | v2=#2f6337 }
+header h1 { --bad: v1=#c0492d | v2=#ad3a20 }
 .tab.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tab.on { --good: v1=#3a7d44 | v2=#2f6337 }
+.tab.on { --bad: v1=#c0492d | v2=#ad3a20 }
 .card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card { --good: v1=#3a7d44 | v2=#2f6337 }
+.card { --bad: v1=#c0492d | v2=#ad3a20 }
 input[type=color] { -webkit-font-smoothing: v1=auto | v2=antialiased }
+input[type=color] { --good: v1=#3a7d44 | v2=#2f6337 }
+input[type=color] { --bad: v1=#c0492d | v2=#ad3a20 }
 .fmt { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.fmt { --good: v1=#3a7d44 | v2=#2f6337 }
+.fmt { --bad: v1=#c0492d | v2=#ad3a20 }
 .sw { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sw { --good: v1=#3a7d44 | v2=#2f6337 }
+.sw { --bad: v1=#c0492d | v2=#ad3a20 }
 .sw .chip { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sw .chip { --good: v1=#3a7d44 | v2=#2f6337 }
+.sw .chip { --bad: v1=#c0492d | v2=#ad3a20 }
 .sw .lab { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sw .lab { --good: v1=#3a7d44 | v2=#2f6337 }
+.sw .lab { --bad: v1=#c0492d | v2=#ad3a20 }
 .ratio { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.ratio { --good: v1=#3a7d44 | v2=#2f6337 }
+.ratio { --bad: v1=#c0492d | v2=#ad3a20 }
 .drop { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.drop { --good: v1=#3a7d44 | v2=#2f6337 }
+.drop { --bad: v1=#c0492d | v2=#ad3a20 }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --good: v1=#3a7d44 | v2=#2f6337 }
+footer { --bad: v1=#c0492d | v2=#ad3a20 }
 
-== computed-style diff, dark (12 differing values) ==
+== computed-style diff, dark (24 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --bad: v1=#e0705a | v2=#e67d68 }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --bad: v1=#e0705a | v2=#e67d68 }
 .tab.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tab.on { --bad: v1=#e0705a | v2=#e67d68 }
 .card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card { --bad: v1=#e0705a | v2=#e67d68 }
 input[type=color] { -webkit-font-smoothing: v1=auto | v2=antialiased }
+input[type=color] { --bad: v1=#e0705a | v2=#e67d68 }
 .fmt { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.fmt { --bad: v1=#e0705a | v2=#e67d68 }
 .sw { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sw { --bad: v1=#e0705a | v2=#e67d68 }
 .sw .chip { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sw .chip { --bad: v1=#e0705a | v2=#e67d68 }
 .sw .lab { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sw .lab { --bad: v1=#e0705a | v2=#e67d68 }
 .ratio { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.ratio { --bad: v1=#e0705a | v2=#e67d68 }
 .drop { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.drop { --bad: v1=#e0705a | v2=#e67d68 }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --bad: v1=#e0705a | v2=#e67d68 }
 

@@ -124,3 +124,26 @@ None. Zero network: the file is read with `FileReader`; no fetch/XHR anywhere in
 6. **Header pill styling override** deviates from the recipe strip-`.back`/`.theme-btn`
    instruction because v1 dataviewer chrome genuinely differs from the shared pattern; parity
    screenshots justify it (see "changes beyond the recipe").
+## Phase 4 a11y audit
+
+Audited 2026-07-16 from `file://`, both themes (`tests/a11y-phase4-set2.mjs`;
+raw: `phase4-a11y-audit.txt`). Re-verified with `node verify-tool.mjs dataviewer` → exit 0.
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only controls named | pass | tree twisties `▸/▾` carry `role=button` + `aria-label` Expand/Collapse + `aria-expanded`; `✕ close` and mode buttons have text |
+| 2 | aria-live | pass | `#notice`, `#rowInfo`, `#fmeta` liveRegion (runtime confirmed). The table body itself is not live (rowInfo announces row counts on filter/sort — the right grain) |
+| 3 | Keyboard path | pass | keyboard-only: sample CSV loaded via Enter; filter typed → "1 row match" announced; column sort via Enter on tabbable `th` (aria-sort flips, **focus restored to the header after re-render**); close + sample JSON via Enter; twisty collapse/expand via Enter (`aria-expanded` tracked). Drop zone itself is mouse-only but the equivalent keyboard path is the "Choose a file" button. No overlays |
+| 4 | Inputs labeled | pass | `#search` and `#file` aria-labels |
+| 5 | Contrast | **fixed** | see below |
+| 6 | Focus visibility | pass | core 2px accent outline on buttons/th/twisties (all tabbable) |
+
+Contrast — **fixed: light `--t-bool`** — JSON boolean tokens were #9a5cc0 on the card:
+**4.43:1**. Deepened to #8a53ae → **5.26**. All other JSON-type inks pass: light `.k` 4.77,
+`.s` 4.93, `.n` 5.74, `.nul` 4.50 (exactly at AA); dark 6.30–9.29. Table: th 14.61/12.96,
+th stats 4.76/6.19, `td.num` 4.95/6.30.
+**SUITE-WIDE flags**: light muted-on-bg 4.36 (tagline, filebar meta, row info) and muted on
+`--accent-soft` 4.11 (row numbers under the hover tint); dark #fff-on-accent 2.36 (active
+mode button).
+
+Fix made: light `--t-bool` #9a5cc0→#8a53ae (both light contexts). No behavior change; no storage.

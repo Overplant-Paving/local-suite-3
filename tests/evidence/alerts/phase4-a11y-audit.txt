@@ -1,0 +1,498 @@
+===== AUDIT alerts =====
+{
+ "tool": "alerts",
+ "themes": {
+  "light": {
+   "stages": [
+    {
+     "name": "stubbed alerts, all severities",
+     "contrast": [
+      {
+       "sel": ".back",
+       "desc": "back link (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".locbar",
+       "desc": "location bar (muted .9rem)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".loclabel",
+       "desc": "location label (ink)",
+       "fg": "#23282e",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 13.39,
+       "pass": true
+      },
+      {
+       "sel": ".linklike",
+       "desc": "change (accent link)",
+       "fg": "#2f6f6a",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.26,
+       "pass": true
+      },
+      {
+       "sel": ".notify-toggle",
+       "desc": "notify pill (muted on card)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".updated",
+       "desc": "updated stamp (muted .8rem)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".banner .count",
+       "desc": "count (white on severity color)",
+       "fg": "#ffffff",
+       "bg": "#b5179e",
+       "bgLabel": "computed",
+       "size": 30.4,
+       "weight": 800,
+       "threshold": 3,
+       "ratio": 5.86,
+       "pass": true
+      },
+      {
+       "sel": ".banner .sub",
+       "desc": "banner sub (muted .88rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".banner .sub strong",
+       "desc": "'Most serious' (severity color on card)",
+       "fg": "#b5179e",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 5.77,
+       "pass": true
+      },
+      {
+       "sel": "[data-sev=\"Extreme\"] .sev-badge",
+       "desc": "Extreme badge (white on --extreme)",
+       "fg": "#ffffff",
+       "bg": "#b5179e",
+       "bgLabel": "computed",
+       "size": 10.88,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 5.86,
+       "pass": true
+      },
+      {
+       "sel": "[data-sev=\"Severe\"] .sev-badge",
+       "desc": "Severe badge (white on --severe)",
+       "fg": "#ffffff",
+       "bg": "#d1341f",
+       "bgLabel": "computed",
+       "size": 10.88,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 4.97,
+       "pass": true
+      },
+      {
+       "sel": "[data-sev=\"Moderate\"] .sev-badge",
+       "desc": "Moderate badge (white on --moderate)",
+       "fg": "#ffffff",
+       "bg": "#a35f08",
+       "bgLabel": "computed",
+       "size": 10.88,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 5,
+       "pass": true
+      },
+      {
+       "sel": "[data-sev=\"Minor\"] .sev-badge",
+       "desc": "Minor badge (white on --minor)",
+       "fg": "#ffffff",
+       "bg": "#85690a",
+       "bgLabel": "computed",
+       "size": 10.88,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 5.22,
+       "pass": true
+      },
+      {
+       "sel": "[data-sev=\"Unknown\"] .sev-badge",
+       "desc": "Unknown badge (white on --unknown)",
+       "fg": "#ffffff",
+       "bg": "#626a78",
+       "bgLabel": "computed",
+       "size": 10.88,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 5.45,
+       "pass": true
+      },
+      {
+       "sel": ".a-meta",
+       "desc": "alert meta (muted .82rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".a-body .instruction",
+       "desc": "instruction (ink on accent-soft)",
+       "fg": "#23282e",
+       "bg": "#e3efed",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 12.61,
+       "pass": true
+      },
+      {
+       "sel": ".kv dt",
+       "desc": "kv label (muted .84rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.44,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".chev",
+       "desc": "chevron (muted, ui)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 3,
+       "ratio": 4.76,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  },
+  "dark": {
+   "stages": [
+    {
+     "name": "stubbed alerts, all severities",
+     "contrast": [
+      {
+       "sel": ".back",
+       "desc": "back link (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".locbar",
+       "desc": "location bar (muted .9rem)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".loclabel",
+       "desc": "location label (ink)",
+       "fg": "#e7e5e0",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 14.25,
+       "pass": true
+      },
+      {
+       "sel": ".linklike",
+       "desc": "change (accent link)",
+       "fg": "#6fb5ae",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 7.6,
+       "pass": true
+      },
+      {
+       "sel": ".notify-toggle",
+       "desc": "notify pill (muted on card)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".updated",
+       "desc": "updated stamp (muted .8rem)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".banner .count",
+       "desc": "count (white on severity color)",
+       "fg": "#15171b",
+       "bg": "#e05bc8",
+       "bgLabel": "computed",
+       "size": 30.4,
+       "weight": 800,
+       "threshold": 3,
+       "ratio": 5.55,
+       "pass": true
+      },
+      {
+       "sel": ".banner .sub",
+       "desc": "banner sub (muted .88rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".banner .sub strong",
+       "desc": "'Most serious' (severity color on card)",
+       "fg": "#e05bc8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 5.05,
+       "pass": true
+      },
+      {
+       "sel": "[data-sev=\"Extreme\"] .sev-badge",
+       "desc": "Extreme badge (white on --extreme)",
+       "fg": "#15171b",
+       "bg": "#e05bc8",
+       "bgLabel": "computed",
+       "size": 10.88,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 5.55,
+       "pass": true
+      },
+      {
+       "sel": "[data-sev=\"Severe\"] .sev-badge",
+       "desc": "Severe badge (white on --severe)",
+       "fg": "#15171b",
+       "bg": "#ec6a55",
+       "bgLabel": "computed",
+       "size": 10.88,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 5.78,
+       "pass": true
+      },
+      {
+       "sel": "[data-sev=\"Moderate\"] .sev-badge",
+       "desc": "Moderate badge (white on --moderate)",
+       "fg": "#15171b",
+       "bg": "#e2a24f",
+       "bgLabel": "computed",
+       "size": 10.88,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 8.13,
+       "pass": true
+      },
+      {
+       "sel": "[data-sev=\"Minor\"] .sev-badge",
+       "desc": "Minor badge (white on --minor)",
+       "fg": "#15171b",
+       "bg": "#d9bd52",
+       "bgLabel": "computed",
+       "size": 10.88,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 9.7,
+       "pass": true
+      },
+      {
+       "sel": "[data-sev=\"Unknown\"] .sev-badge",
+       "desc": "Unknown badge (white on --unknown)",
+       "fg": "#15171b",
+       "bg": "#8b93a1",
+       "bgLabel": "computed",
+       "size": 10.88,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 5.8,
+       "pass": true
+      },
+      {
+       "sel": ".a-meta",
+       "desc": "alert meta (muted .82rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".a-body .instruction",
+       "desc": "instruction (ink on accent-soft)",
+       "fg": "#e7e5e0",
+       "bg": "#1f292b",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 11.81,
+       "pass": true
+      },
+      {
+       "sel": ".kv dt",
+       "desc": "kv label (muted .84rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.44,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".chev",
+       "desc": "chevron (muted, ui)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 3,
+       "ratio": 6.19,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  }
+ },
+ "keyboard": [
+  "first-run: focus is on: zip",
+  "ZIP set via Enter; banner: 5 active alerts",
+  "summary Enter expands: true",
+  "summary Enter collapses: true",
+  "change location via Enter; form shown: true"
+ ],
+ "iconButtons": [],
+ "labels": [],
+ "tabindex": [],
+ "live": [
+  {
+   "sel": "#main",
+   "present": true,
+   "ariaLive": "polite"
+  },
+  {
+   "sel": "#updated",
+   "present": true,
+   "ariaLive": "polite"
+  }
+ ],
+ "focus": {
+  "pass": true,
+  "el": "A",
+  "focused": {
+   "outlineWidth": "2px",
+   "outlineStyle": "solid",
+   "outlineColor": "rgb(47, 111, 106)",
+   "boxShadow": "none"
+  },
+  "blurred": {
+   "outlineWidth": "3px",
+   "outlineStyle": "none",
+   "outlineColor": "rgb(107, 114, 128)",
+   "boxShadow": "none"
+  }
+ },
+ "grep": null,
+ "keyboardConsole": []
+}

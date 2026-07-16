@@ -1,14 +1,14 @@
 stopwatch tab visible: true, timers view hidden: true
 stopwatch started; button reads: Stop
 display after 3.0s fast-forward: 00:03.00
-display after further 2.5s: 00:05.56
+display after further 2.5s: 00:05.57
 lap rows (latest first): ["Lap 2fastest 00:02.53 00:05.57","Lap 1slowest 00:03.03 00:03.03"]
 stopped; button reads: Start, lap disabled: true
 after reset display: 00:00.00, lap table rows: 0
 timer added; name: Egg test, countdown: 00:05, empty-state hidden: true
 remove button aria-label: Remove timer Egg test
 after 2s fast-forward countdown: 00:03
-paused; persisted record: remain=2891ms endAt=null name="Egg test"
+paused; persisted record: remain=2907ms endAt=null name="Egg test"
 run to completion; card shows: Time!, ringing class: true, tab title: 🔔 Time! · Timers
 persisted ringing state: ringing=true dur=5000
 dismissed; countdown reset to: 00:05, buttons: ["Start","Reset"]

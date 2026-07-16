@@ -116,3 +116,28 @@ none — fully offline (canvas + localStorage only). `network: "offline"`, `endp
   `.chip` or `.card` with non-core semantics need the same treatment.
 - The suite dogfoods this contrast checker (QUALITY.md §2): its math was verified against two
   known-value pairs (21.00:1 and 4.48:1), and the relative-luminance code is unchanged from v1.
+
+## Phase 4 a11y audit
+
+Audited 2026-07-16 from `file://`, both themes (`tests/a11y-phase4-set2.mjs`;
+raw: `phase4-a11y-audit.txt`). Re-verified with `node verify-tool.mjs color` → exit 0.
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only controls named | pass | format rows / swatches carry generated aria-labels ("Copy HEX value …", "Copy #hex"); Save buttons "Save <name> palette"; Delete "Delete saved palette <name>" |
+| 2 | aria-live | pass | `#toast`, `#ccRatio`, `#photoSwatches` liveRegion (runtime confirmed). Format rows mirror the picker continuously (not live by design, like a slider readout) |
+| 3 | Keyboard path | pass | keyboard-only: Hue slider ArrowRight×10 → HEX readout changed; format row Enter → "Copied #2f6a6f" toast (the `clickable()` helper gives rows tabindex 0 + Enter/Space); photo drop zone reachable by Tab (`role=button`, aria-label, Enter/Space opens chooser). No overlays |
+| 4 | Inputs labeled | pass | color/hex inputs have aria-labels; sliders have `label[for]` |
+| 5 | Contrast | **fixed** | see below |
+| 6 | Focus visibility | pass | core 2px accent outline (verified on Tab-focused button); fmt rows/swatches are tabbable and get the `[tabindex]:focus-visible` outline |
+
+Contrast — **fixed: the PASS/FAIL badge palette** (tool-local `--good`/`--bad`) failed on its
+own color-mix backgrounds: light 3.86 (pass badge, computed) / 3.97 (fail badge), dark 4.20
+(fail badge). Deepened light `--good` #3a7d44→#2f6337, `--bad` #c0492d→#ad3a20; brightened
+dark `--bad` #e0705a→#e67d68. Post-fix: light **5.32 / 4.83**, dark **5.46 / 4.63**.
+(Audit note: the badges are the tool's own WCAG verdict chips — dogfooding made this one ironic.)
+Other passes: `.fmt .v` 13.39/14.25, `.savebtn` 5.74/6.91, `.sw .lab` 14.61/12.96, muted-on-card 4.76/6.19.
+**SUITE-WIDE flags**: light muted-on-bg 4.36 (tagline, `.fmt .k` on `--bg`, footer); dark #fff-on-accent 2.36 (`.tab.on`).
+
+Fixes made: tool-local badge palette only (all four theme contexts). No behavior change;
+`suite.color.palettes` untouched.

@@ -6,13 +6,15 @@
 <title>Notepad That Stays · Local Suite</title>
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
-  /* tool accent: code-block background (3-layer, same pattern as core) */
-  :root { --code-bg: #efece4; }
+  /* tool accents: code-block background + editing indicator (3-layer, same pattern
+     as core). Phase 4 a11y: --warn was previously an undefined var falling back to
+     #b0752a, which fails AA on the card in both themes (3.81 light / 4.21 dark). */
+  :root { --code-bg: #efece4; --warn: #9c6620; }
   @media (prefers-color-scheme: dark) {
-    :root { --code-bg: #262a31; }
+    :root { --code-bg: #262a31; --warn: #d19a4e; }
   }
-  :root[data-theme="light"] { --code-bg: #efece4; }
-  :root[data-theme="dark"] { --code-bg: #262a31; }
+  :root[data-theme="light"] { --code-bg: #efece4; --warn: #9c6620; }
+  :root[data-theme="dark"] { --code-bg: #262a31; --warn: #d19a4e; }
 
   html, body { height: 100%; }
   body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }

@@ -1,0 +1,391 @@
+===== AUDIT sound =====
+{
+ "tool": "sound",
+ "themes": {
+  "light": {
+   "stages": [
+    {
+     "name": "one sound on + timer set",
+     "contrast": [
+      {
+       "sel": ".tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".master .play",
+       "desc": "play button (white glyph on accent)",
+       "fg": "#ffffff",
+       "bg": "#2f6f6a",
+       "bgLabel": "computed",
+       "size": 20.8,
+       "weight": 400,
+       "threshold": 3,
+       "ratio": 5.83,
+       "pass": true
+      },
+      {
+       "sel": ".master .mlabel",
+       "desc": "master label (muted .78rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".snd .desc",
+       "desc": "sound description (muted .8rem)",
+       "fg": "#6b7280",
+       "bg": "#e3efed",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.11,
+       "pass": false
+      },
+      {
+       "sel": ".snd.on .state",
+       "desc": "state ON (accent on accent-soft)",
+       "fg": "#2f6f6a",
+       "bg": "#e3efed",
+       "bgLabel": "computed",
+       "size": 11.52,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.95,
+       "pass": true
+      },
+      {
+       "sel": ".snd:not(.on) .state",
+       "desc": "state off (muted .72rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 11.52,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".timer .opts button.on",
+       "desc": "timer option active (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#2f6f6a",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.83,
+       "pass": true
+      },
+      {
+       "sel": ".timer .opts button:not(.on)",
+       "desc": "timer option (ink on bg)",
+       "fg": "#23282e",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 13.39,
+       "pass": true
+      },
+      {
+       "sel": ".timer .status",
+       "desc": "timer status (muted on card)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".timer .status b",
+       "desc": "countdown (accent on card)",
+       "fg": "#2f6f6a",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 18.4,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 5.74,
+       "pass": true
+      },
+      {
+       "sel": ".hint",
+       "desc": "hint (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  },
+  "dark": {
+   "stages": [
+    {
+     "name": "one sound on + timer set",
+     "contrast": [
+      {
+       "sel": ".tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".master .play",
+       "desc": "play button (white glyph on accent)",
+       "fg": "#ffffff",
+       "bg": "#6fb5ae",
+       "bgLabel": "computed",
+       "size": 20.8,
+       "weight": 400,
+       "threshold": 3,
+       "ratio": 2.36,
+       "pass": false
+      },
+      {
+       "sel": ".master .mlabel",
+       "desc": "master label (muted .78rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".snd .desc",
+       "desc": "sound description (muted .8rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1b2425",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.99,
+       "pass": true
+      },
+      {
+       "sel": ".snd.on .state",
+       "desc": "state ON (accent on accent-soft)",
+       "fg": "#6fb5ae",
+       "bg": "#1b2425",
+       "bgLabel": "computed",
+       "size": 11.52,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.69,
+       "pass": true
+      },
+      {
+       "sel": ".snd:not(.on) .state",
+       "desc": "state off (muted .72rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 11.52,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".timer .opts button.on",
+       "desc": "timer option active (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#6fb5ae",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 2.36,
+       "pass": false
+      },
+      {
+       "sel": ".timer .opts button:not(.on)",
+       "desc": "timer option (ink on bg)",
+       "fg": "#e7e5e0",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 14.08,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 14.25,
+       "pass": true
+      },
+      {
+       "sel": ".timer .status",
+       "desc": "timer status (muted on card)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 14.4,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".timer .status b",
+       "desc": "countdown (accent on card)",
+       "fg": "#6fb5ae",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 18.4,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 6.91,
+       "pass": true
+      },
+      {
+       "sel": ".hint",
+       "desc": "hint (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  }
+ },
+ "keyboard": [
+  "master play via Enter; aria-pressed: true; glyph: ⏸",
+  "master volume ArrowLeft: 69",
+  "white noise via Enter; aria-pressed: true; state: ● ON",
+  "slider arrow adjusts without toggling card: true",
+  "timer via Enter; status: Stopping in 30:00"
+ ],
+ "iconButtons": [
+  {
+   "tag": "button",
+   "id": "masterBtn",
+   "cls": "play",
+   "text": "⏸",
+   "name": "Play or pause",
+   "pass": true
+  }
+ ],
+ "labels": [
+  {
+   "tag": "input",
+   "type": "range",
+   "id": "masterVol",
+   "visible": true,
+   "how": "aria-labelledby",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "range",
+   "id": null,
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "range",
+   "id": null,
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "range",
+   "id": null,
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "range",
+   "id": null,
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "range",
+   "id": null,
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "range",
+   "id": null,
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  }
+ ],
+ "tabindex": [],
+ "live": [
+  {
+   "sel": "#timerStatus",
+   "present": true,
+   "ariaLive": "polite"
+  }
+ ],
+ "focus": {
+  "pass": true,
+  "el": "BUTTON",
+  "focused": {
+   "outlineWidth": "2px",
+   "outlineStyle": "solid",
+   "outlineColor": "rgb(47, 111, 106)",
+   "boxShadow": "none"
+  },
+  "blurred": {
+   "outlineWidth": "3px",
+   "outlineStyle": "none",
+   "outlineColor": "rgb(35, 40, 46)",
+   "boxShadow": "none"
+  }
+ },
+ "grep": null,
+ "keyboardConsole": []
+}

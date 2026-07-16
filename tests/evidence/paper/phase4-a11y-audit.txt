@@ -1,0 +1,486 @@
+===== AUDIT paper =====
+{
+ "tool": "paper",
+ "themes": {
+  "light": {
+   "stages": [
+    {
+     "name": "default graph paper",
+     "contrast": [
+      {
+       "sel": "header .tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": "h2.sec",
+       "desc": "section heading (muted .78rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".field label",
+       "desc": "field label (muted .8rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".seg button.on",
+       "desc": "segmented active (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#2f6f6a",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.83,
+       "pass": true
+      },
+      {
+       "sel": ".seg button:not(.on)",
+       "desc": "segmented idle (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".btn",
+       "desc": "print button (white on accent)",
+       "fg": "#2f6f6a",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.74,
+       "pass": true
+      },
+      {
+       "sel": ".btn.ghost",
+       "desc": "download (accent on card)",
+       "fg": "#2f6f6a",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.74,
+       "pass": true
+      },
+      {
+       "sel": ".hint",
+       "desc": "hint (muted .78rem)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      },
+      {
+       "sel": ".note",
+       "desc": "print note (muted on bg)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": ".note b",
+       "desc": "note emphasis (ink on bg)",
+       "fg": "#23282e",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 13.39,
+       "pass": true
+      },
+      {
+       "sel": ".checkrow",
+       "desc": "checkbox row (ink on card)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  },
+  "dark": {
+   "stages": [
+    {
+     "name": "default graph paper",
+     "contrast": [
+      {
+       "sel": "header .tag",
+       "desc": "tagline (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": "h2.sec",
+       "desc": "section heading (muted .78rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".field label",
+       "desc": "field label (muted .8rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".seg button.on",
+       "desc": "segmented active (white on accent)",
+       "fg": "#ffffff",
+       "bg": "#6fb5ae",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 2.36,
+       "pass": false
+      },
+      {
+       "sel": ".seg button:not(.on)",
+       "desc": "segmented idle (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".btn",
+       "desc": "print button (white on accent)",
+       "fg": "#6fb5ae",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.91,
+       "pass": true
+      },
+      {
+       "sel": ".btn.ghost",
+       "desc": "download (accent on card)",
+       "fg": "#6fb5ae",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 15.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.91,
+       "pass": true
+      },
+      {
+       "sel": ".hint",
+       "desc": "hint (muted .78rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      },
+      {
+       "sel": ".note",
+       "desc": "print note (muted on bg)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": ".note b",
+       "desc": "note emphasis (ink on bg)",
+       "fg": "#e7e5e0",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 13.12,
+       "weight": 700,
+       "threshold": 4.5,
+       "ratio": 14.25,
+       "pass": true
+      },
+      {
+       "sel": ".checkrow",
+       "desc": "checkbox row (ink on card)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  }
+ },
+ "keyboard": [
+  "type select ArrowDown: \"Preview: Graph / grid paper, US Letter — 8.5 × 11 in, portrait\" -> \"Preview: Dot grid paper, US Letter — 8.5 × 11 in, portrait\" (changed: true)",
+  "landscape via Enter; preview label: Preview: Dot grid paper, US Letter — 8.5 × 11 in, landscape",
+  "margin ArrowUp: 11",
+  "full-bleed 0 via Enter: margin=0"
+ ],
+ "iconButtons": [
+  {
+   "tag": "button",
+   "id": "marginBleed",
+   "cls": "btn ghost",
+   "text": "0",
+   "name": "No margins — full bleed",
+   "pass": true
+  },
+  {
+   "tag": "button",
+   "id": null,
+   "cls": "sw",
+   "text": "",
+   "name": "Ink color #7089a8",
+   "pass": true
+  },
+  {
+   "tag": "button",
+   "id": null,
+   "cls": "sw",
+   "text": "",
+   "name": "Ink color #9db4c9",
+   "pass": true
+  },
+  {
+   "tag": "button",
+   "id": null,
+   "cls": "sw",
+   "text": "",
+   "name": "Ink color #c05a5a",
+   "pass": true
+  },
+  {
+   "tag": "button",
+   "id": null,
+   "cls": "sw",
+   "text": "",
+   "name": "Ink color #5a9d6a",
+   "pass": true
+  },
+  {
+   "tag": "button",
+   "id": null,
+   "cls": "sw",
+   "text": "",
+   "name": "Ink color #8a8f98",
+   "pass": true
+  },
+  {
+   "tag": "button",
+   "id": null,
+   "cls": "sw",
+   "text": "",
+   "name": "Ink color #3a3f47",
+   "pass": true
+  },
+  {
+   "tag": "button",
+   "id": null,
+   "cls": "sw",
+   "text": "",
+   "name": "Ink color #000000",
+   "pass": true
+  }
+ ],
+ "labels": [
+  {
+   "tag": "select",
+   "type": "select-one",
+   "id": "type",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "select",
+   "type": "select-one",
+   "id": "size",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "margin",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "spacing",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "select",
+   "type": "select-one",
+   "id": "unit",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "heavy",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "select",
+   "type": "select-one",
+   "id": "ruled",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "checkbox",
+   "id": "marginLine",
+   "visible": true,
+   "how": "wrapping label",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "weight",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "number",
+   "id": "weightMaj",
+   "visible": true,
+   "how": "label[for]",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "color",
+   "id": "color",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "input",
+   "type": "checkbox",
+   "id": "border",
+   "visible": true,
+   "how": "wrapping label",
+   "pass": true
+  }
+ ],
+ "tabindex": [],
+ "live": [
+  {
+   "sel": "#preview",
+   "present": true,
+   "ariaLive": "polite"
+  }
+ ],
+ "focus": {
+  "pass": true,
+  "el": "A",
+  "focused": {
+   "outlineWidth": "2px",
+   "outlineStyle": "solid",
+   "outlineColor": "rgb(47, 111, 106)",
+   "boxShadow": "none"
+  },
+  "blurred": {
+   "outlineWidth": "3px",
+   "outlineStyle": "none",
+   "outlineColor": "rgb(47, 111, 106)",
+   "boxShadow": "none"
+  }
+ },
+ "grep": null,
+ "keyboardConsole": []
+}

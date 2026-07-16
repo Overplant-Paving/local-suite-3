@@ -1,30 +1,90 @@
-== computed-style diff, light (13 differing values) ==
+== computed-style diff, light (61 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --moderate: v1=#d98324 | v2=#a35f08 }
+body { --minor: v1=#c9a227 | v2=#85690a }
+body { --unknown: v1=#7a8290 | v2=#626a78 }
+body { --sev-ink: v1=undefined | v2=#fff }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --moderate: v1=#d98324 | v2=#a35f08 }
+.topbar { --minor: v1=#c9a227 | v2=#85690a }
+.topbar { --unknown: v1=#7a8290 | v2=#626a78 }
+.topbar { --sev-ink: v1=undefined | v2=#fff }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --moderate: v1=#d98324 | v2=#a35f08 }
+.back { --minor: v1=#c9a227 | v2=#85690a }
+.back { --unknown: v1=#7a8290 | v2=#626a78 }
+.back { --sev-ink: v1=undefined | v2=#fff }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --moderate: v1=#d98324 | v2=#a35f08 }
+.theme-btn { --minor: v1=#c9a227 | v2=#85690a }
+.theme-btn { --unknown: v1=#7a8290 | v2=#626a78 }
+.theme-btn { --sev-ink: v1=undefined | v2=#fff }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --moderate: v1=#d98324 | v2=#a35f08 }
+header h1 { --minor: v1=#c9a227 | v2=#85690a }
+header h1 { --unknown: v1=#7a8290 | v2=#626a78 }
+header h1 { --sev-ink: v1=undefined | v2=#fff }
 .locbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.locbar { --moderate: v1=#d98324 | v2=#a35f08 }
+.locbar { --minor: v1=#c9a227 | v2=#85690a }
+.locbar { --unknown: v1=#7a8290 | v2=#626a78 }
+.locbar { --sev-ink: v1=undefined | v2=#fff }
 .notify-toggle { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.notify-toggle { --moderate: v1=#d98324 | v2=#a35f08 }
+.notify-toggle { --minor: v1=#c9a227 | v2=#85690a }
+.notify-toggle { --unknown: v1=#7a8290 | v2=#626a78 }
+.notify-toggle { --sev-ink: v1=undefined | v2=#fff }
 .card-msg { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card-msg { --moderate: v1=#d98324 | v2=#a35f08 }
+.card-msg { --minor: v1=#c9a227 | v2=#85690a }
+.card-msg { --unknown: v1=#7a8290 | v2=#626a78 }
+.card-msg { --sev-ink: v1=undefined | v2=#fff }
 .card-msg .big { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card-msg .big { --moderate: v1=#d98324 | v2=#a35f08 }
+.card-msg .big { --minor: v1=#c9a227 | v2=#85690a }
+.card-msg .big { --unknown: v1=#7a8290 | v2=#626a78 }
+.card-msg .big { --sev-ink: v1=undefined | v2=#fff }
 .field input { outline-offset: v1=0px | v2=2px }
 .field input { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.field input { --moderate: v1=#d98324 | v2=#a35f08 }
+.field input { --minor: v1=#c9a227 | v2=#85690a }
+.field input { --unknown: v1=#7a8290 | v2=#626a78 }
+.field input { --sev-ink: v1=undefined | v2=#fff }
 .btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { --moderate: v1=#d98324 | v2=#a35f08 }
+.btn { --minor: v1=#c9a227 | v2=#85690a }
+.btn { --unknown: v1=#7a8290 | v2=#626a78 }
+.btn { --sev-ink: v1=undefined | v2=#fff }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --moderate: v1=#d98324 | v2=#a35f08 }
+footer { --minor: v1=#c9a227 | v2=#85690a }
+footer { --unknown: v1=#7a8290 | v2=#626a78 }
+footer { --sev-ink: v1=undefined | v2=#fff }
 
-== computed-style diff, dark (13 differing values) ==
+== computed-style diff, dark (25 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --sev-ink: v1=undefined | v2=#15171b }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --sev-ink: v1=undefined | v2=#15171b }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --sev-ink: v1=undefined | v2=#15171b }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --sev-ink: v1=undefined | v2=#15171b }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --sev-ink: v1=undefined | v2=#15171b }
 .locbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.locbar { --sev-ink: v1=undefined | v2=#15171b }
 .notify-toggle { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.notify-toggle { --sev-ink: v1=undefined | v2=#15171b }
 .card-msg { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card-msg { --sev-ink: v1=undefined | v2=#15171b }
 .card-msg .big { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card-msg .big { --sev-ink: v1=undefined | v2=#15171b }
 .field input { outline-offset: v1=0px | v2=2px }
 .field input { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.field input { --sev-ink: v1=undefined | v2=#15171b }
 .btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { --sev-ink: v1=undefined | v2=#15171b }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --sev-ink: v1=undefined | v2=#15171b }
 

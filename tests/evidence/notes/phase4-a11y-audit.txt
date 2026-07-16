@@ -1,0 +1,360 @@
+===== AUDIT notes =====
+{
+ "tool": "notes",
+ "themes": {
+  "light": {
+   "stages": [
+    {
+     "name": "editor with dirty flag",
+     "contrast": [
+      {
+       "sel": ".saved",
+       "desc": "save state (muted on card header)",
+       "fg": "#9c6620",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.77,
+       "pass": true
+      },
+      {
+       "sel": ".saved.dirty",
+       "desc": "dirty state (--warn fallback on card)",
+       "fg": "#9c6620",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.77,
+       "pass": true
+      },
+      {
+       "sel": ".tbtn",
+       "desc": "toolbar button (ink on card)",
+       "fg": "#23282e",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 14.61,
+       "pass": true
+      },
+      {
+       "sel": ".side-top button",
+       "desc": "+ New note (accent on accent-soft)",
+       "fg": "#2f6f6a",
+       "bg": "#e3efed",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 4.95,
+       "pass": true
+      },
+      {
+       "sel": ".note-list li.on .nm",
+       "desc": "active note name (accent on accent-soft)",
+       "fg": "#2f6f6a",
+       "bg": "#e3efed",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 4.95,
+       "pass": true
+      },
+      {
+       "sel": ".note-list li .wc",
+       "desc": "word count (muted .7rem)",
+       "fg": "#6b7280",
+       "bg": "#e3efed",
+       "bgLabel": "computed",
+       "size": 11.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.11,
+       "pass": false
+      },
+      {
+       "sel": ".note-list li .del",
+       "desc": "delete × (muted on accent-soft)",
+       "fg": "#6b7280",
+       "bg": "#e3efed",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.11,
+       "pass": false
+      },
+      {
+       "sel": ".editor-bar .count",
+       "desc": "word count (muted .78rem on card)",
+       "fg": "#6b7280",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.36,
+       "pass": false
+      },
+      {
+       "sel": "#editor",
+       "desc": "editor text (ink on bg)",
+       "fg": "#23282e",
+       "bg": "#f5f3ee",
+       "bgLabel": "computed",
+       "size": 15,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 13.39,
+       "pass": true
+      },
+      {
+       "sel": ".preview blockquote",
+       "desc": "blockquote (muted on bg)",
+       "missing": true
+      },
+      {
+       "sel": ".preview code",
+       "desc": "inline code (ink on code-bg)",
+       "fg": "#23282e",
+       "bg": "#efece4",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 12.58,
+       "pass": true
+      },
+      {
+       "sel": "footer",
+       "desc": "footer (muted .78rem on card)",
+       "fg": "#6b7280",
+       "bg": "#fffdf9",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 4.76,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  },
+  "dark": {
+   "stages": [
+    {
+     "name": "editor with dirty flag",
+     "contrast": [
+      {
+       "sel": ".saved",
+       "desc": "save state (muted on card header)",
+       "fg": "#d19a4e",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.56,
+       "pass": true
+      },
+      {
+       "sel": ".saved.dirty",
+       "desc": "dirty state (--warn fallback on card)",
+       "fg": "#d19a4e",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 12.8,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.56,
+       "pass": true
+      },
+      {
+       "sel": ".tbtn",
+       "desc": "toolbar button (ink on card)",
+       "fg": "#e7e5e0",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 12.96,
+       "pass": true
+      },
+      {
+       "sel": ".side-top button",
+       "desc": "+ New note (accent on accent-soft)",
+       "fg": "#6fb5ae",
+       "bg": "#1f292b",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 6.3,
+       "pass": true
+      },
+      {
+       "sel": ".note-list li.on .nm",
+       "desc": "active note name (accent on accent-soft)",
+       "fg": "#6fb5ae",
+       "bg": "#1f292b",
+       "bgLabel": "computed",
+       "size": 14.72,
+       "weight": 600,
+       "threshold": 4.5,
+       "ratio": 6.3,
+       "pass": true
+      },
+      {
+       "sel": ".note-list li .wc",
+       "desc": "word count (muted .7rem)",
+       "fg": "#9aa0a8",
+       "bg": "#1f292b",
+       "bgLabel": "computed",
+       "size": 11.2,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.64,
+       "pass": true
+      },
+      {
+       "sel": ".note-list li .del",
+       "desc": "delete × (muted on accent-soft)",
+       "fg": "#9aa0a8",
+       "bg": "#1f292b",
+       "bgLabel": "computed",
+       "size": 16,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 5.64,
+       "pass": true
+      },
+      {
+       "sel": ".editor-bar .count",
+       "desc": "word count (muted .78rem on card)",
+       "fg": "#9aa0a8",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.81,
+       "pass": true
+      },
+      {
+       "sel": "#editor",
+       "desc": "editor text (ink on bg)",
+       "fg": "#e7e5e0",
+       "bg": "#15171b",
+       "bgLabel": "computed",
+       "size": 15,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 14.25,
+       "pass": true
+      },
+      {
+       "sel": ".preview blockquote",
+       "desc": "blockquote (muted on bg)",
+       "missing": true
+      },
+      {
+       "sel": ".preview code",
+       "desc": "inline code (ink on code-bg)",
+       "fg": "#e7e5e0",
+       "bg": "#262a31",
+       "bgLabel": "computed",
+       "size": 13.6,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 11.44,
+       "pass": true
+      },
+      {
+       "sel": "footer",
+       "desc": "footer (muted .78rem on card)",
+       "fg": "#9aa0a8",
+       "bg": "#1d2026",
+       "bgLabel": "computed",
+       "size": 12.48,
+       "weight": 400,
+       "threshold": 4.5,
+       "ratio": 6.19,
+       "pass": true
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  }
+ },
+ "keyboard": [
+  "typed; saved indicator: saved ✓; preview h1: Keyboard note",
+  "new note via Enter; list items: 2",
+  "note selected via Enter on li; title now: Untitled note",
+  "Ctrl+S; saved indicator: saved ✓"
+ ],
+ "iconButtons": [
+  {
+   "tag": "button",
+   "id": null,
+   "cls": "del",
+   "text": "×",
+   "name": "Delete note \"Welcome\"",
+   "pass": true
+  }
+ ],
+ "labels": [
+  {
+   "tag": "input",
+   "type": "text",
+   "id": "noteTitle",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  },
+  {
+   "tag": "textarea",
+   "type": "textarea",
+   "id": "editor",
+   "visible": true,
+   "how": "aria-label",
+   "pass": true
+  }
+ ],
+ "tabindex": [],
+ "live": [
+  {
+   "sel": "#saved",
+   "present": true,
+   "ariaLive": "polite"
+  }
+ ],
+ "focus": {
+  "pass": true,
+  "el": "A",
+  "focused": {
+   "outlineWidth": "2px",
+   "outlineStyle": "solid",
+   "outlineColor": "rgb(47, 111, 106)",
+   "boxShadow": "none"
+  },
+  "blurred": {
+   "outlineWidth": "3px",
+   "outlineStyle": "none",
+   "outlineColor": "rgb(47, 111, 106)",
+   "boxShadow": "none"
+  }
+ },
+ "grep": null,
+ "keyboardConsole": []
+}

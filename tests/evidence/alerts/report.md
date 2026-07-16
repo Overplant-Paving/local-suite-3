@@ -166,3 +166,37 @@ markup in an alert `event` is inert). Expressions interpolated into `innerHTML` 
 - The `console.error: Failed to load resource: net::ERR_FAILED` in interaction.txt is the
   deliberately blocked fetch from the stale-path test (harness-exempt pattern); the console is
   otherwise clean.
+## Phase 4 a11y audit
+
+Audited 2026-07-16 from `file://`, both themes (`tests/a11y-phase4-set2.mjs`;
+raw: `phase4-a11y-audit.txt`). NWS/zippopotam stubbed in the audit run so all five severity
+badges render deterministically; `node verify-tool.mjs alerts` re-run afterwards → exit 0
+**with a live NWS fetch** (real Extreme Heat Warning rendered).
+
+| # | Item | Verdict | Evidence |
+|---|------|---------|----------|
+| 1 | Icon-only controls named | pass | 🔔 notify toggle has text + `aria-pressed`; chevron is `aria-hidden` (summary carries the text) |
+| 2 | aria-live | pass | `#main` (the board) and `#updated` liveRegion; first-run form's `#locMsg` also live (grep + runtime) |
+| 3 | Keyboard path | pass | keyboard-only from first-run: ZIP field auto-focused, typed 10001 + Enter → board rendered ("5 active alerts"); alert expanded/collapsed via Enter on native `details/summary`; "change" link-button via Enter returns to the form. No custom overlays |
+| 4 | Inputs labeled | pass | `#zip` has `label[for]` (form is dynamic — verified in source and in the keyboard run) |
+| 5 | Contrast | **fixed** | see below |
+| 6 | Focus visibility | pass | core 2px accent outline (summary, buttons, input) |
+
+Contrast — **fixed: the severity badge scale** (tool-local). White badge text failed on
+light `--moderate` **2.91**, `--minor` **2.42**, `--unknown` **3.87**, and on **all five**
+dark severity colors (**1.85–3.23**, the dark scale is deliberately light because it doubles
+as text on the card). Two-part fix keeping the 3-layer pattern:
+- light: deepened `--moderate` #d98324→#a35f08, `--minor` #c9a227→#85690a, `--unknown`
+  #7a8290→#626a78 (Extreme/Severe already passed);
+- dark: badge/count ink flips to near-black via new `--sev-ink` (#fff light / #15171b dark)
+  — the severity colors themselves stay light so "Most serious: <severity>" text keeps
+  passing on the card (5.05–9.7 dark).
+Post-fix badges: light **4.97–5.86**, dark **5.55–9.7**; banner count large-text ≥5.55 both
+themes; "Most serious" strong ≥5.05 both. Instruction box 12.61/11.81, kv/meta muted-on-card
+4.76/6.19.
+**SUITE-WIDE flags**: light muted-on-bg 4.36 — includes this tool's `.back` link (v1 styles
+it muted rather than accent), the location bar, and the updated stamp; dark #fff-on-accent
+2.36 (notify toggle when on).
+
+Fixes made: severity variables (all four theme contexts) + `--sev-ink` on `.sev-badge` /
+`.banner .count`. Rendering logic, cache envelope (`suite.cache.alerts`), notify keys untouched.
