@@ -1574,6 +1574,23 @@
       "flags": [
         "embedded-data"
       ]
+    },
+    {
+      "id": "settings",
+      "file": "settings.html",
+      "name": "Suite Settings",
+      "cat": "util",
+      "cx": "M",
+      "desc": "Backup and restore, API keys, relay, and storage — the suite's controls.",
+      "network": "offline",
+      "key": null,
+      "endpoints": [],
+      "storage": [
+        "suite.* (reads/writes all suite keys by design)"
+      ],
+      "cacheTtlMin": null,
+      "since": "v2",
+      "flags": []
     }
   ]
 }

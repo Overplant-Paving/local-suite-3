@@ -1,0 +1,11 @@
+{
+  "note": "new-in-v2 tool — no v1 original; parity N/A",
+  "v2": {
+    "suite.roundtrip.spacing": "{ \"a\":1,   \"b\": [2,3] , \"c\":\"x\" }",
+    "suite.units": "F",
+    "suite.focus.settings": "{\"focus\":25,\"short\":5,\"long\":15,\"rounds\":4,\"chime\":60,\"auto\":1}",
+    "suite.key.finnhub": "fake-finnhub-key-for-roundtrip-123",
+    "suite.notes.test": "{\"txt\":\"café ☕ — naïve ünïcode\"}",
+    "suite.theme": "dark"
+  }
+}

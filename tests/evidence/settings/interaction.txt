@@ -1,0 +1,78 @@
+NOTE: settings.html is born in v2 (no v1 original) — this run verifies the ROADMAP
+NOTE: Phase 4 spec directly. The relay 'success' path is route-fulfilled (no live
+NOTE: request leaves the machine); the failure path is route-aborted to exercise the
+NOTE: designed blocked/CSP explanation state.
+seeded 9 suite.* keys: suite.cache.demo.one, suite.cache.demo.two, suite.focus.settings, suite.key.finnhub, suite.location, suite.notes.test, suite.roundtrip.spacing, suite.theme, suite.units
+storage viewer rows (9): suite.cache.demo.one, suite.cache.demo.two, suite.focus.settings, suite.key.finnhub, suite.location, suite.notes.test, suite.roundtrip.spacing, suite.theme, suite.units
+viewer matches live localStorage key set: true
+storage summary: "9 key(s) · 332 B"
+viewer row suite.notes.test: size=40 B (UTF-8 bytes, value has multi-byte chars), preview="{"txt":"café ☕ — naïve ünïcode"}"
+export msg: "Backup of 9 key(s) created (750 B). It includes your saved API keys — treat it like a password."
+envelope: format=local-suite.backup.v2, exported=2026-07-16T05:38:19.039Z, keys=9, data entries=9
+envelope.data verbatim vs live localStorage (9 keys): all byte-identical
+download button enabled after export: true
+download event: suggested filename "local-suite-backup-2026-07-16.json"
+after wipe + reload: 1 suite.* key(s) present: suite.theme
+  (suite.theme is re-seeded by the harness's addInitScript on every load; its restored
+   value "light" is byte-identical to the seeded one, so the round trip still covers it)
+storage summary on wiped profile: "1 key(s) · 5 B"
+restore with empty textarea -> "Paste a backup first (or use “Restore from file…”)."
+restore with invalid JSON -> "Restore failed: that isn't valid JSON."
+restore with wrong format -> "Restore failed: not a Local Suite backup (expected format "local-suite.backup.v2")."
+restore msg: "Restored 9 key(s). Backup dated 2026-07-16T05:38:19.039Z."
+  round-trip suite.cache.demo.one: byte-identical
+  round-trip suite.cache.demo.two: byte-identical
+  round-trip suite.focus.settings: byte-identical
+  round-trip suite.key.finnhub: byte-identical
+  round-trip suite.location: byte-identical
+  round-trip suite.notes.test: byte-identical
+  round-trip suite.roundtrip.spacing: byte-identical
+  round-trip suite.theme: byte-identical
+  round-trip suite.units: byte-identical
+ROUND-TRIP VERDICT: 9/9 keys byte-identical, 0 mismatched, 0 unexpected extra key(s)
+tamper restore msg: "Restored 1 key(s) · 3 non-suite or non-string entries skipped. Backup dated 2026-07-16T00:00:00Z."
+tamper guard: evil.key=null, localStorageBomb=null, suite.bad.nonstring=null (all must be null), suite.tamper.ok="kept" (written)
+nasa status before set (demo fallback): "using the shared demo key (DEMO_KEY) — low limits; add your free key for more headroom"
+finnhub status (restored custom key): "your key is saved on this machine"
+finnhub input masked: type=password
+nasa key saved via Enter: stored="TESTKEY-NASA-LOCAL-HARNESS", status="your key is saved on this machine", card msg="NASA key saved."
+reveal before: input type=password, aria-pressed=false, aria-label="Show NASA API key"
+reveal after click: input type=text, aria-pressed=true, aria-label="Hide NASA API key", visible value="TESTKEY-NASA-LOCAL-HARNESS"
+reveal toggled back: input type=password
+save with empty field -> "Paste a NASA key first — or use Clear to remove the saved one." (stored key untouched: "TESTKEY-NASA-LOCAL-HARNESS")
+nasa cleared: stored=null, status="using the shared demo key (DEMO_KEY) — low limits; add your free key for more headroom" (must show the shared DEMO_KEY nudge)
+bart demo status (published public key): "using the shared demo key (MW9S-E7SL-26DU-VV8V) — low limits; add your free key for more headroom"
+eia no-demo status: "no key saved — the tool shows its sign-up card when one is needed"
+relay current (unset): "not set — tools use their link-out / embedded-data paths"
+relay save with non-URL -> "The relay base must be an http(s) URL."
+relay saved: suite.relay.url="https://relay-probe.local-suite-test.workers.dev/r"
+relay save msg (shows rewritten probe): "Relay saved. Rewritten probe: https://relay-probe.local-suite-test.workers.dev/r?url=https%3A%2F%2Fexample.org%2Fprobe"
+relay current line: "https://relay-probe.local-suite-test.workers.dev/r"
+relay live test (route-fulfilled): "Relay reachable — it answered HTTP 200 for https://relay-probe.local-suite-test.workers.dev/r?url=https%3A%2F%2Fexample.org%2Fprobe. The ?url= contract works; point your keyed/CORS-blocked tools at it."
+intercepted request URL: https://relay-probe.local-suite-test.workers.dev/r?url=https%3A%2F%2Fexample.org%2Fprobe
+?url= contract: decoded target = https://example.org/probe (expected https://example.org/probe): true
+relay live test (route-aborted): "Test failed (Failed to fetch). Two usual causes: the relay host isn't up, or you're on the built (dist) copy, whose Content-Security-Policy allows only each tool's catalogued endpoints — personal relay hosts are blocked there by design, and we don't weaken that policy. The URL stays saved; the source copy under tools/ carries no CSP and can reach it."
+designed explanation present: mentions CSP=true, mentions blocked-by-design=true, says URL stays saved=true
+relay cleared: suite.relay.url=null, current line: "not set — tools use their link-out / embedded-data paths", msg: "Relay cleared — tools are back on their built-in paths."
+theme seg initial: {"dataTheme":"light","stored":"light","pressed":"light=true dark=false system=false"}
+theme -> dark: {"dataTheme":"dark","stored":"dark","pressed":"light=false dark=true system=false"}, msg="Theme set to dark."
+theme -> system (key removed): {"dataTheme":"(unset)","stored":null,"pressed":"light=false dark=false system=true"}, msg="Following the system setting (suite.theme removed)."
+theme -> light: {"dataTheme":"light","stored":"light","pressed":"light=true dark=false system=false"}
+location current (restored seed): "37.77, -122.42 — San Francisco"
+location save with invalid lat -> "Enter a latitude (−90…90) and longitude (−180…180) first."
+location saved via Enter: suite.location={"lat":51.5,"lon":-0.12,"label":"London"}, current="51.5, -0.12 — London", msg="Location saved — the location-aware tools will pick it up."
+location cleared: suite.location=null, current="not set"
+per-key delete: row button aria-label="Delete suite.tamper.ok" present: true
+after delete: suite.tamper.ok=null, storage msg="Deleted suite.tamper.ok."
+before purge: 8 keys, cache keys: suite.cache.demo.one, suite.cache.demo.two
+purge msg: "Removed 2 cached entries (suite.cache.*)."
+after purge: cache keys remaining=0 (expected 0), non-cache keys intact=true (6/6)
+storage summary now: "6 key(s) · 176 B"
+second purge (nothing left): "No cached entries to remove."
+a11y: aria-live regions on all async/result areas: backupMsg, restoreMsg, keysMsg, relayMsg, themeMsg, locMsg, storageMsg
+a11y: inputs/textareas without label or aria-label: (none)
+a11y: icon-only buttons missing aria-label: (none) (theme-btn "◐ theme" has text + core label; reveal/delete buttons carry per-item labels)
+a11y: overlays/dialogs needing Esc: 0 (none exist by design)
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
