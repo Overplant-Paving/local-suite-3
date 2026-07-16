@@ -199,4 +199,11 @@ function relay(url) {
 }
 
 window.Suite = { theme, fetchJSON, store, esc, liveRegion, location: loc, key, relay };
+
+/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
+   The .catch keeps a failed registration from ever costing console noise on a
+   page that works perfectly well without the service worker. */
+if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
 })();

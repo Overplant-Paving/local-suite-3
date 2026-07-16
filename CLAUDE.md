@@ -34,7 +34,9 @@ reference; never modify it).
   the v1 read-only-archive README commit in `../Local Suite` (permission-denied this
   session; drafted in HANDOFF.md — needs the user). Open deferrals: nearby's live Overpass
   probe (upstream outage — task chip pending); word's 404 mapping code-reviewed only.
-  Phases 3-4 not started.
+  Phase 3 PWA machinery done + verified (`tests/evidence/phase3/`); its GitHub half
+  (repo push + Pages, fresh-profile + headed-install checks) needs the user. Phase 4 not
+  started.
 - v1 is committed in `../Local Suite` on `main` (commit `7088cab`, 175 files), imported here
   as the `v1-import` tag.
 - Distribution model: this repo goes on GitHub; Pages serves `dist/`; sharing = the link or the

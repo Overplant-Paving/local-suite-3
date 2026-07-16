@@ -1,0 +1,27 @@
+{
+  "name": "Local Suite",
+  "short_name": "Local Suite",
+  "description": "Small, calm, self-contained tools. No accounts, no tracking.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f5f3ee",
+  "theme_color": "#2f6f6a",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -1,0 +1,878 @@
+file:// byte-parity: pre-PWA dist (commit 6d3a7e2) vs post-PWA dist, per file
+==============================================================================
+
+--- air.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-EWn/jADH1cWoXF
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-EWn/jADH1cWoXF
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- airport.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-hH7noyNrUh0TFI
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-hH7noyNrUh0TFI
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- alerts.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-+EtdSCPG2y5HgL
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-+EtdSCPG2y5HgL
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- almanac.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-eE3nTCYI7hsRhu
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-eE3nTCYI7hsRhu
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- apod.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-Ogb7i5aNB7aFed
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-Ogb7i5aNB7aFed
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- art.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-4sk2nEcTWrxzOJ
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-4sk2nEcTWrxzOJ
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- asteroids.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-ulFmEgyPhWQlZe
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-ulFmEgyPhWQlZe
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- books.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-UkL2DbLKGNYMiP
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-UkL2DbLKGNYMiP
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- color.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-Hggy/yxOxD2zor
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-Hggy/yxOxD2zor
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- congress.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-sWLb+8VgqsXbYB
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-sWLb+8VgqsXbYB
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- convert.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-FY0SNXkGkTQKym
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-FY0SNXkGkTQKym
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- currency.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-OUx+BnVvVkLU/r
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-OUx+BnVvVkLU/r
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- dataviewer.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-xLYmz8Ka2nJTGE
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-xLYmz8Ka2nJTGE
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- dates.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-76sp2Txp7ylz2+
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-76sp2Txp7ylz2+
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- daylight.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-MVyNP1Fo84C767
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-MVyNP1Fo84C767
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- dictionary.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-v87sGwXskEElHI
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-v87sGwXskEElHI
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- drought.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-Qu3eBgOUMA8v3K
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-Qu3eBgOUMA8v3K
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- elevation.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-yq+yRONhBA+wV5
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-yq+yRONhBA+wV5
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- emergency.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-bEhacZ6/JAj0Xk
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-bEhacZ6/JAj0Xk
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- factbook.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-fbkQLt24ASLak0
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-fbkQLt24ASLak0
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- fedregister.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-oAcds9N0pvG/6m
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-oAcds9N0pvG/6m
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- flashcards.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-5blnzC5O0ECxWc
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-5blnzC5O0ECxWc
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- focus.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-Yx3GgmLMEapALt
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-Yx3GgmLMEapALt
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- foodrecalls.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-bLSun2BaKw5MDC
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-bLSun2BaKw5MDC
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- gas.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-yEDYA0up+DuwMy
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-yEDYA0up+DuwMy
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- geo.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-EUKYA5JkKgFV2o
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-EUKYA5JkKgFV2o
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- holidays.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-DGKWKRfm5EV/SD
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-DGKWKRfm5EV/SD
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- illness.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-yMjpwQwiGU8ksA
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-yMjpwQwiGU8ksA
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- index.html (22 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-Jc43DwrlAielf4
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-OMMev6EFpX/woj
++<link rel="manifest" href="manifest.webmanifest">
++  .hint { margin: 1rem 0 0; padding: .7rem 1rem; background: var(--accent-soft);
++    border: 1px solid var(--line); border-radius: 10px; color: var(--ink); font-size: .9rem; }
++
++  <p class="hint" id="originHint" hidden>Coming from the double-click files? Your data lives
++    with those files, not here — export it there (Settings &rarr; Backup) and import it here.</p>
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
++
++/* served-mode first-run hint (PWA.md §5): file:// and http(s) are different origins,
++   so a file:// regular arriving at the hosted copy starts with empty suite.* storage */
++if (location.protocol.startsWith("http") &&
++    !Object.keys(localStorage).some((k) => k.startsWith("suite."))) {
++  document.getElementById("originHint").hidden = false;
++}
+
+--- inflation.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-GaMB5PvDAa4J3O
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-GaMB5PvDAa4J3O
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- iss.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-jGJhSdiZhOKVNs
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-jGJhSdiZhOKVNs
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- jobs.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-mWVVFDoXC6tH0S
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-mWVVFDoXC6tH0S
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- launches.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-bod/qPYqdCgMJi
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-bod/qPYqdCgMJi
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- loan.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-68e0nZnR/XM02r
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-68e0nZnR/XM02r
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- marine.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-4T0BBXcRNp58dS
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-4T0BBXcRNp58dS
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- markets.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-CUNq3Jp7uErMXZ
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-CUNq3Jp7uErMXZ
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- medicine.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-2/pMX9PHnfV201
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-2/pMX9PHnfV201
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- nearby.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-ZZZK9YsQr/+YYo
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-ZZZK9YsQr/+YYo
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- network.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-ncU3Qd3UPzPKzh
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-ncU3Qd3UPzPKzh
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- normals.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-6A9qV/9kxyWutq
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-6A9qV/9kxyWutq
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- notes.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-YjtYF+lu3oTQ6o
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-YjtYF+lu3oTQ6o
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- nutrition.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-KTYdqSKCEjxAL8
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-KTYdqSKCEjxAL8
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- paper.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-UtHYKVb3ijkHnb
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-UtHYKVb3ijkHnb
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- parks.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-UkVFljnc+ZJzuh
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-UkVFljnc+ZJzuh
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- passes.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-7EYygoH1fEwyDO
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-7EYygoH1fEwyDO
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- password.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-ElE1ySpENXHZzS
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-ElE1ySpENXHZzS
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- printables.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-TIQXNHy3qDOzTN
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-TIQXNHy3qDOzTN
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- qr.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-/pTVnsLzGCkHlL
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-/pTVnsLzGCkHlL
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- quakes.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-jtNr7zT4naA2Nz
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-jtNr7zT4naA2Nz
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- radar.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-QKTPFSa0uSKqVp
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-QKTPFSa0uSKqVp
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- random.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-KcwTRQkJsrKNmm
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-KcwTRQkJsrKNmm
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- recalls.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-LSfx5u9Jwr4fHr
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-LSfx5u9Jwr4fHr
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- rivers.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-2/ba3CeYwHCagS
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-2/ba3CeYwHCagS
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- snow.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-1bqiw0kD3oAp39
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-1bqiw0kD3oAp39
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- sound.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-bNCV0MqDQt2BvZ
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-bNCV0MqDQt2BvZ
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- spaceweather.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-D2euRgJdgZ/oxq
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-D2euRgJdgZ/oxq
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- text.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-i4n58olOpbSKdp
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-i4n58olOpbSKdp
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- tides.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-BX4ydQ+E4PtPtJ
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-BX4ydQ+E4PtPtJ
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- timers.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-cEbHCGG1Yy8Dun
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-cEbHCGG1Yy8Dun
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- transit.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-PgsS4sxQXMmn9n
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-PgsS4sxQXMmn9n
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- treasury.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-YtgeIwHz29chTl
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-YtgeIwHz29chTl
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- tripcost.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-LXycZCzM7r46Hy
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-LXycZCzM7r46Hy
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- volcano.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-0ZdyrKBXOou0Vu
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-0ZdyrKBXOou0Vu
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- voting.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-u95RoAQ0QMcXQD
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-u95RoAQ0QMcXQD
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- weather.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-wbQETibIpII79z
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-wbQETibIpII79z
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- wiki.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-Yj/NpFn8BmEYo6
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-Yj/NpFn8BmEYo6
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- wildfire.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-7kJLF+kP2+12Vc
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-7kJLF+kP2+12Vc
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- wildlife.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-7RWZOQy6ScMs8r
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-7RWZOQy6ScMs8r
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- word.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-dlU2egl+Np6DQj
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-dlU2egl+Np6DQj
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- worldclock.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-7D8TTP7z2B246P
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-7D8TTP7z2B246P
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- yields.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-6SyJgJuDOFJuQg
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-6SyJgJuDOFJuQg
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}
+
+--- zip.html (10 changed lines) ---
+-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-paM1r6OKLeQGjo
++<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-paM1r6OKLeQGjo
++<link rel="manifest" href="manifest.webmanifest">
++
++/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
++   The .catch keeps a failed registration from ever costing console noise on a
++   page that works perfectly well without the service worker. */
++if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
++  navigator.serviceWorker.register("sw.js").catch(() => {});
++}

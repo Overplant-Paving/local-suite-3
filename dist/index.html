@@ -4,7 +4,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-Jc43DwrlAielf4b6cV5Fs/ZlAb+uv4seky0Ox4Wz2dw='; style-src 'unsafe-inline'; img-src data:; media-src 'none'; connect-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-OMMev6EFpX/woj3qn2YrlF9dYI8W5eaCJHQGGH/Wxw4='; style-src 'unsafe-inline'; img-src data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
+<link rel="manifest" href="manifest.webmanifest">
 <title>Local Suite · Command Center</title>
 <style>
 /* Local Suite v2 — core/suite.css
@@ -135,6 +136,8 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
     background: var(--chip); padding: .05rem .3rem; border-radius: 5px;
   }
   .empty { color: var(--muted); text-align: center; padding: 3rem 0; display: none; }
+  .hint { margin: 1rem 0 0; padding: .7rem 1rem; background: var(--accent-soft);
+    border: 1px solid var(--line); border-radius: 10px; color: var(--ink); font-size: .9rem; }
   footer { margin-top: 3.5rem; padding-top: 1.2rem; }
 </style>
 </head>
@@ -156,6 +159,9 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
       placeholder="Search tools, data sources, keywords…  (press /)" autocomplete="off">
     <div class="pills" id="pills"></div>
   </div>
+
+  <p class="hint" id="originHint" hidden>Coming from the double-click files? Your data lives
+    with those files, not here — export it there (Settings &rarr; Backup) and import it here.</p>
 
   <main id="cats"></main>
   <p class="empty" id="empty">Nothing matches — try fewer filters.</p>
@@ -368,12 +374,26 @@ function relay(url) {
 }
 
 window.Suite = { theme, fetchJSON, store, esc, liveRegion, location: loc, key, relay };
+
+/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
+   The .catch keeps a failed registration from ever costing console noise on a
+   page that works perfectly well without the service worker. */
+if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
 })();
 </script>
 <script>
 "use strict";
 
 Suite.theme.init();
+
+/* served-mode first-run hint (PWA.md §5): file:// and http(s) are different origins,
+   so a file:// regular arriving at the hosted copy starts with empty suite.* storage */
+if (location.protocol.startsWith("http") &&
+    !Object.keys(localStorage).some((k) => k.startsWith("suite."))) {
+  document.getElementById("originHint").hidden = false;
+}
 Suite.store.migrate([]); // suite entry point; the v2 migration list starts empty (ARCHITECTURE.md §6)
 
 /* ==== data: filled from manifest/tools.json by build.py ==== */

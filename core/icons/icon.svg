@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Local Suite icon — suite design language: teal accent on warm paper.
+       Full-bleed background (maskable-safe); the tool-grid glyph sits inside
+       the central 66% safe zone. Rendered to PNG by make-icons.mjs. -->
+  <rect width="512" height="512" fill="#f5f3ee"/>
+  <g>
+    <!-- 3x3 grid of tool tiles, 84px tiles on a 108px pitch, centered -->
+    <rect x="94"  y="94"  width="84" height="84" rx="18" fill="#2f6f6a"/>
+    <rect x="214" y="94"  width="84" height="84" rx="18" fill="#2f6f6a" opacity=".78"/>
+    <rect x="334" y="94"  width="84" height="84" rx="18" fill="#2f6f6a" opacity=".56"/>
+    <rect x="94"  y="214" width="84" height="84" rx="18" fill="#2f6f6a" opacity=".78"/>
+    <rect x="214" y="214" width="84" height="84" rx="18" fill="#2f6f6a"/>
+    <rect x="334" y="214" width="84" height="84" rx="18" fill="#2f6f6a" opacity=".78"/>
+    <rect x="94"  y="334" width="84" height="84" rx="18" fill="#2f6f6a" opacity=".56"/>
+    <rect x="214" y="334" width="84" height="84" rx="18" fill="#2f6f6a" opacity=".78"/>
+    <rect x="334" y="334" width="84" height="84" rx="18" fill="#2f6f6a"/>
+  </g>
+</svg>

@@ -41,6 +41,8 @@
     background: var(--chip); padding: .05rem .3rem; border-radius: 5px;
   }
   .empty { color: var(--muted); text-align: center; padding: 3rem 0; display: none; }
+  .hint { margin: 1rem 0 0; padding: .7rem 1rem; background: var(--accent-soft);
+    border: 1px solid var(--line); border-radius: 10px; color: var(--ink); font-size: .9rem; }
   footer { margin-top: 3.5rem; padding-top: 1.2rem; }
 </style>
 </head>
@@ -63,6 +65,9 @@
     <div class="pills" id="pills"></div>
   </div>
 
+  <p class="hint" id="originHint" hidden>Coming from the double-click files? Your data lives
+    with those files, not here — export it there (Settings &rarr; Backup) and import it here.</p>
+
   <main id="cats"></main>
   <p class="empty" id="empty">Nothing matches — try fewer filters.</p>
 
@@ -77,6 +82,13 @@
 "use strict";
 
 Suite.theme.init();
+
+/* served-mode first-run hint (PWA.md §5): file:// and http(s) are different origins,
+   so a file:// regular arriving at the hosted copy starts with empty suite.* storage */
+if (location.protocol.startsWith("http") &&
+    !Object.keys(localStorage).some((k) => k.startsWith("suite."))) {
+  document.getElementById("originHint").hidden = false;
+}
 Suite.store.migrate([]); // suite entry point; the v2 migration list starts empty (ARCHITECTURE.md §6)
 
 /* ==== data: filled from manifest/tools.json by build.py ==== */

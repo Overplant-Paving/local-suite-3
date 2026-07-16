@@ -68,7 +68,28 @@ A user who lives in file:// mode and then installs the PWA starts with empty set
 - Verify install prompts + standalone launch on Chrome and Edge (primary), confirm graceful
   no-op on Firefox/Safari file:// usage.
 
-## 7. Non-goals
+## 7. Implementation addendum (Phase 3, 2026-07-16 — as built)
+
+- **file:// parity, exactly:** every dist file differs from the pre-PWA build by (1) the
+  protocol-gated registration block in the inlined `suite.js`, (2) one
+  `<link rel="manifest">`, (3) `worker-src 'self'; manifest-src 'self'` appended to the CSP
+  (all three inert from `file://`); the hub additionally carries the §5 origin hint.
+  Asserted by diff: `tests/evidence/phase3/file-parity-diff.txt`.
+- **Precache is sequential and revalidating** (`cache: "no-cache"` per request, one at a
+  time), not `addAll`: a host's `max-age` (GitHub Pages: 600 s) must never precache stale
+  bytes on update, and the 76-way `addAll` burst was observed to fail its install during
+  verification. Cache name `suite-v2-<sha256[:12]>` over the full precache contents.
+- **`--check` gains a fatal `pwa-sync` gate** (dist sw.js + webmanifest must match a fresh
+  render; negative-tested like every fatal gate).
+- **Update-path verification** uses `registration.update()` as the deterministic stand-in
+  for Chrome's own scheduled check (which spec-bypasses the HTTP cache for the SW script
+  exactly the same way) — the natural check is hours-delayed and throttle-guarded, which a
+  test cannot wait out. Verified end to end: `tests/evidence/phase3/pwa-update-verify.txt`.
+- **Icons** are rendered once from `core/icons/icon.svg` by `core/icons/make-icons.mjs`
+  (Playwright) and checked in; the maskable variant is the same full-bleed art with the
+  glyph inside the central safe zone.
+
+## 8. Non-goals
 
 No push notifications. No background sync. No periodic background refresh. No web-share targets.
 The PWA is exactly: installable icon + offline shell. Anything more re-opens the "no tracking,

@@ -1,0 +1,12 @@
+=== Phase 3 exit — 2026-07-16T05:24:06Z ===
+
+--- build.py --check ---
+
+migrated: 71/71 tools (+hub)  by network: {'offline': 24, 'cors-open': 36, 'keyed': 8, 'blocked': 3}  flagged: 21
+
+--check: all fatal gates green
+
+--- smoke (file://, all dist) ---
+
+smoke: 72/72 green
+smoke exit: 0

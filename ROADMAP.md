@@ -32,7 +32,11 @@ Standing rules for the executing agent:
   hashes proven v1==source==dist per tool). **One exit item open:** the v1 read-only-archive
   README commit in `../Local Suite` — the session's permission settings deny writes there;
   needs the user (text drafted, see HANDOFF.md). Tick this box when it lands.
-- [ ] Phase 3 — PWA + GitHub sharing
+- [ ] Phase 3 — PWA machinery done 2026-07-16 (sw.js + webmanifest + icons emitted, pwa-sync
+  fatal gate, file:// parity + offline matrix + update path + Firefox no-op all verified —
+  `tests/evidence/phase3/`). **Remaining: the GitHub half** — repo push + Pages on `dist/`
+  (needs the user's GitHub account), fresh-profile share check, headed Chrome/Edge install
+  prompt check. Tick when the Pages link verifies.
 - [ ] Phase 4 — Suite-wide audit → tag `v2.0`
 
 ## Overview

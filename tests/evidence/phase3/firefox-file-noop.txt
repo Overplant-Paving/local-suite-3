@@ -1,0 +1,7 @@
+firefox file:// ok: index.html - Local Suite · Command Center
+firefox file:// ok: convert.html - Unit & Kitchen Converter · Local Suite
+firefox file:// ok: password.html - Password & Passphrase Generator · Local Suite
+firefox file:// ok: weather.html - Weather Station · Local Suite
+sw controller from file:// (must be falsy/absent): false
+non-network errors: none
+FIREFOX FILE:// GRACEFUL NO-OP OK

@@ -4,7 +4,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mbVJV3OQcSEB6bZcRdRoMSg+NCT7vzgwQkzTzZEInRI=' 'sha256-7kJLF+kP2+12VcDkQZXLxnIjTVOAsnOX4cvZha14eDw='; style-src 'unsafe-inline'; img-src data: https://services3.arcgis.com https://api.zippopotam.us; media-src https://services3.arcgis.com https://api.zippopotam.us; connect-src https://services3.arcgis.com https://api.zippopotam.us">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-7kJLF+kP2+12VcDkQZXLxnIjTVOAsnOX4cvZha14eDw='; style-src 'unsafe-inline'; img-src data: https://services3.arcgis.com https://api.zippopotam.us; media-src https://services3.arcgis.com https://api.zippopotam.us; connect-src https://services3.arcgis.com https://api.zippopotam.us; worker-src 'self'; manifest-src 'self'">
+<link rel="manifest" href="manifest.webmanifest">
 <title>Wildfire Watchboard · Local Suite</title>
 <style>
 /* Local Suite v2 — core/suite.css
@@ -389,6 +390,13 @@ function relay(url) {
 }
 
 window.Suite = { theme, fetchJSON, store, esc, liveRegion, location: loc, key, relay };
+
+/* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
+   The .catch keeps a failed registration from ever costing console noise on a
+   page that works perfectly well without the service worker. */
+if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
 })();
 </script>
 <script>
