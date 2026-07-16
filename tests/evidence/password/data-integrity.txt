@@ -19,8 +19,10 @@ Segment 1 of 1: EFF large wordlist string
                     (tools/password.html)
   VERDICT:          EQUAL — byte-exact survival, v1 -> v2 source.
 
-  sha256(dist)      (orchestrator: replay the one-liner against dist/password.html after
-                    integration and append the hash + verdict here)
+  sha256(dist)      c523ba7b5e0d3f77cc6cf0d83bed3f250143c0c90c255d6a646dd992f8453675
+                    (dist/password.html — orchestrator replay 2026-07-16, post-integration
+                    build; 62143 bytes, 7776 words)
+  VERDICT (final):  EQUAL v1 == v2 source == dist — byte-exact through the build.
 
 Method note: the segment was never retyped or reflowed — the migrated file was written with a
 placeholder line and the entire v1 statement (62,175 bytes,
