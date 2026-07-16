@@ -166,7 +166,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 68 | transit.html | local | blocked/key | bart (new) | C | externalize BART key (v1 `transit.html:163`); custom feed → link-out card | ✅ `tests/evidence/transit/` |
 | 69 | password.html | util | off | — | D | LD (62 KB EFF wordlist — must survive build byte-exact) | ✅ `tests/evidence/password/` |
 | 70 | word.html | util/ref | cors | — | D | LD (embedded dictionary) · EA | ✅ `tests/evidence/word/` |
-| 71 | passes.html | space | cors | — | D | LD (SGP4 math + TLE handling) | ⬜ |
+| 71 | passes.html | space | cors | — | D | LD (SGP4 math + TLE handling) | ✅ `tests/evidence/passes/` |
 
 New in v2 (not migrations): **settings.html** (Phase 4 — backup/restore, keys, relay config) and
 the **games** hub category (Phase 4 — meteor-patrol de-nested).

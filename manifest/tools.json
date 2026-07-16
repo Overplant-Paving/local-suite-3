@@ -1550,6 +1550,30 @@
         "embedded-data",
         "ea"
       ]
+    },
+    {
+      "id": "passes",
+      "file": "passes.html",
+      "name": "Satellite Pass Predictor",
+      "cat": "space",
+      "cx": "L",
+      "desc": "When bright satellites cross your backyard sky tonight.",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://celestrak.org",
+        "https://api.zippopotam.us"
+      ],
+      "storage": [
+        "suite.location",
+        "suite.cache.passes.visual",
+        "suite.theme"
+      ],
+      "cacheTtlMin": 1440,
+      "since": "v1",
+      "flags": [
+        "embedded-data"
+      ]
     }
   ]
 }

@@ -1,0 +1,7 @@
+Independent Kepler+J2-secular recomputation, CSS (TIANHE) 48274
+  elements: a=1.061994 er, e=0.0002229, i=41.4690 deg, n=0.06795115 rad/min (un-Kozai)
+  independent peak: el=22.830 deg az=6.94 deg at 2026-07-16T04:39:11.998Z (jd 2461237.6938889)
+  tool (SGP4) peak: el=22.418 deg az=7.06 deg at 2026-07-16T04:39:12.001Z (jd 2461237.6938889)
+  independent el at tool's maxJd: 22.830 deg
+  delta: peak el 0.412 deg, peak time -0.0 s
+  verdict: WITHIN TOLERANCE (|dEl|<=2.5 deg, |dt|<=120 s)

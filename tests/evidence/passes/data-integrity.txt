@@ -1,0 +1,55 @@
+data-integrity.txt — passes.html (Batch D, byte-exact embedded-data proof)
+===========================================================================
+
+Segment inventory
+-----------------
+passes.html carries ONE large embedded data/math block and no other large tables.
+The two small lookup tables it contains (STD_MAG, 4 entries; COMPASS, 16 strings)
+sit INSIDE the segment below, so they are covered by the same hash.
+
+Segment 1: "sgp4-math"
+  What: the entire local computation core, contiguous in both files —
+    WGS72 constants (PI/TWOPI/DEG/X2O3, MU, RE, XKE, TUMIN, J2/J3/J4/J3OJ2),
+    time utilities (gstime, days2mdhms, jday), parseExp, initl, sgp4init, sgp4,
+    makeSatrec, the GP-JSON->TLE synthesizer (pad, gpToTle), geometry helpers
+    (jdFromDate, teme2ecef, siteEcef, lookAngles, sunEci), observer state
+    (OBS, setObserver), observation (sunElevation, STD_MAG, observe), pass
+    scanning (computeNightWindows, findPasses, finishPass, dedupe), and the
+    formatting helpers (COMPASS, compass, jdToDate, fmtTime, fmtClock, nightKey,
+    nightLabel, magWord).
+  Boundary (documented precisely): starts at the first byte of the banner
+    comment line "/* ============================================================"
+    that is immediately followed by "   SGP4 (near-Earth), WGS72 constants ..."
+    (v1 line 216); ends immediately BEFORE the first byte of the banner comment
+    "/* ============================================================" followed by
+    "   Data loading ..." (v1 line 672). Recipe conversions (theme-script removal,
+    addEventListener conversion, Suite.* adoption, escaping changes) stop at this
+    boundary; every migration edit lives outside it.
+
+Extraction (runnable verbatim, bash/git-bash quoting; identical for v1 original,
+v2 source, and the built dist file — the orchestrator replays it against dist
+after integration and appends the post-build hash):
+
+  python -c "import sys,hashlib;b=open(sys.argv[1],'rb').read();s=b.index(b'/* ============================================================\n   SGP4 (near-Earth)');e=b.index(b'/* ============================================================\n   Data loading');d=b[s:e];print(len(d),hashlib.sha256(d).hexdigest())" <file>
+
+  (Both files are LF-only UTF-8; the \n in the byte markers is interpreted by
+   Python, not the shell. First index() hit is the right banner in both files —
+   the only other "====" banner before it names "Satellite Pass Predictor".)
+
+Results
+-------
+  file                                              bytes   sha256
+  ../Local Suite/passes.html (v1, commit 7088cab)   20115   4682299f24e60815894b37d021d9919e58ec0c0c604a298299b3d3f94566d030
+  tools/passes.html (v2 source)                     20115   4682299f24e60815894b37d021d9919e58ec0c0c604a298299b3d3f94566d030
+  dist/passes.html (post-build)                     — to be appended by the orchestrator —
+
+VERDICT: EQUAL (v1 vs v2 source, byte-exact; assembled mechanically — the v2 file
+was spliced from authored prefix/suffix + the raw v1 segment bytes, then re-extracted
+and re-hashed from disk).
+
+Functional proof on top of parity: see report.md and interaction.txt —
+deterministic 30-sat fixture compute under page.clock at 2026-07-16T04:00:00Z
+(148 passes / 52 visible over LA, concrete times+elevations logged), plus an
+independent Kepler+J2-secular recomputation of the CSS (TIANHE) pass
+(independent-recompute.txt: peak elevation delta 0.412 deg, peak time delta 0.0 s
+vs the tool's SGP4 — within the +/-2.5 deg / +/-120 s tolerance).

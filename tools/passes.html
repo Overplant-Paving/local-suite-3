@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Satellite Pass Predictor · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents: sky/visibility palette (3-layer, same pattern as core) */
+  :root { --sky: #3d5a80; --visible: #b9822b; --shadowmark: #8a8f98; }
+  @media (prefers-color-scheme: dark) {
+    :root { --sky: #7d9fd1; --visible: #e0b365; --shadowmark: #6b7280; }
+  }
+  :root[data-theme="light"] { --sky: #3d5a80; --visible: #b9822b; --shadowmark: #8a8f98; }
+  :root[data-theme="dark"] { --sky: #7d9fd1; --visible: #e0b365; --shadowmark: #6b7280; }
+
+  body { padding: 1.4rem 1.25rem 4rem; }
+  .wrap { max-width: 940px; margin: 0 auto; }
+  .top { display: flex; align-items: center; gap: 1rem; }
+  .back { white-space: nowrap; }
+  .theme-btn { float: none; margin-left: auto; }
+  header h1 { font-size: 1.7rem; letter-spacing: -.02em; margin-top: 1rem; }
+  header .tag { color: var(--muted); margin-top: .3rem; max-width: 46rem; font-size: .95rem; }
+
+  .locbar {
+    display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
+    margin: 1.1rem 0 .2rem; font-size: .9rem; color: var(--muted);
+  }
+  .locbar b { color: var(--ink); font-weight: 600; }
+  .linkbtn { background: none; border: none; color: var(--accent); cursor: pointer; font-size: .88rem; padding: 0; }
+  .linkbtn:hover { text-decoration: underline; }
+
+  /* v1 card differs from core's (block layout, own padding/margin) — full override */
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 1.1rem 1.15rem; box-shadow: var(--shadow); margin-top: 1.1rem;
+    display: block; flex-direction: row; gap: normal;
+  }
+  .card h2 { font-size: 1.05rem; margin-bottom: .5rem; }
+  label { display: block; font-size: .82rem; color: var(--muted); margin: .5rem 0 .25rem; }
+  input[type=text], input[type=number] {
+    width: 100%; padding: .55rem .7rem; font-size: 1rem; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 10px; background: var(--bg); outline: none;
+  }
+  input:focus { border-color: var(--accent); }
+  .row { display: flex; gap: .7rem; flex-wrap: wrap; }
+  .row > div { flex: 1; min-width: 130px; }
+  button.go {
+    margin-top: .8rem; border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    border-radius: 10px; padding: .55rem 1.1rem; cursor: pointer; font-size: .95rem;
+  }
+  button.go.ghost { background: var(--card); color: var(--accent); }
+  button.go:disabled { opacity: .55; cursor: default; }
+
+  .stats { display: flex; gap: 1.6rem; margin: .3rem 0 .2rem; flex-wrap: wrap; }
+  .stat b { font-size: 1.4rem; display: block; line-height: 1.15; color: var(--accent); }
+  .stat span { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+
+  .night { margin-top: 1.6rem; }
+  .night h3 {
+    font-size: 1.05rem; display: flex; align-items: baseline; gap: .55rem;
+    padding-bottom: .35rem; border-bottom: 1px solid var(--line);
+  }
+  .night h3 .n { color: var(--muted); font-weight: 500; font-size: .82rem; }
+
+  .pass {
+    display: grid; grid-template-columns: 1fr auto; gap: .3rem .9rem;
+    padding: .85rem 0; border-bottom: 1px solid var(--line); align-items: center;
+  }
+  .pass .name { font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+  .pass .badge {
+    font-size: .68rem; padding: .1rem .5rem; border-radius: 999px; font-weight: 600;
+    letter-spacing: .03em; text-transform: uppercase;
+  }
+  .badge.vis { background: color-mix(in srgb, var(--visible) 22%, transparent); color: var(--visible); }
+  .badge.shd { background: var(--chip); color: var(--shadowmark); }
+  .pass .sub { grid-column: 1; color: var(--muted); font-size: .84rem; margin-top: .1rem; }
+  .pass .el {
+    grid-column: 2; grid-row: 1 / span 2; text-align: right; align-self: center;
+  }
+  .pass .el b { font-size: 1.6rem; color: var(--accent); line-height: 1; display: block;
+    font-variant-numeric: tabular-nums; }
+  .pass .el span { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .pass .track {
+    grid-column: 1 / span 2; margin-top: .45rem; display: flex; gap: 1.1rem; flex-wrap: wrap;
+    font-size: .82rem; color: var(--muted); font-variant-numeric: tabular-nums;
+  }
+  .pass .track b { color: var(--ink); font-weight: 600; }
+  .pass.eclipsed { opacity: .62; }
+
+  .msg { color: var(--muted); font-size: .92rem; }
+  .err {
+    border-color: color-mix(in srgb, #c0392b 40%, var(--line));
+    background: color-mix(in srgb, #c0392b 7%, var(--card));
+  }
+  .err h2 { color: #c0392b; }
+  .spin { display: inline-block; width: 1rem; height: 1rem; border: 2px solid var(--line);
+    border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite;
+    vertical-align: -2px; margin-right: .4rem; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .hidden { display: none; }
+  footer { font-size: .82rem; }
+  code { font: .82rem ui-monospace, "Cascadia Code", Consolas, monospace; background: var(--chip); padding: .05rem .3rem; border-radius: 5px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html">&larr; suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Satellite Pass Predictor</h1>
+    <p class="tag">When bright satellites cross your backyard sky over the next three nights —
+      computed on your machine with a full SGP4 orbit propagator. Times are your local clock.</p>
+  </header>
+
+  <div class="locbar" id="locbar"></div>
+
+  <!-- first-run / change-location card -->
+  <div class="card hidden" id="locCard">
+    <h2>Where are you?</h2>
+    <p class="msg">Pass times depend on your location. Enter a US ZIP, or use your device location.</p>
+    <div class="row" style="margin-top:.7rem">
+      <div>
+        <label for="zip">US ZIP code</label>
+        <input type="text" id="zip" inputmode="numeric" maxlength="5" placeholder="e.g. 80301">
+      </div>
+    </div>
+    <button class="go" id="zipBtn">Set from ZIP</button>
+    <button class="go ghost" id="geoBtn">Use my location</button>
+    <p class="msg" id="locErr" style="margin-top:.6rem;color:#c0392b"></p>
+  </div>
+
+  <div class="card hidden" id="controls">
+    <div class="row">
+      <div>
+        <label for="minEl">Minimum peak elevation</label>
+        <input type="number" id="minEl" min="0" max="80" step="5" value="10"> <span class="msg">degrees above horizon</span>
+      </div>
+    </div>
+    <button class="go" id="refreshBtn">Recompute passes</button>
+    <button class="go ghost" id="reloadTle">Refresh satellite data</button>
+  </div>
+
+  <div class="stats hidden" id="stats"></div>
+
+  <div id="status"></div>
+  <div id="results"></div>
+
+  <footer id="footer">
+    Data: CelesTrak <code>GROUP=visual</code> two-line elements · orbits propagated locally with an SGP4 (Vallado) implementation.
+    Brightness figures are rough estimates. No account, no tracking — everything happens in this file.
+  </footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+/* ============================================================
+   Satellite Pass Predictor — single file, no dependencies.
+   SGP4 near-Earth propagator (WGS72), validated against the
+   live ISS position (sub-degree, sub-km agreement).
+   ============================================================ */
+
+Suite.theme.init();
+
+/* ============================================================
+   SGP4 (near-Earth), WGS72 constants — Vallado/satellite.js port.
+   ============================================================ */
+const PI = Math.PI, TWOPI = 2 * PI, DEG = PI / 180, X2O3 = 2 / 3;
+const MU = 398600.8, RE = 6378.135;
+const XKE = 60.0 / Math.sqrt((RE * RE * RE) / MU);
+const TUMIN = 1.0 / XKE;
+const J2 = 0.001082616, J3 = -0.00000253881, J4 = -0.00000165597, J3OJ2 = J3 / J2;
+
+function gstime(jdut1) {
+  const t = (jdut1 - 2451545.0) / 36525.0;
+  let temp = -6.2e-6 * t * t * t + 0.093104 * t * t
+    + (876600.0 * 3600 + 8640184.812866) * t + 67310.54841;
+  temp = (temp * DEG / 240.0) % TWOPI;
+  if (temp < 0) temp += TWOPI;
+  return temp;
+}
+function days2mdhms(year, days) {
+  const lm = [31, (year % 4 === 0 ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const doy = Math.floor(days);
+  let i = 1, t = 0;
+  while (doy > t + lm[i - 1] && i < 12) { t += lm[i - 1]; i++; }
+  const day = doy - t;
+  let temp = (days - doy) * 24.0;
+  const hr = Math.floor(temp); temp = (temp - hr) * 60.0;
+  const mn = Math.floor(temp); const sc = (temp - mn) * 60.0;
+  return { mon: i, day, hr, minute: mn, sec: sc };
+}
+function jday(y, mo, d, h, mi, s) {
+  return 367.0 * y - Math.floor((7 * (y + Math.floor((mo + 9) / 12))) * 0.25)
+    + Math.floor(275 * mo / 9) + d + 1721013.5 + ((s / 60 + mi) / 60 + h) / 24;
+}
+function parseExp(s) {
+  s = s.trim();
+  if (s === "" || /^0+[+-]?0?$/.test(s.replace(/[+\-]/g, "0"))) {
+    if (parseFloat(s) === 0 || s === "" || s === "00000-0" || s === "00000+0" || s === "0") return 0;
+  }
+  let sign = 1;
+  if (s[0] === "-") { sign = -1; s = s.slice(1); }
+  else if (s[0] === "+") s = s.slice(1);
+  const m = s.match(/^(\d+)([+-]\d)$/);
+  if (m) return sign * parseFloat("0." + m[1]) * Math.pow(10, parseInt(m[2], 10));
+  const v = parseFloat(s);
+  return isNaN(v) ? 0 : sign * (s.indexOf(".") >= 0 ? v : parseFloat("0." + s));
+}
+
+function initl(s) {
+  const ecco = s.ecco, inclo = s.inclo;
+  let no = s.no;
+  const cosio = Math.cos(inclo), cosio2 = cosio * cosio;
+  const eccsq = ecco * ecco, omeosq = 1 - eccsq, rteosq = Math.sqrt(omeosq);
+  const ak = Math.pow(XKE / no, X2O3);
+  const d1 = 0.75 * J2 * (3 * cosio2 - 1) / (rteosq * omeosq);
+  let del = d1 / (ak * ak);
+  const adel = ak * (1 - del * del - del * (1 / 3 + 134 * del * del / 81));
+  del = d1 / (adel * adel);
+  no = no / (1 + del);
+  const ao = Math.pow(XKE / no, X2O3), sinio = Math.sin(inclo);
+  const po = ao * omeosq, con42 = 1 - 5 * cosio2, con41 = -con42 - cosio2 - cosio2;
+  s.no = no; s.con41 = con41; s.gsto = gstime(s.epoch + 2433281.5);
+  s.omeosq = omeosq; s.rteosq = rteosq; s.cosio = cosio; s.cosio2 = cosio2;
+  s.sinio = sinio; s.ao = ao; s.con42 = con42; s.posq = po * po; s.rp = ao * (1 - ecco);
+}
+
+function sgp4init(s) {
+  const ss = 78 / RE + 1, qzms2t = Math.pow((120 - 78) / RE, 4), temp4 = 1.5e-12;
+  s.error = 0;
+  initl(s);
+  const ecco = s.ecco, ao = s.ao, cosio = s.cosio, cosio2 = s.cosio2, omeosq = s.omeosq;
+  const sinio = s.sinio, con41 = s.con41, con42 = s.con42, posq = s.posq, no = s.no;
+  s.a = Math.pow(no * TUMIN, -X2O3);
+  s.altp = s.a * (1 - ecco) - 1; s.alta = s.a * (1 + ecco) - 1;
+
+  let sfour = ss, qzms24 = qzms2t;
+  const perige = (s.rp - 1) * RE;
+  if (perige < 156) {
+    sfour = perige - 78; if (perige < 98) sfour = 20;
+    qzms24 = Math.pow((120 - sfour) / RE, 4); sfour = sfour / RE + 1;
+  }
+  const pinvsq = 1 / posq, tsi = 1 / (ao - sfour);
+  s.eta = ao * ecco * tsi;
+  const etasq = s.eta * s.eta, eeta = ecco * s.eta, psisq = Math.abs(1 - etasq);
+  const coef = qzms24 * Math.pow(tsi, 4), coef1 = coef / Math.pow(psisq, 3.5);
+  const cc2 = coef1 * no * (ao * (1 + 1.5 * etasq + eeta * (4 + etasq))
+    + 0.375 * J2 * tsi / psisq * con41 * (8 + 3 * etasq * (8 + etasq)));
+  s.cc1 = s.bstar * cc2;
+  let cc3 = 0;
+  if (ecco > 1e-4) cc3 = -2 * coef * tsi * J3OJ2 * no * sinio / ecco;
+  s.x1mth2 = 1 - cosio2;
+  s.cc4 = 2 * no * coef1 * ao * omeosq * (s.eta * (2 + 0.5 * etasq) + ecco * (0.5 + 2 * etasq)
+    - J2 * tsi / (ao * psisq) * (-3 * con41 * (1 - 2 * eeta + etasq * (1.5 - 0.5 * eeta))
+      + 0.75 * s.x1mth2 * (2 * etasq - eeta * (1 + etasq)) * Math.cos(2 * s.argpo)));
+  s.cc5 = 2 * coef1 * ao * omeosq * (1 + 2.75 * (etasq + eeta) + eeta * etasq);
+  const cosio4 = cosio2 * cosio2;
+  const t1 = 1.5 * J2 * pinvsq * no, t2 = 0.5 * t1 * J2 * pinvsq, t3 = -0.46875 * J4 * pinvsq * pinvsq * no;
+  s.mdot = no + 0.5 * t1 * s.rteosq * con41 + 0.0625 * t2 * s.rteosq * (13 - 78 * cosio2 + 137 * cosio4);
+  s.argpdot = -0.5 * t1 * con42 + 0.0625 * t2 * (7 - 114 * cosio2 + 395 * cosio4)
+    + t3 * (3 - 36 * cosio2 + 49 * cosio4);
+  const xhdot1 = -t1 * cosio;
+  s.nodedot = xhdot1 + (0.5 * t2 * (4 - 19 * cosio2) + 2 * t3 * (3 - 7 * cosio2)) * cosio;
+  s.xmcof = ecco > 1e-4 ? -X2O3 * coef * s.bstar / eeta : 0;
+  s.nodecf = 3.5 * omeosq * xhdot1 * s.cc1;
+  s.t2cof = 1.5 * s.cc1;
+  s.xlcof = Math.abs(cosio + 1) > 1.5e-12
+    ? -0.25 * J3OJ2 * sinio * (3 + 5 * cosio) / (1 + cosio)
+    : -0.25 * J3OJ2 * sinio * (3 + 5 * cosio) / temp4;
+  s.aycof = -0.5 * J3OJ2 * sinio;
+  s.delmo = Math.pow(1 + s.eta * Math.cos(s.mo), 3);
+  s.sinmao = Math.sin(s.mo);
+  s.x7thm1 = 7 * cosio2 - 1;
+
+  s.omgcof = s.bstar * cc3 * Math.cos(s.argpo);
+  s.cc1sq = s.cc1 * s.cc1;
+  s.d2 = 4 * ao * tsi * s.cc1sq;
+  const tmp = s.d2 * tsi * s.cc1 / 3;
+  s.d3 = (17 * ao + sfour) * tmp;
+  s.d4 = 0.5 * tmp * ao * tsi * (221 * ao + 31 * sfour) * s.cc1;
+  s.t3cof = s.d2 + 2 * s.cc1sq;
+  s.t4cof = 0.25 * (3 * s.d3 + s.cc1 * (12 * s.d2 + 10 * s.cc1sq));
+  s.t5cof = 0.2 * (3 * s.d4 + 12 * s.cc1 * s.d3 + 6 * s.d2 * s.d2 + 15 * s.cc1sq * (2 * s.d2 + s.cc1sq));
+
+  s.isimp = 0;
+  s.deep = (TWOPI / no) >= 225.0;
+  if (s.rp < (220 / RE + 1)) s.isimp = 1;
+  sgp4(s, 0.0);
+  return s;
+}
+
+function sgp4(s, tsince) {
+  const vkmps = RE * XKE / 60.0;
+  s.t = tsince; s.error = 0;
+  const xmdf = s.mo + s.mdot * s.t;
+  const argpdf = s.argpo + s.argpdot * s.t;
+  const nodedf = s.nodeo + s.nodedot * s.t;
+  let argpm = argpdf, mm = xmdf;
+  const t2 = s.t * s.t;
+  let nodem = nodedf + s.nodecf * t2;
+  let tempa = 1 - s.cc1 * s.t;
+  let tempe = s.bstar * s.cc4 * s.t;
+  let templ = s.t2cof * t2;
+  if (s.isimp !== 1) {
+    const delomg = s.omgcof * s.t;
+    const dm = 1 + s.eta * Math.cos(xmdf);
+    const delm = s.xmcof * (dm * dm * dm - s.delmo);
+    const temp = delomg + delm;
+    mm = xmdf + temp; argpm = argpdf - temp;
+    const t3 = t2 * s.t, t4 = t3 * s.t;
+    tempa = tempa - s.d2 * t2 - s.d3 * t3 - s.d4 * t4;
+    tempe = tempe + s.bstar * s.cc5 * (Math.sin(mm) - s.sinmao);
+    templ = templ + s.t3cof * t3 + t4 * (s.t4cof + s.t * s.t5cof);
+  }
+  const nm = s.no; let em = s.ecco; const inclm = s.inclo;
+  const am = Math.pow(XKE / nm, X2O3) * tempa * tempa;
+  em = em - tempe;
+  if (em >= 1 || em < -0.001) { s.error = 1; return null; }
+  if (em < 1e-6) em = 1e-6;
+  mm = mm + s.no * templ;
+  let xlm = mm + argpm + nodem;
+  nodem %= TWOPI; argpm %= TWOPI; xlm %= TWOPI;
+  mm = (xlm - argpm - nodem) % TWOPI;
+  const sinim = Math.sin(inclm), cosim = Math.cos(inclm);
+  const axnl = em * Math.cos(argpm);
+  const temp = 1 / (am * (1 - em * em));
+  const aynl = em * Math.sin(argpm) + temp * s.aycof;
+  const xl = mm + argpm + nodem + temp * s.xlcof * axnl;
+  let u = (xl - nodem) % TWOPI, eo1 = u, tem5 = 9999.9, ktr = 1, sineo1 = 0, coseo1 = 0;
+  while (Math.abs(tem5) >= 1e-12 && ktr <= 10) {
+    sineo1 = Math.sin(eo1); coseo1 = Math.cos(eo1);
+    tem5 = 1 - coseo1 * axnl - sineo1 * aynl;
+    tem5 = (u - aynl * coseo1 + axnl * sineo1 - eo1) / tem5;
+    if (Math.abs(tem5) >= 0.95) tem5 = tem5 > 0 ? 0.95 : -0.95;
+    eo1 += tem5; ktr++;
+  }
+  const ecose = axnl * coseo1 + aynl * sineo1;
+  const esine = axnl * sineo1 - aynl * coseo1;
+  const el2 = axnl * axnl + aynl * aynl, pl = am * (1 - el2);
+  if (pl < 0) { s.error = 4; return null; }
+  const rl = am * (1 - ecose);
+  const rdotl = Math.sqrt(am) * esine / rl;
+  const rvdotl = Math.sqrt(pl) / rl;
+  const betal = Math.sqrt(1 - el2);
+  const tempb = esine / (1 + betal);
+  const sinu = am / rl * (sineo1 - aynl - axnl * tempb);
+  const cosu = am / rl * (coseo1 - axnl + aynl * tempb);
+  let su = Math.atan2(sinu, cosu);
+  const sin2u = (cosu + cosu) * sinu, cos2u = 1 - 2 * sinu * sinu;
+  const tempp = 1 / pl, temp1 = 0.5 * J2 * tempp, temp2 = temp1 * tempp;
+  const mrt = rl * (1 - 1.5 * temp2 * betal * s.con41) + 0.5 * temp1 * s.x1mth2 * cos2u;
+  su = su - 0.25 * temp2 * s.x7thm1 * sin2u;
+  const xnode = nodem + 1.5 * temp2 * cosim * sin2u;
+  const xinc = inclm + 1.5 * temp2 * cosim * sinim * cos2u;
+  const mvt = rdotl - nm * temp1 * s.x1mth2 * sin2u / XKE;
+  const rvdot = rvdotl + nm * temp1 * (s.x1mth2 * cos2u + 1.5 * s.con41) / XKE;
+  const sinsu = Math.sin(su), cossu = Math.cos(su);
+  const snod = Math.sin(xnode), cnod = Math.cos(xnode);
+  const sini = Math.sin(xinc), cosi = Math.cos(xinc);
+  const xmx = -snod * cosi, xmy = cnod * cosi;
+  const ux = xmx * sinsu + cnod * cossu, uy = xmy * sinsu + snod * cossu, uz = sini * sinsu;
+  const vx = xmx * cossu - cnod * sinsu, vy = xmy * cossu - snod * sinsu, vz = sini * cossu;
+  return {
+    position: { x: mrt * ux * RE, y: mrt * uy * RE, z: mrt * uz * RE },
+    velocity: { x: (mvt * ux + rvdot * vx) * vkmps, y: (mvt * uy + rvdot * vy) * vkmps, z: (mvt * uz + rvdot * vz) * vkmps }
+  };
+}
+
+function makeSatrec(name, l1, l2, gp) {
+  const s = { name };
+  s.satnum = (gp && gp.NORAD_CAT_ID != null) ? String(gp.NORAD_CAT_ID) : l1.substring(2, 7).trim();
+  const epochyr = parseInt(l1.substring(18, 20), 10);
+  const epochdays = parseFloat(l1.substring(20, 32));
+  s.bstar = parseExp(l1.substring(53, 61));
+  s.inclo = parseFloat(l2.substring(8, 16)) * DEG;
+  s.nodeo = parseFloat(l2.substring(17, 25)) * DEG;
+  s.ecco = parseFloat("0." + l2.substring(26, 33).trim());
+  s.argpo = parseFloat(l2.substring(34, 42)) * DEG;
+  s.mo = parseFloat(l2.substring(43, 51)) * DEG;
+  s.no = parseFloat(l2.substring(52, 63)) / (1440.0 / TWOPI);
+  let year = epochyr + (epochyr < 57 ? 2000 : 1900);
+  const md = days2mdhms(year, epochdays);
+  s.jdsatepoch = jday(year, md.mon, md.day, md.hr, md.minute, md.sec);
+  s.epoch = s.jdsatepoch - 2433281.5;
+  try { sgp4init(s); } catch (e) { s.error = 99; }
+  return s;
+}
+
+/* ---------- CelesTrak JSON -> two-line elements ----------
+   The GP JSON (OMM-style) gives orbital elements directly, but our
+   parser is text-based, so we synthesize standard TLE lines from it. */
+function pad(n, w, dec) {
+  let str = n.toFixed(dec);
+  while (str.length < w) str = " " + str;
+  return str;
+}
+function gpToTle(gp) {
+  // Build epoch string YYDDD.dddddddd
+  const ep = new Date(gp.EPOCH + "Z");
+  const y = ep.getUTCFullYear();
+  const startOfYear = Date.UTC(y, 0, 1);
+  const doy = (ep.getTime() - startOfYear) / 86400000 + 1;
+  const yy = String(y % 100).padStart(2, "0");
+  const epochStr = yy + doy.toFixed(8).padStart(12, "0");
+  const nn = String(gp.NORAD_CAT_ID).padStart(5, " ");
+  const inc = pad(gp.INCLINATION, 8, 4);
+  const raan = pad(gp.RA_OF_ASC_NODE, 8, 4);
+  const ecc = gp.ECCENTRICITY.toFixed(7).slice(2).padStart(7, "0");
+  const argp = pad(gp.ARG_OF_PERICENTER, 8, 4);
+  const ma = pad(gp.MEAN_ANOMALY, 8, 4);
+  const mm = gp.MEAN_MOTION.toFixed(8).padStart(11, "0");
+  const l1 = `1 ${nn}U 00000A   ${epochStr}  .00000000  00000+0  00000+0 0  9990`;
+  const l2 = `2 ${nn} ${inc} ${raan} ${ecc} ${argp} ${ma} ${mm}00000`;
+  return { l1, l2 };
+}
+
+/* ---------- geometry helpers ---------- */
+function jdFromDate(d) { return 2440587.5 + d.getTime() / 86400000; }
+
+function teme2ecef(r, gmst) {
+  const c = Math.cos(gmst), sn = Math.sin(gmst);
+  return { x: c * r.x + sn * r.y, y: -sn * r.x + c * r.y, z: r.z };
+}
+function siteEcef(latRad, lonRad, hKm) {
+  const a = 6378.137, f = 1 / 298.257223563, e2 = f * (2 - f);
+  const s = Math.sin(latRad), N = a / Math.sqrt(1 - e2 * s * s);
+  return {
+    x: (N + hKm) * Math.cos(latRad) * Math.cos(lonRad),
+    y: (N + hKm) * Math.cos(latRad) * Math.sin(lonRad),
+    z: (N * (1 - e2) + hKm) * s
+  };
+}
+// look angles from observer ENU. Returns {az deg, el deg, rangeKm}
+function lookAngles(satEcef, obs) {
+  const rx = satEcef.x - obs.ecef.x, ry = satEcef.y - obs.ecef.y, rz = satEcef.z - obs.ecef.z;
+  const e = -obs.sinLon * rx + obs.cosLon * ry;
+  const n = -obs.sinLat * obs.cosLon * rx - obs.sinLat * obs.sinLon * ry + obs.cosLat * rz;
+  const u = obs.cosLat * obs.cosLon * rx + obs.cosLat * obs.sinLon * ry + obs.sinLat * rz;
+  const rng = Math.sqrt(rx * rx + ry * ry + rz * rz);
+  let az = Math.atan2(e, n); if (az < 0) az += TWOPI;
+  const el = Math.asin(u / rng);
+  return { az: az / DEG, el: el / DEG, rangeKm: rng };
+}
+// Low-precision Sun position, ECI (equatorial) unit vector + distance km
+function sunEci(jd) {
+  const T = (jd - 2451545.0) / 36525.0;
+  const M = (357.52911 + 35999.05029 * T - 0.0001537 * T * T) * DEG;
+  const L0 = (280.46646 + 36000.76983 * T + 0.0003032 * T * T) * DEG;
+  const C = (1.914602 - 0.004817 * T - 0.000014 * T * T) * Math.sin(M)
+    + (0.019993 - 0.000101 * T) * Math.sin(2 * M) + 0.000289 * Math.sin(3 * M);
+  const trueLong = L0 + C * DEG;
+  const obliq = (23.439291 - 0.0130042 * T) * DEG;
+  const R = 1.000001018 * (1 - 0.01671123 * Math.cos(M)) * 149597870.7; // km, approx
+  const x = Math.cos(trueLong);
+  const y = Math.cos(obliq) * Math.sin(trueLong);
+  const z = Math.sin(obliq) * Math.sin(trueLong);
+  return { x, y, z, R };
+}
+
+/* ---------- observer state ---------- */
+let OBS = null;
+function setObserver(lat, lon) {
+  const latR = lat * DEG, lonR = lon * DEG;
+  OBS = {
+    lat, lon, latRad: latR, lonRad: lonR,
+    sinLat: Math.sin(latR), cosLat: Math.cos(latR),
+    sinLon: Math.sin(lonR), cosLon: Math.cos(lonR),
+    ecef: siteEcef(latR, lonR, 0)
+  };
+}
+
+/* full observation at a moment: sun elevation for observer, and for a
+   satellite: look angles + whether it's sunlit + estimated magnitude */
+function sunElevation(jd) {
+  const su = sunEci(jd), gmst = gstime(jd);
+  const se = teme2ecef(su, gmst);
+  const m = Math.sqrt(se.x * se.x + se.y * se.y + se.z * se.z);
+  const up = { x: OBS.cosLat * OBS.cosLon, y: OBS.cosLat * OBS.sinLon, z: OBS.sinLat };
+  return Math.asin((se.x * up.x + se.y * up.y + se.z * up.z) / m) / DEG;
+}
+
+const STD_MAG = { "25544": -1.8, "20580": 2.4, "48274": -1.0, "54216": -1.0 }; // ISS, HST, CSS/Tiangong
+function observe(sat, jd) {
+  const tsince = (jd - sat.jdsatepoch) * 1440.0;
+  const pv = sgp4(sat, tsince);
+  if (!pv || sat.error) return null;
+  const gmst = gstime(jd);
+  const satEcef = teme2ecef(pv.position, gmst);
+  const look = lookAngles(satEcef, OBS);
+  // sunlit test (cylindrical shadow)
+  const su = sunEci(jd);
+  const sm = Math.sqrt(su.x * su.x + su.y * su.y + su.z * su.z);
+  const sunHat = { x: su.x / sm, y: su.y / sm, z: su.z / sm }; // ECI unit toward sun
+  const r = pv.position;
+  const dot = r.x * sunHat.x + r.y * sunHat.y + r.z * sunHat.z;
+  let sunlit = true;
+  if (dot < 0) {
+    const perp = Math.sqrt((r.x - dot * sunHat.x) ** 2 + (r.y - dot * sunHat.y) ** 2 + (r.z - dot * sunHat.z) ** 2);
+    if (perp < RE) sunlit = false;
+  }
+  look.sunlit = sunlit;
+  // magnitude estimate
+  const sunEcef = teme2ecef(su, gmst);
+  const s2 = Math.sqrt(sunEcef.x ** 2 + sunEcef.y ** 2 + sunEcef.z ** 2);
+  const toSun = { x: sunEcef.x / s2, y: sunEcef.y / s2, z: sunEcef.z / s2 };
+  const toObs = { x: OBS.ecef.x - satEcef.x, y: OBS.ecef.y - satEcef.y, z: OBS.ecef.z - satEcef.z };
+  const om = Math.sqrt(toObs.x ** 2 + toObs.y ** 2 + toObs.z ** 2);
+  const phaseCos = (toSun.x * toObs.x + toSun.y * toObs.y + toSun.z * toObs.z) / om;
+  const phaseAngle = Math.acos(Math.max(-1, Math.min(1, phaseCos)));
+  const frac = (1 + Math.cos(phaseAngle)) / 2;
+  const stdMag = STD_MAG[sat.satnum] != null ? STD_MAG[sat.satnum] : 4.0;
+  look.mag = stdMag + 5 * Math.log10(look.rangeKm / 1000) - 2.5 * Math.log10(Math.max(frac, 0.002));
+  return look;
+}
+
+/* ---------- pass scanning ---------- */
+function computeNightWindows(startJd, hours) {
+  // sample sun elevation, mark windows where sun < -6 deg (dark enough)
+  const step = 2 / 1440; // 2 minutes in days
+  const wins = [];
+  let cur = null, prevDark = false;
+  for (let jd = startJd; jd <= startJd + hours / 24; jd += step) {
+    const dark = sunElevation(jd) < -6;
+    if (dark && !prevDark) cur = { start: jd };
+    if (!dark && prevDark && cur) { cur.end = jd; wins.push(cur); cur = null; }
+    prevDark = dark;
+  }
+  if (cur) { cur.end = startJd + hours / 24; wins.push(cur); }
+  return wins;
+}
+
+function findPasses(sats, startJd, hours, minEl) {
+  const wins = computeNightWindows(startJd, hours);
+  const passes = [];
+  const stepS = 20 / 86400; // 20 s in days
+  for (const sat of sats) {
+    if (sat.deep || sat.error) continue;
+    for (const w of wins) {
+      const from = w.start - 12 / 1440, to = w.end + 12 / 1440;
+      let inPass = false, cur = null, prevEl = -90;
+      for (let jd = from; jd <= to; jd += stepS) {
+        const ob = observe(sat, jd);
+        if (!ob) { if (inPass) { finishPass(cur, sat, passes, minEl); inPass = false; cur = null; } continue; }
+        const el = ob.el;
+        if (el > 0 && !inPass) {
+          inPass = true;
+          cur = { start: { jd, ob }, max: { jd, ob }, samples: [] };
+        }
+        if (inPass) {
+          cur.samples.push({ jd, ob });
+          if (el > cur.max.ob.el) cur.max = { jd, ob };
+          if (el <= 0) { cur.end = { jd, ob }; finishPass(cur, sat, passes, minEl); inPass = false; cur = null; }
+        }
+        prevEl = el;
+      }
+      if (inPass && cur) { cur.end = cur.samples[cur.samples.length - 1]; finishPass(cur, sat, passes, minEl); }
+    }
+  }
+  passes.sort((a, b) => a.startJd - b.startJd);
+  return dedupe(passes);
+}
+
+function finishPass(cur, sat, out, minEl) {
+  // refine max with local sampling
+  let bestJd = cur.max.jd, bestEl = cur.max.ob.el;
+  for (let d = -20; d <= 20; d += 2) {
+    const jd = cur.max.jd + d / 86400;
+    const ob = observe(sat, jd);
+    if (ob && ob.el > bestEl) { bestEl = ob.el; bestJd = jd; }
+  }
+  if (bestEl < minEl) return;
+  const maxOb = observe(sat, bestJd);
+  const startOb = cur.start.ob, endOb = (cur.end || cur.samples[cur.samples.length - 1]).ob;
+  const endJd = (cur.end || cur.samples[cur.samples.length - 1]).jd;
+  // pass is "visible" if satellite sunlit at peak AND observer dark enough
+  const sunElAtMax = sunElevation(bestJd);
+  const visible = maxOb.sunlit && sunElAtMax < -6;
+  out.push({
+    satnum: sat.satnum, name: sat.name,
+    startJd: cur.start.jd, maxJd: bestJd, endJd,
+    startAz: startOb.az, maxAz: maxOb.az, endAz: endOb.az,
+    maxEl: bestEl, mag: maxOb.mag, sunlit: maxOb.sunlit, visible,
+    startSunlit: startOb.sunlit, endSunlit: endOb.sunlit
+  });
+}
+
+function dedupe(passes) {
+  const out = [];
+  for (const p of passes) {
+    const dup = out.find(q => q.satnum === p.satnum && Math.abs(q.maxJd - p.maxJd) < 3 / 1440);
+    if (!dup) out.push(p);
+    else if (p.maxEl > dup.maxEl) Object.assign(dup, p);
+  }
+  return out;
+}
+
+/* ---------- formatting ---------- */
+const COMPASS = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+function compass(deg) { return COMPASS[Math.round(((deg % 360) / 22.5)) % 16]; }
+function jdToDate(jd) { return new Date((jd - 2440587.5) * 86400000); }
+function fmtTime(d) { return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }); }
+function fmtClock(d) { return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
+function nightKey(d) {
+  // group passes by the night they belong to: passes before ~noon count to previous date's night
+  const shifted = new Date(d.getTime() - 12 * 3600000);
+  return shifted.toDateString();
+}
+function nightLabel(d) {
+  const shifted = new Date(d.getTime() - 12 * 3600000);
+  return "Night of " + shifted.toLocaleDateString([], { weekday: "long", month: "short", day: "numeric" });
+}
+function magWord(mag, visible) {
+  if (!visible) return "in Earth's shadow";
+  if (mag <= -1) return "brilliant";
+  if (mag <= 1.5) return "bright";
+  if (mag <= 3.5) return "moderate";
+  return "faint";
+}
+
+/* ============================================================
+   Data loading (CelesTrak visual TLEs, cached 24h)
+   ============================================================ */
+const CACHE_KEY = "suite.cache.passes.visual";
+const CACHE_MAX_MS = 24 * 3600 * 1000; // manifest cacheTtlMin 1440 — CelesTrak asks ~2 h minimum between GP pulls
+const CELESTRAK_JSON = "https://celestrak.org/NORAD/elements/gp.php?GROUP=visual&FORMAT=json";
+const CELESTRAK_TLE = "https://celestrak.org/NORAD/elements/gp.php?GROUP=visual&FORMAT=tle";
+
+/* Suite.fetchJSON is JSON-only; v1's plain-text TLE fallback keeps a minimal
+   timeout fetch of its own (same shape as v1's fetchTimeout helper). */
+async function fetchText(url, ms) {
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), ms);
+  try {
+    const r = await fetch(url, { signal: ctl.signal });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return await r.text();
+  } finally { clearTimeout(t); }
+}
+
+/* The cache keeps v1's exact key, {t, v} envelope and slim {name, l1, l2}
+   value shape, so a v1 user's stored elements keep working. It is managed via
+   Suite.store rather than fetchJSON's cacheKey (which would store the raw GP
+   JSON — a value-shape change that would break existing v1 caches). */
+function readCache() {
+  const e = Suite.store.get(CACHE_KEY);
+  return (e && typeof e === "object" && "t" in e && Array.isArray(e.v)) ? e : null;
+}
+function writeCache(sats) {
+  const slim = sats.map(s => ({ name: s.name, l1: s.l1, l2: s.l2 }));
+  Suite.store.set(CACHE_KEY, { t: Date.now(), v: slim });
+}
+
+// returns { sats:[satrec], stamp:ms, note:string }
+async function loadSats(forceNet) {
+  const cache = readCache();
+  const fresh = cache && (Date.now() - cache.t) < CACHE_MAX_MS;
+  if (cache && fresh && !forceNet) {
+    return { sats: buildFromLines(cache.v), stamp: cache.t, note: "" };
+  }
+  // try network
+  try {
+    let note = "";
+    let lines = null;
+    try {
+      const r = await Suite.fetchJSON(CELESTRAK_JSON, { timeout: 12000, fallbackToCache: false });
+      const gp = r.v;
+      if (!Array.isArray(gp) || !gp.length) throw new Error("empty");
+      lines = gp.map(g => { const t = gpToTle(g); return { name: g.OBJECT_NAME, l1: t.l1, l2: t.l2 }; });
+    } catch (eJson) {
+      // fall back to TLE text
+      const txt = await fetchText(CELESTRAK_TLE, 12000);
+      lines = parseTleText(txt);
+      note = "Loaded via plain-text TLE fallback.";
+      if (!lines.length) throw new Error("no TLEs parsed");
+    }
+    writeCache(lines);
+    return { sats: buildFromLines(lines), stamp: Date.now(), note };
+  } catch (e) {
+    if (cache) return { sats: buildFromLines(cache.v), stamp: cache.t, note: "Network failed — showing cached elements." };
+    throw e;
+  }
+}
+
+function parseTleText(txt) {
+  const rows = txt.replace(/\r/g, "").split("\n").filter(l => l.length);
+  const out = [];
+  for (let i = 0; i + 2 < rows.length + 1; i += 3) {
+    const name = rows[i], l1 = rows[i + 1], l2 = rows[i + 2];
+    if (l1 && l2 && l1[0] === "1" && l2[0] === "2") out.push({ name: name.trim(), l1, l2 });
+  }
+  return out;
+}
+function buildFromLines(lines) {
+  const out = [];
+  for (const ln of lines) {
+    try {
+      const s = makeSatrec(ln.name, ln.l1, ln.l2, null);
+      s.l1 = ln.l1; s.l2 = ln.l2;
+      if (!s.error) out.push(s);
+    } catch {}
+  }
+  return out;
+}
+
+/* ============================================================
+   Location (shared suite.location)
+   ============================================================ */
+const locbar = document.getElementById("locbar");
+const locCard = document.getElementById("locCard");
+const controls = document.getElementById("controls");
+const locErr = Suite.liveRegion(document.getElementById("locErr"));
+function getLocation() { return Suite.location.get(); }
+function saveLocation(loc) { Suite.location.set(loc); }
+
+function renderLocbar(loc) {
+  locbar.textContent = "";
+  if (!loc) { locbar.classList.add("hidden"); return; }
+  locbar.classList.remove("hidden");
+  const span = document.createElement("span");
+  span.append(document.createTextNode("Location: "));
+  const b = document.createElement("b"); b.textContent = loc.label || (loc.lat.toFixed(3) + ", " + loc.lon.toFixed(3));
+  span.append(b);
+  const btn = document.createElement("button"); btn.className = "linkbtn"; btn.textContent = "change";
+  btn.style.marginLeft = ".5rem";
+  btn.addEventListener("click", () => { locCard.classList.remove("hidden"); });
+  locbar.append(span, btn);
+}
+
+document.getElementById("zipBtn").addEventListener("click", async () => {
+  const zip = document.getElementById("zip").value.trim();
+  locErr.textContent = "";
+  if (!/^\d{5}$/.test(zip)) { locErr.textContent = "Enter a 5-digit ZIP."; return; }
+  try {
+    const r = await Suite.fetchJSON("https://api.zippopotam.us/us/" + zip, { timeout: 12000 });
+    const p = r.v.places[0];
+    const loc = {
+      lat: parseFloat(p.latitude), lon: parseFloat(p.longitude),
+      label: p["place name"] + ", " + p["state abbreviation"] + " " + zip
+    };
+    saveLocation(loc); onLocationReady(loc);
+  } catch (e) { locErr.textContent = "Could not find that ZIP. Check it and try again."; }
+});
+/* Enter in the ZIP field submits (a11y: text-entry + button pair) */
+document.getElementById("zip").addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); document.getElementById("zipBtn").click(); }
+});
+document.getElementById("geoBtn").addEventListener("click", () => {
+  locErr.textContent = "";
+  if (!navigator.geolocation) { locErr.textContent = "Geolocation isn't available in this browser."; return; }
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const loc = { lat: pos.coords.latitude, lon: pos.coords.longitude, label: "My location" };
+      saveLocation(loc); onLocationReady(loc);
+    },
+    err => { locErr.textContent = "Location denied or unavailable. (From file:// this may need http://localhost.) Try a ZIP instead."; }
+  );
+});
+
+function onLocationReady(loc) {
+  locCard.classList.add("hidden");
+  controls.classList.remove("hidden");
+  renderLocbar(loc);
+  setObserver(loc.lat, loc.lon);
+  run(false);
+}
+
+/* ============================================================
+   Run + render
+   ============================================================ */
+const statusEl = Suite.liveRegion(document.getElementById("status"));
+const resultsEl = Suite.liveRegion(document.getElementById("results"));
+const statsEl = document.getElementById("stats");
+
+function setStatus(html, isErr) {
+  statusEl.innerHTML = "";
+  if (!html) return;
+  const div = document.createElement("div");
+  div.className = "card msg" + (isErr ? " err" : "");
+  div.innerHTML = html;
+  statusEl.append(div);
+}
+
+let LOADING = false;
+async function run(forceNet) {
+  if (LOADING || !OBS) return;
+  LOADING = true;
+  resultsEl.textContent = "";
+  statsEl.classList.add("hidden");
+  setStatus('<span class="spin"></span> Loading satellite elements and propagating three nights of orbits…');
+  let data;
+  try {
+    data = await loadSats(forceNet);
+  } catch (e) {
+    setStatus("<b>Couldn't load satellite data.</b><br>CelesTrak was unreachable and no cached data is stored. " +
+      "Check your connection and try “Refresh satellite data.” <br><span style='font-size:.85rem'>(" + Suite.esc(String(e.message || e)) + ")</span>", true);
+    LOADING = false;
+    return;
+  }
+  // yield so the spinner paints before the heavy compute
+  await new Promise(r => setTimeout(r, 30));
+
+  const minEl = Math.max(0, Math.min(85, parseFloat(document.getElementById("minEl").value) || 10));
+  const startJd = jdFromDate(new Date());
+  let passes;
+  try {
+    passes = findPasses(data.sats, startJd, 72, minEl);
+  } catch (e) {
+    setStatus("<b>Computation error.</b> " + Suite.esc(String(e.message || e)), true);
+    LOADING = false; return;
+  }
+
+  const visiblePasses = passes.filter(p => p.visible);
+  renderStats(data.sats.length, visiblePasses.length, passes.length);
+  renderResults(passes, data);
+
+  const stampNote = data.note ? " · " + data.note : "";
+  const age = Math.round((Date.now() - data.stamp) / 60000);
+  const stampTxt = age < 2 ? "just now" : (age < 90 ? age + " min ago" : "from " + jdToDate(jdFromDate(new Date(data.stamp))).toLocaleString());
+  setStatus("Elements " + stampTxt + stampNote + ". " + data.sats.length + " satellites tracked.");
+  LOADING = false;
+}
+
+function renderStats(nSats, nVisible, nTotal) {
+  statsEl.classList.remove("hidden");
+  statsEl.textContent = "";
+  const mk = (n, l) => {
+    const d = document.createElement("div"); d.className = "stat";
+    const b = document.createElement("b"); b.textContent = n;
+    const s = document.createElement("span"); s.textContent = l;
+    d.append(b, s); return d;
+  };
+  statsEl.append(
+    mk(nVisible, "visible passes"),
+    mk(nTotal, "passes ≥ threshold"),
+    mk(nSats, "satellites")
+  );
+}
+
+function renderResults(passes, data) {
+  resultsEl.textContent = "";
+  if (!passes.length) {
+    const div = document.createElement("div");
+    div.className = "card msg";
+    div.textContent = "No passes above your elevation threshold during darkness over the next three nights. " +
+      "Try lowering the minimum elevation. (Bright passes cluster around morning and evening twilight.)";
+    resultsEl.append(div);
+    return;
+  }
+  // group by night
+  const groups = new Map();
+  for (const p of passes) {
+    const d = jdToDate(p.maxJd);
+    const key = nightKey(d);
+    if (!groups.has(key)) groups.set(key, { label: nightLabel(d), passes: [] });
+    groups.get(key).passes.push(p);
+  }
+  for (const [, g] of groups) {
+    const sec = document.createElement("div");
+    sec.className = "night";
+    const h3 = document.createElement("h3");
+    h3.append(document.createTextNode(g.label + " "));
+    const n = document.createElement("span"); n.className = "n";
+    const vis = g.passes.filter(p => p.visible).length;
+    n.textContent = g.passes.length + (g.passes.length === 1 ? " pass" : " passes") + (vis ? " · " + vis + " visible" : "");
+    h3.append(n);
+    const card = document.createElement("div"); card.className = "card";
+    card.style.paddingTop = ".4rem"; card.style.paddingBottom = ".4rem";
+    g.passes.forEach(p => card.append(passRow(p)));
+    sec.append(h3, card);
+    resultsEl.append(sec);
+  }
+}
+
+function passRow(p) {
+  const el = document.createElement("div");
+  el.className = "pass" + (p.visible ? "" : " eclipsed");
+
+  const name = document.createElement("div"); name.className = "name";
+  name.textContent = titleCase(p.name);
+  const badge = document.createElement("span");
+  badge.className = "badge " + (p.visible ? "vis" : "shd");
+  badge.textContent = p.visible ? "visible" : "eclipsed";
+  name.append(badge);
+  if (STD_MAG[p.satnum] != null && p.visible) {
+    const mb = document.createElement("span");
+    mb.className = "badge vis";
+    mb.textContent = "mag ~" + p.mag.toFixed(1);
+    mb.title = "Estimated apparent magnitude — lower is brighter";
+    name.append(mb);
+  }
+
+  const sub = document.createElement("div"); sub.className = "sub";
+  const startD = jdToDate(p.startJd), maxD = jdToDate(p.maxJd), endD = jdToDate(p.endJd);
+  const durS = Math.round((p.endJd - p.startJd) * 86400);
+  sub.textContent = fmtClock(maxD) + " peak · " + magWord(p.mag, p.visible) +
+    " · visible for " + Math.floor(durS / 60) + "m " + (durS % 60) + "s";
+
+  const elBox = document.createElement("div"); elBox.className = "el";
+  const b = document.createElement("b"); b.textContent = Math.round(p.maxEl) + "°";
+  const sp = document.createElement("span"); sp.textContent = "peak elev";
+  elBox.append(b, sp);
+
+  const track = document.createElement("div"); track.className = "track";
+  track.append(
+    seg("Rises", fmtTime(startD) + " · " + compass(p.startAz) + " (" + Math.round(p.startAz) + "°)"),
+    seg("Peak", fmtTime(maxD) + " · " + compass(p.maxAz) + " (" + Math.round(p.maxAz) + "°)"),
+    seg("Sets", fmtTime(endD) + " · " + compass(p.endAz) + " (" + Math.round(p.endAz) + "°)")
+  );
+
+  el.append(name, sub, elBox, track);
+  return el;
+}
+function seg(k, v) {
+  const s = document.createElement("span");
+  const b = document.createElement("b"); b.textContent = k + " ";
+  s.append(b, document.createTextNode(v));
+  return s;
+}
+
+function titleCase(s) {
+  // CelesTrak names are usually upper-case; make them calmer, keep known acronyms
+  if (/\(/.test(s) || s.length <= 4) return s;
+  return s.replace(/\w[^\s\-()]*/g, w => {
+    if (/^[A-Z0-9]+$/.test(w) && w.length <= 4) return w; // ISS, HST etc
+    return w.charAt(0) + w.slice(1).toLowerCase();
+  });
+}
+
+/* control buttons */
+document.getElementById("refreshBtn").addEventListener("click", () => run(false));
+document.getElementById("reloadTle").addEventListener("click", () => run(true));
+/* Enter in the threshold field recomputes (a11y: input + button pair) */
+document.getElementById("minEl").addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); run(false); }
+});
+
+/* ---------- boot ---------- */
+(function boot() {
+  const loc = getLocation();
+  if (loc) {
+    controls.classList.remove("hidden");
+    renderLocbar(loc);
+    setObserver(loc.lat, loc.lon);
+    run(false);
+  } else {
+    locCard.classList.remove("hidden");
+  }
+})();
+</script>
+</body>
+</html>
