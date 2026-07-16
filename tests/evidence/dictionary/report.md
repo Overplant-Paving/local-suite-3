@@ -144,3 +144,89 @@ the good-citizen behavior).
    (pre-approved), `.theme-btn float: right` from core (inert — the button is a flex
    item in `.topbar`, floats don't apply), `.search` outline (the core focus-visible
    ring, item above). Nothing else differs in either theme.
+
+## Phase 4 escaping audit (line-by-line)
+
+Audit date 2026-07-16. Scope: every dynamic-markup and attribute-context site in
+`tools/dictionary.html` (post-audit line numbers). Verified against a fresh
+`node verify-tool.mjs dictionary` run — exit 0, evidence in this directory.
+
+### Site inventory (complete)
+
+| line | sink | interpolated data | provenance | verdict |
+|---|---|---|---|---|
+| 77 | `el()` helper: `e.textContent = txt` | all card text flows through here | mixed (remote + local) | safe — text node, never parsed as markup |
+| 116 | `box.innerHTML = ""` | none | — | safe — bare literal clear |
+| 170 | `resultEl.innerHTML = ""` | none | — | safe — bare literal clear |
+| 171 | loading card via `el(..., "Looking up “"+word+"”…")` | `word` (user input) | local user input | safe — textContent |
+| 120 | history chips `el("span","hchip",w)` | `w` from `suite.dictionary.history` | localStorage (originally user/remote words) | safe — textContent |
+| 201 | `resultEl.innerHTML = ""` | none | — | safe — bare literal clear |
+| 202 | not-found msg via `el()` | `word` (user input) | local user input | safe — textContent |
+| 212 | `resultEl.innerHTML = ""` | none | — | safe — bare literal clear |
+| 215 | `el("h2", null, model.word)` | headword | remote (dictionaryapi.dev) / cache | safe — textContent |
+| 216 | `el("span","phon", model.phonetic)` | phonetic | remote | safe — textContent |
+| 218–228 | audio button: `btn.title`, `aria-label` | literals only | local | safe |
+| 225 | `player.src = audioUrl` | audio URL | remote / cached model | **was UNSAFE-adjacent — FIXED** (see below) |
+| 232 | `el("h3", null, m.pos)` | partOfSpeech | remote | safe — textContent |
+| 236 | `document.createTextNode(d.def)` | definition | remote (incl. Wiktionary HTML pre-reduced by `stripHtml`) | safe — text node |
+| 237 | example via `el()` | example | remote | safe — textContent |
+| 238–245 | def- and meaning-level `chipRow()` | synonym/antonym words | remote | safe — textContent; className is a literal ternary (`"synchip"`/`" ant"`) |
+| 249 | src-note via `el()` | `fetchedAt` (`Date.toLocaleString`), `model.source` | local clock; source is a normalizer-set literal (arbitrary only via tampered same-origin cache) | safe — textContent either way |
+| 164–167 | `stripHtml` DOMParser | Wiktionary definition/example HTML | remote | safe — inert document (no subresource loads, scripts dead), only `textContent` extracted |
+| 173 | `q.value = word` | user input | local | safe — value property, not markup |
+
+`sourceUrls` from dictionaryapi.dev are **never rendered** — `fromDictApi` drops them
+and the tool has no dynamic `href` sink at all (the only anchor is the static back
+link). Grep-verified: the sinks above are the exhaustive set of
+`innerHTML|outerHTML|insertAdjacentHTML|document.write|.src=|.href=|setAttribute|.title=`
+occurrences; all `setAttribute` calls use literal names/values (`role`, `aria-label`).
+
+### Fix applied (1)
+
+- **`player.src` scheme guard** (render(), the audio button block): `model.audio` is
+  remote data — and on a cache-fallback render it comes from localStorage, including
+  v1-era caches — reaching a URL attribute context. A media `src` is not a script
+  sink in any current browser (`javascript:` does not execute on `<audio>`), but it
+  was the tool's single remote-data-to-URL-context flow, so it now passes through
+  `/^https?:\/\//i`: a non-http(s) audio value (javascript:, data:, blob:) renders NO
+  audio button and never touches `player.src`. No behavior change for legitimate data
+  (observed audio URLs are `https://api.dictionaryapi.dev/media/...`). The Batch B
+  report's reviewer-concern #2 (CSP `media-src`) still stands and is unchanged by this.
+
+No other site needed changes: the tool was already fully `createElement`/`textContent`
+(v1 heritage), matching the Batch B report's claim — re-verified line by line.
+
+### Adversarial probe (route-fulfilled hostile payloads)
+
+`tests/interactions/dictionary.mjs` now ends with a probe section (runs inside the
+standard harness pass; probe cache/history state is removed afterwards so localStorage
+parity stays byte-clean — `keysOnlyInV1/V2` still `[]`):
+
+- **Hostile dictionaryapi.dev payload** (`xzzhostileprobe`): `<img onerror>` in word +
+  definition, `<svg onload>` in phonetic + antonym, `<script>` in partOfSpeech,
+  `<img onerror>`/`<iframe javascript:>` in synonyms, `example` attribute-breakout
+  string, `audio: "javascript:window.__pwned=3"`, `sourceUrls:
+  ["javascript:window.__pwned=10"]`.
+- **Hostile Wiktionary payload** (`xzzwikprobe`, primary aborted to force the
+  fallback): `<img onerror>` in the definition HTML, `<script>` in examples[0].
+
+Results (interaction.txt lines 20–28): `window.__pwned` stayed `undefined` through
+both probes after a 500 ms grace period; **zero** `img/svg/script/iframe` elements
+inside `#result` or `#history`; every hostile string rendered as literal visible text
+(headword, phonetic, pos, definition, example, chips — screenshot
+`hostile-probe.png`); the `javascript:` audio URL produced **no button** and
+`player.src` stayed `""` (the new scheme guard, exercised); **no anchors** rendered
+(`sourceUrls` never reach the DOM); `stripHtml` reduced the hostile Wiktionary HTML to
+`"wik definition"` / `"wik example"` with nothing executed. The probe throws (fails
+the harness) on any escape, so this is a standing regression gate, not a one-off.
+
+### Allowlist
+
+`tests/escape-allowlist.json` has no dictionary.html entries and still needs none —
+no previously-allowlisted expression exists for this tool, and none was found unsafe.
+
+Harness: `node verify-tool.mjs dictionary` exit 0 (2026-07-16 run; the 6
+`net::ERR_FAILED` console lines are the harness-aborted known-miss/offline/probe
+requests, filtered by design). Note: this run required the verify-tool.mjs line-98
+string-literal fix (raw newline -> `\n`) landed by the orchestrator — the harness at
+the previous HEAD did not parse.

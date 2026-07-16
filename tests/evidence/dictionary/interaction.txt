@@ -4,7 +4,7 @@ first definition: "A combination of events which have come together by chance to
 synonym chips rendered: [chance, luck, chance, luck]
 antonym chips rendered: [Murphy's law, perfect storm, Murphy's law, perfect storm]
 source note: "Source: dictionaryapi.dev"
-cache envelope written: t=1784147471558 source=dictionaryapi.dev meanings=1 audio=https://api.dictionaryapi.dev/media/pronunciations/en/serendipity-au.mp3
+cache envelope written: t=1784180158892 source=dictionaryapi.dev meanings=1 audio=https://api.dictionaryapi.dev/media/pronunciations/en/serendipity-au.mp3
 audio button present: true aria-label="Play pronunciation"
 Enter-submitted lookup rendered: "ephemeral"
   first definition: "Something which lasts for a short period of time."
@@ -15,10 +15,20 @@ history chip click re-rendered: "ephemeral" note="Source: dictionaryapi.dev"
 not-found state: "No definition found for “zzxqwvv”. Check the spelling, or it may be a word neither dictionary covers."
 gibberish NOT pushed to history (v1 parity): [ephemeral, ephemeron, serendipity]
 offline reload rendered word: "ephemeral"
-offline stale note: "Offline — cached from 7/7/2026, 3:31:12 PM · Source: dictionaryapi.dev"
+offline stale note: "Offline — cached from 7/8/2026, 12:36:00 AM · Source: dictionaryapi.dev"
 restored (fresh cache, no refetch): "ephemeral" note="Source: dictionaryapi.dev"
+PROBE hostile dictionaryapi payload: __pwned=undefined injected-elements=0
+  headword rendered as literal text: true; phonetic="/<svg onload="window.__pwned=2">/"
+  pos="noun<script>window.__pwned=4</script>" def="<img src=x onerror="window.__pwned=5">evil definition" example="“"><img src=x onerror="window.__pwned=6">evil example”"
+  chips (literal text): [<img src=x onerror="window.__pwned=7">synA | <svg onload="window.__pwned=8">antA | <iframe src="javascript:window.__pwned=9">synB]
+  javascript: audio URL -> button rendered=false, player.src=""
+  anchors in result (sourceUrls must never render): []
+PROBE hostile Wiktionary payload: __pwned=undefined injected-elements=0
+  stripHtml output def="wik definition" example="“wik example”" (Source: Wiktionary)
+post-probe cleanup + reload: "ephemeral" history=[ephemeral, ephemeron, serendipity]
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
   console.error: Failed to load resource: net::ERR_FAILED
   console.error: Failed to load resource: net::ERR_FAILED
   console.error: Failed to load resource: net::ERR_FAILED

@@ -214,11 +214,15 @@ function render(model, fromCache, fetchedAt) {
   const head = el("div", "word-head");
   head.append(el("h2", null, model.word));
   if (model.phonetic) head.append(el("span", "phon", model.phonetic));
-  if (model.audio) {
+  /* Phase 4 escaping audit: model.audio is remote data (or a model from an
+     older cache) reaching a URL attribute context — only an http(s) URL may
+     ever become the media src (javascript:/data:/blob: payloads get no button). */
+  const audioUrl = /^https?:\/\//i.test(String(model.audio || "")) ? model.audio : "";
+  if (audioUrl) {
     const btn = el("button", "audio-btn", "🔊");
     btn.title = "Play pronunciation";
     btn.setAttribute("aria-label", "Play pronunciation");
-    btn.addEventListener("click", () => { player.src = model.audio; player.play().catch(() => {}); });
+    btn.addEventListener("click", () => { player.src = audioUrl; player.play().catch(() => {}); });
     head.append(btn);
   }
   card.append(head);

@@ -134,6 +134,115 @@ export async function interact({ page, log, evidenceDir }) {
   await page.reload();
   await page.waitForSelector("#result .card .word-head h2", { timeout: 30000 });
   log(`restored (fresh cache, no refetch): "${await page.textContent("#result .word-head h2")}" note="${(await page.textContent("#result .src-note")).trim()}"`);
+
+  /* ================= Phase 4 escaping audit: adversarial probe =================
+     Route-fulfil both dictionary sources with hostile payloads and prove inert
+     rendering: <img onerror>/<svg onload>/<script> in every remote text field,
+     javascript: in the audio URL, javascript: sourceUrls (never rendered by the
+     tool — included to prove that stays true). Probe state (cache + history) is
+     removed afterwards so the localStorage parity snapshot is unaffected. */
+  const P1 = "xzzhostileprobe", P2 = "xzzwikprobe";
+  const hostilePrimary = [{
+    word: P1 + `<img src=x onerror="window.__pwned=1">`,
+    phonetic: `/<svg onload="window.__pwned=2">/`,
+    phonetics: [{ text: "", audio: "javascript:window.__pwned=3" }],
+    sourceUrls: ["javascript:window.__pwned=10"],
+    meanings: [{
+      partOfSpeech: `noun<script>window.__pwned=4<\/script>`,
+      definitions: [{
+        definition: `<img src=x onerror="window.__pwned=5">evil definition`,
+        example: `"><img src=x onerror="window.__pwned=6">evil example`,
+        synonyms: [`<img src=x onerror="window.__pwned=7">synA`],
+        antonyms: [`<svg onload="window.__pwned=8">antA`],
+      }],
+      synonyms: [`<iframe src="javascript:window.__pwned=9">synB`],
+      antonyms: [],
+    }],
+  }];
+  const hostileWik = { en: [{
+    partOfSpeech: "noun",
+    definitions: [{
+      definition: `<img src=x onerror="window.__pwned=11">wik definition`,
+      examples: [`<script>window.__pwned=12<\/script>wik example`],
+    }],
+  }] };
+  const routeP1 = u => u.href.includes("api.dictionaryapi.dev") && u.href.includes(P1);
+  const routeP2miss = u => u.href.includes("api.dictionaryapi.dev") && u.href.includes(P2);
+  const routeP2wik = u => u.href.includes("en.wiktionary.org") && u.href.includes(P2);
+  await page.route(routeP1,
+    r => r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(hostilePrimary) }));
+  await page.route(routeP2miss, r => r.abort()); // net::ERR — filtered by the harness gate
+  await page.route(routeP2wik,
+    r => r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(hostileWik) }));
+
+  /* probe 1: hostile dictionaryapi.dev payload */
+  await page.fill("#q", P1);
+  await page.press("#q", "Enter");
+  await page.waitForFunction(p => {
+    const h2 = document.querySelector("#result .card .word-head h2");
+    return h2 && h2.textContent.includes(p);
+  }, P1, { timeout: 30000 });
+  await page.waitForTimeout(500); // grace period for any async onerror/onload to fire
+  const probe1 = await page.evaluate(() => ({
+    pwned: window.__pwned,
+    injectedEls: document.querySelectorAll(
+      "#result img, #result svg, #result script, #result iframe, #history img, #history svg, #history script, #history iframe").length,
+    wordIsText: document.querySelector("#result .word-head h2").textContent.includes("<img src=x"),
+    phonIsText: (document.querySelector("#result .phon") || {}).textContent || "(none)",
+    posIsText: document.querySelector("#result .pos h3").textContent,
+    defIsText: document.querySelector("#result ol.defs li").childNodes[0].textContent,
+    exampleIsText: document.querySelector("#result .example").textContent,
+    chipTexts: [...document.querySelectorAll("#result .synchip")].map(c => c.textContent),
+    audioBtn: !!document.querySelector("#result .audio-btn"),
+    playerSrc: document.getElementById("player").src,
+    hrefs: [...document.querySelectorAll("#result a")].map(a => a.href),
+  }));
+  log(`PROBE hostile dictionaryapi payload: __pwned=${probe1.pwned} injected-elements=${probe1.injectedEls}`);
+  log(`  headword rendered as literal text: ${probe1.wordIsText}; phonetic="${probe1.phonIsText}"`);
+  log(`  pos="${probe1.posIsText}" def="${probe1.defIsText}" example="${probe1.exampleIsText}"`);
+  log(`  chips (literal text): [${probe1.chipTexts.join(" | ")}]`);
+  log(`  javascript: audio URL -> button rendered=${probe1.audioBtn}, player.src="${probe1.playerSrc}"`);
+  log(`  anchors in result (sourceUrls must never render): [${probe1.hrefs.join(", ")}]`);
+  if (probe1.pwned !== undefined) throw new Error("PROBE FAILED: hostile payload executed (__pwned=" + probe1.pwned + ")");
+  if (probe1.injectedEls !== 0) throw new Error("PROBE FAILED: hostile markup became elements");
+  if (probe1.audioBtn || probe1.hrefs.length) throw new Error("PROBE FAILED: javascript: URL reached a live sink");
+  await page.screenshot({ path: `${evidenceDir}/hostile-probe.png`, fullPage: true });
+
+  /* probe 2: hostile Wiktionary HTML through the fallback + stripHtml */
+  await page.fill("#q", P2);
+  await page.press("#q", "Enter");
+  await page.waitForFunction(p => {
+    const h2 = document.querySelector("#result .card .word-head h2");
+    return h2 && h2.textContent === p;
+  }, P2, { timeout: 30000 });
+  await page.waitForTimeout(500);
+  const probe2 = await page.evaluate(() => ({
+    pwned: window.__pwned,
+    injectedEls: document.querySelectorAll("#result img, #result svg, #result script, #result iframe").length,
+    def: document.querySelector("#result ol.defs li").childNodes[0].textContent,
+    example: (document.querySelector("#result .example") || {}).textContent || "(none)",
+    source: document.querySelector("#result .src-note").textContent.trim(),
+  }));
+  log(`PROBE hostile Wiktionary payload: __pwned=${probe2.pwned} injected-elements=${probe2.injectedEls}`);
+  log(`  stripHtml output def="${probe2.def}" example="${probe2.example}" (${probe2.source})`);
+  if (probe2.pwned !== undefined) throw new Error("PROBE FAILED: hostile Wiktionary payload executed");
+  if (probe2.injectedEls !== 0) throw new Error("PROBE FAILED: hostile Wiktionary markup became elements");
+
+  /* cleanup: drop probe cache entries + history rows so parity stays byte-clean */
+  await page.unroute(routeP1);
+  await page.unroute(routeP2miss);
+  await page.unroute(routeP2wik);
+  await page.evaluate(prefixes => {
+    for (const k of Object.keys(localStorage))
+      if (k.startsWith("suite.cache.dictionary.") && prefixes.some(p => k.includes(p)))
+        localStorage.removeItem(k);
+    const h = JSON.parse(localStorage.getItem("suite.dictionary.history") || "[]")
+      .filter(w => !prefixes.some(p => String(w).includes(p)));
+    localStorage.setItem("suite.dictionary.history", JSON.stringify(h));
+  }, [P1, P2]);
+  await page.reload(); // auto-search history[0], served from the re-freshened cache
+  await page.waitForSelector("#result .card .word-head h2", { timeout: 30000 });
+  log(`post-probe cleanup + reload: "${await page.textContent("#result .word-head h2")}" history=[${await page.evaluate(() => [...document.querySelectorAll("#history .hchip")].map(c => c.textContent).join(", "))}]`);
 }
 
 /* Same state-writing actions on v1 so localStorage parity compares equal key sets:

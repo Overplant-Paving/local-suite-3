@@ -1,15 +1,15 @@
 {
   "v1": {
-    "suite.cache.dictionary.serendipity": "{\"t\":1784147472932,\"v\":{\"word\":\"serendipity\",\"phonetic\":\"/ˌsɛ.ɹən.ˈdɪ.pɪ.ti/\",\"audio\":\"https://api.dictionaryapi.dev/media/pronunciations/en/serendipi…(679 chars)",
+    "suite.cache.dictionary.serendipity": "{\"t\":1784180161732,\"v\":{\"word\":\"serendipity\",\"phonetic\":\"/ˌsɛ.ɹən.ˈdɪ.pɪ.ti/\",\"audio\":\"https://api.dictionaryapi.dev/media/pronunciations/en/serendipi…(679 chars)",
     "suite.dictionary.history": "[\"ephemeron\",\"ephemeral\",\"serendipity\"]",
-    "suite.cache.dictionary.ephemeral": "{\"t\":1784147473375,\"v\":{\"word\":\"ephemeral\",\"phonetic\":\"/əˈfɛ.mə.ɹəl/\",\"audio\":\"https://api.dictionaryapi.dev/media/pronunciations/en/ephemeral-us.mp3\"…(1072 chars)",
-    "suite.cache.dictionary.ephemeron": "{\"t\":1784147473497,\"v\":{\"word\":\"ephemeron\",\"phonetic\":\"\",\"audio\":\"\",\"meanings\":[{\"pos\":\"noun\",\"defs\":[{\"def\":\"Something short-lived or transitory.\",\"e…(430 chars)",
+    "suite.cache.dictionary.ephemeral": "{\"t\":1784180162180,\"v\":{\"word\":\"ephemeral\",\"phonetic\":\"/əˈfɛ.mə.ɹəl/\",\"audio\":\"https://api.dictionaryapi.dev/media/pronunciations/en/ephemeral-us.mp3\"…(1072 chars)",
+    "suite.cache.dictionary.ephemeron": "{\"t\":1784180162337,\"v\":{\"word\":\"ephemeron\",\"phonetic\":\"\",\"audio\":\"\",\"meanings\":[{\"pos\":\"noun\",\"defs\":[{\"def\":\"Something short-lived or transitory.\",\"e…(430 chars)",
     "suite.theme": "dark"
   },
   "v2": {
-    "suite.cache.dictionary.serendipity": "{\"t\":1784147472588,\"v\":{\"word\":\"serendipity\",\"phonetic\":\"/ˌsɛ.ɹən.ˈdɪ.pɪ.ti/\",\"audio\":\"https://api.dictionaryapi.dev/media/pronunciations/en/serendipi…(679 chars)",
-    "suite.cache.dictionary.ephemeron": "{\"t\":1784147472588,\"v\":{\"word\":\"ephemeron\",\"phonetic\":\"\",\"audio\":\"\",\"meanings\":[{\"pos\":\"noun\",\"defs\":[{\"def\":\"Something short-lived or transitory.\",\"e…(430 chars)",
-    "suite.cache.dictionary.ephemeral": "{\"t\":1784147472588,\"v\":{\"word\":\"ephemeral\",\"phonetic\":\"/əˈfɛ.mə.ɹəl/\",\"audio\":\"https://api.dictionaryapi.dev/media/pronunciations/en/ephemeral-us.mp3\"…(1072 chars)",
+    "suite.cache.dictionary.serendipity": "{\"t\":1784180160205,\"v\":{\"word\":\"serendipity\",\"phonetic\":\"/ˌsɛ.ɹən.ˈdɪ.pɪ.ti/\",\"audio\":\"https://api.dictionaryapi.dev/media/pronunciations/en/serendipi…(679 chars)",
+    "suite.cache.dictionary.ephemeron": "{\"t\":1784180160205,\"v\":{\"word\":\"ephemeron\",\"phonetic\":\"\",\"audio\":\"\",\"meanings\":[{\"pos\":\"noun\",\"defs\":[{\"def\":\"Something short-lived or transitory.\",\"e…(430 chars)",
+    "suite.cache.dictionary.ephemeral": "{\"t\":1784180160205,\"v\":{\"word\":\"ephemeral\",\"phonetic\":\"/əˈfɛ.mə.ɹəl/\",\"audio\":\"https://api.dictionaryapi.dev/media/pronunciations/en/ephemeral-us.mp3\"…(1072 chars)",
     "suite.dictionary.history": "[\"ephemeral\",\"ephemeron\",\"serendipity\"]",
     "suite.theme": "dark"
   },
