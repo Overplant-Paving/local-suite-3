@@ -237,3 +237,21 @@ cannot be injected from anywhere else, and no file uses `unsafe-inline`. Sole us
 | Quality drift across 71 parallel migrations | batches grouped by risk class so shared defects surface early; one subagent per tool with the orchestrator reviewing every diff against `v1-import`; per-tool evidence directories; burn-down table cross-checked by `--check` |
 | Home-directory git hazard (`C:\Users\henry` is a repo — anything outside a real repo silently belongs to it) | Phase 0's first task: `git init` here and verify `git rev-parse --show-toplevel` resolves to this folder |
 | `file://` vs localhost storage split | documented in PWA.md; settings.html export/import is the bridge |
+
+### D10 — WCAG AA overrides v1 palette fidelity (Phase 4 addendum, 2026-07-16)
+
+The Phase 4 accessibility audit (six independent agents, computed contrast from rendered
+styles across all 73 files) converged on two suite-wide failures inherited from v1:
+
+1. **Light-theme `--muted` `#6b7280`** measured 4.36:1 on `--bg`, 4.10:1 on `--chip`,
+   4.11:1 on `--accent-soft` — under AA's 4.5:1 for normal text, on every footer, tagline,
+   hint, and chip in the suite. **Decision:** core light `--muted` is now `#5f6670`
+   (5.23 / 4.91 / 5.71 on those surfaces). This is the one deliberate divergence from the
+   "byte-identical v1 theme block" extraction contract (D2/D6 era); computed-style diffs
+   against v1 will show it on muted text everywhere, permanently justified by this ruling.
+   Dark `--muted` (`#9aa0a8`) passed everywhere and is unchanged.
+2. **White ink on filled `--accent` controls** measured 2.36:1 in dark theme (the dark
+   accent is a light teal). **Convention:** filled-accent controls use `color: var(--bg)`
+   (or an equivalent `--on-accent` var) — ~5.3:1 light / ~7.6:1 dark, visually
+   indistinguishable in light. Applied per tool by the audit wave; tool-local button CSS
+   means core cannot enforce it centrally.
