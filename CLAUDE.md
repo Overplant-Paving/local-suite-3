@@ -27,16 +27,17 @@ reference; never modify it).
 
 ## Project state (as of 2026-07-16, end of session 2)
 
-- Phases 0-1 done; **Phase 2: 71/71 tools migrated** (Batches A-D), all gates green, smoke
-  72/72 (`tests/evidence/batchC/gates.txt`, `tests/evidence/batchD/gates.txt`); Batch D
-  embedded-data segments proven byte-exact v1==source==dist (per-tool data-integrity.txt).
-  `build.py --refresh-data` implemented + live-verified. **Phase 2 exit lacks ONE item:**
-  the v1 read-only-archive README commit in `../Local Suite` (permission-denied this
-  session; drafted in HANDOFF.md — needs the user). Open deferrals: nearby's live Overpass
-  probe (upstream outage — task chip pending); word's 404 mapping code-reviewed only.
-  Phase 3 PWA machinery done + verified (`tests/evidence/phase3/`); its GitHub half
-  (repo push + Pages, fresh-profile + headed-install checks) needs the user. Phase 4 not
-  started.
+- **All four phases' technical work is DONE.** 71/71 v1 tools migrated + settings.html
+  (Batches A-D + Phase 4, per-tool evidence under `tests/evidence/`); PWA machinery built
+  and verified (`tests/evidence/phase3/`); Phase 4 audits complete — escaping (3 real
+  fixes), a11y (all 73 files; core ruling ARCHITECTURE D10), games parked as a designed
+  hub WIP card. Gates zero-warning green; smoke 73/73 (`tests/evidence/phase4/gates.txt`);
+  release checklist executed (`tests/evidence/phase4/release-checklist.md`).
+- **Tag `v2.0` is HELD on two user-side items:** (1) the v1 read-only-archive README
+  commit in `../Local Suite` (session permissions deny writes there; text drafted in
+  HANDOFF.md); (2) Phase 3's GitHub half — repo push + Pages on `dist/`, fresh-profile
+  share check, headed install-prompt check. Deferred verifications (upstream outages /
+  shared demo-pool budgets) are listed in the release checklist; none block the tag.
 - v1 is committed in `../Local Suite` on `main` (commit `7088cab`, 175 files), imported here
   as the `v1-import` tag.
 - Distribution model: this repo goes on GitHub; Pages serves `dist/`; sharing = the link or the

@@ -1,0 +1,97 @@
+=== Phase 4 exit gates — 2026-07-16T06:38:16Z ===
+
+--- python build.py --check (zero warnings required) ---
+GATE manifest-files-sync  pass
+GATE markers              pass
+GATE dist-staleness       pass
+GATE no-inline-handlers   pass
+GATE csp                  pass
+GATE escaping-heuristic   pass
+GATE catalog-crosscheck   pass
+GATE key-hygiene          pass
+GATE no-example-urls      pass
+GATE pwa-sync             pass
+NEGATIVE TESTS          pass (all fatal gates seen to fail on fixtures)
+
+migrated: 72/71 tools (+hub)  by network: {'offline': 25, 'cors-open': 36, 'keyed': 8, 'blocked': 3}  flagged: 21
+
+--check: all fatal gates green
+check exit: 0
+
+--- node smoke.mjs (all dist incl. settings = 73 files) ---
+ok   air.html
+ok   airport.html
+ok   alerts.html
+ok   almanac.html
+ok   apod.html
+ok   art.html
+ok   asteroids.html
+ok   books.html
+ok   color.html
+ok   congress.html
+ok   convert.html
+ok   currency.html
+ok   dataviewer.html
+ok   dates.html
+ok   daylight.html
+ok   dictionary.html
+ok   drought.html
+ok   elevation.html
+ok   emergency.html
+ok   factbook.html
+ok   fedregister.html
+ok   flashcards.html
+ok   focus.html
+ok   foodrecalls.html
+ok   gas.html
+ok   geo.html
+ok   holidays.html
+ok   illness.html
+ok   index.html
+ok   inflation.html
+ok   iss.html
+ok   jobs.html
+ok   launches.html
+ok   loan.html
+ok   marine.html
+ok   markets.html
+ok   medicine.html
+ok   nearby.html
+ok   network.html
+ok   normals.html
+ok   notes.html
+ok   nutrition.html
+ok   paper.html
+ok   parks.html
+ok   passes.html
+ok   password.html
+ok   printables.html
+ok   qr.html
+ok   quakes.html
+ok   radar.html
+ok   random.html
+ok   recalls.html
+ok   rivers.html
+ok   settings.html
+ok   snow.html
+ok   sound.html
+ok   spaceweather.html
+ok   text.html
+ok   tides.html
+ok   timers.html
+ok   transit.html
+ok   treasury.html
+ok   tripcost.html
+ok   volcano.html
+ok   voting.html
+ok   weather.html
+ok   wiki.html
+ok   wildfire.html
+ok   wildlife.html
+ok   word.html
+ok   worldclock.html
+ok   yields.html
+ok   zip.html
+
+smoke: 73/73 green
+smoke exit: 0

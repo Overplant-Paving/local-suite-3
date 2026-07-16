@@ -37,7 +37,11 @@ Standing rules for the executing agent:
   `tests/evidence/phase3/`). **Remaining: the GitHub half** — repo push + Pages on `dist/`
   (needs the user's GitHub account), fresh-profile share check, headed Chrome/Edge install
   prompt check. Tick when the Pages link verifies.
-- [ ] Phase 4 — Suite-wide audit → tag `v2.0`
+- [ ] Phase 4 — Suite-wide audit DONE 2026-07-16 (settings.html at DoD; escaping audit: 5 EA
+  files + extras, 3 real fixes; a11y audit: all 73 files, 6 agents, ~60 tools fixed, core
+  ruling D10; games parked as designed hub card; gates zero-warning green, smoke 73/73 —
+  `tests/evidence/phase4/`). **Tag `v2.0` HELD on the two user items** (v1 archive README,
+  Phase 3 GitHub half) — see `tests/evidence/phase4/release-checklist.md`. Tick with the tag.
 
 ## Overview
 
