@@ -1390,6 +1390,32 @@
       ]
     },
     {
+      "id": "nearby",
+      "file": "nearby.html",
+      "name": "Nearby Finder",
+      "cat": "local",
+      "cx": "L",
+      "desc": "Nearest pharmacy, EV charger, playground, library — from OpenStreetMap.",
+      "network": "cors-open",
+      "key": null,
+      "endpoints": [
+        "https://overpass-api.de",
+        "https://overpass.kumi.systems",
+        "https://tile.openstreetmap.org",
+        "https://api.zippopotam.us"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.location",
+        "suite.cache.nearby.*"
+      ],
+      "cacheTtlMin": 60,
+      "since": "v1",
+      "flags": [
+        "rl"
+      ]
+    },
+    {
       "id": "airport",
       "file": "airport.html",
       "name": "Airport & Flight-Weather Board",

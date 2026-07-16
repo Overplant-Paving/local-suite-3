@@ -1,0 +1,50 @@
+Overpass public-instance outage record — nearby.html verification runs, 2026-07-15/16 (UTC 04:00-04:50)
+========================================================================================================
+
+Context: the Definition-of-Done live fetch for nearby.html requires one real Overpass query.
+Both v1 endpoints were unhealthy from this network for the entire session; the harness's
+interaction module (tests/interactions/nearby.mjs) therefore took its documented outage path:
+designed-error-state verification + route-fulfilled canned render path, logged as such.
+General connectivity was fine throughout (api.zippopotam.us and tile.openstreetmap.org both
+answered instantly, and the harness recorded real 200s from both).
+
+Terminal evidence (curl, 1-2 requests per probe, spread over ~50 minutes):
+
+1) overpass-api.de — answers HTTP 406 "Not Acceptable" (371-byte Apache error page, no CORS
+   headers) to EVERYTHING, including /api/status and a minimal query, regardless of method
+   (GET or POST form-encoded), Accept header, Origin header, or User-Agent (curl default and
+   a Chrome UA both tried):
+     GET /api/interpreter?data=<pharmacy query>          -> 406 in 0.7s
+     GET same, no Origin                                 -> 406 in 0.6s
+     GET same, Accept: application/json + Origin: null   -> 406 in 0.5s
+     POST /api/interpreter (data=<query>, v1-style)      -> 406 in 0.6s
+     GET same, Chrome User-Agent                         -> 406 in 0.6s
+     GET /api/status                                     -> 406
+     GET /api/interpreter?data=[out:json];node(1);out;   -> 406
+     GET /api/status (retry ~50 min later)               -> 406
+   In-page (Chrome via Playwright, file:// origin) the same failure surfaces as a CORS error
+   ("No 'Access-Control-Allow-Origin' header"), because the Apache 406 page carries no ACAO.
+
+2) overpass.kumi.systems — nginx front-end is up (GET / -> 200, nginx/1.26.3) but the
+   Overpass backend does not answer queries:
+     GET /api/interpreter?data=<pharmacy query> -m 60    -> timeout, 0 bytes in 60s
+     GET same, -m 120 (retry)                            -> timeout, 0 bytes in 120s
+     GET /api/status -m 20                               -> timeout, 0 bytes in 20s
+     node-side probe during harness run                  -> HTTP 429 (backend briefly answering,
+                                                            throttled) then hung again
+     GET /api/interpreter?data=<query> -m 45 (final retry) -> timeout, 0 bytes in 45s
+
+3) Control/diagnostic (third public instance, one query, not a tool endpoint):
+     GET overpass.private.coffee/api/interpreter?data=<query> -m 45 -> timeout, 0 bytes
+
+4) Controls proving the network itself was healthy:
+     GET api.zippopotam.us/us/90012                      -> 200 in 0.12s
+     GET tile.openstreetmap.org/12/655/1583.png          -> 200 in 0.32s, 29,653 bytes
+
+Conclusion: a genuine upstream outage/degradation window across Overpass public instances
+(or an upstream-side block of this network range), not a defect in the migrated tool — v1
+run live right now fails identically (same two endpoints, same POST-then-mirror flow).
+The live Overpass query should be re-recorded once the service recovers:
+    cd tests && node verify-tool.mjs nearby
+(the interaction module probes /api/status node-side and takes the live path automatically
+when the primary answers 200).

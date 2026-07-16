@@ -1,0 +1,7 @@
+setup: both Overpass endpoints route-fulfilled HTTP 429; pharmacy cache seeded 90 min old (TTL 60 min, doubled 120 min)
+after boot search: 2 Overpass request(s) (primary 429 -> mirror 429)
+throttle note rendered: searchMsg="Overpass is rate-limiting — showing cached data from 9:45 PM."
+cached data still rendered: resStamp="1 found · cached 9:45 PM", first item="Cached Corner Pharmacy"
+backoff proof: Search clicked again -> Overpass requests 2 -> 2 (0 new); cache (90 min old) accepted under doubled 120-min TTL; resStamp="1 found · cached 9:45 PM", searchMsg=""
+expected console errors from the fulfilled 429s (why this runs outside the harness): 2 x "Failed to load resource: the server responded with a status of 429 (Too Many Requests)" (+ 24 net::ERR from route-aborted tiles)
+VERDICT: throttle note OK; cached render OK; doubled-TTL backoff OK (no new request)
