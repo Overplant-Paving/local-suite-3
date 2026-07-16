@@ -83,3 +83,24 @@ Evidence: `interaction.txt` (main run), `interaction-supplemental-404-path.txt` 
 4. **Vehicle hard-error card and park-it badges verified by inspection only** (see walk-through) — exercising them live would have required burning extra real requests or finding a currently-park-it vehicle; the code is transplanted verbatim from v1.
 5. **CPSC cache is ~119 KB** in localStorage — same as v1 (same trimmed-to-40 payload); no change, just a known chunk of the quota.
 6. The `net::ERR_FAILED` console lines in `interaction.txt` come exclusively from the deliberately-blocked offline/per-source passes and are the harness's documented exemption.
+
+## Phase 4 audit fix: URL scheme guard (2026-07-16)
+
+Concern 2 above (CPSC `r.URL` assigned to `a.href` unmodified) is now fixed. `renderProducts`
+routes `r.URL` through a new `httpUrl()` helper: only strings matching `^https?://` (trimmed,
+case-insensitive) reach the anchor; anything else (`javascript:`, `data:`, protocol-relative,
+non-strings) renders the title as plain text via the tool's existing `else` branch — no link,
+nothing dropped from the card.
+
+Proof: `tests/interactions/recalls.mjs` gained a route-fulfilled hostile-payload probe (zero
+real requests — all other hosts blocked): a CPSC response carrying `javascript:alert(document.domain)`,
+a whitespace/mixed-case `  JaVaScRiPt:alert(1)` variant, and one legit `https://` URL. Asserted:
+both hostile titles render with `href=null` (plain text), no non-http(s) value appears in any
+href, and the https recall still links. interaction.txt:
+
+    URL scheme guard probe (hostile CPSC payload): [{"text":"HOSTILE javascript recall","href":null},{"text":"HOSTILE disguised recall","href":null},{"text":"Legit https recall","href":"https://www.cpsc.gov/Recalls/2026/example"}]
+    scheme guard verified: both javascript: variants rendered as plain text, https link intact
+
+Harness re-run: `node verify-tool.mjs recalls` exit 0 (net::ERR console lines are the
+documented exemption from the deliberately-blocked passes). CPSC cache stashed/restored
+around the probe, so the parity snapshot keeps the real payload.

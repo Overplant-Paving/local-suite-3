@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-LSfx5u9Jwr4fHrks5uqnEsv/NMpwP+rtFw1O+UScwjc='; style-src 'unsafe-inline'; img-src data: https://api.fda.gov https://api.nhtsa.gov https://www.saferproducts.gov; media-src https://api.fda.gov https://api.nhtsa.gov https://www.saferproducts.gov; connect-src https://api.fda.gov https://api.nhtsa.gov https://www.saferproducts.gov; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-MZhCAL0livmPeFy3C3V70L1jm+o9GMuZrywa+sQ+FkY='; style-src 'unsafe-inline'; img-src data: https://api.fda.gov https://api.nhtsa.gov https://www.saferproducts.gov; media-src https://api.fda.gov https://api.nhtsa.gov https://www.saferproducts.gov; connect-src https://api.fda.gov https://api.nhtsa.gov https://www.saferproducts.gov; worker-src 'self'; manifest-src 'self'">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Recall Radar · Local Suite</title>
 <style>
@@ -455,6 +455,11 @@ function classBadge(cls){ // "Class I" -> c1
   const m = /Class\s*(I{1,3})/i.exec(cls || ""); const r = m ? m[1].length : 0;
   return { text: cls || "Recall", cls: r === 1 ? "c1" : r === 2 ? "c2" : "c3" };
 }
+function httpUrl(u){ // Phase 4 escaping audit: href is an attribute sink — only http(s)
+  if (typeof u !== "string") return null; // URLs from the API may become links; anything
+  const s = u.trim(); // else (javascript:, data:, …) renders as plain text instead.
+  return /^https?:\/\//i.test(s) ? s : null;
+}
 
 const STATES = [["AL","Alabama"],["AK","Alaska"],["AZ","Arizona"],["AR","Arkansas"],["CA","California"],
 ["CO","Colorado"],["CT","Connecticut"],["DE","Delaware"],["DC","District of Columbia"],["FL","Florida"],
@@ -661,7 +666,8 @@ function renderProducts(arr, stampMs, stale){
     if (hazards.length){ const hb = document.createElement("span"); hb.className = "badge c2"; hb.textContent = hazards[0].length > 40 ? hazards[0].slice(0,40) + "…" : hazards[0]; top.append(hb); }
     const dt = document.createElement("span"); dt.className = "date"; dt.textContent = fmtISO(r.RecallDate); top.append(dt);
     const h = document.createElement("h3");
-    if (r.URL){ const a = document.createElement("a"); a.href = r.URL; a.target = "_blank"; a.rel = "noopener"; a.textContent = r.Title || "(untitled recall)"; h.append(a); }
+    const safeUrl = httpUrl(r.URL);
+    if (safeUrl){ const a = document.createElement("a"); a.href = safeUrl; a.target = "_blank"; a.rel = "noopener"; a.textContent = r.Title || "(untitled recall)"; h.append(a); }
     else { h.textContent = r.Title || "(untitled recall)"; }
     el.append(top, h);
     const prods = (r.Products || []).map(function(p){ return p.Name; }).filter(Boolean);

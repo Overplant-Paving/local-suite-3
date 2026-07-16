@@ -176,6 +176,42 @@ export async function interact({ page, log, evidenceDir }) {
   await page.context().unroute(/^https?:/);
   await page.evaluate(cc => { if (cc) localStorage.setItem("suite.cache.recalls.cpsc", cc); }, cpscCache);
   log("cpsc cache restored after the link-out pass (parity snapshot keeps the full key set)");
+
+  /* ---- Phase 4 audit fix: CPSC URL scheme guard. Route-fulfil the CPSC endpoint with a
+     hostile payload (zero real requests; everything else stays blocked): javascript: URLs
+     (plain and case/whitespace-disguised) must render as PLAIN TEXT titles, never an href;
+     a normal https URL must still become a link. Cache stashed/restored as usual. ---- */
+  await page.evaluate(() => { localStorage.removeItem("suite.cache.recalls.cpsc"); });
+  await page.context().route(/^https?:/, r => r.abort());
+  await page.context().route(/www\.saferproducts\.gov/, r => r.fulfill({
+    status: 200, contentType: "application/json",
+    body: JSON.stringify([
+      { RecallDate: "2026-07-03", Title: "HOSTILE javascript recall", URL: "javascript:alert(document.domain)", Hazards: [], Products: [] },
+      { RecallDate: "2026-07-02", Title: "HOSTILE disguised recall", URL: "  JaVaScRiPt:alert(1)", Hazards: [], Products: [] },
+      { RecallDate: "2026-07-01", Title: "Legit https recall", URL: "https://www.cpsc.gov/Recalls/2026/example", Hazards: [], Products: [] }
+    ])
+  }));
+  await page.reload();
+  await waitPanel(page, "prodList");
+  const guard = await page.evaluate(() =>
+    Array.from(document.querySelectorAll("#prodList .rec h3")).map(h => {
+      const a = h.querySelector("a");
+      return { text: h.textContent.trim(), href: a ? a.getAttribute("href") : null };
+    }));
+  log(`URL scheme guard probe (hostile CPSC payload): ${JSON.stringify(guard)}`);
+  if (guard.length !== 3) throw new Error("scheme-guard probe expected 3 rendered recalls, got " + guard.length);
+  const hostileLinked = guard.filter(g => g.href && !/^https?:\/\//i.test(g.href));
+  if (hostileLinked.length) throw new Error("scheme guard FAILED — non-http(s) URL reached an href: " + JSON.stringify(hostileLinked));
+  if (guard[0].href !== null || guard[1].href !== null) throw new Error("scheme guard FAILED — hostile recall rendered as a link");
+  if (guard[2].href !== "https://www.cpsc.gov/Recalls/2026/example") throw new Error("scheme guard over-blocked the legit https URL: " + JSON.stringify(guard[2]));
+  log("scheme guard verified: both javascript: variants rendered as plain text, https link intact");
+  await page.context().unroute(/www\.saferproducts\.gov/);
+  await page.context().unroute(/^https?:/);
+  await page.evaluate(cc => {
+    localStorage.removeItem("suite.cache.recalls.cpsc");
+    if (cc) localStorage.setItem("suite.cache.recalls.cpsc", cc);
+  }, cpscCache);
+  log("cpsc cache restored after the scheme-guard probe (parity snapshot keeps the real payload)");
 }
 
 /* Same state-writing actions on v1 so the localStorage key sets compare equal:
