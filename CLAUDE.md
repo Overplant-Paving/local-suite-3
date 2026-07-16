@@ -25,10 +25,15 @@ reference; never modify it).
 - Keep it simple. The user has explicitly rejected elaborate machinery for small problems.
   No new infrastructure, services, or accounts — everything lives in this one repo.
 
-## Project state (as of 2026-07-15)
+## Project state (as of 2026-07-15, end of session 1)
 
-- Planning docs complete; no code exists yet. **Next action: Phase 0 of ROADMAP.md.**
-- v1 is committed in `../Local Suite` on `main` (commit `7088cab`, 175 files).
+- Phases 0-1 done; Phase 2: Batches A + B done (56/71 tools migrated, evidence archived,
+  gates + smoke green); Batch C core landed; **Batch C tool migrations interrupted mid-flight
+  by a usage limit — read [HANDOFF.md](HANDOFF.md) for the exact continuation procedure,**
+  including the unverified drafts in `handoff/batchC-drafts/` and the orchestration scripts
+  in `handoff/orchestration/`. Batch D + Phases 3-4 not started.
+- v1 is committed in `../Local Suite` on `main` (commit `7088cab`, 175 files), imported here
+  as the `v1-import` tag.
 - Distribution model: this repo goes on GitHub; Pages serves `dist/`; sharing = the link or the
   files. CORS-blocked sources: BLS numbers embedded at build; airport/custom-transit link out.
 - `relay/worker.js` is an optional power-user template only — nothing depends on it.

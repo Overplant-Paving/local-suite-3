@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Astronomy Picture of the Day · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  body { min-height: 100vh; line-height: 1.6; }
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .9rem 1.25rem; gap: 1rem;
+    position: sticky; top: 0; z-index: 10; background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  /* v1: muted back link that warms to accent on hover (differs from core .back) */
+  .back { color: var(--muted); text-decoration: none; font-size: .9rem; }
+  .back:hover { color: var(--accent); text-decoration: none; }
+  .topbar .theme-btn { float: none; } /* v1: button sits in the flex topbar, no float */
+  .wrap { max-width: 1020px; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; }
+  h1 { font-size: 1.5rem; letter-spacing: -.02em; }
+  .sub { color: var(--muted); margin-top: .2rem; font-size: .92rem; }
+
+  .controls {
+    display: flex; flex-wrap: wrap; gap: .5rem; align-items: center;
+    margin: 1.1rem 0 1.4rem;
+  }
+  .controls button, .controls input[type=date] {
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    border-radius: 10px; padding: .45rem .75rem; font-size: .9rem; cursor: pointer;
+    font-family: inherit;
+  }
+  .controls button:hover { border-color: var(--accent); }
+  .controls button:disabled { opacity: .4; cursor: default; }
+  .controls .spacer { flex: 1; }
+
+  .hero {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: var(--shadow); overflow: hidden;
+  }
+  .media { background: #000; display: flex; justify-content: center; }
+  .media img { max-width: 100%; max-height: 78vh; display: block; }
+  .media a.hd {
+    position: absolute; bottom: .6rem; right: .7rem;
+    background: rgba(0,0,0,.55); color: #fff; padding: .25rem .6rem;
+    border-radius: 999px; font-size: .78rem; text-decoration: none;
+  }
+  .media-wrap { position: relative; }
+  /* video days: a designed link-out card (dist CSP has no frame-src, so no inline
+     embeds — the thumbnail links straight to the video on its own site) */
+  .videocard { position: relative; display: block; background: #000; }
+  .videocard img { max-width: 100%; max-height: 78vh; display: block; margin: 0 auto; }
+  .videocard .play {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: rgba(0,0,0,.65); color: #fff; padding: .55rem 1.1rem;
+    border-radius: 999px; font-size: .95rem; white-space: nowrap;
+  }
+  .videocard:hover .play { background: rgba(0,0,0,.85); }
+  .videolink {
+    display: block; padding: 3rem 1.25rem; text-align: center; color: var(--ink);
+    text-decoration: none; background: var(--chip);
+  }
+  .body { padding: 1.3rem 1.4rem 1.5rem; }
+  .body h2 { font-size: 1.55rem; line-height: 1.25; letter-spacing: -.01em; }
+  .meta { color: var(--muted); font-size: .88rem; margin: .45rem 0 1.1rem;
+    display: flex; flex-wrap: wrap; gap: .4rem 1rem; }
+  .explanation { max-width: 62ch; font-size: 1.04rem; line-height: 1.75; color: var(--ink); }
+
+  .msg {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: var(--shadow); padding: 2.5rem 1.5rem; text-align: center; color: var(--muted);
+  }
+  .msg.err { border-color: color-mix(in srgb, #c0392b 40%, var(--line)); }
+  .keycard {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: var(--shadow); padding: 1rem 1.15rem; margin-bottom: 1.2rem; font-size: .9rem;
+  }
+  .keycard summary { cursor: pointer; color: var(--accent); }
+  .keycard .row { display: flex; gap: .5rem; margin-top: .7rem; flex-wrap: wrap; }
+  .keycard input {
+    flex: 1; min-width: 12rem; border: 1px solid var(--line); background: var(--bg);
+    color: var(--ink); border-radius: 10px; padding: .45rem .7rem; font: inherit;
+  }
+  .keycard button {
+    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    border-radius: 10px; padding: .45rem .9rem; cursor: pointer; font: inherit;
+  }
+  .keycard .note { color: var(--muted); margin-top: .5rem; }
+  .stamp { color: var(--muted); font-size: .8rem; margin-top: .6rem; }
+  footer { margin-top: 2.5rem; font-size: .84rem; }
+  .skeleton { animation: pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:.55} 50%{opacity:1} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="back" href="index.html">← suite</a>
+  <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+</div>
+
+<div class="wrap">
+  <h1>Astronomy Picture of the Day</h1>
+  <p class="sub">NASA's daily window on the cosmos — one image, one explanation.</p>
+
+  <details class="keycard" id="keycard">
+    <summary id="keySummary">Using the shared NASA demo key (30 requests/hour). Add your own free key →</summary>
+    <div class="row">
+      <input type="text" id="keyInput" placeholder="Paste your NASA API key" aria-label="NASA API key" autocomplete="off" spellcheck="false">
+      <button id="keySave">Save key</button>
+      <button id="keyClear" style="background:var(--card);color:var(--ink);border-color:var(--line)">Use demo</button>
+    </div>
+    <p class="note">Free instant key at <a href="https://api.nasa.gov/" target="_blank" rel="noopener">api.nasa.gov</a> — raises the limit to 1,000/hour. Stored only in this browser (<code>suite.key.nasa</code>).</p>
+  </details>
+
+  <div class="controls">
+    <button id="prevBtn" title="Previous day">‹ prev</button>
+    <button id="todayBtn">today</button>
+    <button id="nextBtn" title="Next day">next ›</button>
+    <input type="date" id="datePick" aria-label="Choose a date">
+    <button id="randBtn">🎲 random</button>
+    <div class="spacer"></div>
+    <button id="refreshBtn" title="Re-fetch this date">↻ refresh</button>
+  </div>
+
+  <div id="view"></div>
+  <p class="stamp" id="stamp"></p>
+
+  <footer>Data: NASA Astronomy Picture of the Day · api.nasa.gov/planetary/apod</footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+/* ---- constants & helpers ---- */
+const FIRST = "1995-06-16";                     // first APOD
+const view = Suite.liveRegion(document.getElementById("view"));
+const stampEl = Suite.liveRegion(document.getElementById("stamp"));
+const datePick = document.getElementById("datePick");
+
+function todayStr() {
+  // APOD is US/Eastern; local date is close enough and self-correcting on 404.
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+const TODAY = todayStr();
+datePick.max = TODAY;
+datePick.min = FIRST;
+
+/* One picture per day: manifest cacheTtlMin 1440. Past dates are immutable and
+   cache forever; rlBackoff doubles the effective TTL after a 429 (flags: rl). */
+const TTL = 24 * 60 * 60 * 1000;
+let rlBackoff = 1;
+
+function getKey() { return Suite.key("nasa").value; }
+function usingDemo() { return Suite.key("nasa").isDemo; }
+
+function cacheGet(date) {
+  const e = Suite.store.get("suite.cache.apod." + date);
+  return (e && typeof e === "object" && "t" in e && "v" in e) ? e : null;
+}
+
+function fmtDate(d) {
+  const [y, m, day] = d.split("-").map(Number);
+  return new Date(y, m - 1, day).toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+}
+function ago(t) {
+  const s = Math.round((Date.now() - t) / 1000);
+  if (s < 90) return "just now";
+  if (s < 5400) return Math.round(s / 60) + " min ago";
+  if (s < 172800) return Math.round(s / 3600) + " hr ago";
+  return Math.round(s / 86400) + " days ago";
+}
+
+/* ---- rendering ---- */
+let current = TODAY;
+
+function renderLoading(date) {
+  view.innerHTML = "";
+  const box = document.createElement("div");
+  box.className = "msg skeleton";
+  box.textContent = "Loading " + fmtDate(date) + "…";
+  view.append(box);
+}
+
+function renderError(date, err, status, cached) {
+  view.innerHTML = "";
+  const box = document.createElement("div");
+  box.className = "msg err";
+  const h = document.createElement("p");
+  h.style.color = "var(--ink)"; h.style.fontWeight = "600"; h.style.marginBottom = ".4rem";
+  h.textContent = "Couldn't load this picture";
+  const p = document.createElement("p");
+  let hint = err && err.message ? err.message : "Network error";
+  if (status === 429) hint = "Rate limit reached on the demo key. Wait a bit, or add your own free key above.";
+  if (status === 404) hint = "No picture published for this date yet — try another day.";
+  p.textContent = hint;
+  box.append(h, p);
+  view.append(box);
+  if (cached) renderApod(cached.v, cached.t, true);
+}
+
+function renderApod(d, cachedAt, appended) {
+  if (!appended) view.innerHTML = "";
+  const hero = document.createElement("article");
+  hero.className = "hero";
+
+  if (d.media_type === "video") {
+    const url = String(d.url || "");
+    /* Designed link-out (no inline embed: the dist CSP carries no frame-src).
+       thumbs=true gives us a video still to make the card first-class. */
+    if (d.thumbnail_url) {
+      const a = document.createElement("a");
+      a.className = "videocard"; a.href = url; a.target = "_blank"; a.rel = "noopener";
+      a.setAttribute("aria-label", "Watch today's video on the source site (opens in a new tab)");
+      const img = document.createElement("img");
+      img.src = String(d.thumbnail_url);
+      img.alt = (d.title ? String(d.title) + " — " : "") + "video still";
+      img.loading = "eager";
+      const play = document.createElement("span");
+      play.className = "play";
+      play.textContent = "▶ Watch video ↗";
+      a.append(img, play);
+      hero.append(a);
+    } else {
+      const a = document.createElement("a");
+      a.className = "videolink"; a.href = url; a.target = "_blank"; a.rel = "noopener";
+      a.textContent = "▶ Open today's video (" + url + ")";
+      hero.append(a);
+    }
+  } else {
+    const mw = document.createElement("div");
+    mw.className = "media-wrap";
+    const m = document.createElement("div");
+    m.className = "media";
+    const img = document.createElement("img");
+    img.src = String(d.url || "");
+    img.alt = d.title ? String(d.title) : "Astronomy Picture of the Day";
+    img.loading = "eager";
+    m.append(img);
+    mw.append(m);
+    if (d.hdurl && d.hdurl !== d.url) {
+      const hd = document.createElement("a");
+      hd.className = "hd"; hd.href = String(d.hdurl); hd.target = "_blank"; hd.rel = "noopener";
+      hd.textContent = "HD ↗";
+      mw.append(hd);
+    }
+    hero.append(mw);
+  }
+
+  const bodyEl = document.createElement("div");
+  bodyEl.className = "body";
+  const h2 = document.createElement("h2");
+  h2.textContent = d.title ? String(d.title) : "(untitled)";
+  const meta = document.createElement("div");
+  meta.className = "meta";
+  const dt = document.createElement("span");
+  dt.textContent = "📅 " + fmtDate(d.date || current);
+  meta.append(dt);
+  if (d.copyright) {
+    const c = document.createElement("span");
+    c.textContent = "© " + String(d.copyright).replace(/\s+/g, " ").trim();
+    meta.append(c);
+  }
+  const exp = document.createElement("p");
+  exp.className = "explanation";
+  exp.textContent = d.explanation == null ? "" : String(d.explanation);
+  bodyEl.append(h2, meta, exp);
+  hero.append(bodyEl);
+  view.append(hero);
+
+  if (appended && cachedAt) {
+    const s = document.createElement("p");
+    s.className = "stamp";
+    s.textContent = "Showing cached copy from " + ago(cachedAt) + ".";
+    view.append(s);
+  }
+}
+
+/* ---- load flow ---- */
+async function load(date, force) {
+  current = date;
+  datePick.value = date <= TODAY && date >= FIRST ? date : "";
+  updateNav();
+  stampEl.textContent = "";
+
+  const cached = cacheGet(date);
+  const isPast = date < TODAY;
+  /* Past dates are immutable — cache forever, skip network unless forced.
+     Today refreshes on the manifest TTL (24 h), doubled while rate-limited. */
+  const ttl = force ? 0 : (isPast ? Infinity : TTL * rlBackoff);
+  const willUseCache = !!cached && ttl > 0 && (Date.now() - cached.t) < ttl;
+  if (!willUseCache) renderLoading(date);
+
+  const url = "https://api.nasa.gov/planetary/apod?api_key=" + encodeURIComponent(getKey()) +
+    "&date=" + date + "&thumbs=true";
+  try {
+    const r = await Suite.fetchJSON(url, {
+      cacheKey: "apod." + date, ttl, fallbackToCache: false
+    });
+    renderApod(r.v, r.t, false);
+    if (r.fromCache) {
+      stampEl.textContent = isPast
+        ? "Cached · loaded " + ago(r.t) + "."
+        : "Cached · today's picture from " + ago(r.t) + ".";
+    } else {
+      stampEl.textContent = "Loaded just now" + (usingDemo() ? " · demo key" : "") + ".";
+    }
+  } catch (err) {
+    const m = /HTTP (\d+)/.exec(err && err.message || "");
+    const status = m ? +m[1] : 0;
+    if (status === 429) rlBackoff = Math.min(rlBackoff * 2, 8);
+    renderError(date, err, status, cached);
+    if (cached) {
+      stampEl.textContent = status === 429
+        ? "Source is rate-limiting — showing cached data from " + ago(cached.t) + "."
+        : "Live fetch failed — showing what we had.";
+    }
+  }
+}
+
+function shiftDate(date, days) {
+  const [y, m, d] = date.split("-").map(Number);
+  const dt = new Date(y, m - 1, d + days);
+  return dt.getFullYear() + "-" + String(dt.getMonth() + 1).padStart(2, "0") + "-" + String(dt.getDate()).padStart(2, "0");
+}
+function updateNav() {
+  document.getElementById("nextBtn").disabled = current >= TODAY;
+  document.getElementById("prevBtn").disabled = current <= FIRST;
+}
+function randomDate() {
+  const start = Date.parse(FIRST), end = Date.parse(TODAY);
+  const t = start + Math.random() * (end - start);
+  const dt = new Date(t);
+  return dt.getFullYear() + "-" + String(dt.getMonth() + 1).padStart(2, "0") + "-" + String(dt.getDate()).padStart(2, "0");
+}
+
+/* ---- key card (v1 paste-a-key mechanics; settings.html centralizes in Phase 4) ---- */
+function refreshKeyUI() {
+  const sum = document.getElementById("keySummary");
+  if (usingDemo()) sum.textContent = "Using the shared NASA demo key (30 requests/hour). Add your own free key →";
+  else sum.textContent = "Using your saved NASA key (1,000/hour). ✓ Change or remove →";
+  document.getElementById("keyInput").value = usingDemo() ? "" : getKey();
+}
+function saveKey() {
+  const v = document.getElementById("keyInput").value.trim();
+  if (v) { Suite.store.set("suite.key.nasa", v); refreshKeyUI(); load(current, true); }
+}
+document.getElementById("keySave").addEventListener("click", saveKey);
+document.getElementById("keyInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); saveKey(); }
+});
+document.getElementById("keyClear").addEventListener("click", () => {
+  Suite.store.remove("suite.key.nasa"); refreshKeyUI(); load(current, true);
+});
+
+/* ---- controls ---- */
+document.getElementById("prevBtn").addEventListener("click", () => load(shiftDate(current, -1), false));
+document.getElementById("nextBtn").addEventListener("click", () => { if (current < TODAY) load(shiftDate(current, 1), false); });
+document.getElementById("todayBtn").addEventListener("click", () => load(TODAY, false));
+document.getElementById("randBtn").addEventListener("click", () => load(randomDate(), false));
+document.getElementById("refreshBtn").addEventListener("click", () => load(current, true));
+datePick.addEventListener("change", () => { if (datePick.value) load(datePick.value, false); });
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT") return;
+  if (e.key === "ArrowLeft" && current > FIRST) load(shiftDate(current, -1), false);
+  if (e.key === "ArrowRight" && current < TODAY) load(shiftDate(current, 1), false);
+});
+
+refreshKeyUI();
+load(TODAY, false);
+</script>
+</body>
+</html>

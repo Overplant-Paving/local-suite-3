@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transit Departure Board · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents (3-layer, same pattern as core) */
+  :root { --warn: #b0752a; --bad: #c0503f; }
+  @media (prefers-color-scheme: dark) {
+    :root { --warn: #d0a24d; --bad: #e0766a; }
+  }
+  :root[data-theme="light"] { --warn: #b0752a; --bad: #c0503f; }
+  :root[data-theme="dark"] { --warn: #d0a24d; --bad: #e0766a; }
+
+  body { padding: 1.4rem 1.25rem 4rem; }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  header h1 { font-size: 1.7rem; letter-spacing: -.02em; margin-top: 1rem; }
+  header .tag { color: var(--muted); margin-top: .3rem; max-width: 46rem; font-size: .95rem; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.1rem 1.15rem; box-shadow: var(--shadow); margin-top: 1.1rem; }
+  .card h2 { font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; margin-bottom: .8rem; }
+  label { font-size: .82rem; color: var(--muted); display: block; margin-bottom: .25rem; }
+  input, select { width: 100%; padding: .55rem .7rem; font-size: 1rem; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 10px; background: var(--bg); outline: none; }
+  input:focus, select:focus { border-color: var(--accent); }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; margin-bottom: .3rem; flex-wrap: wrap; }
+  .seg button { border: none; background: var(--card); color: var(--muted); padding: .4rem 1rem; cursor: pointer; font-size: .88rem; }
+  .seg button.on { background: var(--accent); color: #fff; }
+  .row { display: flex; gap: .7rem; align-items: flex-end; flex-wrap: wrap; }
+  .row > .grow { flex: 1; min-width: 180px; }
+  .btn { border: 1px solid var(--line); background: var(--chip); color: var(--ink); border-radius: 10px; padding: .55rem .9rem; cursor: pointer; font-size: .9rem; white-space: nowrap; }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .hint { font-size: .82rem; color: var(--muted); margin-top: .5rem; }
+  .err { color: var(--bad); }
+  .stale-note { color: var(--warn); }
+  .board-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: .3rem; }
+  .board-head .stn { font-size: 1.5rem; font-weight: 700; letter-spacing: -.01em; }
+  .board-head .upd { font-size: .8rem; color: var(--muted); }
+  .board-head .upd.stale { color: var(--warn); }
+  .dep { display: grid; grid-template-columns: auto 1fr auto; gap: .3rem .9rem; align-items: center; padding: .85rem 0; border-top: 1px solid var(--line); }
+  .dep:first-of-type { border-top: none; }
+  .line-dot { width: .95rem; height: .95rem; border-radius: 4px; flex: none; }
+  .dep .dest { font-size: 1.35rem; font-weight: 600; line-height: 1.15; }
+  .dep .meta { color: var(--muted); font-size: .82rem; grid-column: 2; }
+  .times { display: flex; gap: .5rem; align-items: baseline; flex-wrap: wrap; justify-content: flex-end; grid-row: 1 / span 2; grid-column: 3; }
+  .t { font-variant-numeric: tabular-nums; }
+  .t.first { font-size: 2rem; font-weight: 700; color: var(--accent); line-height: 1; }
+  .t.first small { font-size: .9rem; color: var(--muted); font-weight: 500; }
+  .t.next { font-size: 1.05rem; color: var(--muted); }
+  .t.now { color: var(--bad); }
+  .linkgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .7rem; }
+  .linkcard { border: 1px solid var(--line); border-radius: 11px; padding: .8rem .9rem; background: var(--bg); text-decoration: none; color: var(--ink); display: block; }
+  .linkcard:hover { border-color: var(--accent); }
+  .linkcard b { display: block; }
+  .linkcard span { color: var(--muted); font-size: .82rem; }
+  #agencyCard { margin-top: .8rem; }
+  #agencyCard .linkcard { border-color: var(--accent); background: var(--accent-soft); }
+  #agencyCard .linkcard b { color: var(--accent); }
+  .subhead { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .75rem;
+    letter-spacing: .08em; text-transform: uppercase; font-weight: 600; margin: 1.1rem 0 .7rem; }
+  .subhead::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  pre { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: .8rem; overflow-x: auto; font: .78rem/1.5 ui-monospace, Menlo, Consolas, monospace; max-height: 340px; }
+  footer { margin-top: 2.5rem; font-size: .82rem; padding-top: 1rem; }
+  code { font: .82rem ui-monospace, Menlo, Consolas, monospace; background: var(--chip); padding: .05rem .3rem; border-radius: 5px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Transit Departure Board</h1>
+    <p class="tag">Next departures, big and glanceable. Real-time for BART out of the box; a link-out
+      directory for other agencies; and a slot for any agency that publishes a JSON feed.</p>
+  </header>
+
+  <section class="card">
+    <div class="seg" id="srcSeg" role="group" aria-label="Departure source">
+      <button data-s="bart" class="on" aria-pressed="true">BART (live)</button>
+      <button data-s="custom" aria-pressed="false">My agency</button>
+      <button data-s="links" aria-pressed="false">Other agencies</button>
+    </div>
+
+    <div id="bartPane">
+      <div class="row">
+        <div class="grow"><label for="bartStn">Station</label><select id="bartStn"><option>Loading stations…</option></select></div>
+        <button class="btn" id="bartRefresh">Refresh</button>
+      </div>
+      <div class="hint">Live estimated departures from BART's public API. Auto-refreshes every 30 seconds while this tab is visible.</div>
+      <div class="hint" id="keyNudge" hidden>Using BART's shared public key —
+        <a href="https://api.bart.gov/api/register.aspx" target="_blank" rel="noopener">get your free key</a>.</div>
+    </div>
+
+    <div id="customPane" hidden>
+      <div class="row">
+        <div class="grow"><label for="agencyUrl">Your agency's live departure board (a web page)</label>
+          <input id="agencyUrl" placeholder="https://www.transitchicago.com/traintracker/" autocomplete="off"></div>
+        <button class="btn" id="agencySave">Save link</button>
+      </div>
+      <div id="agencyCard"></div>
+      <div class="hint">Most agencies don't send the CORS headers a single HTML file needs, so this page
+        can't read their feeds directly — but the agency's own live board works everywhere. Save yours
+        for one-click access.</div>
+
+      <div class="subhead">Advanced: direct JSON feed</div>
+      <div class="row">
+        <div class="grow"><label for="customUrl">JSON feed URL (must send CORS headers)</label><input id="customUrl" placeholder="https://…/departures.json" autocomplete="off"></div>
+        <button class="btn" id="customGo">Load</button>
+      </div>
+      <div class="hint">If your agency offers a CORS-open JSON endpoint — or you run the optional suite
+        relay — paste it here. The board makes a best effort to read common shapes (GTFS-realtime-as-JSON,
+        plain departure arrays), and shows the raw JSON if it can't. Protobuf GTFS-realtime won't work
+        directly.</div>
+    </div>
+
+    <div id="linksPane" hidden>
+      <div class="hint" style="margin-top:0;margin-bottom:.8rem">Agencies without a browser-friendly JSON feed. These open the agency's own real-time board:</div>
+      <div class="linkgrid" id="linkGrid"></div>
+    </div>
+  </section>
+
+  <section class="card" id="boardCard">
+    <div class="board-head">
+      <div class="stn" id="boardStn">—</div>
+      <div class="upd" id="boardUpd"></div>
+    </div>
+    <div id="board"><div class="hint">Pick a station to see departures.</div></div>
+  </section>
+
+  <footer id="foot">
+    Data: BART real-time ETD API (<code>api.bart.gov</code>, public key). Other feeds are the agency's own.
+  </footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+const $ = s => document.querySelector(s);
+const esc = Suite.esc;
+const BART_KEY = Suite.key("bart");   // v1 hardcoded this at transit.html:163 — now suite.key.bart, public value as default
+if (BART_KEY.isDemo) $("#keyNudge").hidden = false;
+
+Suite.liveRegion($("#board"));
+Suite.liveRegion($("#boardUpd"));
+Suite.liveRegion($("#agencyCard"));
+
+const STN_TTL = 7 * 24 * 60 * 60 * 1000;   // station list = reference data (API-AND-RELAY.md §2)
+const fmtUpd = opts => new Date().toLocaleTimeString([], opts);
+function staleUpd(t) {
+  return "Offline — cached from " + new Date(t).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+}
+function setUpd(text, stale) {
+  const el = $("#boardUpd");
+  el.textContent = text;
+  el.classList.toggle("stale", !!stale);
+}
+
+/* ---------- source tabs ---------- */
+let source = "bart";
+$("#srcSeg").querySelectorAll("button").forEach(b => {
+  b.addEventListener("click", () => {
+    source = b.dataset.s;
+    $("#srcSeg").querySelectorAll("button").forEach(x => {
+      x.classList.toggle("on", x === b);
+      x.setAttribute("aria-pressed", String(x === b));
+    });
+    $("#bartPane").hidden = source !== "bart";
+    $("#customPane").hidden = source !== "custom";
+    $("#linksPane").hidden = source !== "links";
+    $("#boardCard").style.display = source === "links" ? "none" : "";
+    if (source === "bart") loadBartBoard();
+  });
+});
+
+/* ---------- BART ---------- */
+async function loadStations() {
+  /* v1 cache shape preserved: suite.cache.transit.bartstations = {t, v:[{abbr,name}]}.
+     v1 never expired it; v2 refreshes after 7 days but still falls back to any cached
+     copy when the network is down. */
+  const CK = "suite.cache.transit.bartstations";
+  const cached = Suite.store.get(CK);
+  let list = cached && cached.v;
+  const fresh = cached && typeof cached.t === "number" && Date.now() - cached.t < STN_TTL;
+  if (!list || !fresh) {
+    try {
+      const r = await Suite.fetchJSON(
+        `https://api.bart.gov/api/stn.aspx?cmd=stns&key=${encodeURIComponent(BART_KEY.value)}&json=y`);
+      list = r.v.root.stations.station.map(s => ({ abbr: s.abbr, name: s.name }));
+      Suite.store.set(CK, { t: r.t, v: list });
+    } catch (e) {
+      if (!list) {
+        $("#bartStn").innerHTML = `<option>Couldn't load stations</option>`;
+        $("#board").innerHTML = `<div class="hint err">Station list failed to load (${esc(e.message)}). Check your connection.</div>`;
+        return;
+      }
+      /* expired cache but offline: keep serving the old list — it changes rarely */
+    }
+  }
+  const sel = $("#bartStn");
+  sel.innerHTML = "";
+  list.sort((a, b) => a.name.localeCompare(b.name));
+  for (const s of list) {
+    const o = document.createElement("option");
+    o.value = s.abbr; o.textContent = s.name;
+    sel.append(o);
+  }
+  const saved = Suite.store.get("suite.transit.bartStation", "");
+  if (saved && list.some(s => s.abbr === saved)) sel.value = saved;
+  sel.addEventListener("change", () => { Suite.store.set("suite.transit.bartStation", sel.value); loadBartBoard(); });
+  loadBartBoard();
+}
+
+async function loadBartBoard() {
+  if (source !== "bart") return;
+  const abbr = $("#bartStn").value;
+  if (!abbr || abbr.length !== 4) return;
+  const board = $("#board");
+  try {
+    /* ttl 0 = departures are always fetched live (v1 refreshed every 30 s); the cache
+       envelope exists purely for the offline/stale fallback (policy, API-AND-RELAY.md §2) */
+    const r = await Suite.fetchJSON(
+      `https://api.bart.gov/api/etd.aspx?cmd=etd&orig=${encodeURIComponent(abbr)}&key=${encodeURIComponent(BART_KEY.value)}&json=y`,
+      { cacheKey: `transit.etd.${abbr}`, ttl: 0 });
+    const root = r.v.root;
+    const stn = root.station && root.station[0];
+    $("#boardStn").textContent = stn ? stn.name : abbr;
+    if (r.stale) setUpd(staleUpd(r.t), true);
+    else setUpd("Updated " + fmtUpd({ hour: "numeric", minute: "2-digit", second: "2-digit" }), false);
+    if (!stn || !stn.etd || !stn.etd.length) {
+      const msg = (root.message && (root.message.warning || root.message["#cdata-section"])) || "No trains are currently scheduled from this station.";
+      board.innerHTML = `<div class="hint">${esc(typeof msg === "string" ? msg : "No departures right now.")}</div>`;
+      return;
+    }
+    board.textContent = "";
+    // sort destinations by soonest train
+    const etds = stn.etd.slice().sort((a, b) => firstMin(a) - firstMin(b));
+    for (const e of etds) {
+      const est = e.estimate || [];
+      const color = est[0] && est[0].hexcolor ? est[0].hexcolor : "#888";
+      const dep = document.createElement("div");
+      dep.className = "dep";
+      const dot = document.createElement("span"); dot.className = "line-dot"; dot.style.background = color;
+      const dest = document.createElement("div"); dest.className = "dest"; dest.textContent = e.destination;
+      const meta = document.createElement("div"); meta.className = "meta";
+      const plat = est[0] && est[0].platform ? "Platform " + est[0].platform : "";
+      const len = est[0] && est[0].length ? est[0].length + "-car" : "";
+      const delay = est[0] && +est[0].delay > 0 ? `delayed ${Math.round(+est[0].delay / 60)} min` : "";
+      meta.textContent = [plat, len, delay].filter(Boolean).join(" · ");
+      const times = document.createElement("div"); times.className = "times";
+      est.slice(0, 3).forEach((x, i) => {
+        const t = document.createElement("span");
+        const leaving = String(x.minutes).toLowerCase() === "leaving";
+        if (i === 0) {
+          t.className = "t first" + (leaving ? " now" : "");
+          t.innerHTML = leaving ? "Now" : `${esc(x.minutes)} <small>min</small>`;
+        } else {
+          t.className = "t next" + (leaving ? " now" : "");
+          t.textContent = leaving ? "Now" : `${x.minutes}m`;
+        }
+        times.append(t);
+      });
+      dep.append(dot, dest, times, meta);
+      board.append(dep);
+    }
+  } catch (e) {
+    board.innerHTML = `<div class="hint err">Couldn't reach BART (${esc(e.message)}). Retrying on the next refresh.</div>`;
+  }
+}
+function firstMin(etd) {
+  const m = etd.estimate && etd.estimate[0] && etd.estimate[0].minutes;
+  if (m == null) return 999;
+  return String(m).toLowerCase() === "leaving" ? 0 : (parseInt(m) || 999);
+}
+
+$("#bartRefresh").addEventListener("click", loadBartBoard);
+
+/* ---------- my agency: link-out card (API-AND-RELAY.md §4–5) ----------
+   Most agency feeds block browser scripts; the agency's own live board doesn't.
+   The user saves that page once and gets a first-class card linking to it. */
+function renderAgencyCard() {
+  const wrap = $("#agencyCard");
+  wrap.textContent = "";
+  const url = Suite.store.get("suite.transit.agencyLink", "");
+  if (!url) return;
+  let host = url;
+  try { host = new URL(url).hostname; } catch (e) {}
+  const a = document.createElement("a");
+  a.className = "linkcard"; a.href = url; a.target = "_blank"; a.rel = "noopener";
+  const b = document.createElement("b"); b.textContent = "Open your departure board ↗";
+  const s = document.createElement("span"); s.textContent = host;
+  a.append(b, s);
+  wrap.append(a);
+}
+function saveAgencyLink() {
+  const raw = $("#agencyUrl").value.trim();
+  if (!raw) { Suite.store.remove("suite.transit.agencyLink"); renderAgencyCard(); return; }
+  if (!/^https?:\/\//i.test(raw)) {
+    $("#agencyCard").innerHTML = `<div class="hint err">The link must start with http:// or https://.</div>`;
+    return;
+  }
+  Suite.store.set("suite.transit.agencyLink", raw);
+  renderAgencyCard();
+}
+$("#agencySave").addEventListener("click", saveAgencyLink);
+$("#agencyUrl").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); saveAgencyLink(); } });
+$("#agencyUrl").value = Suite.store.get("suite.transit.agencyLink", "");
+renderAgencyCard();
+
+/* ---------- custom JSON feed (direct if CORS-open, or via the optional relay) ---------- */
+$("#customGo").addEventListener("click", loadCustom);
+$("#customUrl").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); loadCustom(); } });
+$("#customUrl").value = Suite.store.get("suite.transit.customUrl", "");
+async function loadCustom() {
+  const url = $("#customUrl").value.trim();
+  const board = $("#board");
+  if (!url) { board.innerHTML = `<div class="hint err">Paste a feed URL first.</div>`; return; }
+  Suite.store.set("suite.transit.customUrl", url);
+  $("#boardStn").textContent = "Custom feed";
+  board.innerHTML = `<div class="hint">Loading…</div>`;
+  const viaRelay = Suite.relay(url);   // suite.relay.url set → fetch through the personal relay
+  try {
+    const r = await Suite.fetchJSON(viaRelay || url);
+    setUpd("Updated " + fmtUpd({ hour: "numeric", minute: "2-digit" }) + (viaRelay ? " · via relay" : ""), false);
+    renderCustom(r.v, board);
+  } catch (e) {
+    board.innerHTML = `<div class="hint err">Load failed (${esc(e.message)}). The feed must be JSON and send
+      <code>Access-Control-Allow-Origin</code>${viaRelay ? " (or your relay must allow this host)" : ""}. Protobuf GTFS-realtime won't work directly.</div>`;
+  }
+}
+function renderCustom(d, board) {
+  // Heuristic 1: GTFS-realtime-as-JSON (entity[].trip_update.stop_time_update)
+  let rows = [];
+  if (d && Array.isArray(d.entity)) {
+    for (const ent of d.entity) {
+      const tu = ent.trip_update;
+      if (!tu) continue;
+      const route = (tu.trip && (tu.trip.route_id || tu.trip.trip_id)) || "route";
+      const stu = (tu.stop_time_update || [])[0];
+      const when = stu && ((stu.departure && stu.departure.time) || (stu.arrival && stu.arrival.time));
+      rows.push({ dest: route, at: when ? new Date(when * 1000) : null, meta: stu ? "stop " + (stu.stop_id || "") : "" });
+    }
+  }
+  // Heuristic 2: a plain array of departure-ish objects
+  const arr = Array.isArray(d) ? d : (d && Array.isArray(d.departures) ? d.departures : null);
+  if (!rows.length && arr) {
+    for (const it of arr) {
+      const dest = it.destination || it.headsign || it.direction || it.route || it.line || "Departure";
+      let at = null;
+      const raw = it.time || it.departure || it.expected || it.eta || it.timestamp;
+      if (typeof raw === "number") at = new Date(raw > 1e12 ? raw : raw * 1000);
+      else if (typeof raw === "string" && !isNaN(Date.parse(raw))) at = new Date(raw);
+      const mins = it.minutes != null ? it.minutes : (it.min != null ? it.min : null);
+      rows.push({ dest: String(dest), at, mins, meta: it.platform ? "Platform " + it.platform : "" });
+    }
+  }
+  if (rows.length) {
+    board.textContent = "";
+    rows.slice(0, 20).forEach(r => {
+      const dep = document.createElement("div"); dep.className = "dep";
+      const dot = document.createElement("span"); dot.className = "line-dot"; dot.style.background = "var(--accent)";
+      const dest = document.createElement("div"); dest.className = "dest"; dest.textContent = r.dest;
+      const meta = document.createElement("div"); meta.className = "meta"; meta.textContent = r.meta || "";
+      const times = document.createElement("div"); times.className = "times";
+      const t = document.createElement("span"); t.className = "t first";
+      let label = "—";
+      if (r.mins != null) label = `${esc(r.mins)} <small>min</small>`;
+      else if (r.at) {
+        const diff = Math.round((r.at - Date.now()) / 60000);
+        label = diff <= 0 ? "Now" : `${diff} <small>min</small>`;
+      }
+      t.innerHTML = label;
+      times.append(t);
+      dep.append(dot, dest, times, meta);
+      board.append(dep);
+    });
+    return;
+  }
+  // Fallback: show the raw JSON honestly
+  const pre = document.createElement("pre");
+  pre.textContent = JSON.stringify(d, null, 2).slice(0, 8000);
+  board.innerHTML = `<div class="hint">Couldn't recognise a departure structure — here's the raw response so you can see what the feed returns:</div>`;
+  board.append(pre);
+}
+
+/* ---------- link-out directory ---------- */
+const AGENCIES = [
+  { name: "MTA (New York)", desc: "Subway & bus real-time", url: "https://new.mta.info/schedules" },
+  { name: "WMATA (DC Metro)", desc: "Next trains & buses", url: "https://www.wmata.com/" },
+  { name: "CTA (Chicago)", desc: "Train Tracker & Bus Tracker", url: "https://www.transitchicago.com/traintracker/" },
+  { name: "MBTA (Boston)", desc: "Subway, bus, commuter rail", url: "https://www.mbta.com/schedules" },
+  { name: "SEPTA (Philadelphia)", desc: "Real-time departures", url: "https://www.septa.org/schedules/" },
+  { name: "LA Metro", desc: "Rail & bus arrivals", url: "https://www.metro.net/riding/trip-planner/" },
+  { name: "Sound Transit (Seattle)", desc: "Link & Sounder", url: "https://www.soundtransit.org/ride-with-us/schedules" },
+  { name: "TfL (London)", desc: "Tube & bus live", url: "https://tfl.gov.uk/" },
+];
+function renderLinks() {
+  const g = $("#linkGrid");
+  g.textContent = "";
+  for (const a of AGENCIES) {
+    const el = document.createElement("a");
+    el.className = "linkcard"; el.href = a.url; el.target = "_blank"; el.rel = "noopener";
+    const b = document.createElement("b"); b.textContent = a.name;
+    const s = document.createElement("span"); s.textContent = a.desc;
+    el.append(b, s);
+    g.append(el);
+  }
+}
+
+/* ---------- auto-refresh ---------- */
+setInterval(() => {
+  if (document.hidden) return;
+  if (source === "bart") loadBartBoard();
+  else if (source === "custom" && $("#customUrl").value.trim()) loadCustom();
+}, 30000);
+
+/* ---------- boot ---------- */
+renderLinks();
+loadStations();
+</script>
+</body>
+</html>

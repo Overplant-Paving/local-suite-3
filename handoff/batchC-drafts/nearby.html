@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nearby Finder · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents: warn/bad states (3-layer, same pattern as core) */
+  :root { --warn: #b0752a; --bad: #c0503f; }
+  @media (prefers-color-scheme: dark) {
+    :root { --warn: #d0a24d; --bad: #e0766a; }
+  }
+  :root[data-theme="light"] { --warn: #b0752a; --bad: #c0503f; }
+  :root[data-theme="dark"] { --warn: #d0a24d; --bad: #e0766a; }
+
+  body { padding: 1.4rem 1.25rem 4rem; }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  /* v1 back link is muted, accent on hover, never underlined — override core */
+  .back { color: var(--muted); }
+  .back:hover { color: var(--accent); text-decoration: none; }
+  .theme-btn { float: none; }
+  header h1 { font-size: 1.7rem; letter-spacing: -.02em; margin-top: 1rem; }
+  header .tag { color: var(--muted); margin-top: .3rem; max-width: 46rem; font-size: .95rem; }
+  .locbar { margin-top: .8rem; font-size: .88rem; color: var(--muted); display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
+  .locbar b { color: var(--ink); }
+  .link { background: none; border: none; color: var(--accent); cursor: pointer; font-size: .85rem; padding: 0; text-decoration: underline; }
+  /* v1 card is a plain block with its own padding — override core's flex card */
+  .card { display: block; flex-direction: row; gap: normal; padding: 1.1rem 1.15rem; margin-top: 1.1rem; }
+  .card h2 { font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; margin-bottom: .8rem; }
+  .cats { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .cat { border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 999px; padding: .4rem .85rem; cursor: pointer; font-size: .9rem; display: inline-flex; gap: .4rem; align-items: center; }
+  .cat:hover { border-color: var(--accent); }
+  .cat.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .controls { display: flex; gap: .8rem; align-items: flex-end; flex-wrap: wrap; margin-top: .9rem; }
+  label { font-size: .82rem; color: var(--muted); display: block; margin-bottom: .25rem; }
+  select, input { padding: .5rem .65rem; font-size: 1rem; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; background: var(--bg); outline: none; }
+  select:focus, input:focus { border-color: var(--accent); }
+  .btn { border: 1px solid var(--line); background: var(--chip); color: var(--ink); border-radius: 10px; padding: .55rem .9rem; cursor: pointer; font-size: .9rem; }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn.primary:hover { filter: brightness(1.06); color: #fff; }
+  .hint { font-size: .82rem; color: var(--muted); }
+  .err { color: var(--bad); }
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; margin-top: 1.1rem; }
+  @media (max-width: 760px) { .split { grid-template-columns: 1fr; } }
+
+  /* vanilla map */
+  .map-wrap { position: relative; width: 100%; height: 360px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: #dfe3e7; }
+  .map-tiles { position: absolute; inset: 0; }
+  .map-tiles img { position: absolute; width: 256px; height: 256px; user-select: none; -webkit-user-drag: none; }
+  .dot { position: absolute; width: 12px; height: 12px; border-radius: 50%; transform: translate(-50%, -50%); border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,.5); cursor: pointer; }
+  .dot.result { background: var(--accent); }
+  .dot.here { width: 16px; height: 16px; background: #d9534f; z-index: 3; box-shadow: 0 0 0 4px rgba(217,83,79,.3), 0 1px 3px rgba(0,0,0,.5); cursor: default; }
+  .dot.sel { background: var(--warn); z-index: 4; width: 15px; height: 15px; }
+  .map-attr { position: absolute; right: 0; bottom: 0; background: rgba(255,255,255,.82); color: #333; font-size: 10px; padding: 1px 5px; border-top-left-radius: 5px; }
+  .map-attr a { color: #333; }
+  .map-msg { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: var(--muted); font-size: .9rem; padding: 1rem; }
+
+  .list { display: flex; flex-direction: column; gap: .5rem; max-height: 360px; overflow-y: auto; }
+  .item { border: 1px solid var(--line); border-radius: 11px; padding: .6rem .75rem; background: var(--bg); cursor: pointer; display: flex; gap: .7rem; align-items: baseline; justify-content: space-between; }
+  .item:hover { border-color: var(--accent); }
+  .item.sel { border-color: var(--warn); box-shadow: 0 0 0 2px color-mix(in srgb, var(--warn) 25%, transparent); }
+  .item .nm { font-weight: 600; font-size: .95rem; }
+  .item .det { color: var(--muted); font-size: .8rem; }
+  .item .dist { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .item .dist b { color: var(--accent); display: block; }
+  .item .dist span { color: var(--muted); font-size: .78rem; }
+  .stamp { font-size: .8rem; color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: 0; }
+
+  .firstrun { text-align: center; padding: 1.5rem 1rem; }
+  .firstrun .row { display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; margin-top: .8rem; }
+  footer { margin-top: 2.5rem; font-size: .82rem; padding-top: 1rem; }
+  code { font: .82rem ui-monospace, Menlo, Consolas, monospace; background: var(--chip); padding: .05rem .3rem; border-radius: 5px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Nearby Finder</h1>
+    <p class="tag">The nearest pharmacy, EV charger, playground and more — straight from OpenStreetMap,
+      with distances, walking times, and a little map centred on you.</p>
+    <div class="locbar" id="locbar"></div>
+  </header>
+
+  <div id="firstrunCard" class="card" hidden>
+    <div class="firstrun">
+      <div style="font-size:1.05rem;font-weight:600;margin-bottom:.2rem">Where are you?</div>
+      <div class="hint">Everything here searches around one saved spot. It stays on your machine and every suite tool reuses it.</div>
+      <div class="row">
+        <input id="zipInput" inputmode="numeric" placeholder="US ZIP e.g. 94110" aria-label="US ZIP code" style="width:170px">
+        <button class="btn" id="zipBtn">Use ZIP</button>
+        <button class="btn primary" id="geoBtn">Use my location</button>
+      </div>
+      <div class="hint err" id="frMsg" style="margin-top:.6rem"></div>
+      <div class="hint" style="margin-top:.5rem">"Use my location" may need the page served over <code>http://localhost</code> rather than opened from disk.</div>
+    </div>
+  </div>
+
+  <div id="mainUI" hidden>
+    <section class="card">
+      <h2>What are you looking for?</h2>
+      <div class="cats" id="cats"></div>
+      <div class="controls">
+        <div>
+          <label for="radius">Search radius</label>
+          <select id="radius">
+            <option value="800">0.5 mi (800 m)</option>
+            <option value="1600" selected>1 mi (1.6 km)</option>
+            <option value="3200">2 mi (3.2 km)</option>
+            <option value="8000">5 mi (8 km)</option>
+          </select>
+        </div>
+        <button class="btn primary" id="searchBtn">Search</button>
+        <span class="hint" id="searchMsg"></span>
+      </div>
+    </section>
+
+    <div class="split">
+      <section class="card" style="margin-top:0">
+        <h2>Map <span class="stamp">© OpenStreetMap</span></h2>
+        <div class="map-wrap" id="mapWrap">
+          <div class="map-tiles" id="mapTiles"></div>
+          <div class="map-msg" id="mapMsg">Run a search to place results on the map.</div>
+          <div class="map-attr">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors</div>
+        </div>
+      </section>
+
+      <section class="card" style="margin-top:0">
+        <h2>Results <span class="stamp" id="resStamp"></span></h2>
+        <div class="list" id="list"><div class="hint">No search yet.</div></div>
+      </section>
+    </div>
+  </div>
+
+  <footer>
+    Data: <strong>Overpass API</strong> (OpenStreetMap) · map tiles from
+    <strong>tile.openstreetmap.org</strong>. Results cached 60&nbsp;minutes per category to respect
+    Overpass fair-use; falls back to the kumi.systems mirror if the main endpoint is busy.
+  </footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+
+Suite.theme.init();
+
+const $ = s => document.querySelector(s);
+const esc = Suite.esc;
+
+/* async result containers announce updates (QUALITY.md §2) */
+Suite.liveRegion($("#list"));
+Suite.liveRegion($("#resStamp"));
+Suite.liveRegion($("#searchMsg"));
+Suite.liveRegion($("#frMsg"));
+
+/* ---------- categories → Overpass selectors ---------- */
+const CATS = {
+  pharmacy:   { label: "Pharmacy",    icon: "💊", sel: ["nwr[amenity=pharmacy]"] },
+  hospital:   { label: "Hospital",    icon: "🏥", sel: ["nwr[amenity=hospital]"] },
+  ev:         { label: "EV charger",  icon: "🔌", sel: ["nwr[amenity=charging_station]"] },
+  playground: { label: "Playground",  icon: "🛝", sel: ["nwr[leisure=playground]"] },
+  library:    { label: "Library",     icon: "📚", sel: ["nwr[amenity=library]"] },
+  grocery:    { label: "Grocery",     icon: "🛒", sel: ["nwr[shop=supermarket]", "nwr[shop=grocery]"] },
+  gas:        { label: "Gas station", icon: "⛽", sel: ["nwr[amenity=fuel]"] },
+  coffee:     { label: "Coffee",      icon: "☕", sel: ["nwr[amenity=cafe]", "nwr[shop=coffee]"] },
+  park:       { label: "Park",        icon: "🌳", sel: ["nwr[leisure=park]"] },
+};
+let activeCat = "pharmacy";
+
+/* ---------- location (shared suite.location key) ---------- */
+function loadLoc() { return Suite.location.get(); }
+function saveLoc(l) { Suite.location.set(l); }
+
+function renderLocBar() {
+  const l = loadLoc();
+  const bar = $("#locbar");
+  bar.textContent = "";
+  if (l && l.lat != null) {
+    const span = document.createElement("span");
+    span.innerHTML = `Near <b></b>`;
+    span.querySelector("b").textContent = l.label || `${l.lat.toFixed(4)}, ${l.lon.toFixed(4)}`;
+    const btn = document.createElement("button");
+    btn.className = "link"; btn.textContent = "change";
+    btn.addEventListener("click", showFirstRun);
+    bar.append(span, btn);
+  }
+}
+
+function showFirstRun() {
+  $("#firstrunCard").hidden = false;
+  $("#mainUI").hidden = true;
+  $("#zipInput").focus();
+}
+function showMain() {
+  $("#firstrunCard").hidden = true;
+  $("#mainUI").hidden = false;
+  renderLocBar();
+}
+
+async function useZip() {
+  const zip = $("#zipInput").value.trim();
+  const msg = $("#frMsg");
+  if (!/^\d{5}$/.test(zip)) { msg.textContent = "Enter a 5-digit US ZIP."; return; }
+  msg.textContent = "";
+  try {
+    const r = await Suite.fetchJSON("https://api.zippopotam.us/us/" + zip, { timeout: 12000 });
+    const p = r.v.places[0];
+    saveLoc({ lat: +parseFloat(p.latitude), lon: +parseFloat(p.longitude), label: `${p["place name"]}, ${p["state abbreviation"]} ${zip}` });
+    showMain();
+  } catch(e) {
+    const why = (e && e.message === "HTTP 404") ? "ZIP not found" : (e && e.message) || e;
+    msg.textContent = "Couldn't look up that ZIP (" + why + ").";
+  }
+}
+$("#zipBtn").addEventListener("click", useZip);
+$("#zipInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); useZip(); } });
+
+$("#geoBtn").addEventListener("click", () => {
+  const msg = $("#frMsg");
+  if (!navigator.geolocation) { msg.textContent = "Geolocation isn't available in this browser."; return; }
+  msg.textContent = "";
+  $("#geoBtn").textContent = "Locating…";
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      saveLoc({ lat: +pos.coords.latitude.toFixed(5), lon: +pos.coords.longitude.toFixed(5), label: "my location" });
+      $("#geoBtn").textContent = "Use my location";
+      showMain();
+    },
+    err => { $("#geoBtn").textContent = "Use my location"; msg.textContent = "Couldn't get location: " + err.message; },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+});
+
+/* ---------- category pills ---------- */
+function renderCats() {
+  const wrap = $("#cats");
+  wrap.textContent = "";
+  for (const [key, c] of Object.entries(CATS)) {
+    const b = document.createElement("button");
+    b.className = "cat" + (key === activeCat ? " on" : "");
+    b.setAttribute("aria-pressed", String(key === activeCat));
+    const icon = document.createElement("span"); icon.textContent = c.icon;
+    const lbl = document.createElement("span"); lbl.textContent = c.label;
+    b.append(icon, lbl);
+    b.addEventListener("click", () => { activeCat = key; renderCats(); doSearch(); });
+    wrap.append(b);
+  }
+}
+
+/* ---------- geometry ---------- */
+function haversineM(a, b) {
+  const R = 6371000, rad = Math.PI/180;
+  const dLat = (b.lat-a.lat)*rad, dLon = (b.lon-a.lon)*rad;
+  const s = Math.sin(dLat/2)**2 + Math.cos(a.lat*rad)*Math.cos(b.lat*rad)*Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(s), Math.sqrt(1-s));
+}
+function walkMins(m) { return Math.max(1, Math.round(m / 84)); } // ~5 km/h
+function fmtDist(m) { return m < 1000 ? Math.round(m) + " m" : (m/1000).toFixed(m < 10000 ? 2 : 1) + " km"; }
+function fmtTime(t) { return new Date(t).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }); }
+
+/* ---------- Overpass via Suite.fetchJSON ---------- */
+function buildQuery(cat, loc, radius) {
+  const body = CATS[cat].sel.map(s => `${s}(around:${radius},${loc.lat},${loc.lon});`).join("\n  ");
+  return `[out:json][timeout:25];\n(\n  ${body}\n);\nout center tags 120;`;
+}
+
+const OVERPASS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"];
+const TTL = 60 * 60 * 1000; // manifest cacheTtlMin: 60 — Overpass public instances are fair-use
+/* rate-limit backoff (flags: rl): after a 429/504/403 the effective TTL doubles,
+   so cached results are accepted twice as long before the next request. */
+let ttlBoost = 1;
+
+/* Primary endpoint first, kumi.systems mirror on failure (v1 behavior, kept).
+   Overpass supports GET ?data= — used because Suite.fetchJSON is GET-only.
+   fallbackToCache stays off per attempt so a primary failure reaches the mirror;
+   the stale-cache fallback happens here, after both endpoints failed. */
+async function overpassFetch(query, cacheKey) {
+  const ttl = TTL * ttlBoost;
+  let lastErr = null, throttled = false;
+  for (const ep of OVERPASS) {
+    try {
+      return await Suite.fetchJSON(ep + "?data=" + encodeURIComponent(query), {
+        cacheKey, ttl, timeout: 30000, fallbackToCache: false
+      });
+    } catch (e) {
+      lastErr = e;
+      if (/^HTTP (429|504|403)$/.test((e && e.message) || "")) throttled = true;
+    }
+  }
+  if (throttled) ttlBoost = 2;
+  const env = Suite.store.get("suite.cache." + cacheKey);
+  if (env && typeof env === "object" && env.v != null && env.t != null) {
+    return { v: env.v, t: env.t, stale: true, fromCache: true, throttled };
+  }
+  const err = lastErr || new Error("Overpass unreachable");
+  err.throttled = throttled;
+  throw err;
+}
+
+/* v1 cached the processed results array; Suite.fetchJSON caches the raw Overpass
+   response. Accept both so a v1 user's existing cache keeps rendering. */
+function toResults(v, loc, cat) {
+  if (Array.isArray(v)) return v; // v1-era cache envelope
+  return (v.elements || []).map(el => {
+    const lat = el.lat != null ? el.lat : (el.center && el.center.lat);
+    const lon = el.lon != null ? el.lon : (el.center && el.center.lon);
+    if (lat == null || lon == null) return null;
+    const t = el.tags || {};
+    const dist = haversineM(loc, { lat, lon });
+    return {
+      id: el.type + "/" + el.id,
+      name: t.name || t.brand || t.operator || ("(" + CATS[cat].label + ")"),
+      lat, lon, dist,
+      addr: [t["addr:housenumber"], t["addr:street"]].filter(Boolean).join(" "),
+      extra: t.opening_hours || t.brand || ""
+    };
+  }).filter(Boolean).sort((a, b) => a.dist - b.dist);
+}
+
+let lastResults = [], lastMeta = null, selectedId = null;
+
+$("#searchBtn").addEventListener("click", doSearch);
+$("#radius").addEventListener("change", doSearch);
+
+async function doSearch() {
+  const loc = loadLoc();
+  if (!loc) { showFirstRun(); return; }
+  const radius = +$("#radius").value;
+  const msg = $("#searchMsg");
+  const cat = activeCat;
+  const cacheKey = `nearby.${cat}.${loc.lat.toFixed(4)}_${loc.lon.toFixed(4)}_${radius}`;
+
+  /* v1 behavior: render any cached copy immediately; skip the request while fresh */
+  const env = Suite.store.get("suite.cache." + cacheKey);
+  const cachedResults = (env && typeof env === "object" && env.v != null && env.t != null)
+    ? toResults(env.v, loc, cat) : null;
+  if (cachedResults) {
+    showResults(cachedResults, loc, radius, env.t, true);
+    if (Date.now() - env.t < TTL * ttlBoost) { msg.textContent = ""; return; }
+  }
+
+  msg.textContent = "Searching OpenStreetMap…";
+  try {
+    const r = await overpassFetch(buildQuery(cat, loc, radius), cacheKey);
+    showResults(toResults(r.v, loc, cat), loc, radius, r.t, r.fromCache);
+    if (r.stale) {
+      msg.innerHTML = r.throttled
+        ? `<span class="err">Overpass is rate-limiting — showing cached data from ${esc(fmtTime(r.t))}.</span>`
+        : `<span class="err">Offline — cached from ${esc(fmtTime(r.t))}.</span>`;
+    } else {
+      msg.textContent = "";
+    }
+  } catch(e) {
+    const note = e.throttled ? "Overpass is rate-limiting — " : "";
+    msg.innerHTML = `<span class="err">${esc(note)}Search failed (${esc(e.message)}).</span>`;
+    if (!cachedResults) $("#list").innerHTML = `<div class="hint err">Couldn't reach Overpass. It may be rate-limited — wait a moment and retry.</div>`;
+  }
+}
+
+function showResults(results, loc, radius, t, fromCache) {
+  lastResults = results; lastMeta = { loc, radius }; selectedId = null;
+  const stamp = $("#resStamp");
+  const age = Date.now() - t;
+  stamp.textContent = `${results.length} found` + (fromCache && age > 60000 ? ` · cached ${fmtTime(t)}` : "");
+  renderList();
+  drawMap();
+}
+
+function renderList() {
+  const list = $("#list");
+  list.textContent = "";
+  if (!lastResults.length) { list.innerHTML = `<div class="hint">Nothing found in this radius — try a larger one.</div>`; return; }
+  lastResults.forEach(r => {
+    const el = document.createElement("div");
+    el.className = "item" + (r.id === selectedId ? " sel" : "");
+    el.dataset.id = r.id;
+    el.setAttribute("role", "button");
+    el.tabIndex = 0;
+    const info = document.createElement("div");
+    const nm = document.createElement("div"); nm.className = "nm"; nm.textContent = r.name;
+    const det = document.createElement("div"); det.className = "det"; det.textContent = [r.addr, r.extra].filter(Boolean).join(" · ");
+    info.append(nm, det);
+    const dist = document.createElement("div");
+    dist.className = "dist";
+    dist.innerHTML = `<b></b><span></span>`;
+    dist.querySelector("b").textContent = fmtDist(r.dist);
+    dist.querySelector("span").textContent = `~${walkMins(r.dist)} min walk`;
+    el.append(info, dist);
+    const select = () => { selectedId = r.id; renderList(); drawMap(); };
+    el.addEventListener("click", select);
+    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(); } });
+    list.append(el);
+  });
+}
+
+/* ---------- vanilla slippy map (OSM tiles + Web Mercator dots) ----------
+   Dots are aria-hidden: every dot's action (select a result) is available
+   from the keyboard-focusable results list. */
+const TILE = 256;
+function lonToX(lon, z) { return (lon + 180) / 360 * Math.pow(2, z); }
+function latToY(lat, z) {
+  const r = lat * Math.PI / 180;
+  return (1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * Math.pow(2, z);
+}
+function fitZoom(lat, radiusM, halfPx) {
+  // metres per pixel at equator = 156543.03 * cos(lat) / 2^z ; we want radius ≈ halfPx * mpp
+  for (let z = 18; z >= 3; z--) {
+    const mpp = 156543.03392 * Math.cos(lat * Math.PI / 180) / Math.pow(2, z);
+    if (radiusM / mpp <= halfPx) return z;
+  }
+  return 12;
+}
+
+function drawMap() {
+  const wrap = $("#mapWrap"), tilesEl = $("#mapTiles");
+  const loc = lastMeta && lastMeta.loc;
+  if (!loc) return;
+  $("#mapMsg").style.display = "none";
+  tilesEl.textContent = "";
+  // clear old dots (keep tiles container + attribution + msg)
+  wrap.querySelectorAll(".dot").forEach(d => d.remove());
+
+  const W = wrap.clientWidth, H = wrap.clientHeight;
+  const cx = W / 2, cy = H / 2;
+  const half = Math.min(W, H) / 2 - 20;
+  const z = fitZoom(loc.lat, (lastMeta.radius || 1600), half);
+  const scale = Math.pow(2, z);
+
+  const uX = lonToX(loc.lon, z), uY = latToY(loc.lat, z);       // fractional tile coords of user
+  const uPxX = uX * TILE, uPxY = uY * TILE;                     // world pixel coords
+  // world→screen: screenX = worldPx - uPxX + cx
+  const off = (wpx, c, u) => wpx - u + c;
+
+  const ctX = Math.floor(uX), ctY = Math.floor(uY);
+  for (let i = -2; i <= 2; i++) {
+    for (let j = -2; j <= 2; j++) {
+      const tx = ctX + i, ty = ctY + j;
+      if (ty < 0 || ty >= scale) continue;
+      const wx = ((tx % scale) + scale) % scale;
+      const left = off(tx * TILE, cx, uPxX);
+      const top = off(ty * TILE, cy, uPxY);
+      if (left > W || top > H || left < -TILE || top < -TILE) continue;
+      const img = document.createElement("img");
+      img.src = `https://tile.openstreetmap.org/${z}/${wx}/${ty}.png`;
+      img.loading = "eager"; img.alt = "";
+      img.style.left = left + "px"; img.style.top = top + "px";
+      tilesEl.append(img);
+    }
+  }
+
+  // user dot
+  const here = document.createElement("div");
+  here.className = "dot here"; here.title = "You";
+  here.setAttribute("aria-hidden", "true");
+  here.style.left = cx + "px"; here.style.top = cy + "px";
+  wrap.append(here);
+
+  // result dots
+  lastResults.forEach(r => {
+    const rx = lonToX(r.lon, z) * TILE, ry = latToY(r.lat, z) * TILE;
+    const left = off(rx, cx, uPxX), top = off(ry, cy, uPxY);
+    if (left < -6 || left > W + 6 || top < -6 || top > H + 6) return;
+    const d = document.createElement("div");
+    d.className = "dot result" + (r.id === selectedId ? " sel" : "");
+    d.dataset.id = r.id;
+    d.setAttribute("aria-hidden", "true");
+    d.style.left = left + "px"; d.style.top = top + "px";
+    d.title = `${r.name} · ${fmtDist(r.dist)}`;
+    d.addEventListener("click", () => {
+      selectedId = r.id; renderList(); drawMap();
+      const item = document.querySelector(`.item[data-id="${CSS.escape(r.id)}"]`);
+      if (item) item.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+    wrap.append(d);
+  });
+}
+
+let resizeT = null;
+window.addEventListener("resize", () => { clearTimeout(resizeT); resizeT = setTimeout(() => { if (lastMeta) drawMap(); }, 200); });
+
+/* ---------- boot ---------- */
+renderCats();
+if (loadLoc()) { showMain(); doSearch(); }
+else showFirstRun();
+</script>
+</body>
+</html>

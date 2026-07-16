@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Congress Tracker · Local Suite</title>
+<link rel="stylesheet" href="../core/suite.css" data-suite-inline>
+<style>
+  /* tool accents: party + passage palette (3-layer, same pattern as core) */
+  :root { --dem: #3b6fb0; --rep: #b0452f; --ind: #6b7280; --pass: #3a7d44; }
+  @media (prefers-color-scheme: dark) {
+    :root { --dem: #6d9fd6; --rep: #d67a63; --ind: #9aa0a8; --pass: #7dc487; }
+  }
+  :root[data-theme="light"] { --dem: #3b6fb0; --rep: #b0452f; --ind: #6b7280; --pass: #3a7d44; }
+  :root[data-theme="dark"] { --dem: #6d9fd6; --rep: #d67a63; --ind: #9aa0a8; --pass: #7dc487; }
+
+  body { padding: 1.4rem 1.25rem 4rem; }
+  .wrap { max-width: 940px; margin: 0 auto; }
+  .topbar { display: flex; align-items: center; gap: 1rem; }
+  .theme-btn { float: none; margin-left: auto; }
+  header h1 { font-size: 1.7rem; letter-spacing: -.02em; margin-top: .8rem; }
+  header .tag { color: var(--muted); margin-top: .3rem; max-width: 46rem; font-size: .95rem; }
+  .tabs { display: flex; flex-wrap: wrap; gap: .45rem; margin: 1.2rem 0 .3rem; }
+  .tab {
+    border: 1px solid var(--line); background: var(--card); color: var(--muted);
+    border-radius: 999px; padding: .32rem .9rem; font-size: .86rem; cursor: pointer; user-select: none;
+  }
+  .tab.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .toolrow { display: flex; flex-wrap: wrap; gap: .7rem; align-items: center; margin: .9rem 0 .2rem; }
+  select, input[type=text] {
+    font: inherit; font-size: .9rem; color: var(--ink); background: var(--card);
+    border: 1px solid var(--line); border-radius: 10px; padding: .45rem .6rem;
+  }
+  .stamp { font-size: .78rem; color: var(--muted); }
+  .list { margin-top: 1rem; display: flex; flex-direction: column; gap: .75rem; }
+  .bill, .member {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: .9rem 1.05rem; box-shadow: var(--shadow);
+  }
+  .bill .num { font-size: .75rem; font-weight: 600; color: var(--accent); letter-spacing: .03em; }
+  .bill h3 { font-size: 1rem; line-height: 1.35; margin-top: .2rem; }
+  .bill h3 a { color: var(--ink); text-decoration: none; }
+  .bill h3 a:hover { color: var(--accent); text-decoration: underline; }
+  .bill .action { font-size: .84rem; color: var(--muted); margin-top: .45rem; }
+  .bill .passbadge {
+    display: inline-block; font-size: .7rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .03em; color: #fff; background: var(--pass); border-radius: 6px; padding: .1rem .45rem; margin-left: .4rem;
+  }
+  .member { cursor: pointer; }
+  .member:hover { border-color: var(--accent); }
+  .member .name { font-size: 1rem; font-weight: 600; }
+  .member .meta { font-size: .82rem; color: var(--muted); margin-top: .2rem; }
+  .party { display: inline-block; width: .6rem; height: .6rem; border-radius: 50%; margin-right: .4rem; vertical-align: baseline; }
+  .party.D { background: var(--dem); } .party.R { background: var(--rep); } .party.I { background: var(--ind); }
+  .member .sponsored { margin-top: .7rem; border-top: 1px dashed var(--line); padding-top: .6rem; display: none; }
+  .member.open .sponsored { display: block; }
+  .member .sponsored .sb { font-size: .85rem; margin-top: .4rem; }
+  .member .sponsored .sb a { color: var(--ink); text-decoration: none; }
+  .member .sponsored .sb a:hover { color: var(--accent); text-decoration: underline; }
+  .member .sponsored .sb .sa { color: var(--muted); font-size: .78rem; }
+  .card-msg {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 1.3rem 1.2rem; box-shadow: var(--shadow); color: var(--muted);
+  }
+  .card-msg h3 { color: var(--ink); font-size: 1.05rem; margin-bottom: .5rem; }
+  .card-msg p { margin-bottom: .6rem; }
+  .card-msg .keyrow { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .6rem; }
+  .card-msg input { flex: 1; min-width: 200px; }
+  button.primary {
+    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    border-radius: 10px; padding: .5rem 1rem; cursor: pointer; font: inherit; font-size: .9rem;
+  }
+  button.ghost {
+    border: 1px solid var(--line); background: var(--card); color: var(--accent);
+    border-radius: 999px; padding: .28rem .7rem; cursor: pointer; font: inherit; font-size: .8rem;
+  }
+  footer { font-size: .82rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← suite</a>
+    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
+  </div>
+  <header>
+    <h1>Congress Tracker</h1>
+    <p class="tag">Recent bills, what passed this week, and your delegation's latest sponsored legislation —
+      from the official Congress.gov API.</p>
+  </header>
+
+  <div class="tabs" id="tabs" hidden>
+    <button class="tab on" data-view="recent" aria-pressed="true">Recent bills</button>
+    <button class="tab" data-view="passed" aria-pressed="false">Passed this week</button>
+    <button class="tab" data-view="delegation" aria-pressed="false">My delegation</button>
+  </div>
+
+  <div class="toolrow" id="toolrow" hidden>
+    <div id="stateWrap" hidden>
+      <label class="stamp">State
+        <select id="stateSel"></select>
+      </label>
+    </div>
+    <span class="stamp" id="stamp"></span>
+    <button class="ghost" id="changeKey" style="margin-left:auto">change key</button>
+  </div>
+
+  <div class="list" id="list"></div>
+
+  <footer>Data: Congress.gov API (Library of Congress) · api.congress.gov. Free key from api.data.gov.</footer>
+</div>
+
+<script src="../core/suite.js" data-suite-inline></script>
+<script>
+"use strict";
+Suite.theme.init();
+
+/* ---- helpers ---- */
+const KEY_LS = "suite.key.congress";
+function getKey(){ return Suite.key("congress").value || ""; }
+
+/* TTLs — manifest cacheTtlMin: 360 governs the bill feed (v1 refetched every 10 min;
+   the good-citizen policy is now enforceable, API-AND-RELAY.md §2). Members and
+   sponsored legislation keep v1's 24 h. */
+const TTL_BILLS = 360 * 60 * 1000;
+const TTL_DAY = 24 * 3600 * 1000;
+
+/* v1 cached PROCESSED arrays under suite.cache.congress.* ({t, v} envelope);
+   Suite.fetchJSON caches the RAW response under the same keys. To keep stored values
+   byte-compatible with v1 (a v1 user's cache keeps working, and v1 can still read a
+   v2-written cache), each loader normalizes either shape and writes the processed v1
+   shape back over fetchJSON's raw cache write — same pattern as treasury.html. */
+function cacheGet(key){
+  const e = Suite.store.get("suite.cache.congress." + key);
+  return (e && typeof e === "object" && "t" in e && "v" in e) ? e : null;
+}
+function cachePutProcessed(key, r, v){
+  if (!r.fromCache) Suite.store.set("suite.cache.congress." + key, { t: r.t, v: v });
+}
+const normBills = v => Array.isArray(v) ? v : ((v && v.bills) || []);
+const normMembers = v => Array.isArray(v) ? v : ((v && v.members) || []);
+const normSponsored = v => Array.isArray(v) ? v : ((v && v.sponsoredLegislation) || []);
+
+/* One fetch path for the whole tool. v1 semantics preserved: a 401/403 surfaces as
+   e.status (the key gate shows the key card even when a cache exists); any other
+   failure falls back to the cache envelope, flagged stale so the stamp says so. */
+async function apiGet(cacheKey, url, ttl){
+  try {
+    return await Suite.fetchJSON(url, { cacheKey: "congress." + cacheKey, ttl: ttl, fallbackToCache: false });
+  } catch(e){
+    const m = /^HTTP (401|403)$/.exec((e && e.message) || "");
+    if (m){ e.status = +m[1]; throw e; }
+    const cached = cacheGet(cacheKey);
+    if (cached) return { v: cached.v, t: cached.t, stale: true, fromCache: true };
+    throw e;
+  }
+}
+
+function fmtTime(ms){ return new Date(ms).toLocaleString(undefined, { month:"short", day:"numeric", hour:"numeric", minute:"2-digit" }); }
+function fmtDate(s){ if (!s) return ""; const d = new Date(s); return isNaN(d) ? s : d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}); }
+function ordinal(n){ const s=["th","st","nd","rd"], v=n%100; return n + (s[(v-20)%10] || s[v] || s[0]); }
+function stampText(t, stale){ return t ? (stale ? "offline — data from " + fmtTime(t) : "data from " + fmtTime(t)) : ""; }
+const TYPE_PATH = { HR:"house-bill", S:"senate-bill", HJRES:"house-joint-resolution", SJRES:"senate-joint-resolution",
+  HCONRES:"house-concurrent-resolution", SCONRES:"senate-concurrent-resolution", HRES:"house-resolution", SRES:"senate-resolution" };
+function billURL(b){
+  const t = (b.type || "").toUpperCase();
+  const path = TYPE_PATH[t];
+  if (path && b.congress && b.number) return "https://www.congress.gov/bill/" + ordinal(b.congress) + "-congress/" + path + "/" + b.number;
+  return "https://www.congress.gov/search?q=" + encodeURIComponent((b.type||"") + b.number);
+}
+function billLabel(b){ return (b.type || "").toUpperCase().replace("RES"," RES") + " " + (b.number || ""); }
+function partyLetter(p){ if (!p) return "I"; const c = p[0].toUpperCase(); return (c==="D"||c==="R") ? c : "I"; }
+
+const STATES = [["AL","Alabama"],["AK","Alaska"],["AZ","Arizona"],["AR","Arkansas"],["CA","California"],
+["CO","Colorado"],["CT","Connecticut"],["DE","Delaware"],["DC","District of Columbia"],["FL","Florida"],
+["GA","Georgia"],["HI","Hawaii"],["ID","Idaho"],["IL","Illinois"],["IN","Indiana"],["IA","Iowa"],
+["KS","Kansas"],["KY","Kentucky"],["LA","Louisiana"],["ME","Maine"],["MD","Maryland"],["MA","Massachusetts"],
+["MI","Michigan"],["MN","Minnesota"],["MS","Mississippi"],["MO","Missouri"],["MT","Montana"],["NE","Nebraska"],
+["NV","Nevada"],["NH","New Hampshire"],["NJ","New Jersey"],["NM","New Mexico"],["NY","New York"],
+["NC","North Carolina"],["ND","North Dakota"],["OH","Ohio"],["OK","Oklahoma"],["OR","Oregon"],
+["PA","Pennsylvania"],["RI","Rhode Island"],["SC","South Carolina"],["SD","South Dakota"],["TN","Tennessee"],
+["TX","Texas"],["UT","Utah"],["VT","Vermont"],["VA","Virginia"],["WA","Washington"],["WV","West Virginia"],
+["WI","Wisconsin"],["WY","Wyoming"],["AS","American Samoa"],["GU","Guam"],["MP","Northern Mariana Islands"],
+["PR","Puerto Rico"],["VI","U.S. Virgin Islands"]];
+
+/* ---- elements ---- */
+const listEl = Suite.liveRegion(document.getElementById("list"));
+const tabsEl = document.getElementById("tabs");
+const toolrow = document.getElementById("toolrow");
+const stampEl = Suite.liveRegion(document.getElementById("stamp"));
+const stateWrap = document.getElementById("stateWrap");
+const stateSel = document.getElementById("stateSel");
+const changeKeyBtn = document.getElementById("changeKey");
+
+const state = { view: "recent", bills: null, billsStamp: 0, billsStale: false, st: Suite.store.get("suite.state") || "" };
+
+function msgCard(title, bodyLines){
+  listEl.textContent = "";
+  const c = document.createElement("div"); c.className = "card-msg";
+  const h = document.createElement("h3"); h.textContent = title; c.append(h);
+  (bodyLines || []).forEach(function(t){ const p = document.createElement("p"); p.textContent = t; c.append(p); });
+  listEl.append(c);
+  return c;
+}
+
+/* ---- key gate: the designed no-key state (Batch C — no demo tier exists) ---- */
+function showKeyCard(invalid){
+  tabsEl.hidden = true; toolrow.hidden = true;
+  const c = msgCard(invalid ? "That key didn't work" : "Add your free Congress.gov key",
+    invalid
+      ? ["The API rejected the saved key. Paste a valid one below."]
+      : ["The Congress.gov API needs a free key. Get one instantly at api.data.gov/signup (one key works for every api.data.gov service). Then paste it here — it stays in this browser only, never sent anywhere but Congress.gov."]);
+  const row = document.createElement("div"); row.className = "keyrow";
+  const inp = document.createElement("input"); inp.type = "text"; inp.placeholder = "paste API key";
+  inp.setAttribute("aria-label", "Congress.gov API key");
+  inp.value = invalid ? "" : getKey();
+  const btn = document.createElement("button"); btn.className = "primary"; btn.textContent = "Save key";
+  btn.addEventListener("click", function(){
+    const v = inp.value.trim();
+    if (!v) return;
+    Suite.store.set(KEY_LS, v);
+    boot();
+  });
+  inp.addEventListener("keydown", function(e){ if (e.key === "Enter") btn.click(); });
+  row.append(inp, btn);
+  const link = document.createElement("p");
+  const a = document.createElement("a"); a.href = "https://api.data.gov/signup/"; a.target = "_blank"; a.rel = "noopener"; a.textContent = "Open api.data.gov/signup →";
+  link.append(a);
+  c.append(row, link);
+}
+
+/* ---- data loads ---- */
+async function loadBills(){
+  try {
+    const r = await apiGet("bills",
+      "https://api.congress.gov/v3/bill?format=json&limit=250&sort=updateDate+desc&api_key=" + encodeURIComponent(getKey()),
+      TTL_BILLS);
+    const bills = normBills(r.v);
+    cachePutProcessed("bills", r, bills);
+    state.bills = bills; state.billsStamp = r.t; state.billsStale = !!r.stale;
+  } catch(e){
+    if (e.status === 403 || e.status === 401){ showKeyCard(true); throw e; }
+    msgCard("Couldn't load bills", ["Network error" + (e && e.message ? " (" + e.message + ")" : "") + ". Try again."]);
+    throw e;
+  }
+}
+
+function renderRecent(){
+  const bills = (state.bills || []).slice(0, 40);
+  stampEl.textContent = stampText(state.billsStamp, state.billsStale);
+  if (!bills.length){ msgCard("No bills returned", ["The API returned no recent bills. Try again shortly."]); return; }
+  listEl.textContent = "";
+  bills.forEach(function(b){ listEl.append(billCard(b, false)); });
+}
+
+function isPassed(b){
+  const t = ((b.latestAction && b.latestAction.text) || "").toLowerCase();
+  return t.indexOf("passed") >= 0 || t.indexOf("became public law") >= 0 || t.indexOf("agreed to in") >= 0;
+}
+function renderPassed(){
+  const now = Date.now(), weekAgo = now - 8 * 24 * 3600 * 1000;
+  const bills = (state.bills || []).filter(function(b){
+    if (!isPassed(b)) return false;
+    const d = b.latestAction && b.latestAction.actionDate ? new Date(b.latestAction.actionDate).getTime() : 0;
+    return d >= weekAgo;
+  });
+  stampEl.textContent = stampText(state.billsStamp, state.billsStale);
+  if (!bills.length){
+    msgCard("Nothing passed in the last week", ["No bill in the recent-activity feed shows a floor-passage or enactment action dated in the past week. Chamber activity comes in bursts — check back after a session day."]);
+    return;
+  }
+  listEl.textContent = "";
+  bills.forEach(function(b){ listEl.append(billCard(b, true)); });
+}
+
+function billCard(b, showPass){
+  const el = document.createElement("article"); el.className = "bill";
+  const num = document.createElement("div"); num.className = "num";
+  num.textContent = billLabel(b) + " · " + ordinal(b.congress) + " Congress";
+  const h = document.createElement("h3");
+  const a = document.createElement("a"); a.href = billURL(b); a.target = "_blank"; a.rel = "noopener";
+  a.textContent = b.title || "(untitled bill)";
+  h.append(a);
+  if (showPass){ const pb = document.createElement("span"); pb.className = "passbadge"; pb.textContent = "passed"; h.append(pb); }
+  el.append(num, h);
+  if (b.latestAction){
+    const ac = document.createElement("div"); ac.className = "action";
+    ac.textContent = "Latest action" + (b.latestAction.actionDate ? " (" + fmtDate(b.latestAction.actionDate) + ")" : "") + ": " + (b.latestAction.text || "");
+    el.append(ac);
+  }
+  return el;
+}
+
+async function loadDelegation(st){
+  const cacheKey = "members." + st;
+  const cached = cacheGet(cacheKey);
+  if (!(cached && Date.now() - cached.t < TTL_DAY)){
+    msgCard("Loading delegation…", ["Fetching current members from " + stName(st) + "."]);
+  }
+  const url = "https://api.congress.gov/v3/member/" + st + "?format=json&currentMember=true&limit=250&api_key=" + encodeURIComponent(getKey());
+  try {
+    const r = await apiGet(cacheKey, url, TTL_DAY);
+    const members = normMembers(r.v);
+    cachePutProcessed(cacheKey, r, members);
+    renderDelegation(members, r.t, st, !!r.stale);
+  } catch(e){
+    if (e.status === 403 || e.status === 401){ showKeyCard(true); return; }
+    msgCard("Couldn't load the delegation", ["Network error" + (e && e.message ? " (" + e.message + ")" : "") + ". Try again."]);
+  }
+}
+
+function memberChamber(m){
+  if (m.district !== undefined && m.district !== null && m.district !== "") return "House";
+  const terms = m.terms && m.terms.item ? m.terms.item : [];
+  const last = terms.length ? terms[terms.length - 1] : null;
+  if (last && last.chamber){ return /senate/i.test(last.chamber) ? "Senate" : "House"; }
+  return "";
+}
+function stName(st){ const f = STATES.filter(function(s){ return s[0] === st; })[0]; return f ? f[1] : st; }
+
+function renderDelegation(members, stampMs, st, stale){
+  stampEl.textContent = stampText(stampMs, stale);
+  listEl.textContent = "";
+  const senate = [], house = [];
+  members.forEach(function(m){ (memberChamber(m) === "Senate" ? senate : house).push(m); });
+  const ordered = senate.concat(house);
+  if (!ordered.length){ msgCard("No current members found", ["The API returned no sitting members for " + stName(st) + "."]); return; }
+  ordered.forEach(function(m){ listEl.append(memberCard(m)); });
+}
+
+function memberCard(m){
+  const el = document.createElement("article"); el.className = "member";
+  el.setAttribute("role", "button"); el.tabIndex = 0; el.setAttribute("aria-expanded", "false");
+  const nm = document.createElement("div"); nm.className = "name";
+  const dot = document.createElement("span"); dot.className = "party " + partyLetter(m.partyName);
+  nm.append(dot, document.createTextNode(m.name || "(unknown)"));
+  const meta = document.createElement("div"); meta.className = "meta";
+  const chamber = memberChamber(m);
+  let metaTxt = [chamber, m.partyName].filter(Boolean).join(" · ");
+  if (chamber === "House" && m.district) metaTxt += " · District " + m.district;
+  meta.textContent = metaTxt;
+  const sp = document.createElement("div"); sp.className = "sponsored";
+  el.append(nm, meta, sp);
+  let loaded = false;
+  function toggle(){
+    el.classList.toggle("open");
+    el.setAttribute("aria-expanded", String(el.classList.contains("open")));
+    if (!loaded && el.classList.contains("open")){ loaded = true; loadSponsored(m, sp); }
+  }
+  el.addEventListener("click", function(e){
+    if (e.target.closest("a")) return; /* let sponsored-bill links click through */
+    toggle();
+  });
+  el.addEventListener("keydown", function(e){
+    if (e.target !== el) return;
+    if (e.key === "Enter" || e.key === " "){ e.preventDefault(); toggle(); }
+  });
+  return el;
+}
+
+async function loadSponsored(m, container){
+  container.textContent = "";
+  const info = document.createElement("div"); info.className = "sb sa"; info.textContent = "Loading recent sponsored bills…"; container.append(info);
+  const cacheKey = "sponsored." + m.bioguideId;
+  function draw(items){
+    container.textContent = "";
+    if (!items.length){ const p = document.createElement("div"); p.className = "sb sa"; p.textContent = "No recent sponsored legislation."; container.append(p); return; }
+    items.slice(0, 8).forEach(function(b){
+      const row = document.createElement("div"); row.className = "sb";
+      const a = document.createElement("a"); a.href = billURL(b); a.target = "_blank"; a.rel = "noopener";
+      a.textContent = billLabel(b) + " — " + (b.title || "(untitled)");
+      const sa = document.createElement("div"); sa.className = "sa";
+      sa.textContent = (b.introducedDate ? "Introduced " + fmtDate(b.introducedDate) : "") +
+        (b.latestAction && b.latestAction.text ? " · " + b.latestAction.text : "");
+      row.append(a, sa); container.append(row);
+    });
+  }
+  const url = "https://api.congress.gov/v3/member/" + m.bioguideId + "/sponsored-legislation?format=json&limit=15&api_key=" + encodeURIComponent(getKey());
+  try {
+    const r = await apiGet(cacheKey, url, TTL_DAY);
+    const items = normSponsored(r.v);
+    cachePutProcessed(cacheKey, r, items);
+    draw(items);
+  } catch(e){
+    container.textContent = "";
+    const p = document.createElement("div"); p.className = "sb sa"; p.textContent = "Couldn't load sponsored bills.";
+    container.append(p);
+  }
+}
+
+/* ---- views ---- */
+async function switchView(v){
+  state.view = v;
+  Array.prototype.forEach.call(tabsEl.querySelectorAll(".tab"), function(t){
+    const on = t.dataset.view === v;
+    t.classList.toggle("on", on);
+    t.setAttribute("aria-pressed", String(on));
+  });
+  stateWrap.hidden = v !== "delegation";
+  if (v === "delegation"){
+    if (!state.st){ msgCard("Pick your state", ["Choose your state above to see its current senators and representatives, and their latest sponsored legislation."]); return; }
+    loadDelegation(state.st);
+  } else {
+    if (!state.bills){ msgCard("Loading bills…", ["Fetching recent activity from Congress.gov."]); try { await loadBills(); } catch(e){ return; } }
+    if (v === "recent") renderRecent(); else renderPassed();
+  }
+}
+
+/* ---- init ---- */
+function initStateSel(){
+  stateSel.textContent = "";
+  const ph = document.createElement("option"); ph.value = ""; ph.textContent = "— choose —"; stateSel.append(ph);
+  STATES.forEach(function(s){ const o = document.createElement("option"); o.value = s[0]; o.textContent = s[1]; stateSel.append(o); });
+  stateSel.value = state.st || "";
+}
+/* registered once — boot() (and so initStateSel) can run again after a key save */
+stateSel.addEventListener("change", function(){
+  state.st = stateSel.value;
+  if (state.st) Suite.store.set("suite.state", state.st);
+  if (state.view === "delegation" && state.st) loadDelegation(state.st);
+});
+
+Array.prototype.forEach.call(tabsEl.querySelectorAll(".tab"), function(t){
+  t.addEventListener("click", function(){ switchView(t.dataset.view); });
+});
+changeKeyBtn.addEventListener("click", function(){ showKeyCard(false); });
+
+async function boot(){
+  if (!getKey()){ showKeyCard(false); return; }
+  tabsEl.hidden = false; toolrow.hidden = false;
+  initStateSel();
+  switchView(state.view);
+}
+boot();
+</script>
+</body>
+</html>
