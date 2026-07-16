@@ -14,11 +14,14 @@ Census JSONP live geocode: name="1600 PENNSYLVANIA AVE NW, WASHINGTON, DC, 20500
 Nominatim live reverse geocode 38.8977,-77.0365: name="White House" coords=38.897639, -77.036552 tag=nominatim
   sub="White House, 1600, Pennsylvania Avenue Northwest, Ward 2, Washington, District of Columbia, 20500, United States"
 offline stale Open-Meteo "Denver": name="Denver" coords=39.739150, -104.984700
-  stale note: "Offline — showing cached results from 7/7/2026, 3:31:05 PM."
+  stale note: "Offline — showing cached results from 7/8/2026, 12:37:46 AM."
 offline stale Nominatim reverse: name="White House" coords=38.897639, -77.036552
-  stale note: "Offline — showing cached results from 7/7/2026, 3:31:05 PM."
+  stale note: "Offline — showing cached results from 7/8/2026, 12:37:46 AM."
 offline stale Census JSONP: name="1600 PENNSYLVANIA AVE NW, WASHINGTON, DC, 20500" coords=38.898699, -77.035188
-  stale note: "Offline — showing cached results from 7/7/2026, 3:31:05 PM."
+  stale note: "Offline — showing cached results from 7/8/2026, 12:37:46 AM."
+prune probe query (route-fulfilled) after seeding 25 geo cache keys: name="Prunetown"
+cache prune: 20 suite.cache.geo.* keys after the query (bound 20); newest seed kept=true, oldest seed evicted=true, new query kept=true, non-geo cache key untouched=true
+geo cache restored after the prune probe (parity snapshot keeps the original key set)
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
   console.error: Failed to load resource: net::ERR_FAILED

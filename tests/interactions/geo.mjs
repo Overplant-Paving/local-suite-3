@@ -146,6 +146,59 @@ export async function interact({ page, log, evidenceDir }) {
   log(`offline stale Census JSONP: ${r.name ? `name="${r.name}" coords=${r.co}` : `NO RESULT: "${r.text}"`}`);
   log(`  stale note: "${r.note}"`);
   await page.context().unroute(/^https?:/);
+
+  /* ---- Phase 4 audit fix: bounded query cache (route-fulfilled, zero live requests).
+     Seed 25 synthetic suite.cache.geo.* envelopes (distinct ages) plus one NON-geo cache
+     key, run one more forward geocode (fulfilled from a route), and assert the tool
+     pruned to <=20 geo keys, keeping the newest and never touching the non-geo key.
+     Real geo cache keys are stashed and restored so the parity snapshot is unchanged. */
+  const geoStash = await page.evaluate(() => {
+    const o = {};
+    for (const k of Object.keys(localStorage)) if (k.startsWith("suite.cache.geo.")) o[k] = localStorage.getItem(k);
+    return o;
+  });
+  await page.evaluate(() => {
+    for (const k of Object.keys(localStorage)) if (k.startsWith("suite.cache.geo.")) localStorage.removeItem(k);
+    for (let i = 0; i < 25; i++) { // seed00 oldest … seed24 newest
+      localStorage.setItem("suite.cache.geo.fwd.om.seed" + String(i).padStart(2, "0"),
+        JSON.stringify({ t: Date.now() - (25 - i) * 60000, v: { results: [] } }));
+    }
+    localStorage.setItem("suite.cache.other.keepme", JSON.stringify({ t: 1, v: "must survive" }));
+  });
+  await page.context().route(/^https?:/, rt => rt.abort());
+  await page.context().route(/geocoding-api\.open-meteo\.com/, rt => rt.fulfill({
+    status: 200, contentType: "application/json",
+    body: JSON.stringify({ results: [{ name: "Prunetown", admin1: "California", country: "United States", latitude: 37.0, longitude: -122.0 }] })
+  }));
+  await page.fill("#fwdQ", "Prunetown");
+  await page.selectOption("#fwdSrc", "openmeteo");
+  await page.click("#fwdGo");
+  r = await firstResult(page, "#fwdRes");
+  log(`prune probe query (route-fulfilled) after seeding 25 geo cache keys: name="${r.name}"`);
+  const pruned = await page.evaluate(() => {
+    const geo = Object.keys(localStorage).filter(k => k.startsWith("suite.cache.geo.")).sort();
+    return {
+      count: geo.length,
+      newestSeedKept: geo.includes("suite.cache.geo.fwd.om.seed24"),
+      oldestSeedGone: !geo.includes("suite.cache.geo.fwd.om.seed00"),
+      newQueryKept: geo.includes("suite.cache.geo.fwd.om.prunetown"),
+      nonGeoUntouched: localStorage.getItem("suite.cache.other.keepme") === JSON.stringify({ t: 1, v: "must survive" })
+    };
+  });
+  log(`cache prune: ${pruned.count} suite.cache.geo.* keys after the query (bound 20); ` +
+    `newest seed kept=${pruned.newestSeedKept}, oldest seed evicted=${pruned.oldestSeedGone}, ` +
+    `new query kept=${pruned.newQueryKept}, non-geo cache key untouched=${pruned.nonGeoUntouched}`);
+  if (pruned.count > 20) throw new Error("cache prune FAILED — " + pruned.count + " geo keys remain (bound 20)");
+  if (!pruned.newestSeedKept || !pruned.oldestSeedGone || !pruned.newQueryKept) throw new Error("cache prune FAILED — wrong eviction order: " + JSON.stringify(pruned));
+  if (!pruned.nonGeoUntouched) throw new Error("cache prune FAILED — a non-geo key was touched");
+  await page.context().unroute(/geocoding-api\.open-meteo\.com/);
+  await page.context().unroute(/^https?:/);
+  await page.evaluate(st => {
+    for (const k of Object.keys(localStorage)) if (k.startsWith("suite.cache.geo.")) localStorage.removeItem(k);
+    localStorage.removeItem("suite.cache.other.keepme");
+    for (const [k, v] of Object.entries(st)) localStorage.setItem(k, v);
+  }, geoStash);
+  log("geo cache restored after the prune probe (parity snapshot keeps the original key set)");
 }
 
 /* v1 writes no cache keys (it never cached); the only state keys are suite.location

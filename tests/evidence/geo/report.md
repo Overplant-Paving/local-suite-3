@@ -77,3 +77,24 @@ All three hosts appear in CATALOG.md; no CATALOG update needed.
 scriptEndpoints wired through build.py (the first build omitted the host — caller fix). Direct
 test on dist/geo.html from file://: injected the Census JSONP script under the built CSP —
 callback fired with "1600 PENNSYLVANIA AVE NW, WASHINGTON, DC, 20500", zero CSP violations.
+
+## Phase 4 audit fix: bounded query cache (2026-07-16)
+
+Concern 5 above (per-query cache growth, no eviction) is now fixed. Key naming is unchanged;
+after every lookup that writes a cache envelope (`pruneGeoCache()` called after the Open-Meteo
+fetch, inside the `nominatim()` helper, and after the Census JSONP `Suite.store.set`), the tool
+keeps only the newest `GEO_CACHE_MAX = 20` `suite.cache.geo.*` envelopes, evicting oldest-first
+by the `{t,v}` envelope's `t` stamp. The prune enumerates only keys prefixed `suite.cache.geo.`
+— it can never touch another tool's keys — and is wrapped in try/catch so it can never break a
+lookup.
+
+Proof: `tests/interactions/geo.mjs` gained a probe (route-fulfilled, zero live requests):
+seed 25 synthetic geo envelopes with distinct ages plus one non-geo cache key
+(`suite.cache.other.keepme`), run one more forward geocode fulfilled from a route, assert.
+interaction.txt:
+
+    prune probe query (route-fulfilled) after seeding 25 geo cache keys: name="Prunetown"
+    cache prune: 20 suite.cache.geo.* keys after the query (bound 20); newest seed kept=true, oldest seed evicted=true, new query kept=true, non-geo cache key untouched=true
+
+Harness re-run: `node verify-tool.mjs geo` exit 0. Real geo cache keys stashed/restored around
+the probe, so the parity snapshot keeps the original key set.

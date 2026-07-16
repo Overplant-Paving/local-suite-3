@@ -153,6 +153,29 @@ const EMAIL = "henry.litoff@gmail.com";
    addition (API-AND-RELAY.md §2). Rendering is otherwise identical to v1. */
 const TTL = 10080 * 60 * 1000;
 
+/* Phase 4 audit fix: bound the per-query cache. Every distinct query writes its own
+   suite.cache.geo.* key; without eviction they accumulate forever. After each lookup,
+   keep only the newest GEO_CACHE_MAX envelopes (evict oldest by the {t,v} stamp).
+   Pruning only ever touches suite.cache.geo.* keys. */
+const GEO_CACHE_MAX = 20;
+function pruneGeoCache() {
+  try {
+    const ks = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith("suite.cache.geo.")) ks.push(k);
+    }
+    if (ks.length <= GEO_CACHE_MAX) return;
+    ks.map(k => {
+        const e = Suite.store.get(k);
+        return { k, t: (e && typeof e === "object" && typeof e.t === "number") ? e.t : 0 };
+      })
+      .sort((a, b) => a.t - b.t)
+      .slice(0, ks.length - GEO_CACHE_MAX)
+      .forEach(x => Suite.store.remove(x.k));
+  } catch (e) { /* pruning must never break a lookup */ }
+}
+
 /* ---------- shared location bar ---------- */
 function renderLocBar() {
   const l = Suite.location.get();
@@ -198,6 +221,7 @@ async function censusGeocode(q) {
     const d = await jsonp(url, "callback");
     const t = Date.now();
     Suite.store.set(key, { t, v: d });
+    pruneGeoCache();
     return { v: d, t, stale: false };
   } catch (e) {
     if (cached) return { v: cached.v, t: cached.t, stale: true };
@@ -211,7 +235,9 @@ async function nominatim(path, cacheKey) {
   const wait = 1000 - (Date.now() - lastNom);
   if (wait > 0) await new Promise(r => setTimeout(r, wait));
   lastNom = Date.now();
-  return Suite.fetchJSON("https://nominatim.openstreetmap.org/" + path, { cacheKey: "geo." + cacheKey, ttl: TTL });
+  const r = await Suite.fetchJSON("https://nominatim.openstreetmap.org/" + path, { cacheKey: "geo." + cacheKey, ttl: TTL });
+  pruneGeoCache();
+  return r;
 }
 
 function staleNote(t) {
@@ -245,6 +271,7 @@ async function doForward() {
       const r = await Suite.fetchJSON(
         "https://geocoding-api.open-meteo.com/v1/search?count=8&language=en&name=" + encodeURIComponent(q),
         { cacheKey: "geo.fwd.om." + q.toLowerCase(), ttl: TTL });
+      pruneGeoCache();
       if (r.stale) staleT = r.t;
       results = (r.v.results || []).map(x => ({
         name: x.name,
