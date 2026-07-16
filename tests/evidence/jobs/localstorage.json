@@ -1,0 +1,18 @@
+{
+  "v1": {
+    "suite.relay": "https://relay.test/?url=",
+    "suite.theme": "dark",
+    "suite.data.jobs": "{\"unemp\":{\"2026-07\":9.9,\"2026-08\":9.8}}"
+  },
+  "v2": {
+    "suite.relay.url": "https://relay.test",
+    "suite.data.jobs": "{\"unemp\":{\"2026-07\":3.3},\"part\":{\"2026-07\":63},\"payroll\":{\"2026-07\":160000}}",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [
+    "suite.relay"
+  ],
+  "keysOnlyInV2": [
+    "suite.relay.url"
+  ]
+}

@@ -1,0 +1,27 @@
+data stamp: "Data: June 2026 · refreshed monthly at build time"
+stat: Unemployment rate = 4.2% (Jun 2026) sparkline=true
+stat: Labor-force participation = 61.5% (Jun 2026) sparkline=true
+stat: Nonfarm payroll change = +57K (Jun 2026 · month-over-month) sparkline=true
+chart note: "Seasonally adjusted, last 4 years. Latest embedded reading: Jun 2026."
+unemployment chart: 2 paths, 3 gridlines, 12 text labels
+offline reload (all http/https aborted): headline = 4.2% (Jun 2026) — embedded data renders with zero network
+chart line stroke re-read on theme toggle: light="#2f6f6a" dark="#6fb5ae" (redrawn: true)
+paste error path: "Couldn't find any year-month + value rows. Try lines like “2026 M07 4.1”."
+relay empty-input path: "Enter a relay URL first."
+paste msg: "Merged 2 months into the unemp series."
+headline after merge: 9.8% (Aug 2026)
+chart note after merge: "Seasonally adjusted, last 4 years. Latest embedded reading: Aug 2026."
+suite.data.jobs = {"unemp":{"2026-07":9.9,"2026-08":9.8}}
+clear msg: "Your updates were cleared. Showing embedded data only."
+headline after clear: 4.2% (Jun 2026)
+suite.data.jobs after clear: null
+relay msg: "Live fetch merged 3 data points."
+relay contract LNS14000000: requested-as-expected=true
+relay contract LNS11300000: requested-as-expected=true
+relay contract CES0000000001: requested-as-expected=true
+relay requests observed: 3 — https://relay.test/?url=https%3A%2F%2Fapi.bls.gov%2FpublicAPI%2Fv1%2Ftimeseries%2Fdata%2FLNS14000000 | https://relay.test/?url=https%3A%2F%2Fapi.bls.gov%2FpublicAPI%2Fv1%2Ftimeseries%2Fdata%2FLNS11300000 | https://relay.test/?url=https%3A%2F%2Fapi.bls.gov%2FpublicAPI%2Fv1%2Ftimeseries%2Fdata%2FCES0000000001
+headline after relay merge: 3.3% (Jul 2026)
+payroll stat after relay merge: +1,016K (Jul 2026 · month-over-month)
+suite.relay.url = https://relay.test
+theme toggle: light -> dark, aria-pressed=true
+console: clean (no errors)

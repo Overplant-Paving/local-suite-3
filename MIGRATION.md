@@ -161,7 +161,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 63 | launches.html | space | cors | — | C | RL (15 req/hr — TTL + backoff) | ✅ `tests/evidence/launches/` |
 | 64 | nearby.html | local | cors | — | C | RL (Overpass — TTL + mirror fallback) | ⬜ |
 | 65 | airport.html | space | blocked | — | C | remove `.example` → link-out card to aviationweather.gov | ✅ `tests/evidence/airport/` |
-| 66 | jobs.html | money | blocked | — | C | remove `.example` → embedded monthly BLS data | ⬜ |
+| 66 | jobs.html | money | blocked | — | C | remove `.example` → embedded monthly BLS data | ✅ `tests/evidence/jobs/` |
 | 67 | inflation.html | money | blocked | — | C | remove `.example` → embedded monthly BLS data | ✅ `tests/evidence/inflation/` |
 | 68 | transit.html | local | blocked/key | bart (new) | C | externalize BART key (v1 `transit.html:163`); custom feed → link-out card | ✅ `tests/evidence/transit/` |
 | 69 | password.html | util | off | — | D | LD (62 KB EFF wordlist — must survive build byte-exact) | ⬜ |

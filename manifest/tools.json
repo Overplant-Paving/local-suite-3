@@ -1373,6 +1373,28 @@
       "flags": []
     },
     {
+      "id": "jobs",
+      "file": "jobs.html",
+      "name": "Jobs & Unemployment Snapshot",
+      "cat": "money",
+      "cx": "S",
+      "desc": "Unemployment rate and the latest jobs-report numbers.",
+      "network": "blocked",
+      "key": null,
+      "endpoints": [],
+      "storage": [
+        "suite.theme",
+        "suite.data.jobs",
+        "suite.relay.url",
+        "suite.relay"
+      ],
+      "cacheTtlMin": null,
+      "since": "v1",
+      "flags": [
+        "embedded-data"
+      ]
+    },
+    {
       "id": "inflation",
       "file": "inflation.html",
       "name": "Cost-of-Living Tracker (CPI)",

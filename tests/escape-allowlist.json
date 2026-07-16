@@ -227,5 +227,10 @@
   },
   "transit.html": {
     "viaRelay ? \" (or your relay must allow this host)\" : \"\"": "local-only expression, recorded verified-clean with reasoning in tests/evidence/transit/report.md"
+  },
+  "jobs.html": {
+    "sparkline(U.slice(-24),css(\"--accent\"))": "local-only expression, recorded verified-clean with reasoning in tests/evidence/jobs/report.md",
+    "sparkline(P.slice(-24),css(\"--c2\"))": "local-only expression, recorded verified-clean with reasoning in tests/evidence/jobs/report.md",
+    "sparkline(C.slice(-24),css(\"--c3\"))": "local-only expression, recorded verified-clean with reasoning in tests/evidence/jobs/report.md"
   }
 }
