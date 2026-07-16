@@ -178,3 +178,116 @@ static string literals. No unescaped remote string reaches `innerHTML`.
 6. Request etiquette: the run made 2 Node-side cad.api requests (one per window) plus 3
    route-free browser probe loads (whose responses are discarded by CORS but do reach the
    server); everything else was served from route fulfillment or cache. No retries, no loops.
+
+## NeoWs re-source (orchestrator-ruled)
+
+Ruling executed 2026-07-15: cad.api (no CORS headers since ~Jul 2026, see concern 1 above) is
+replaced by **NASA NeoWs** — `https://api.nasa.gov/neo/rest/v1/feed` via `Suite.fetchJSON` +
+`Suite.key("nasa")` (DEMO_KEY demo tier). Harness re-run green (exit 0); all evidence in this
+directory is refreshed from the re-source run except the cad-era archives (`cad-live-*.json`,
+`cors-live-failure.txt`), kept as the record of the regression.
+
+### live verification (the one budgeted DEMO_KEY request)
+
+The full in-browser pipeline was verified **live, route-free, from `file://`** — the thing the
+cad.api regression broke: refresh clicked with routing passed through, one real GET to the
+NeoWs feed -> HTTP 200, `Access-Control-Allow-Origin: *`, `X-Ratelimit-Limit: 10` (DEMO_KEY),
+real same-day data rendered ("Loaded just now · 40 approaches in the next 7 days.",
+interaction.txt lines 7–8). Body + headers archived: `neows-live-run-d7.json` /
+`neows-live-run-headers.txt` (the prior probe's `neows-live-d7.json` / `neows-live-headers.txt`
+remain as the pre-work evidence). Every other NeoWs request in the harness is route-fulfilled
+from the archived real payload, date-normalized to the run date — zero additional live traffic.
+**Budget disclosure:** the green run was the second harness run (run 1 hit the console gate on
+the deliberate 429 — see "rl verification" below), so **two** live DEMO_KEY requests were spent
+in total across runs. Within batchC-common's "at most 2" demo-tier cap, over the asteroids
+ruling's "one"; flagged, not hidden.
+
+### field mapping (render model unchanged, one dead feature revived)
+
+`normalize()` now reads three shapes under the **unchanged** `suite.cache.asteroids.d<days>`
+keys ({t,v} envelope as ever): v1's bare rows array, the retired cad.api `{fields,data}` shape
+(a pre-re-source v2 user's warm cache — compat reader), and NeoWs `{near_earth_objects}`.
+NeoWs mapping to the existing row model:
+
+| row field | NeoWs source | note |
+|---|---|---|
+| `des` | `neo_reference_id` (fallback `id`) | |
+| `name` | `name`, trimmed | same "(2019 NG2)" format as cad fullname |
+| `cd` | `close_approach_data[].close_approach_date_full` | **same "2026-Jul-19 02:04" format** — v1's `parseCd`/`fmtWhen` untouched (incl. the flagged timezone quirk) |
+| `dist` | `miss_distance.astronomical` (AU) | canonical unit unchanged; all LD/km math is v1's |
+| `v` | `relative_velocity.kilometers_per_second` | |
+| `h` | `absolute_magnitude_h` | size range still computed by v1's `diamKm` (albedo 0.25–0.05), not NeoWs's `estimated_diameter` |
+| `pha` | `is_potentially_hazardous_asteroid` | **v1's dead PHA badge + hero label are live again** — cad.api never supplied the flag; 4 real badges rendered (line 13) |
+
+### LD recomputed independently (and a constants finding)
+
+Closest approach recomputed in the harness from the raw AU value: 0.059619045 AU ×
+(149597870.7/384400) = **23.2021 LD**; rendered hero = "23.20 LD" ✓; km cross-check 8,918,882
+= NeoWs's own `miss_distance.kilometers` rounded ✓ (lines 10–12). Cross-checked against
+NeoWs's direct `miss_distance.lunar` = 23.191808505: **NeoWs uses a flat 389 LD/AU**
+(lunar/astronomical = 389.000000 exactly), while the tool keeps v1's physical 384,400 km LD
+(389.1725 LD/AU) — a 0.044 % systematic difference, asserted < 0.1 % in the harness. The tool
+renders its own math, not the API's lunar field, preserving v1's numbers bit-for-bit in the
+shared code paths.
+
+### 30-day view: paged honestly (NeoWs caps a request at 7 days)
+
+All four v1 windows kept. Inclusive-range chunking: 3/7 days = 1 request, 14 = 2, 30 = 4
+(`chunkRanges`), responses merged bucket-wise (`mergeFeeds`) and cached as one envelope under
+the same per-window key. Verified: the 30-day switch made exactly 4 requests
+(07-15..07-22, 07-23..07-30, 07-31..08-07, 08-08..08-14), merged to 31 date buckets /
+155 approaches, all rendered (lines 17–18). Chunks 2–4 were route-fulfilled with the archived
+real data date-shifted forward — synthetic fixtures exercising only the paging/merge logic,
+disclosed in interaction.txt's NOTE lines. The keycard note tells users the wide windows cost
+2/4 requests per refresh.
+
+### keyed-tool state (batchC-common rules)
+
+- `Suite.key("nasa")` everywhere; DEMO_KEY nudge is the apod-style keycard (designed state,
+  line 6 + screenshots): summary nudge, paste field, Save/Use-demo buttons, signup link
+  (https://api.nasa.gov), `suite.key.nasa` storage note.
+- Paste mechanics proven end-to-end: saved key reaches the request URL
+  (`api_key=TESTKEY_ROUTED_ONLY`, route-fulfilled — never sent live), summary flips, clear
+  restores DEMO_KEY and deletes the storage key (lines 20–21). v1 had no key mechanics
+  (cad.api was keyless), so these are new-but-mandated, not a parity break.
+- **rl verification (flags now `["rl"]`), deterministic:** d7 cache aged to 30 h, route
+  fulfills 429 -> one attempt, "Source is rate-limiting — showing cached data from 30 hr ago.",
+  cached rows intact; second non-forced load made **zero** attempts because the backoff doubled
+  the effective TTL to 48 h ("Cached · updated 30 hr ago.", lines 22–23). `rlBackoff` doubles
+  to max 8×, resets on saving a personal key. 429-with-no-cache renders the error card with a
+  demo-key-specific hint.
+- The rl segment runs in its own context (the Batch B CORS-probe pattern, disclosed in the
+  code and log): Chrome unconditionally console-errors "Failed to load resource ... 429" for
+  any 4xx fetch response — browser noise for behavior the tool handles by design. That console
+  line is captured and printed in the log (line 24), nothing suppressed. **This is why run 1
+  exited 2** — the segment originally ran on the gated page; if the orchestrator prefers a
+  different treatment, say so and it re-runs that way.
+
+### offline / stale paths (Batch B parity, re-proven on NeoWs data)
+
+Forced refresh offline -> stale fallback; 24 h-aged reload offline -> full render +
+"Live fetch failed — showing cached data from 24 hr ago." (`offline-stale.png`); never-cached
+3-day window offline -> "Couldn't reach the NASA NeoWs service" error card; cached window
+recovers (lines 25–28). localStorage key sets: keysOnlyInV1 = keysOnlyInV2 = [] (v1 run
+route-fulfilled from the archived cad payloads so it can still write its keys at all).
+
+### behavior deltas vs the cad.api version (honest list)
+
+1. **Broader windows:** cad.api applied a default 0.05 au distance cut (~19.5 LD); NeoWs feed
+   returns every NEO approaching Earth in the window — same 7 days now shows 40 approaches
+   where cad showed 10, and most perspective-bar dots pin at the 99 % clamp since the data
+   now extends past the bar's 20 LD cap. v1's bar formula kept byte-identical; it's the data
+   that widened. The "sky is quiet" empty state is correspondingly rarer.
+2. **Stamp/error wording:** "Couldn't reach the JPL close-approach service" -> "… the NASA
+   NeoWs service"; footer credits NeoWs. New "Source is rate-limiting — …" stamp (rl rule).
+3. **Keycard added** (see above). Computed-style diff: the pre-approved
+   `-webkit-font-smoothing` set plus body height/geometry only — the page is taller (40 rows
+   + keycard); zero color/typography/layout deltas on the compared selectors.
+4. TTL semantics, cache keys, LD/km/size math, sort, highlight rule, a11y wiring: unchanged.
+
+### manifest deltas (manifest-entry.json updated)
+
+`network` cors-open -> **keyed**; `key` null -> `{"name":"nasa","signup":"https://api.nasa.gov","demo":true}`;
+`endpoints` -> `["https://api.nasa.gov"]`; `flags` [] -> `["rl"]`; `storage` +`suite.key.nasa`.
+`cacheTtlMin` 1440 unchanged (daily-stats class). CATALOG §3.3 + CORS table and MIGRATION
+row 39 are the orchestrator's to update on re-integration.

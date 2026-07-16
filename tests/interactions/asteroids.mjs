@@ -1,31 +1,26 @@
-/* tests/interactions/asteroids.mjs — Near-Earth Asteroid Watch (Batch B, CORS-open fetcher)
+/* tests/interactions/asteroids.mjs — Near-Earth Asteroid Watch
+   NeoWs RE-SOURCE VERIFICATION (Batch C, orchestrator-ruled)
 
-   *** UPSTREAM SOURCE REGRESSION — READ BEFORE TRUSTING THIS EVIDENCE ***
-   As of this run, ssd-api.jpl.nasa.gov/cad.api returns 200 with NO
-   Access-Control-Allow-Origin header for ANY origin (curl-verified with
-   Origin: null and Origin: https://example.com). Every in-browser fetch of it
-   is CORS-blocked — v1 asteroids.html fails identically from file://
-   (probe archived in cors-live-failure.txt). CATALOG.md marks this host
-   CORS ✓, so this is a source-side regression, not a migration defect.
+   Context: ssd-api.jpl.nasa.gov/cad.api dropped its CORS headers ~Jul 2026 (archived in
+   cors-live-failure.txt from the Batch B run); the tool was re-sourced to NASA NeoWs
+   (api.nasa.gov/neo/rest/v1/feed, ACAO * live-verified — neows-live-headers.txt).
 
-   Strategy, fully disclosed:
-   1. The LIVE FETCH happens Node-side at module load (CORS only restricts
-      browsers): one real cad.api request per window (7 d, 30 d). Raw bodies
-      are archived as cad-live-d7.json / cad-live-d30.json.
-   2. chromium.launch is wrapped below so every harness context fulfills
-      in-page cad.api requests with those same-day real payloads. Without
-      this, the genuine CORS console error fires during the harness's initial
-      page load — before interact() can intercept anything — and fails the
-      console gate for a defect that is upstream and v1-identical. The full
-      in-browser pipeline (Suite.fetchJSON -> cache envelope -> normalize ->
-      render) still executes for real; only the network hop is bridged.
-   3. interact() re-proves the genuine failure in a route-free context and
-      archives it (cors-live-failure.txt), then verifies rendering, the
-      lunar-distance math, the window selector, and the Batch B stale/offline
-      paths. Nothing here pretends the browser path works today. */
+   Strategy, fully disclosed (DEMO_KEY is a shared 30/hr pool — budget: ONE live request):
+   1. Every harness context route-fulfills NeoWs requests from the archived real 7-day
+      payload (neows-live-d7.json, fetched live 2026-07-16 by the re-source probe),
+      date-normalized to the run date. The paged 30-day window's later chunks are the same
+      real data date-shifted forward — synthetic fixtures, clearly labeled, used only to
+      exercise the paging/merge logic deterministically.
+   2. interact() makes exactly ONE real in-browser NeoWs request (the refresh click with
+      routing set to pass through) — the full live CORS + render pipeline from file:// —
+      and archives the body + headers (neows-live-run-d7.json / -headers.txt).
+   3. The 429 rate-limit path (flags: ["rl"]) is verified deterministically via
+      route-fulfilled 429s; the real API is never hammered.
+   4. v1 (../Local Suite) still fetches cad.api; its requests are route-fulfilled from the
+      archived cad-live-d7/d30.json so the localStorage-parity pass can run at all. */
 
 import { chromium } from "playwright";
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 export const selectors = [
@@ -35,42 +30,73 @@ export const selectors = [
 
 export const screenshotAfterInteract = true;
 
-const AU_KM = 149597870.7, LD_KM = 384400, AU_LD = AU_KM / LD_KM; // tool's constants
+const AU_KM = 149597870.7, LD_KM = 384400, AU_LD = AU_KM / LD_KM; // tool's constants (389.1725 LD/AU)
+const NEOWS_RE = /api\.nasa\.gov\/neo\/rest\/v1\/feed/;
 const CAD_RE = /ssd-api\.jpl\.nasa\.gov\/cad\.api/;
+const EV_DIR = join(import.meta.dirname, "..", "evidence", "asteroids");
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
-function dstr(d) {
-  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+/* archived real payloads */
+const base = JSON.parse(readFileSync(join(EV_DIR, "neows-live-d7.json"), "utf8"));
+const baseDates = Object.keys(base.near_earth_objects).sort(); // 8 date buckets
+const cadBodies = {
+  7: readFileSync(join(EV_DIR, "cad-live-d7.json"), "utf8"),
+  30: readFileSync(join(EV_DIR, "cad-live-d30.json"), "utf8")
+};
+
+/* Build a NeoWs feed body for [startStr..endStr] (inclusive) from the archived real data:
+   bucket i of the archive is remapped onto date start+i, close-approach timestamps shifted
+   by the same delta. Chunk 0 is thus the real payload date-normalized to the run date;
+   chunks 1-3 of the 30-day window are the same real data shifted forward (synthetic). */
+function bodyFor(startStr, endStr) {
+  const start = Date.parse(startStr + "T00:00:00Z");
+  const nDays = Math.round((Date.parse(endStr + "T00:00:00Z") - start) / 86400000);
+  const out = { element_count: 0, near_earth_objects: {} };
+  for (let i = 0; i <= nDays && i < baseDates.length; i++) {
+    const nd = new Date(start + i * 86400000).toISOString().slice(0, 10);
+    const shiftMs = Date.parse(nd + "T00:00:00Z") - Date.parse(baseDates[i] + "T00:00:00Z");
+    out.near_earth_objects[nd] = base.near_earth_objects[baseDates[i]].map(neo => {
+      const c = JSON.parse(JSON.stringify(neo));
+      c.close_approach_data = (c.close_approach_data || []).map(ca => {
+        const t = new Date((ca.epoch_date_close_approach || 0) + shiftMs);
+        ca.epoch_date_close_approach = t.getTime();
+        ca.close_approach_date = t.toISOString().slice(0, 10);
+        ca.close_approach_date_full = t.getUTCFullYear() + "-" + MON[t.getUTCMonth()] + "-" +
+          String(t.getUTCDate()).padStart(2, "0") + " " +
+          String(t.getUTCHours()).padStart(2, "0") + ":" + String(t.getUTCMinutes()).padStart(2, "0");
+        return ca;
+      });
+      return c;
+    });
+    out.element_count += out.near_earth_objects[nd].length;
+  }
+  return out;
 }
-const bootTime = new Date();
-const urlFor = days => "https://ssd-api.jpl.nasa.gov/cad.api?date-min=" + dstr(bootTime) +
-  "&date-max=" + dstr(new Date(bootTime.getTime() + days * 86400000)) + "&sort=dist&fullname=true";
 
-/* ---- 1. the live fetch (Node side, one request per window) ---- */
-const livePayloads = {}; // day-span -> body text
-const liveMeta = {};     // day-span -> {url, status, acao, fetchedAt, count}
-for (const days of [7, 30]) {
-  const url = urlFor(days);
-  const res = await fetch(url, { headers: { "Accept": "application/json", "Origin": "https://example.com" } });
-  if (!res.ok) throw new Error(`live cad.api fetch failed for ${days}d window: HTTP ${res.status}`);
-  const body = await res.text();
-  livePayloads[days] = body;
-  liveMeta[days] = {
-    url, status: res.status,
-    acao: res.headers.get("access-control-allow-origin"),
-    fetchedAt: new Date().toISOString(),
-    count: JSON.parse(body).count
-  };
-}
+/* ---- route modes (module-level so interact() can flip them) ---- */
+let liveMode = false;   // pass the next NeoWs request through to the real API (the ONE budgeted request)
+let rlMode = false;     // fulfill NeoWs with a synthetic 429 (deterministic rl verification)
+const neowsUrls = [];   // every NeoWs request the routes saw, in order
+let fulfilled = 0;      // how many were served from the archived fixture
 
-/* ---- 2. fulfill in-page cad.api requests with the real payloads ---- */
-async function routeCad(ctx) {
-  await ctx.route(CAD_RE, route => {
+async function routeAll(ctx) {
+  await ctx.route(CAD_RE, route => { // v1 only
     const u = new URL(route.request().url());
     const span = Math.round((Date.parse(u.searchParams.get("date-max")) -
       Date.parse(u.searchParams.get("date-min"))) / 86400000);
-    const body = livePayloads[span];
+    const body = cadBodies[span];
     if (body) return route.fulfill({ status: 200, contentType: "application/json", body });
-    return route.abort(); // windows we did not live-fetch (3 d, 14 d) stay unreachable
+    return route.abort();
+  });
+  await ctx.route(NEOWS_RE, route => {
+    const u = new URL(route.request().url());
+    neowsUrls.push(route.request().url());
+    if (liveMode) return route.continue(); // real network — the ONE budgeted request
+    if (rlMode) return route.fulfill({ status: 429, contentType: "application/json",
+      body: JSON.stringify({ error: { code: "OVER_RATE_LIMIT", message: "synthetic throttle (deterministic rl test)" } }) });
+    fulfilled++;
+    return route.fulfill({ status: 200, contentType: "application/json",
+      body: JSON.stringify(bodyFor(u.searchParams.get("start_date"), u.searchParams.get("end_date"))) });
   });
 }
 const realLaunch = chromium.launch.bind(chromium);
@@ -79,7 +105,7 @@ chromium.launch = async (...args) => {
   const realNewContext = browser.newContext.bind(browser);
   browser.newContext = async (...ca) => {
     const ctx = await realNewContext(...ca);
-    await routeCad(ctx);
+    await routeAll(ctx);
     return ctx;
   };
   return browser;
@@ -88,128 +114,176 @@ chromium.launch = async (...args) => {
 async function waitForView(page) {
   await page.waitForSelector("#view .hero, #view .msg:not(.skeleton)", { timeout: 30000 });
 }
+const stamp = page => page.locator("#stamp").innerText().then(s => s.trim());
 
 export async function interact({ page, log, evidenceDir }) {
-  log("NOTE: ssd-api.jpl.nasa.gov currently sends no Access-Control-Allow-Origin header — the");
-  log("NOTE: browser path is CORS-blocked live (v1 fails identically; see cors-live-failure.txt).");
-  log("NOTE: all in-page cad.api responses in this run are the real same-day payloads fetched");
-  log("NOTE: Node-side (cad-live-d7.json / cad-live-d30.json), served via route fulfillment.");
-  for (const days of [7, 30]) {
-    const m = liveMeta[days];
-    log(`live fetch (Node): ${m.url} -> HTTP ${m.status}, count=${m.count}, ` +
-      `Access-Control-Allow-Origin: ${m.acao === null ? "ABSENT" : JSON.stringify(m.acao)}, at ${m.fetchedAt}`);
-    writeFileSync(join(evidenceDir, `cad-live-d${days}.json`), livePayloads[days]);
-  }
+  log("NOTE: RE-SOURCED to NASA NeoWs (cad.api dropped CORS ~Jul 2026 — see cors-live-failure.txt).");
+  log("NOTE: NeoWs requests are route-fulfilled from the archived real payload neows-live-d7.json");
+  log("NOTE: (date-normalized; 30-day chunks 2-4 are that data date-shifted — synthetic, paging-only).");
+  log("NOTE: Exactly ONE real DEMO_KEY request is made below (shared 30/hr pool — budget honored).");
 
-  /* ---- 3a. genuine in-browser failure, archived (route-free context) ---- */
-  {
-    const probeCtx = await page.context().browser().newContext();
-    await probeCtx.unroute(CAD_RE); // strip the fulfillment route: raw reality
-    const lines = [`genuine in-browser probe (no route fulfillment), ${new Date().toISOString()}`];
-    for (const [name, url] of [
-      ["v2", page.url()],
-      ["v1", page.url().replace(/Local%20Suite%202\/tools\//, "Local%20Suite/")]
-    ]) {
-      const pp = await probeCtx.newPage();
-      const errs = [];
-      pp.on("console", m => { if (m.type() === "error") errs.push(m.text()); });
-      await pp.goto(url);
-      await pp.waitForSelector("#view .msg.err", { timeout: 30000 });
-      lines.push(`${name} (${url}):`);
-      lines.push(`  error card: "${(await pp.locator("#view .msg.err").innerText()).replace(/\s+/g, " ").trim()}"`);
-      for (const e of errs) lines.push(`  console.error: ${e}`);
-      await pp.close();
-    }
-    writeFileSync(join(evidenceDir, "cors-live-failure.txt"), lines.join("\n") + "\n");
-    await probeCtx.close();
-    log(`genuine CORS failure re-proven in a route-free context for v1 AND v2 -> cors-live-failure.txt`);
-  }
-
-  /* ---- 3b. live-payload render, default 7-day window ---- */
+  /* ---- initial 7-day load (route-fulfilled) + demo-key nudge ---- */
   await waitForView(page);
-  log(`stamp after load: "${(await page.locator("#stamp").innerText()).trim()}"`);
+  log(`stamp after fulfilled load: "${await stamp(page)}"`);
+  const nudge = (await page.locator("#keySummary").innerText()).trim();
+  if (!/demo key/.test(nudge)) throw new Error("demo-key nudge missing: " + nudge);
+  log(`demo-key nudge (designed state): "${nudge}"`);
 
-  const cache = await page.evaluate(() => {
-    const raw = localStorage.getItem("suite.cache.asteroids.d7");
-    if (!raw) return null;
-    const e = JSON.parse(raw);
-    const j = e.v;
-    const idx = {};
-    j.fields.forEach((f, i) => idx[f] = i);
-    const first = (j.data || [])[0] || null;
-    return {
-      cachedAt: new Date(e.t).toISOString(),
-      count: j.count,
-      dataLen: (j.data || []).length,
-      sample: first ? { des: first[idx.des], fullname: (first[idx.fullname] || "").trim(),
-        cd: first[idx.cd], distAU: first[idx.dist], vRel: first[idx.v_rel], h: first[idx.h] } : null
-    };
-  });
-  log(`cache envelope suite.cache.asteroids.d7: count=${cache && cache.count}, data rows=${cache && cache.dataLen}, cached at ${cache && cache.cachedAt}`);
-  const s = cache && cache.sample;
-  log(`sample object: des="${s && s.des}" fullname="${s && s.fullname}" cd="${s && s.cd}" dist=${s && s.distAU} AU (${s ? (parseFloat(s.distAU) * AU_LD).toFixed(2) : "?"} LD) v=${s && s.vRel} km/s H=${s && s.h}`);
+  /* ---- THE ONE LIVE REQUEST: refresh with routing passed through ---- */
+  liveMode = true;
+  const respP = page.waitForResponse(r => NEOWS_RE.test(r.url()), { timeout: 30000 });
+  await page.click("#refreshBtn");
+  const resp = await respP;
+  liveMode = false;
+  const h = resp.headers();
+  const liveStatus = resp.status();
+  let liveBody = null;
+  try { liveBody = await resp.text(); } catch (e) { /* body unavailable on failure */ }
+  log(`LIVE NeoWs fetch (in-browser from file://, DEMO_KEY): HTTP ${liveStatus}, ` +
+    `Access-Control-Allow-Origin: ${h["access-control-allow-origin"] || "ABSENT"}, ` +
+    `X-Ratelimit-Limit: ${h["x-ratelimit-limit"]}, X-Ratelimit-Remaining: ${h["x-ratelimit-remaining"]}`);
+  writeFileSync(join(evidenceDir, "neows-live-run-headers.txt"),
+    `url: ${resp.url()}\nstatus: ${liveStatus}\nfetched: ${new Date().toISOString()}\n` +
+    Object.entries(h).map(([k, v]) => `${k}: ${v}`).join("\n") + "\n");
+  if (liveStatus === 200 && liveBody) {
+    writeFileSync(join(evidenceDir, "neows-live-run-d7.json"), liveBody);
+    await page.waitForFunction(() => /^Loaded just now/.test(document.getElementById("stamp").textContent), { timeout: 15000 });
+    log(`live render: stamp "${await stamp(page)}" — full browser CORS + render pipeline, real data`);
+  } else {
+    // Shared pool exhausted at run time: the rl designed state IS the correct behavior; say so.
+    await page.waitForFunction(() => /rate-limiting|Live fetch failed/.test(document.getElementById("stamp").textContent), { timeout: 15000 });
+    log(`LIVE REQUEST NOT 200 (shared DEMO_KEY pool) — designed fallback rendered: "${await stamp(page)}"`);
+    log(`the live-CORS claim then rests on neows-live-headers.txt (archived probe) — flag for the orchestrator`);
+  }
 
-  /* ---- lunar-distance math: recompute the closest approach independently ---- */
+  /* ---- LD math: recompute independently from what the page actually cached/rendered ---- */
+  const feed = await page.evaluate(() => JSON.parse(localStorage.getItem("suite.cache.asteroids.d7")).v);
+  const approaches = [];
+  for (const d of Object.keys(feed.near_earth_objects)) {
+    for (const neo of feed.near_earth_objects[d]) {
+      for (const ca of neo.close_approach_data || []) {
+        approaches.push({
+          name: (neo.name || "").trim(), pha: !!neo.is_potentially_hazardous_asteroid,
+          h: neo.absolute_magnitude_h, au: parseFloat(ca.miss_distance.astronomical),
+          lunarApi: parseFloat(ca.miss_distance.lunar), kmApi: parseFloat(ca.miss_distance.kilometers),
+          cd: ca.close_approach_date_full
+        });
+      }
+    }
+  }
+  approaches.sort((a, b) => a.au - b.au);
+  const top = approaches[0];
+  const ldComputed = top.au * AU_LD;
+  const kmComputed = Math.round(top.au * AU_KM);
   const heroName = (await page.locator(".hero .name").innerText()).trim();
-  const heroWhen = (await page.locator(".hero .when").innerText()).trim();
-  const heroLD = (await page.locator("#hLD").innerText()).replace(/\s+/g, " ").trim();
+  const heroLD = parseFloat((await page.locator("#hLD").innerText()).trim());
   const heroKM = (await page.locator("#hKM").innerText()).replace(/\s+/g, " ").trim();
-  const heroV = (await page.locator("#hV").innerText()).replace(/\s+/g, " ").trim();
-  const heroSize = (await page.locator("#hSize").innerText()).trim();
-  log(`hero: name="${heroName}" when="${heroWhen}"`);
-  log(`hero numbers: LD="${heroLD}" km="${heroKM}" speed="${heroV}" size="${heroSize}"`);
+  log(`hero: "${heroName}" (expected "${top.name}"), when="${(await page.locator(".hero .when").innerText()).trim()}"`);
+  log(`LD recompute (independent): ${top.au} AU × ${AU_LD.toFixed(4)} = ${ldComputed.toFixed(4)} LD; ` +
+    `NeoWs miss_distance.lunar=${top.lunarApi}; rendered #hLD=${heroLD}`);
+  log(`LD constant note: NeoWs lunar/astronomical = ${(top.lunarApi / top.au).toFixed(4)} (flat 389 LD/AU); ` +
+    `tool keeps v1's 384,400 km LD (389.1725) — delta ${(Math.abs(ldComputed - top.lunarApi) / top.lunarApi * 100).toFixed(3)}%`);
+  log(`km cross-check: computed ${kmComputed.toLocaleString("en-US")} km, NeoWs kilometers=${Math.round(top.kmApi).toLocaleString("en-US")}, rendered "${heroKM}"`);
+  if (heroName !== top.name) throw new Error("hero is not the closest approach");
+  if (Math.abs(heroLD - ldComputed) > 0.006) throw new Error(`hero LD mismatch: ${heroLD} vs ${ldComputed}`);
+  if (Math.abs(ldComputed - top.lunarApi) / top.lunarApi > 0.001) throw new Error("LD cross-check vs NeoWs lunar failed (>0.1%)");
 
-  const minDist = Math.min(...(() => {
-    const j = JSON.parse(livePayloads[7]);
-    const di = j.fields.indexOf("dist");
-    return j.data.map(d => parseFloat(d[di]));
-  })());
-  const expectLD = (minDist * AU_LD).toFixed(2);
-  const expectKM = Math.round(minDist * AU_KM).toLocaleString("en-US");
-  log(`LD math check: min dist=${minDist} AU -> expected ${expectLD} LD / ${expectKM} km; rendered "${heroLD}" / "${heroKM}"`);
+  /* ---- PHA badges: real data now (cad.api never supplied the flag) ---- */
+  const phaExpected = approaches.filter(a => a.pha).length;
+  const phaRendered = await page.locator(".pha").count();
+  log(`PHA badges: ${phaRendered} rendered vs ${phaExpected} is_potentially_hazardous_asteroid=true in the payload ` +
+    `(v1's dead pha:false code path is live again)`);
+  if (phaRendered !== phaExpected) throw new Error("PHA badge count mismatch");
 
-  /* perspective bar: Moon marker at 1 LD, expected left = 100/maxLD % */
-  const barmax = (await page.locator("#barmax").innerText()).trim();
-  const maxLD = parseFloat(barmax);
-  const moonLeft = await page.locator(".moonline").count()
-    ? await page.evaluate(() => document.querySelector(".moonline").style.left) : "(no moon marker)";
-  log(`perspective bar: barmax="${barmax}", moonline left=${moonLeft} (1 LD = ~${(100 / maxLD).toFixed(2)}% of ${maxLD} LD track), ` +
-    `rock dots=${await page.locator(".rock").count()} (caps at 8), moon label present=${await page.locator(".moonlabel").count() === 1}`);
-
-  /* table: row count, closer-than-Moon highlighting, first row */
+  /* ---- table + closer-than-Moon highlight ---- */
   const rowCount = await page.locator("#view tbody tr").count();
   const closeRows = await page.locator("#view tbody tr.close").count();
-  const closeExpected = (() => {
-    const j = JSON.parse(livePayloads[7]);
-    const di = j.fields.indexOf("dist");
-    return j.data.filter(d => parseFloat(d[di]) * AU_LD < 1).length;
-  })();
-  log(`table: ${rowCount} rows (h2: "${(await page.locator("#view h2").innerText()).trim()}")`);
-  log(`closer-than-Moon highlight: ${closeRows} tr.close rows vs ${closeExpected} rows with dist < 1 LD in the raw payload`);
+  const closeExpected = approaches.filter(a => a.au * AU_LD < 1).length;
+  log(`table: ${rowCount} rows (payload has ${approaches.length} approaches); h2 "${(await page.locator("#view h2").innerText()).trim()}"`);
+  log(`closer-than-Moon highlight: ${closeRows} tr.close vs ${closeExpected} under 1 LD in the payload`);
+  if (rowCount !== approaches.length || closeRows !== closeExpected) throw new Error("table/highlight mismatch");
   log(`first table row: "${(await page.locator("#view tbody tr").first().innerText()).replace(/\s+/g, " | ").trim()}"`);
-  log(`PHA badges rendered: ${await page.locator(".pha").count()} (v1 normalize hardcodes pha:false — expect 0)`);
 
-  /* ---- window selector: second window, separate cache key (d30) ---- */
+  /* ---- 30-day window: NeoWs caps a request at 7 days -> expect 4 paged requests ---- */
+  const beforeN = neowsUrls.length;
   await page.selectOption("#window", "30");
   await waitForView(page);
   await page.waitForFunction(() => localStorage.getItem("suite.cache.asteroids.d30") !== null, { timeout: 30000 });
-  const d30count = await page.evaluate(() => JSON.parse(localStorage.getItem("suite.cache.asteroids.d30")).v.count);
-  log(`window -> 30 days: stamp "${(await page.locator("#stamp").innerText()).trim()}", cache d30 count=${d30count}, table rows=${await page.locator("#view tbody tr").count()}`);
+  const pagedUrls = neowsUrls.slice(beforeN).map(u => {
+    const p = new URL(u).searchParams; return p.get("start_date") + ".." + p.get("end_date");
+  });
+  log(`window -> 30 days: ${pagedUrls.length} paged requests (7-day cap): ${pagedUrls.join(", ")}`);
+  if (pagedUrls.length !== 4) throw new Error("expected 4 paged requests for the 30-day window");
+  const d30 = await page.evaluate(() => {
+    const e = JSON.parse(localStorage.getItem("suite.cache.asteroids.d30"));
+    return { t: e.t, count: e.v.element_count, buckets: Object.keys(e.v.near_earth_objects).length };
+  });
+  log(`merged d30 cache: element_count=${d30.count}, ${d30.buckets} date buckets (8+8+8+7=31 expected), ` +
+    `rendered rows=${await page.locator("#view tbody tr").count()}, stamp "${await stamp(page)}"`);
+  if (d30.buckets !== 31) throw new Error("30-day merge produced " + d30.buckets + " buckets");
 
-  /* back to 7 days: served from the fresh cache (TTL 1440 min), no request */
+  /* back to 7 days: fresh cache serves without any request */
+  const beforeBack = neowsUrls.length;
   await page.selectOption("#window", "7");
   await waitForView(page);
-  log(`window -> back to 7 days (within TTL): stamp "${(await page.locator("#stamp").innerText()).trim()}"`);
+  log(`window -> back to 7 days: stamp "${await stamp(page)}", new requests=${neowsUrls.length - beforeBack} (expect 0)`);
+  if (neowsUrls.length !== beforeBack) throw new Error("7-day cache should have served without a request");
 
-  /* ---- refresh button with the network cut: forced fetch falls back to stale cache ---- */
-  await page.context().route(/^https?:/, r => r.abort()); // registered later -> outranks the fulfillment route
-  await page.click("#refreshBtn");
-  await waitForView(page);
-  await page.waitForFunction(() => /cached data/.test(document.getElementById("stamp").textContent), { timeout: 15000 });
-  log(`refresh while offline: stamp "${(await page.locator("#stamp").innerText()).trim()}", table still renders ${await page.locator("#view tbody tr").count()} rows`);
-  await page.context().unroute(/^https?:/);
+  /* ---- key card mechanics: saved key reaches the request URL; clear returns to DEMO_KEY ---- */
+  await page.click("#keycard summary");
+  await page.fill("#keyInput", "TESTKEY_ROUTED_ONLY");
+  await page.click("#keySave"); // forces a (route-fulfilled) reload with the new key
+  await page.waitForFunction(() => /^Loaded just now/.test(document.getElementById("stamp").textContent), { timeout: 15000 });
+  const savedUrlKey = new URL(neowsUrls[neowsUrls.length - 1]).searchParams.get("api_key");
+  log(`key saved: request used api_key=${savedUrlKey}; summary "${(await page.locator("#keySummary").innerText()).trim()}"; ` +
+    `suite.key.nasa=${await page.evaluate(() => localStorage.getItem("suite.key.nasa"))}`);
+  if (savedUrlKey !== "TESTKEY_ROUTED_ONLY") throw new Error("saved key did not reach the request URL");
+  await page.click("#keyClear");
+  await page.waitForFunction(() => /^Loaded just now/.test(document.getElementById("stamp").textContent), { timeout: 15000 });
+  const clearedUrlKey = new URL(neowsUrls[neowsUrls.length - 1]).searchParams.get("api_key");
+  log(`key cleared: request back to api_key=${clearedUrlKey}; suite.key.nasa=${await page.evaluate(() => localStorage.getItem("suite.key.nasa"))}`);
+  if (clearedUrlKey !== "DEMO_KEY") throw new Error("clearing the key did not restore DEMO_KEY");
 
-  /* ---- Batch B stale-cache offline path: age caches 24 h, cut network, reload ---- */
+  /* ---- rl backoff (flags: ["rl"]), deterministic via route-fulfilled 429 ----
+     Age the d7 cache to 30 h (> 24 h TTL, < 48 h doubled TTL), throttle the route:
+     load #1 attempts a fetch, gets 429, doubles the backoff, serves the cache with the note;
+     load #2 must serve the same cache silently WITHOUT a network attempt.
+     Runs in its OWN context (the Batch B CORS-probe pattern): Chrome unconditionally logs
+     "Failed to load resource: ... 429" for any 4xx fetch response — that's the browser, not
+     the tool (which handles the 429 by design) — and it would fail the console gate on the
+     gated page. The probe's console is captured and logged below, nothing hidden. */
+  {
+    const rlCtx = await page.context().browser().newContext();
+    const rp = await rlCtx.newPage();
+    const rlConsole = [];
+    rp.on("console", m => { if (m.type() === "error") rlConsole.push(m.text()); });
+    await rp.goto(page.url()); // fresh context -> fresh cache, seeded by one fulfilled request
+    await waitForView(rp);
+    await rp.evaluate(() => {
+      const k = "suite.cache.asteroids.d7";
+      const e = JSON.parse(localStorage.getItem(k));
+      e.t = Date.now() - 30 * 3600 * 1000;
+      localStorage.setItem(k, JSON.stringify(e));
+    });
+    rlMode = true;
+    const beforeRl = neowsUrls.length;
+    await rp.evaluate(() => document.getElementById("window").dispatchEvent(new Event("change"))); // load(false)
+    await rp.waitForFunction(() => /rate-limiting/.test(document.getElementById("stamp").textContent), { timeout: 15000 });
+    log(`429 fulfilled (${neowsUrls.length - beforeRl} attempt): stamp "${await stamp(rp)}", ` +
+      `cached rows still rendered: ${await rp.locator("#view tbody tr").count()}`);
+    const afterFirst = neowsUrls.length;
+    await rp.evaluate(() => document.getElementById("window").dispatchEvent(new Event("change")));
+    await rp.waitForFunction(() => /^Cached · updated/.test(document.getElementById("stamp").textContent), { timeout: 15000 });
+    log(`backoff proof: second non-forced load made ${neowsUrls.length - afterFirst} network attempts (expect 0 — ` +
+      `effective TTL doubled to 48 h covers the 30 h cache); stamp "${await stamp(rp)}"`);
+    if (neowsUrls.length !== afterFirst) throw new Error("rl backoff did not suppress the refetch");
+    rlMode = false;
+    log(`rl probe console (expected browser noise for a 4xx fetch response): ` +
+      (rlConsole.length ? rlConsole.map(s => JSON.stringify(s)).join(", ") : "(none)"));
+    await rlCtx.close();
+  }
+
+  /* ---- Batch B offline paths on the gated page: age caches 24 h, cut the network ---- */
   await page.evaluate(() => {
     for (const k of Object.keys(localStorage)) if (k.startsWith("suite.cache.")) {
       const e = JSON.parse(localStorage.getItem(k));
@@ -217,26 +291,29 @@ export async function interact({ page, log, evidenceDir }) {
       localStorage.setItem(k, JSON.stringify(e));
     }
   });
-  await page.context().route(/^https?:/, r => r.abort());
-  await page.reload();
+  await page.context().route(/^https?:/, r => r.abort()); // registered later -> outranks fulfillment routes
+  await page.click("#refreshBtn"); // forced fetch falls back to the aged cache
+  await page.waitForFunction(() => /cached data/.test(document.getElementById("stamp").textContent), { timeout: 15000 });
+  log(`refresh while offline: stamp "${await stamp(page)}", table still renders ${await page.locator("#view tbody tr").count()} rows`);
+
+  await page.reload(); // stale-cache reload path
   await waitForView(page);
   await page.waitForFunction(() => /cached data/.test(document.getElementById("stamp").textContent), { timeout: 15000 });
-  log(`offline stale reload: stamp "${(await page.locator("#stamp").innerText()).trim()}", hero "${(await page.locator(".hero .name").innerText()).trim()}", rows ${await page.locator("#view tbody tr").count()}`);
+  log(`offline stale reload: stamp "${await stamp(page)}", hero "${(await page.locator(".hero .name").innerText()).trim()}", ` +
+    `rows ${await page.locator("#view tbody tr").count()}`);
   await page.screenshot({ path: join(evidenceDir, "offline-stale.png"), fullPage: true });
 
-  /* never-cached window while offline -> hard error card (no cache to fall back on) */
-  await page.selectOption("#window", "3");
+  await page.selectOption("#window", "3"); // never-cached window -> designed error card
   await page.waitForSelector("#view .msg.err", { timeout: 15000 });
   log(`offline uncached window (3 days): error card "${(await page.locator("#view .msg.err").innerText()).replace(/\s+/g, " ").trim()}"`);
-  await page.selectOption("#window", "7"); // recover from the aged cache
+  await page.selectOption("#window", "7");
   await waitForView(page);
   log(`offline back to 7 days: recovered ${await page.locator("#view tbody tr").count()} cached rows from the aged envelope`);
   await page.context().unroute(/^https?:/);
 }
 
-/* Same state-writing actions on v1 (route-fulfilled identically) so the
-   localStorage key sets compare equal: 7-day load writes suite.cache.asteroids.d7,
-   the window switch writes d30; offline segments write nothing. */
+/* Same state-writing actions on v1 (cad.api route-fulfilled from the archived payloads)
+   so the localStorage key sets compare equal: d7 on load, d30 on the window switch. */
 export async function v1Interact({ page }) {
   await page.waitForSelector("#view .hero, #view .msg:not(.skeleton)", { timeout: 30000 });
   await page.selectOption("#window", "30");

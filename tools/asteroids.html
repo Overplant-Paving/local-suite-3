@@ -28,6 +28,22 @@
   h1 { font-size: 1.5rem; letter-spacing: -.02em; }
   .sub { color: var(--muted); margin-top: .2rem; font-size: .92rem; max-width: 54ch; }
 
+  .keycard {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: var(--shadow); padding: 1rem 1.15rem; margin-top: 1.2rem; font-size: .9rem;
+  }
+  .keycard summary { cursor: pointer; color: var(--accent); }
+  .keycard .row { display: flex; gap: .5rem; margin-top: .7rem; flex-wrap: wrap; }
+  .keycard input {
+    flex: 1; min-width: 12rem; border: 1px solid var(--line); background: var(--bg);
+    color: var(--ink); border-radius: 10px; padding: .45rem .7rem; font: inherit;
+  }
+  .keycard button {
+    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    border-radius: 10px; padding: .45rem .9rem; cursor: pointer; font: inherit;
+  }
+  .keycard .note { color: var(--muted); margin-top: .5rem; }
+
   .hero {
     margin: 1.4rem 0; background: var(--card); border: 1px solid var(--line);
     border-left: 4px solid var(--near); border-radius: 14px; box-shadow: var(--shadow);
@@ -90,6 +106,16 @@
   <h1>Near-Earth Asteroid Watch</h1>
   <p class="sub">Close approaches over the next week — how big, how fast, and how close in <strong>lunar distances</strong> (one LD = the Earth–Moon gap). Perspective with breakfast.</p>
 
+  <details class="keycard" id="keycard">
+    <summary id="keySummary">Using the shared NASA demo key (30 requests/hour). Add your own free key →</summary>
+    <div class="row">
+      <input type="text" id="keyInput" placeholder="Paste your NASA API key" aria-label="NASA API key" autocomplete="off" spellcheck="false">
+      <button id="keySave">Save key</button>
+      <button id="keyClear" style="background:var(--card);color:var(--ink);border-color:var(--line)">Use demo</button>
+    </div>
+    <p class="note">Free instant key at <a href="https://api.nasa.gov/" target="_blank" rel="noopener">api.nasa.gov</a> — raises the limit to 1,000/hour. Stored only in this browser (<code>suite.key.nasa</code>). NeoWs caps one request at 7 days, so the 14- and 30-day windows page it (2 and 4 requests per refresh).</p>
+  </details>
+
   <div class="controls">
     <label class="grow" style="display:flex;align-items:center;gap:.5rem;color:var(--muted);font-size:.9rem">
       Window
@@ -107,7 +133,7 @@
   <p class="stamp" id="stamp"></p>
   <p class="foot-note">Diameter is <em>estimated</em> from absolute magnitude (H) assuming a typical albedo — real sizes vary with reflectivity, so we show a range. Distances and speeds are computed at the moment of closest approach. "Closer than the Moon" (&lt; 1 LD) rows are highlighted.</p>
 
-  <footer>Data: NASA/JPL Solar System Dynamics · Close Approach Data (ssd-api.jpl.nasa.gov)</footer>
+  <footer>Data: NASA Near-Earth Object Web Service — NeoWs (api.nasa.gov)</footer>
 </div>
 
 <script src="../core/suite.js" data-suite-inline></script>
@@ -121,6 +147,9 @@ const AU_KM = 149597870.7;
 const LD_KM = 384400;
 const AU_LD = AU_KM / LD_KM;          // ~389.17 lunar distances per AU
 const TTL = 1440 * 60 * 1000;          // manifest cacheTtlMin: 1440 — daily close-approach data
+let rlBackoff = 1;                     // doubles (max 8×) after a 429/403 throttle — flags: ["rl"]
+function getKey() { return Suite.key("nasa").value; }
+function usingDemo() { return Suite.key("nasa").isDemo; }
 const view = Suite.liveRegion(document.getElementById("view"));
 const stampEl = Suite.liveRegion(document.getElementById("stamp"));
 
@@ -246,58 +275,150 @@ function renderRows(rows, cachedAt, live) {
   t.append(tb); scroll.append(t); view.append(scroll);
 }
 
-/* ---- load ---- */
+/* ---- load ----
+   Re-sourced Jul 2026 (orchestrator-ruled): ssd-api.jpl.nasa.gov/cad.api dropped its CORS
+   headers, blocking every in-browser fetch. Data now comes from NASA NeoWs
+   (api.nasa.gov/neo/rest/v1/feed, CORS ✓, keyed — DEMO_KEY demo tier). */
 function normalize(json) {
-  // v1 cached the already-normalized rows array under the same suite.cache key;
-  // tolerate that legacy shape so a v1 user's warm cache still renders offline.
+  // Cache-compat reader — three shapes under the unchanged suite.cache.asteroids.d<days> keys:
+  // 1. bare array: v1 cached the already-normalized rows;
+  // 2. {near_earth_objects}: NeoWs, the live shape since the Jul 2026 re-source;
+  // 3. {fields,data}: the retired cad.api payload (a pre-re-source v2 user's warm cache).
   if (Array.isArray(json)) return json.slice().sort((a, b) => a.dist - b.dist);
-  const idx = {};
-  json.fields.forEach((f, i) => idx[f] = i);
-  const rows = (json.data || []).map(d => ({
-    des: d[idx.des],
-    name: (d[idx.fullname] || d[idx.des] || "").trim(),
-    cd: d[idx.cd],
-    dist: parseFloat(d[idx.dist]),
-    v: parseFloat(d[idx.v_rel]),
-    h: d[idx.h] != null && d[idx.h] !== "" ? parseFloat(d[idx.h]) : null,
-    pha: false,
-  }));
+  const rows = [];
+  if (json.near_earth_objects) {
+    Object.keys(json.near_earth_objects).forEach(date => {
+      json.near_earth_objects[date].forEach(neo => {
+        (neo.close_approach_data || []).forEach(ca => {
+          rows.push({
+            des: neo.neo_reference_id || neo.id,
+            name: (neo.name || "").trim(),
+            cd: ca.close_approach_date_full || ca.close_approach_date,   // "2026-Jul-19 02:04" — cad.api's format
+            dist: parseFloat(ca.miss_distance && ca.miss_distance.astronomical), // AU, same unit as before
+            v: parseFloat(ca.relative_velocity && ca.relative_velocity.kilometers_per_second),
+            h: neo.absolute_magnitude_h != null ? parseFloat(neo.absolute_magnitude_h) : null,
+            pha: !!neo.is_potentially_hazardous_asteroid,  // real now — cad.api never supplied it
+          });
+        });
+      });
+    });
+  } else {
+    const idx = {};
+    json.fields.forEach((f, i) => idx[f] = i);
+    (json.data || []).forEach(d => rows.push({
+      des: d[idx.des],
+      name: (d[idx.fullname] || d[idx.des] || "").trim(),
+      cd: d[idx.cd],
+      dist: parseFloat(d[idx.dist]),
+      v: parseFloat(d[idx.v_rel]),
+      h: d[idx.h] != null && d[idx.h] !== "" ? parseFloat(d[idx.h]) : null,
+      pha: false,
+    }));
+  }
   rows.sort((a, b) => a.dist - b.dist);
   return rows;
 }
 
+/* NeoWs caps one feed request at a 7-day span; wider windows page it honestly.
+   Inclusive day ranges: 3/7 days = 1 request, 14 = 2, 30 = 4. */
+function chunkRanges(days) {
+  const out = [];
+  let a = 0;
+  while (a <= days) { const b = Math.min(a + 7, days); out.push([a, b]); a = b + 1; }
+  return out;
+}
+function mergeFeeds(pages) {
+  if (pages.length === 1) return pages[0];
+  const neo = {};
+  let count = 0;
+  pages.forEach(p => {
+    Object.keys(p.near_earth_objects || {}).forEach(d => {
+      neo[d] = (neo[d] || []).concat(p.near_earth_objects[d]);
+      count += p.near_earth_objects[d].length;
+    });
+  });
+  return { element_count: count, near_earth_objects: neo };
+}
+function cacheGet(key) {
+  const e = Suite.store.get("suite.cache.asteroids." + key);
+  return (e && typeof e === "object" && "t" in e && "v" in e) ? e : null;
+}
+
 async function load(force) {
-  const days = document.getElementById("window").value;
-  const now = new Date();
-  const end = new Date(now.getTime() + days * 86400000);
+  const days = +document.getElementById("window").value;
   const key = "d" + days;
   stampEl.textContent = "";
+
+  const cached = cacheGet(key);
+  const ttl = force ? 0 : TTL * rlBackoff;   // rl backoff: effective TTL doubles while throttled
+  if (cached && ttl > 0 && Date.now() - cached.t < ttl) {
+    renderRows(normalize(cached.v), cached.t, false);
+    stampEl.textContent = "Cached · updated " + ago(cached.t) + ".";
+    return;
+  }
 
   const sk = document.createElement("div"); sk.className = "msg skeleton"; sk.textContent = "Scanning the neighbourhood…";
   view.innerHTML = ""; view.append(sk);
 
-  const url = "https://ssd-api.jpl.nasa.gov/cad.api?date-min=" + dstr(now) +
-    "&date-max=" + dstr(end) + "&sort=dist&fullname=true";
+  const now = new Date();
   try {
-    const r = await Suite.fetchJSON(url, { cacheKey: "asteroids." + key, ttl: force ? 0 : TTL });
-    const rows = normalize(r.v);
-    renderRows(rows, r.t, !r.fromCache);
-    if (r.stale) {
-      stampEl.textContent = "Live fetch failed — showing cached data from " + ago(r.t) + ".";
-    } else if (r.fromCache) {
-      stampEl.textContent = "Cached · updated " + ago(r.t) + ".";
-    } else {
-      stampEl.textContent = "Loaded just now · " + rows.length + " approaches in the next " + days + " days.";
+    const pages = [];
+    for (const r of chunkRanges(days)) {
+      const url = "https://api.nasa.gov/neo/rest/v1/feed" +
+        "?start_date=" + dstr(new Date(now.getTime() + r[0] * 86400000)) +
+        "&end_date=" + dstr(new Date(now.getTime() + r[1] * 86400000)) +
+        "&api_key=" + encodeURIComponent(getKey());
+      pages.push((await Suite.fetchJSON(url, { ttl: 0, fallbackToCache: false })).v);
     }
+    const merged = mergeFeeds(pages);
+    const t = Date.now();
+    Suite.store.set("suite.cache.asteroids." + key, { t, v: merged }); // same {t,v} envelope + keys as ever
+    const rows = normalize(merged);
+    renderRows(rows, t, true);
+    stampEl.textContent = "Loaded just now · " + rows.length + " approaches in the next " + days + " days.";
   } catch (err) {
+    const m = /HTTP (\d+)/.exec(err && err.message || "");
+    const status = m ? +m[1] : 0;
+    const throttled = status === 429 || status === 403; // api.nasa.gov throttles with 429 (403 on some gateways)
+    if (throttled) rlBackoff = Math.min(rlBackoff * 2, 8);
+    if (cached) {
+      renderRows(normalize(cached.v), cached.t, false);
+      stampEl.textContent = (throttled ? "Source is rate-limiting" : "Live fetch failed") +
+        " — showing cached data from " + ago(cached.t) + ".";
+      return;
+    }
     view.innerHTML = "";
-    const m = document.createElement("div"); m.className = "msg err";
-    m.innerHTML = "<p style='color:var(--ink);font-weight:600;margin-bottom:.4rem'>Couldn't reach the JPL close-approach service</p>";
-    const p = document.createElement("p"); p.textContent = err.message || "Check your connection and try refresh.";
-    m.append(p); view.append(m);
+    const box = document.createElement("div"); box.className = "msg err";
+    box.innerHTML = "<p style='color:var(--ink);font-weight:600;margin-bottom:.4rem'>Couldn't reach the NASA NeoWs service</p>";
+    const p = document.createElement("p");
+    p.textContent = throttled
+      ? "Rate limit reached on the shared demo key. Wait a bit, or add your own free key above."
+      : (err.message || "Check your connection and try refresh.");
+    box.append(p); view.append(box);
     stampEl.textContent = "";
   }
 }
+
+/* ---- key card (suite.key.<name> convention; settings.html centralizes entry in Phase 4) ---- */
+function refreshKeyUI() {
+  const sum = document.getElementById("keySummary");
+  sum.textContent = usingDemo()
+    ? "Using the shared NASA demo key (30 requests/hour). Add your own free key →"
+    : "Using your saved NASA key (1,000/hour). ✓ Change or remove →";
+  document.getElementById("keyInput").value = usingDemo() ? "" : getKey();
+}
+function saveKey() {
+  const v = document.getElementById("keyInput").value.trim();
+  if (v) { Suite.store.set("suite.key.nasa", v); rlBackoff = 1; refreshKeyUI(); load(true); }
+}
+document.getElementById("keySave").addEventListener("click", saveKey);
+document.getElementById("keyInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); saveKey(); }
+});
+document.getElementById("keyClear").addEventListener("click", () => {
+  Suite.store.remove("suite.key.nasa"); refreshKeyUI(); load(true);
+});
+refreshKeyUI();
 
 document.getElementById("refreshBtn").addEventListener("click", () => load(true));
 document.getElementById("window").addEventListener("change", () => load(false));

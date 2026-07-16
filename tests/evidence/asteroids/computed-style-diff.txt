@@ -1,4 +1,8 @@
-== computed-style diff, light (12 differing values) ==
+== computed-style diff, light (16 differing values) ==
+body { block-size: v1=1368.62px | v2=2720.8px }
+body { height: v1=1368.62px | v2=2720.8px }
+body { perspective-origin: v1=640px 684.312px | v2=640px 1360.39px }
+body { transform-origin: v1=640px 684.312px | v2=640px 1360.4px }
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
@@ -12,7 +16,11 @@ h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .foot-note { -webkit-font-smoothing: v1=auto | v2=antialiased }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
 
-== computed-style diff, dark (12 differing values) ==
+== computed-style diff, dark (16 differing values) ==
+body { block-size: v1=1368.62px | v2=2720.8px }
+body { height: v1=1368.62px | v2=2720.8px }
+body { perspective-origin: v1=640px 684.312px | v2=640px 1360.39px }
+body { transform-origin: v1=640px 684.312px | v2=640px 1360.4px }
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }

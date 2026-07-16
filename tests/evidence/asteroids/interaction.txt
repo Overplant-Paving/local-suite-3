@@ -1,27 +1,31 @@
-NOTE: ssd-api.jpl.nasa.gov currently sends no Access-Control-Allow-Origin header — the
-NOTE: browser path is CORS-blocked live (v1 fails identically; see cors-live-failure.txt).
-NOTE: all in-page cad.api responses in this run are the real same-day payloads fetched
-NOTE: Node-side (cad-live-d7.json / cad-live-d30.json), served via route fulfillment.
-live fetch (Node): https://ssd-api.jpl.nasa.gov/cad.api?date-min=2026-07-15&date-max=2026-07-22&sort=dist&fullname=true -> HTTP 200, count=10, Access-Control-Allow-Origin: ABSENT, at 2026-07-15T20:30:09.626Z
-live fetch (Node): https://ssd-api.jpl.nasa.gov/cad.api?date-min=2026-07-15&date-max=2026-08-14&sort=dist&fullname=true -> HTTP 200, count=20, Access-Control-Allow-Origin: ABSENT, at 2026-07-15T20:30:09.820Z
-genuine CORS failure re-proven in a route-free context for v1 AND v2 -> cors-live-failure.txt
-stamp after load: "Loaded just now · 10 approaches in the next 7 days."
-cache envelope suite.cache.asteroids.d7: count=10, data rows=10, cached at 2026-07-15T20:30:14.290Z
-sample object: des="2025 MB90" fullname="(2025 MB90)" cd="2026-Jul-19 02:04" dist=0.0127323074667725 AU (4.96 LD) v=9.58016485165603 km/s H=24.11
-hero: name="(2025 MB90)" when="Jul 18, 09:04 PM UTC · in 3 d"
-hero numbers: LD="4.96 LD" km="1,904,726 km" speed="9.6 km/s" size="40 m–90 m"
-LD math check: min dist=0.0127323074667725 AU -> expected 4.96 LD / 1,904,726 km; rendered "4.96 LD" / "1,904,726 km"
-perspective bar: barmax="18 LD", moonline left=5.6588% (1 LD = ~5.56% of 18 LD track), rock dots=8 (caps at 8), moon label present=true
-table: 10 rows (h2: "All 10 approaches, closest first")
-closer-than-Moon highlight: 0 tr.close rows vs 0 rows with dist < 1 LD in the raw payload
-first table row: "(2025 | MB90) | Jul | 18, | 09:04 | PM | UTC | · | in | 3 | d | 4.96 | 1,904,726 | 9.6 | 40 | m–90 | m"
-PHA badges rendered: 0 (v1 normalize hardcodes pha:false — expect 0)
-window -> 30 days: stamp "Loaded just now · 20 approaches in the next 30 days.", cache d30 count=20, table rows=20
-window -> back to 7 days (within TTL): stamp "Cached · updated just now."
-refresh while offline: stamp "Live fetch failed — showing cached data from just now.", table still renders 10 rows
-offline stale reload: stamp "Live fetch failed — showing cached data from 24 hr ago.", hero "(2025 MB90)", rows 10
-offline uncached window (3 days): error card "Couldn't reach the JPL close-approach service Failed to fetch"
-offline back to 7 days: recovered 10 cached rows from the aged envelope
+NOTE: RE-SOURCED to NASA NeoWs (cad.api dropped CORS ~Jul 2026 — see cors-live-failure.txt).
+NOTE: NeoWs requests are route-fulfilled from the archived real payload neows-live-d7.json
+NOTE: (date-normalized; 30-day chunks 2-4 are that data date-shifted — synthetic, paging-only).
+NOTE: Exactly ONE real DEMO_KEY request is made below (shared 30/hr pool — budget honored).
+stamp after fulfilled load: "Loaded just now · 40 approaches in the next 7 days."
+demo-key nudge (designed state): "Using the shared NASA demo key (30 requests/hour). Add your own free key →"
+LIVE NeoWs fetch (in-browser from file://, DEMO_KEY): HTTP 200, Access-Control-Allow-Origin: *, X-Ratelimit-Limit: 10, X-Ratelimit-Remaining: 6
+live render: stamp "Loaded just now · 40 approaches in the next 7 days." — full browser CORS + render pipeline, real data
+hero: "(2019 NG2)" (expected "(2019 NG2)"), when="Jul 19, 10:40 PM UTC · in 4 d"
+LD recompute (independent): 0.059619045 AU × 389.1724 = 23.2021 LD; NeoWs miss_distance.lunar=23.191808505; rendered #hLD=23.2
+LD constant note: NeoWs lunar/astronomical = 389.0000 (flat 389 LD/AU); tool keeps v1's 384,400 km LD (389.1725) — delta 0.044%
+km cross-check: computed 8,918,882 km, NeoWs kilometers=8,918,882, rendered "8,918,882 km"
+PHA badges: 4 rendered vs 4 is_potentially_hazardous_asteroid=true in the payload (v1's dead pha:false code path is live again)
+table: 40 rows (payload has 40 approaches); h2 "All 40 approaches, closest first"
+closer-than-Moon highlight: 0 tr.close vs 0 under 1 LD in the payload
+first table row: "(2019 | NG2) | Jul | 19, | 10:40 | PM | UTC | · | in | 4 | d | 23.2 | 8,918,882 | 13.8 | 40 | m–90 | m"
+window -> 30 days: 4 paged requests (7-day cap): 2026-07-15..2026-07-22, 2026-07-23..2026-07-30, 2026-07-31..2026-08-07, 2026-08-08..2026-08-14
+merged d30 cache: element_count=155, 31 date buckets (8+8+8+7=31 expected), rendered rows=155, stamp "Loaded just now · 155 approaches in the next 30 days."
+window -> back to 7 days: stamp "Cached · updated just now.", new requests=0 (expect 0)
+key saved: request used api_key=TESTKEY_ROUTED_ONLY; summary "Using your saved NASA key (1,000/hour). ✓ Change or remove →"; suite.key.nasa=TESTKEY_ROUTED_ONLY
+key cleared: request back to api_key=DEMO_KEY; suite.key.nasa=null
+429 fulfilled (1 attempt): stamp "Source is rate-limiting — showing cached data from 30 hr ago.", cached rows still rendered: 40
+backoff proof: second non-forced load made 0 network attempts (expect 0 — effective TTL doubled to 48 h covers the 30 h cache); stamp "Cached · updated 30 hr ago."
+rl probe console (expected browser noise for a 4xx fetch response): "Failed to load resource: the server responded with a status of 429 (Too Many Requests)"
+refresh while offline: stamp "Live fetch failed — showing cached data from 24 hr ago.", table still renders 40 rows
+offline stale reload: stamp "Live fetch failed — showing cached data from 24 hr ago.", hero "(2019 NG2)", rows 40
+offline uncached window (3 days): error card "Couldn't reach the NASA NeoWs service Failed to fetch"
+offline back to 7 days: recovered 40 cached rows from the aged envelope
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
   console.error: Failed to load resource: net::ERR_FAILED
