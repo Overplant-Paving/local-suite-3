@@ -35,8 +35,9 @@ reference; never modify it).
   release checklist executed (`tests/evidence/phase4/release-checklist.md`).
 - **Tag `v2.0` is HELD on two user-side items:** (1) the v1 read-only-archive README
   commit in `../Local Suite` (session permissions deny writes there; text drafted in
-  HANDOFF.md); (2) Phase 3's GitHub half — repo push + Pages on `dist/`, fresh-profile
-  share check, headed install-prompt check. Deferred verifications (upstream outages /
+  HANDOFF.md); (2) one headed Chrome/Edge install-prompt
+  check (the rest of Phase 3's GitHub half is DONE: public repo Overplant-Paving/local-suite-2,
+  Pages live + fresh-profile verified — https://overplant-paving.github.io/local-suite-2/). Deferred verifications (upstream outages /
   shared demo-pool budgets) are listed in the release checklist; none block the tag.
 - v1 is committed in `../Local Suite` on `main` (commit `7088cab`, 175 files), imported here
   as the `v1-import` tag.

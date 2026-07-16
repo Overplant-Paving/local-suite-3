@@ -34,9 +34,11 @@ Standing rules for the executing agent:
   needs the user (text drafted, see HANDOFF.md). Tick this box when it lands.
 - [ ] Phase 3 — PWA machinery done 2026-07-16 (sw.js + webmanifest + icons emitted, pwa-sync
   fatal gate, file:// parity + offline matrix + update path + Firefox no-op all verified —
-  `tests/evidence/phase3/`). **Remaining: the GitHub half** — repo push + Pages on `dist/`
-  (needs the user's GitHub account), fresh-profile share check, headed Chrome/Edge install
-  prompt check. Tick when the Pages link verifies.
+  `tests/evidence/phase3/`). **GitHub half done 2026-07-16:**
+  repo `Overplant-Paving/local-suite-2` (public), Pages workflow publishing `dist/` —
+  live at <https://overplant-paving.github.io/local-suite-2/>, fresh-profile verified
+  (72 links, SW precached, click-through, zero errors — `tests/evidence/phase3/pages-live-verify.txt`).
+  Remaining: one headed Chrome/Edge install-prompt check (needs a human's browser).
 - [ ] Phase 4 — Suite-wide audit DONE 2026-07-16 (settings.html at DoD; escaping audit: 5 EA
   files + extras, 3 real fixes; a11y audit: all 73 files, 6 agents, ~60 tools fixed, core
   ruling D10; games parked as designed hub card; gates zero-warning green, smoke 73/73 —
