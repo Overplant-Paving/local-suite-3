@@ -1,0 +1,36 @@
+== computed-style diff, light (16 differing values) ==
+body { block-size: v1=1169.75px | v2=1190.58px }
+body { height: v1=1169.75px | v2=1190.58px }
+body { perspective-origin: v1=640px 584.875px | v2=640px 595.281px }
+body { transform-origin: v1=640px 584.875px | v2=640px 595.289px }
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.panel { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#pasteBox { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.primary { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.ghost { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#icaoInput { -webkit-font-smoothing: v1=auto | v2=antialiased }
+input.relay { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+
+== computed-style diff, dark (16 differing values) ==
+body { block-size: v1=1169.75px | v2=1190.58px }
+body { height: v1=1169.75px | v2=1190.58px }
+body { perspective-origin: v1=640px 584.875px | v2=640px 595.281px }
+body { transform-origin: v1=640px 584.875px | v2=640px 595.289px }
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.panel { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#pasteBox { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.primary { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.ghost { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#icaoInput { -webkit-font-smoothing: v1=auto | v2=antialiased }
+input.relay { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+

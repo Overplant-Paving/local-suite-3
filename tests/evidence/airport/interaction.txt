@@ -1,0 +1,65 @@
+sample decode: station="KSFO", category="Visual (VFR)"
+sample decode grid: Wind=280° (W) at 16 kt (18 mph) | Visibility=10 SM | Weather=None reported | Sky=few at 1,500 ft, broken at 20,000 ft | Ceiling=20,000 ft | Temperature=19 °C (66 °F) | Dew point=12 °C (54 °F) | Altimeter=30.01 inHg
+after Clear: pasteBox="", decodeOut="" (both empty expected)
+custom decode: category="Low IFR" (expect Low IFR)
+custom decode grid: Wind=210° (SSW) at 14 kt (16 mph), gusting 22 kt | Visibility=1/4 SM | Weather=fog | Sky=vertical visibility at 200 ft | Ceiling=200 ft | Temperature=17 °C (63 °F) | Dew point=16 °C (61 °F) | Altimeter=29.92 inHg
+decoder error path: .err="Doesn't start with a 4-character station code — is this a METAR?"
+suite.airports after adds: ["KSFO","KJFK"]
+board mode line: "Link-out mode — aviationweather.gov blocks browser scripts (no CORS), so each card links straight to the official pages. The decoder above works fully offline."
+link-out cards: [
+ {
+  "id": "KSFO",
+  "sub": "Current weather and delay status for KSFO, one tap away:",
+  "links": [
+   "METAR ↗ -> https://aviationweather.gov/data/metar?ids=KSFO",
+   "TAF ↗ -> https://aviationweather.gov/data/metar?ids=KSFO&taf=true",
+   "FAA delays ↗ -> https://nasstatus.faa.gov/"
+  ]
+ },
+ {
+  "id": "KJFK",
+  "sub": "Current weather and delay status for KJFK, one tap away:",
+  "links": [
+   "METAR ↗ -> https://aviationweather.gov/data/metar?ids=KJFK",
+   "TAF ↗ -> https://aviationweather.gov/data/metar?ids=KJFK&taf=true",
+   "FAA delays ↗ -> https://nasstatus.faa.gov/"
+  ]
+ }
+]
+link-out card screenshotted in both themes (linkout-card-light.png / linkout-card-dark.png)
+after invalid code "12": suite.airports=["KSFO","KJFK"] (unchanged expected)
+after removing KJFK: suite.airports=["KSFO"], cards on board=1
+relay request observed: https://relay.test.invalid/w?url=https%3A%2F%2Faviationweather.gov%2Fapi%2Fdata%2Fmetar%3Fformat%3Djson%26ids%3DKSFO
+contract expected:      https://relay.test.invalid/w?url=https%3A%2F%2Faviationweather.gov%2Fapi%2Fdata%2Fmetar%3Fformat%3Djson%26ids%3DKSFO
+contract fulfilled: true
+board mode line: "Live mode — fetching through your relay."
+live station card via relay: {
+ "className": "station vfr",
+ "id": "KSFO",
+ "cat": "VFR",
+ "name": "San Francisco Intl, CA, US",
+ "rows": [
+  "Wind280° (W) at 16 kt (18 mph)",
+  "Vis10 SM",
+  "Skyfew at 1,500 ft, broken at 20,000 ft",
+  "Temp19 °C (66 °F)",
+  "Altim30.01 inHg"
+ ],
+ "raw": "KSFO 141856Z 28016KT 10SM FEW015 BKN200 19/12 A3001 RMK AO2 SLP162"
+}
+board stamp: "Updated just now via relay."
+after Refresh board: relay calls total=2 (expect 2), stamp="Updated just now via relay."
+offline reload (relay unreachable, cache aged 24 h):
+  stale stamp: "Relay unreachable — showing data cached 24 hr ago."
+  cards rendered from stale cache=1, first card cat="VFR"
+after Remove relay: suite.relay.url=null, relayInput=""
+  mode line: "Link-out mode — aviationweather.gov blocks browser scripts (no CORS), so each card links straight to the official pages. The decoder above works fully offline."
+  link-out cards back=1
+legacy v1 relay key set; note hidden=false
+  note text: "A v1 relay URL was found (suite.relay). The relay contract changed in v2 — the relay now receives ?url=<encoded upstream URL> (see relay/worker.js in the repo).…"
+  relayInput prefilled="https://old-v1-worker.invalid/"
+  suite.relay.url=null (must stay null — user must Save explicitly)
+final state: link-out board, saved airports=["KSFO"]
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED

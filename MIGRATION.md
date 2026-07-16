@@ -160,7 +160,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 62 | markets.html | money | key | finnhub | C | RL (CoinGecko keyless path) | ⬜ |
 | 63 | launches.html | space | cors | — | C | RL (15 req/hr — TTL + backoff) | ⬜ |
 | 64 | nearby.html | local | cors | — | C | RL (Overpass — TTL + mirror fallback) | ⬜ |
-| 65 | airport.html | space | blocked | — | C | remove `.example` → link-out card to aviationweather.gov | ⬜ |
+| 65 | airport.html | space | blocked | — | C | remove `.example` → link-out card to aviationweather.gov | ✅ `tests/evidence/airport/` |
 | 66 | jobs.html | money | blocked | — | C | remove `.example` → embedded monthly BLS data | ⬜ |
 | 67 | inflation.html | money | blocked | — | C | remove `.example` → embedded monthly BLS data | ⬜ |
 | 68 | transit.html | local | blocked/key | bart (new) | C | externalize BART key (v1 `transit.html:163`); custom feed → link-out card | ⬜ |

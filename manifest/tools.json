@@ -1272,6 +1272,26 @@
       "cacheTtlMin": 360,
       "since": "v1",
       "flags": []
+    },
+    {
+      "id": "airport",
+      "file": "airport.html",
+      "name": "Airport & Flight-Weather Board",
+      "cat": "space",
+      "cx": "M",
+      "desc": "METARs/TAFs decoded to plain English, plus FAA delay status.",
+      "network": "blocked",
+      "key": null,
+      "endpoints": [],
+      "storage": [
+        "suite.airports",
+        "suite.cache.airport.metars",
+        "suite.relay.url",
+        "suite.relay"
+      ],
+      "cacheTtlMin": null,
+      "since": "v1",
+      "flags": []
     }
   ]
 }
