@@ -1,0 +1,24 @@
+{
+  "id": "apod",
+  "file": "apod.html",
+  "name": "Astronomy Picture of the Day",
+  "cat": "space",
+  "cx": "S",
+  "desc": "NASA’s APOD with its explanation — a serene new-tab page.",
+  "network": "keyed",
+  "key": { "name": "nasa", "signup": "https://api.nasa.gov", "demo": true },
+  "endpoints": [
+    "https://api.nasa.gov",
+    "https://apod.nasa.gov",
+    "https://img.youtube.com",
+    "https://i.vimeocdn.com"
+  ],
+  "storage": [
+    "suite.theme",
+    "suite.key.nasa",
+    "suite.cache.apod.*"
+  ],
+  "cacheTtlMin": 1440,
+  "since": "v1",
+  "flags": ["rl"]
+}

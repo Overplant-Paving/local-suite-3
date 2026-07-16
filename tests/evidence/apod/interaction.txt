@@ -1,0 +1,30 @@
+live fetch 1/2 (Node, REUSED from this run-day's earlier archive — no request spent): https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=2026-07-15&thumbs=true -> HTTP 200, X-RateLimit 9/10 remaining, at 2026-07-16T04:01:57.446Z
+today's APOD (2026-07-15): media_type=image, title="Red Sprites in the Tatacoa Desert", copyright="Mario Vargas Text: Keighley Rockcliffe (NASA GSFC, UMBC CSST, CRESST II)"
+media bytes for deterministic screenshots: https://apod.nasa.gov/apod/image/2607/red_sprite_700.jpg (197084 bytes, image/jpeg, fetched once Node-side)
+NOTE: all in-page api.nasa.gov requests in this harness are route-fulfilled — today's date
+NOTE: with the real same-day payload above, other dates with labeled synthetic fixtures.
+initial render: title="Red Sprites in the Tatacoa Desert", meta="📅 Wednesday, July 15, 2026© Mario Vargas Text: Keighley Rockcliffe (NASA GSFC, UMBC CSST, CRESST II)", explanation 1030 chars (payload has 1030), img src=https://apod.nasa.gov/apod/image/2607/red_sprite_700.jpg, hd=https://apod.nasa.gov/apod/image/2607/red_sprite.jpg, videocard=null
+stamp: "Loaded just now · demo key."
+nav state at today: nextBtn disabled=true, prevBtn disabled=false, datePick min=1995-06-16 max=2026-07-15 value=2026-07-15
+demo-key nudge (keycard summary): "Using the shared NASA demo key (30 requests/hour). Add your own free key →"
+keycard signup link: https://api.nasa.gov/
+live fetch 2/2 (browser, NO route fulfillment) — REUSED from this run-day's earlier run (no request spent): HTTP 200, X-RateLimit-Remaining=8, rendered title="Red Sprites in the Tatacoa Desert", stamp="Loaded just now · demo key.", at 2026-07-16T04:02:20.000Z (screenshot live-browser.png from that run)
+key saved: request fired with api_key=TESTKEY-not-real date=2026-07-15; summary now "Using your saved NASA key (1,000/hour). ✓ Change or remove →"; localStorage suite.key.nasa=TESTKEY-not-real
+stamp with own key (no demo suffix): "Loaded just now."
+key cleared: summary back to "Using the shared NASA demo key (30 requests/hour). Add your own free key →", suite.key.nasa=null, last request api_key=DEMO_KEY, stamp="Loaded just now · demo key."
+prev -> 2026-07-14: title="Synthetic fixture — 2026-07-14" (synthetic fixture), stamp="Loaded just now · demo key.", nextBtn re-enabled=true
+ArrowRight -> today from cache: title="Red Sprites in the Tatacoa Desert", stamp="Cached · today's picture from just now."
+date picker -> 2015-10-31: title="Synthetic fixture — 2015-10-31", HD link=https://apod.nasa.gov/apod/image/fixture-2015-10-31-hd.jpg (hdurl!=url renders the HD pill)
+random (Math.random stubbed to 0.5) -> 2010-12-29: title="Synthetic fixture — 2010-12-29"
+today button: stamp="Cached · today's picture from just now."
+video day 2020-02-02: videocard href=https://www.youtube.com/watch?v=fixture123 target=_blank rel=noopener, play badge="▶ Watch video ↗", thumb=https://img.youtube.com/vi/fixture123/0.jpg, aria-label="Watch today's video on the source site (opens in a new tab)", iframes in view=0
+404 for 1995-06-17: error card "Couldn't load this picture No picture published for this date yet — try another day.", cache key written=false
+429 on forced refresh: error card "Couldn't load this picture Rate limit reached on the demo key. Wait a bit, or add your own free key above."
+429 cached fallback below the card: hero present=1, stamp="Source is rate-limiting — showing cached data from just now."
+backoff: cache aged to 25 h (> normal 24 h TTL), today after 429 -> api requests fired=0 (0 = doubled TTL honored), stamp="Cached · today's picture from 25 hr ago."
+sibling-page console during 404/429 provocation (expected resource-load errors only): "Failed to load resource: the server responded with a status of 404 (Not Found)", "Failed to load resource: the server responded with a status of 429 (Too Many Requests)"
+offline stale reload: error card "Couldn't load this picture Failed to fetch", cached hero title="Red Sprites in the Tatacoa Desert", in-view stamp="Showing cached copy from 25 hr ago.", stamp="Live fetch failed — showing what we had."
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

@@ -1,0 +1,20 @@
+{
+  "v1": {
+    "suite.cache.apod.2010-12-29": "{\"t\":1784174687768,\"v\":{\"date\":\"2010-12-29\",\"media_type\":\"image\",\"service_version\":\"v1\",\"title\":\"Synthetic fixture — 2010-12-29\",\"explanation\":\"Synthe…(486 chars)",
+    "suite.cache.apod.2020-02-02": "{\"t\":1784174687793,\"v\":{\"date\":\"2020-02-02\",\"media_type\":\"video\",\"service_version\":\"v1\",\"title\":\"Synthetic video fixture — 2020-02-02\",\"explanation\":\"…(448 chars)",
+    "suite.cache.apod.2026-07-15": "{\"t\":1784174687216,\"v\":{\"copyright\":\"Mario Vargas\\n\\nText:\\nKeighley Rockcliffe  \\n(NASA\\nGSFC, \\nUMBC CSST, \\nCRESST II)\",\"date\":\"2026-07-15\",\"explan…(1407 chars)",
+    "suite.cache.apod.2015-10-31": "{\"t\":1784174687712,\"v\":{\"date\":\"2015-10-31\",\"media_type\":\"image\",\"service_version\":\"v1\",\"title\":\"Synthetic fixture — 2015-10-31\",\"explanation\":\"Synthe…(486 chars)",
+    "suite.cache.apod.2026-07-14": "{\"t\":1784174687685,\"v\":{\"date\":\"2026-07-14\",\"media_type\":\"image\",\"service_version\":\"v1\",\"title\":\"Synthetic fixture — 2026-07-14\",\"explanation\":\"Synthe…(486 chars)",
+    "suite.theme": "dark"
+  },
+  "v2": {
+    "suite.cache.apod.2010-12-29": "{\"t\":1784174686135,\"v\":{\"date\":\"2010-12-29\",\"media_type\":\"image\",\"service_version\":\"v1\",\"title\":\"Synthetic fixture — 2010-12-29\",\"explanation\":\"Synthe…(486 chars)",
+    "suite.cache.apod.2020-02-02": "{\"t\":1784174686203,\"v\":{\"date\":\"2020-02-02\",\"media_type\":\"video\",\"service_version\":\"v1\",\"title\":\"Synthetic video fixture — 2020-02-02\",\"explanation\":\"…(448 chars)",
+    "suite.cache.apod.2026-07-15": "{\"t\":1784084686778,\"v\":{\"copyright\":\"Mario Vargas\\n\\nText:\\nKeighley Rockcliffe  \\n(NASA\\nGSFC, \\nUMBC CSST, \\nCRESST II)\",\"date\":\"2026-07-15\",\"explan…(1407 chars)",
+    "suite.cache.apod.2015-10-31": "{\"t\":1784174686071,\"v\":{\"date\":\"2015-10-31\",\"media_type\":\"image\",\"service_version\":\"v1\",\"title\":\"Synthetic fixture — 2015-10-31\",\"explanation\":\"Synthe…(486 chars)",
+    "suite.cache.apod.2026-07-14": "{\"t\":1784174686035,\"v\":{\"date\":\"2026-07-14\",\"media_type\":\"image\",\"service_version\":\"v1\",\"title\":\"Synthetic fixture — 2026-07-14\",\"explanation\":\"Synthe…(486 chars)",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}

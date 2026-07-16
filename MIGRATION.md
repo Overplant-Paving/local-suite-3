@@ -152,7 +152,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 54 | geo.html | local | cors | — | B | Census JSONP path; Nominatim 1 req/s | ✅ `tests/evidence/geo/` |
 | 55 | elevation.html | local | cors | — | B | | ✅ `tests/evidence/elevation/` |
 | 56 | network.html | local | cors | — | B | ipapi.co 1k/day | ✅ `tests/evidence/network/` |
-| 57 | apod.html | space | key | nasa (demo) | C | RL (DEMO_KEY 30/hr) | ⬜ |
+| 57 | apod.html | space | key | nasa (demo) | C | RL (DEMO_KEY 30/hr) | ✅ `tests/evidence/apod/` |
 | 58 | nutrition.html | health | key | usda (demo) | C | RL | ✅ `tests/evidence/nutrition/` |
 | 59 | congress.html | civic | key | congress | C | | ✅ `tests/evidence/congress/` |
 | 60 | gas.html | money | key | eia | C | | ✅ `tests/evidence/gas/` |

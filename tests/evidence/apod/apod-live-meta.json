@@ -1,0 +1,9 @@
+{
+  "url": "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=2026-07-15&thumbs=true",
+  "status": 200,
+  "date": "2026-07-15",
+  "rlLimit": "10",
+  "rlRemaining": "9",
+  "fetchedAt": "2026-07-16T04:01:57.446Z",
+  "reused": false
+}
