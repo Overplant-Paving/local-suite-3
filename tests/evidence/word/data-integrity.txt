@@ -37,3 +37,7 @@ Independent recomputation (no browser, run against the v1 file):
 node -e "const s=require('fs').readFileSync('C:/Users/henry/Developement/Local Suite/word.html','utf8');const m=s.match(/const WORD_RAW = \x60\n([\s\S]*?)\x60\.trim\(\);/);let W=m[1].trim().split('\n').map(l=>{const p=l.split('|');return{word:p[0],origin:p[3]}}).filter(w=>w.origin&&!/sentinel|filtered out|never appear/i.test(w.origin));const h=t=>{let x=2166136261;for(let i=0;i<t.length;i++){x^=t.charCodeAt(i);x=Math.imul(x,16777619)}return x>>>0};console.log(W.length,W[h('2026-7-29')%W.length].word,W[h('2026-7-30')%W.length].word,W[Math.floor(.5*W.length)].word)"
 
   prints: 374 candid tundra anthology  — matching the observed in-page values.
+
+Orchestrator dist replay (2026-07-16, post-integration build):
+  dist/word.html -> 39422 bytes, sha256 1a8cce2e751d488e60884cbd4af073549e65369a4077d6b5b6744be9fc4a7c0b
+  VERDICT (final): EQUAL v1 == v2 source == dist — byte-exact through the build.
