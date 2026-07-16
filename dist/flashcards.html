@@ -101,12 +101,13 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 }
 </style>
 <style>
-  /* tool accents: grade palette (3-layer, same pattern as core) */
-  :root { --again: #c05a5a; --hard: #c07f2d; --good: #3a7d44; --easy: #2f6f6a; }
+  /* tool accents: grade palette (3-layer, same pattern as core)
+     Phase 4 a11y: light --again/--hard deepened (were 4.26:1 and 3.27:1 on the card) */
+  :root { --again: #b04545; --hard: #9a6110; --good: #3a7d44; --easy: #2f6f6a; }
   @media (prefers-color-scheme: dark) {
     :root { --again: #e07a7a; --hard: #d9a153; --good: #7dc487; --easy: #6fb5ae; }
   }
-  :root[data-theme="light"] { --again: #c05a5a; --hard: #c07f2d; --good: #3a7d44; --easy: #2f6f6a; }
+  :root[data-theme="light"] { --again: #b04545; --hard: #9a6110; --good: #3a7d44; --easy: #2f6f6a; }
   :root[data-theme="dark"] { --again: #e07a7a; --hard: #d9a153; --good: #7dc487; --easy: #6fb5ae; }
 
   body { padding: 1.5rem 1.25rem 4rem; }

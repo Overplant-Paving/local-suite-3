@@ -7,12 +7,14 @@
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
   /* tool accents: sky/visibility palette (3-layer, same pattern as core) */
-  :root { --sky: #3d5a80; --visible: #b9822b; --shadowmark: #8a8f98; }
+  /* a11y (Phase 4): --visible light darkened (badge text was 2.6:1 on its 22% tint, now 4.9:1);
+     --shadowmark light/dark adjusted (was 2.8:1 light on the chip bg, 3.0:1 dark) */
+  :root { --sky: #3d5a80; --visible: #7a520d; --shadowmark: #5c636e; }
   @media (prefers-color-scheme: dark) {
-    :root { --sky: #7d9fd1; --visible: #e0b365; --shadowmark: #6b7280; }
+    :root { --sky: #7d9fd1; --visible: #e0b365; --shadowmark: #9aa0a8; }
   }
-  :root[data-theme="light"] { --sky: #3d5a80; --visible: #b9822b; --shadowmark: #8a8f98; }
-  :root[data-theme="dark"] { --sky: #7d9fd1; --visible: #e0b365; --shadowmark: #6b7280; }
+  :root[data-theme="light"] { --sky: #3d5a80; --visible: #7a520d; --shadowmark: #5c636e; }
+  :root[data-theme="dark"] { --sky: #7d9fd1; --visible: #e0b365; --shadowmark: #9aa0a8; }
 
   body { padding: 1.4rem 1.25rem 4rem; }
   .wrap { max-width: 940px; margin: 0 auto; }
@@ -46,7 +48,7 @@
   .row { display: flex; gap: .7rem; flex-wrap: wrap; }
   .row > div { flex: 1; min-width: 130px; }
   button.go {
-    margin-top: .8rem; border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    margin-top: .8rem; border: 1px solid var(--accent); background: var(--accent); color: var(--bg); /* a11y: was #fff — 2.4:1 on the dark accent */
     border-radius: 10px; padding: .55rem 1.1rem; cursor: pointer; font-size: .95rem;
   }
   button.go.ghost { background: var(--card); color: var(--accent); }

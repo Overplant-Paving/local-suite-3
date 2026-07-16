@@ -176,6 +176,9 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .diff .del mark { background: var(--del-hi); color: inherit; border-radius: 3px; }
   .diff .ins mark { background: var(--ins-hi); color: inherit; border-radius: 3px; }
   .diff .gutter { color: var(--muted); user-select: none; }
+  /* a11y (Phase 4): the +/- gutter carries meaning; inside colored rows the muted
+     gray fails AA against the tinted backgrounds — inherit the row ink instead */
+  .diff .del .gutter, .diff .ins .gutter { color: inherit; }
   .hidden { display: none !important; }
   .hint { color: var(--muted); font-size: .82rem; margin-top: .7rem; }
   .err { color: var(--del-ink); }

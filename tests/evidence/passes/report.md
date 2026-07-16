@@ -140,3 +140,101 @@ not flag them; listed for completeness.)
    host's zone — America/Chicago here).
 8. report.md Write-hook gotcha from HANDOFF.md applied (the hook also rejects report.md in the
    scratchpad — this file was authored as passes-report-src.md and shell-copied into place).
+
+## Phase 4 a11y audit (2026-07-16)
+
+Independent re-verification of the QUALITY.md §2 checklist, executed in the running tool
+(Playwright/Chrome from file://, light + dark, keyboard-only drive of the primary feature,
+contrast computed from getComputedStyle with ancestor alpha-compositing).
+
+| # | Checklist item | Verdict | Evidence |
+|---|---|---|---|
+| 1 | icon-only controls have accessible names | pass | unnamed: (none) |
+| 2 | async/result regions carry aria-live | pass | runtime check below |
+| 3 | keyboard path for every mouse path | pass | keyboard-only drive log below; no positive tabindex ((none)); no traps |
+| 4 | inputs labelled | pass | unlabelled: (none) (labelled: 1) |
+| 5 | contrast, both palettes | fixed (see below); remaining FAILs are the suite-wide --muted flags | full pair tables below |
+| 6 | visible focus indicator | pass | light: all stops show an indicator; dark: all stops show an indicator |
+
+### Contrast — light
+```
+contrast pairs (13 unique fg/bg combos):
+  FAIL 4.1 (need 4.5) fg=#6b7280 bg=#efece4 13.1px/400 — code "GROUP=visual"
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 13.1px/400 — footer#footer "two-line elements · orbits propa"
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 13.1px/400 — span "01:22:00 AM · NW (317°)"
+  pass 4.87 (need 4.5) fg=#7a520d bg=#e2d7c5 10.9px/600 — span.badge.vis "visible"
+  pass 5.13 (need 4.5) fg=#5c636e bg=#efece4 10.9px/600 — span.badge.shd "eclipsed"
+  pass 5.26 (need 4.5) fg=#2f6f6a bg=#f5f3ee 14.1px/400 — button.linkbtn "change"
+  pass 5.26 (need 4.5) fg=#f5f3ee bg=#2f6f6a 15.2px/400 — button#refreshBtn.go "Recompute passes"
+  pass 5.26 (need 3) fg=#2f6f6a bg=#f5f3ee 22.4px/700 — b "30"
+  pass 5.74 (need 4.5) fg=#2f6f6a bg=#fffdf9 15.2px/400 — button#reloadTle.go.ghost "Refresh satellite data"
+  pass 5.74 (need 3) fg=#2f6f6a bg=#fffdf9 25.6px/700 — b "27°"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 27.2px/700 — h1 "Satellite Pass Predictor"
+  pass 13.39 (need 4.5) fg=#23282e bg=#f5f3ee 16.8px/700 — h3 "Night of Saturday, Jul 18"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.linkbtn [outline] -> input#minEl [accent-border] -> button#refreshBtn.go [outline] -> button#reloadTle.go [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.linkbtn [outline] -> input#minEl [accent-border] -> button#refreshBtn.go [outline] -> button#reloadTle.go [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.linkbtn [outline] -> input#minEl [accent-border] -> button#refreshBtn.go [outline] -> button#reloadTle.go [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.linkbtn [outline] -> input#minEl [accent-border]
+```
+
+### Contrast — dark
+```
+contrast pairs (12 unique fg/bg combos):
+  pass 5.23 (need 4.5) fg=#e0b365 bg=#484034 10.9px/600 — span.badge.vis "visible"
+  pass 5.47 (need 4.5) fg=#9aa0a8 bg=#262a31 13.1px/400 — code "GROUP=visual"
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 13.1px/400 — label "Minimum peak elevation"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 13.1px/400 — footer#footer "two-line elements · orbits propa"
+  pass 6.91 (need 4.5) fg=#6fb5ae bg=#1d2026 15.2px/400 — button#reloadTle.go.ghost "Refresh satellite data"
+  pass 6.91 (need 3) fg=#6fb5ae bg=#1d2026 25.6px/700 — b "16°"
+  pass 7.6 (need 4.5) fg=#6fb5ae bg=#15171b 14.4px/400 — a.back "← suite"
+  pass 7.6 (need 4.5) fg=#15171b bg=#6fb5ae 15.2px/400 — button#refreshBtn.go "Recompute passes"
+  pass 7.6 (need 3) fg=#6fb5ae bg=#15171b 22.4px/700 — b "47"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 27.2px/700 — h1 "Satellite Pass Predictor"
+  pass 14.25 (need 4.5) fg=#e7e5e0 bg=#15171b 14.4px/600 — b "Los Angeles, CA"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.linkbtn [outline] -> input#minEl [accent-border] -> button#refreshBtn.go [outline] -> button#reloadTle.go [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.linkbtn [outline] -> input#minEl [accent-border] -> button#refreshBtn.go [outline] -> button#reloadTle.go [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.linkbtn [outline] -> input#minEl [accent-border] -> button#refreshBtn.go [outline] -> button#reloadTle.go [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.linkbtn [outline] -> input#minEl [accent-border]
+```
+
+### Keyboard-only drive + live regions
+```
+### keyboard-only primary-feature drive
+  Tab -> reached min-elevation input (INPUT#minEl after 4 tab(s))
+  Tab -> reached Recompute button (BUTTON#refreshBtn after 1 tab(s))
+  keyboard minEl=30 + Enter on Recompute -> stats recomputed
+  Tab -> reached location change link-button (BUTTON after 5 tab(s))
+  Enter on change -> location card open: true
+  Tab -> reached ZIP input (INPUT#zip after 1 tab(s))
+  Enter in ZIP input (route-fulfilled zippopotam) -> locbar shows Beverly Hills
+
+### aria-live runtime check
+  #status: aria-live=polite
+  #results: aria-live=polite
+  #locErr: aria-live=polite
+```
+
+### Fixes made (tool-local CSS, all four theme contexts)
+- `button.go` text `#fff` -> `var(--bg)` (2.36:1 on the dark accent -> 7.60:1).
+- Badge palette (tool `:root` vars): light `--visible` #b9822b -> #7a520d ("visible" badge on its 22% tint 2.62 -> 4.85), light `--shadowmark` #8a8f98 -> #5c636e ("eclipsed" on the chip bg 2.75 -> 5.13), dark `--shadowmark` #6b7280 -> #9aa0a8 (2.98 -> 5.47; the old dark value was the light palette's muted gray). Embedded sgp4-math segment untouched (hash below).
+
+### Notes
+- TLE cache seeded from the archived 30-satellite fixture; CelesTrak aborted during the audit (zero audit traffic); zippopotam route-fulfilled for the keyboard ZIP path.
+
+### Suite-wide contrast flags (REPORTED, not fixed locally — core palette)
+
+The light palette's `--muted` (#6b7280) misses WCAG AA 4.5:1 on two core surfaces
+(it passes on `--card` at 4.76, and the dark palette passes everywhere, 5.5-6.8):
+
+| pair | ratio | where it shows in this tool set |
+|---|---|---|
+| `--muted` on `--bg` #f5f3ee | **4.36** | core `footer` rule; tool taglines/hints/stamps on the page background (every tool) |
+| `--muted` on `--chip` #efece4 | **4.10** | core `.chip`; tool-local chip-bg recreations (jobs #dataStamp, markets .caveat, settings/transit/passes `code`, airport chips, hub chips) |
+| `--muted` on `--accent-soft` #e3efed | **4.11** | parks `.code` chip inside picker rows |
+
+Root cause is the palette value, not any one tool: per the audit addendum these are
+suite-wide failures — fixing them tool-by-tool would fork the palette across 71 files.
+Suggested one-line core remedy (NOT applied): darken light `--muted` to ~#5f6670
+(-> 5.23 on --bg, 4.91 on --chip, 5.71 on --card). Decision belongs to core.
+
+### Harness re-runs
+- `node verify-tool.mjs passes` re-run after the modification: exit 0, evidence refreshed (2026-07-16). Computed-style diffs vs v1 now include the documented a11y color deltas.
+- Embedded-data byte parity: python re-extraction of the sgp4-math segment after the edit: 20115 bytes, sha256 4682299f24e60815894b37d021d9919e58ec0c0c604a298299b3d3f94566d030 — identical to the recorded v1/v2/dist hash.

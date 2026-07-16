@@ -138,3 +138,99 @@ machine (success route-fulfilled, failure route-aborted).
 - `zoom-storage-card-dark.png` is a supplementary element capture taken to rule out a
   rendering artifact that turned out to be full-page-screenshot downscaling moiré; the DOM
   cell contains exactly one labeled `×` button.
+
+## Phase 4 a11y audit (2026-07-16)
+
+Independent re-verification of the QUALITY.md §2 checklist, executed in the running tool
+(Playwright/Chrome from file://, light + dark, keyboard-only drive of the primary feature,
+contrast computed from getComputedStyle with ancestor alpha-compositing).
+
+| # | Checklist item | Verdict | Evidence |
+|---|---|---|---|
+| 1 | icon-only controls have accessible names | pass | unnamed: (none) |
+| 2 | async/result regions carry aria-live | pass | runtime check below |
+| 3 | keyboard path for every mouse path | pass | keyboard-only drive log below; no positive tabindex ((none)); no traps |
+| 4 | inputs labelled | pass | unlabelled: (none) (labelled: 14) |
+| 5 | contrast, both palettes | fixed (see below); remaining FAILs are the suite-wide --muted flags | full pair tables below |
+| 6 | visible focus indicator | pass | light: all stops show an indicator; dark: all stops show an indicator |
+
+### Contrast — light
+```
+contrast pairs (10 unique fg/bg combos):
+  FAIL 4.1 (need 4.5) fg=#6b7280 bg=#efece4 12px/400 — code "suite.cache.*"
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 13.6px/400 — footer "No network of its own — the rela"
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 12.2px/400 — td.preview "light"
+  pass 4.93 (need 4.5) fg=#3a7d44 bg=#fffdf9 12.8px/400 — div.kstatus.good "your key is saved on this machin"
+  pass 5.26 (need 4.5) fg=#2f6f6a bg=#f5f3ee 14.4px/400 — a.back "← suite"
+  pass 5.26 (need 4.5) fg=#f5f3ee bg=#2f6f6a 14.4px/600 — button#locSaveBtn.btn "Save location"
+  pass 5.77 (need 4.5) fg=#b23b3b bg=#fffdf9 14.4px/600 — button#purgeBtn.btn.danger "Purge cached data"
+  pass 12.58 (need 4.5) fg=#23282e bg=#efece4 11.4px/400 — code "suite.theme"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 27.2px/700 — h1 "Suite Settings"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#exportBtn.btn [outline] -> textarea#backupText [accent-border] -> textarea#restoreText [accent-border] -> button#restoreBtn.btn [outline] -> button#restoreFileBtn.btn [outline] -> input [accent-border] -> button.btn [outline] -> button.btn [outline] -> button.btn [outline] -> input [accent-border] -> button.btn [outline] -> button.btn [outline] -> button.btn [outline] -> input [accent-border] -> button.btn [outline] -> button.btn [outline] -> button.btn [outline] -> input [accent-border] -> button.btn [outline] -> button.btn [outline] -> button.btn [outline] -> input [accent-border] -> button.btn [outline]
+```
+
+### Contrast — dark
+```
+contrast pairs (10 unique fg/bg combos):
+  pass 5.31 (need 4.5) fg=#e0736b bg=#1d2026 14.4px/600 — button#purgeBtn.btn.danger "Purge cached data"
+  pass 5.47 (need 4.5) fg=#9aa0a8 bg=#262a31 12px/400 — code "suite.cache.*"
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 14.1px/400 — p.note "One JSON snapshot of every"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 13.6px/400 — footer "No network of its own — the rela"
+  pass 7.6 (need 4.5) fg=#6fb5ae bg=#15171b 14.4px/400 — a.back "← suite"
+  pass 7.6 (need 4.5) fg=#15171b bg=#6fb5ae 14.4px/600 — button#exportBtn.btn "Create backup"
+  pass 7.86 (need 4.5) fg=#7dc487 bg=#1d2026 12.8px/400 — div.kstatus.good "your key is saved on this machin"
+  pass 11.44 (need 4.5) fg=#e7e5e0 bg=#262a31 11.4px/400 — code "suite.cache.demo.one"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 27.2px/700 — h1 "Suite Settings"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#exportBtn.btn [outline] -> textarea#backupText [accent-border] -> textarea#restoreText [accent-border] -> button#restoreBtn.btn [outline] -> button#restoreFileBtn.btn [outline] -> input [accent-border] -> button.btn [outline] -> button.btn [outline] -> button.btn [outline] -> input [accent-border] -> button.btn [outline] -> button.btn [outline] -> button.btn [outline] -> input [accent-border] -> button.btn [outline] -> button.btn [outline] -> button.btn [outline] -> input [accent-border] -> button.btn [outline] -> button.btn [outline] -> button.btn [outline] -> input [accent-border] -> button.btn [outline]
+```
+
+### Keyboard-only drive + live regions
+```
+### keyboard-only primary-feature drive
+  Tab -> reached Export button (BUTTON#exportBtn after 3 tab(s))
+  Enter on Export -> backup JSON in textarea, msg "Backup of 3 key(s) created (250 B). It includes your saved API keys — treat it like a password."
+  Tab -> reached NASA key input (INPUT after 7 tab(s))
+  typed key + Enter -> saved; msg "NASA key saved."
+  Tab -> reached NASA reveal toggle (BUTTON after 1 tab(s))
+  Enter on reveal -> aria-pressed=true
+  Tab -> reached theme seg Dark (BUTTON after 36 tab(s))
+  Enter on Dark -> data-theme=dark
+
+### aria-live runtime check
+  #backupMsg: aria-live=polite
+  #restoreMsg: aria-live=polite
+  #keysMsg: aria-live=polite
+  #relayMsg: aria-live=polite
+  #themeMsg: aria-live=polite
+  #locMsg: aria-live=polite
+  #storageMsg: aria-live=polite
+```
+
+### Fixes made (tool-local CSS, all four theme contexts)
+- `.btn` and `.seg button[aria-pressed="true"]` text `#fff` -> `var(--bg)`: white on the dark-theme accent was 2.36:1; now 5.26:1 light / 7.60:1 dark. (This is the independent re-verification of the freshly-built settings.html: everything else on the QUALITY.md checklist passed as built.)
+
+### Notes
+- Focus note: text inputs/textareas suppress the core outline but flip their border to the accent on focus (`textarea:focus, input:focus { outline:none; border-color:var(--accent) }`) — the suite's own core `.search` pattern; counted as a visible indicator ([accent-border] in the walk).
+
+### Suite-wide contrast flags (REPORTED, not fixed locally — core palette)
+
+The light palette's `--muted` (#6b7280) misses WCAG AA 4.5:1 on two core surfaces
+(it passes on `--card` at 4.76, and the dark palette passes everywhere, 5.5-6.8):
+
+| pair | ratio | where it shows in this tool set |
+|---|---|---|
+| `--muted` on `--bg` #f5f3ee | **4.36** | core `footer` rule; tool taglines/hints/stamps on the page background (every tool) |
+| `--muted` on `--chip` #efece4 | **4.10** | core `.chip`; tool-local chip-bg recreations (jobs #dataStamp, markets .caveat, settings/transit/passes `code`, airport chips, hub chips) |
+| `--muted` on `--accent-soft` #e3efed | **4.11** | parks `.code` chip inside picker rows |
+
+Root cause is the palette value, not any one tool: per the audit addendum these are
+suite-wide failures — fixing them tool-by-tool would fork the palette across 71 files.
+Suggested one-line core remedy (NOT applied): darken light `--muted` to ~#5f6670
+(-> 5.23 on --bg, 4.91 on --chip, 5.71 on --card). Decision belongs to core.
+
+### Harness re-runs
+- `node verify-tool.mjs settings` re-run after the modification: exit 0, evidence refreshed (2026-07-16). Computed-style diffs vs v1 now include the documented a11y color deltas.

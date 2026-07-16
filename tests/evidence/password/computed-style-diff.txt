@@ -1,16 +1,43 @@
-== computed-style diff, light (18 differing values) ==
+== computed-style diff, light (45 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .out .pw { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { caret-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { outline-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 .btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 .btn.ghost { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .meter .bar { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .meter .lbl { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tab { caret-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.tab { color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.tab { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.tab { outline-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.tab { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.tab { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.tab { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 .tab { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tab { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.tab { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.tab.on { caret-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.tab.on { color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.tab.on { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.tab.on { outline-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.tab.on { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.tab.on { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.tab.on { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 .tab.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tab.on { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.tab.on { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 #charPanel { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .tg { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .tg.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
@@ -18,19 +45,46 @@ select { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .hint { -webkit-font-smoothing: v1=auto | v2=antialiased }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
 
-== computed-style diff, dark (18 differing values) ==
+== computed-style diff, dark (45 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .out .pw { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { caret-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { outline-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 .btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 .btn.ghost { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .meter .bar { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .meter .lbl { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tab { caret-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.tab { color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.tab { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.tab { outline-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.tab { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.tab { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.tab { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 .tab { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tab { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.tab { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.tab.on { caret-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.tab.on { color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.tab.on { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.tab.on { outline-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.tab.on { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.tab.on { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.tab.on { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 .tab.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.tab.on { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.tab.on { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 #charPanel { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .tg { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .tg.on { -webkit-font-smoothing: v1=auto | v2=antialiased }

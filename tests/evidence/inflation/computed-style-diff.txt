@@ -1,22 +1,51 @@
-== computed-style diff, light (16 differing values) ==
+== computed-style diff, light (45 differing values) ==
 body { block-size: v1=1438.62px | v2=1480.58px }
 body { height: v1=1438.62px | v2=1480.58px }
 body { perspective-origin: v1=640px 719.312px | v2=640px 740.281px }
 body { transform-origin: v1=640px 719.312px | v2=640px 740.289px }
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --core: v1=#b06d2b | v2=#9a5f22 }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --core: v1=#b06d2b | v2=#9a5f22 }
 .stats { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.stats { --core: v1=#b06d2b | v2=#9a5f22 }
 .stat.headline { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.stat.headline { --core: v1=#b06d2b | v2=#9a5f22 }
 .stat.core { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.stat.core { --core: v1=#b06d2b | v2=#9a5f22 }
 svg.chart { -webkit-font-smoothing: v1=auto | v2=antialiased }
+svg.chart { --core: v1=#b06d2b | v2=#9a5f22 }
 .spark { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.spark { --core: v1=#b06d2b | v2=#9a5f22 }
 .catcard { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.catcard { --core: v1=#b06d2b | v2=#9a5f22 }
 details summary { -webkit-font-smoothing: v1=auto | v2=antialiased }
+details summary { --core: v1=#b06d2b | v2=#9a5f22 }
 #paste { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#paste { --core: v1=#b06d2b | v2=#9a5f22 }
+.btn { border-block-end-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { border-block-start-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { border-bottom-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { border-inline-end-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { border-inline-start-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { border-left-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { border-right-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { border-top-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { caret-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { outline-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 .btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn { --core: v1=#b06d2b | v2=#9a5f22 }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --core: v1=#b06d2b | v2=#9a5f22 }
 
-== computed-style diff, dark (16 differing values) ==
+== computed-style diff, dark (33 differing values) ==
 body { block-size: v1=1438.62px | v2=1480.58px }
 body { height: v1=1438.62px | v2=1480.58px }
 body { perspective-origin: v1=640px 719.312px | v2=640px 740.281px }
@@ -31,6 +60,23 @@ svg.chart { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .catcard { -webkit-font-smoothing: v1=auto | v2=antialiased }
 details summary { -webkit-font-smoothing: v1=auto | v2=antialiased }
 #paste { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { border-block-end-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { border-block-start-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { border-bottom-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { border-inline-end-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { border-inline-start-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { border-left-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { border-right-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { border-top-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { caret-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { outline-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 .btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
 

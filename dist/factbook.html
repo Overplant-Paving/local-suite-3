@@ -113,7 +113,9 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .tabs{display:flex;gap:.45rem;margin:1.3rem 0 1rem}
   .tab{border:1px solid var(--line);background:var(--card);color:var(--muted);
     border-radius:999px;padding:.4rem 1rem;font-size:.9rem;cursor:pointer}
-  .tab.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  /* Phase 4 a11y audit: #fff on the dark-theme accent (#6fb5ae) measured 2.36:1 — below
+     the 4.5:1 AA floor. var(--bg) passes both palettes (5.26:1 light / 7.60:1 dark). */
+  .tab.on{background:var(--accent);border-color:var(--accent);color:var(--bg)}
   .searchbox{position:relative}
   .search{padding:.75rem 1rem} /* v1 search is a touch taller than core's */
   .suggest{position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--card);
@@ -136,7 +138,9 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .fact .v small{font-weight:400;color:var(--muted);font-size:.85rem}
   .hint{color:var(--muted);font-size:.9rem;margin-top:.4rem}
   .grid-states{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.7rem;margin-top:1rem}
-  .schip{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:.55rem .75rem;
+  /* Phase 4 a11y audit: .schip set no color, so <button> text stayed UA-default black —
+     1.29:1 on the dark card. var(--ink) matches every other control in both palettes. */
+  .schip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:.55rem .75rem;
     cursor:pointer;font-size:.92rem;display:flex;justify-content:space-between;gap:.5rem}
   .schip:hover{border-color:var(--accent);color:var(--accent)}
   .schip .pop{color:var(--muted);font-size:.82rem}

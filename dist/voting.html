@@ -102,11 +102,13 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 </style>
 <style>
   /* tool accents: deadline-warning palette (3-layer, same pattern as core) */
-  :root { --warn: #b0752a; --warn-soft: #f0e2ce; }
+  /* Phase 4 a11y audit: light --warn darkened (was #b0752a — 3.04 vs --warn-soft
+     for the banner's <strong> text; needs >= 4.5) */
+  :root { --warn: #8a5a1e; --warn-soft: #f0e2ce; }
   @media (prefers-color-scheme: dark) {
     :root { --warn: #d9a05a; --warn-soft: #33291a; }
   }
-  :root[data-theme="light"] { --warn: #b0752a; --warn-soft: #f0e2ce; }
+  :root[data-theme="light"] { --warn: #8a5a1e; --warn-soft: #f0e2ce; }
   :root[data-theme="dark"] { --warn: #d9a05a; --warn-soft: #33291a; }
 
   body { padding: 2rem 1.25rem 4rem; }

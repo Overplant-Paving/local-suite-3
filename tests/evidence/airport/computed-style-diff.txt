@@ -1,36 +1,90 @@
-== computed-style diff, light (16 differing values) ==
+== computed-style diff, light (49 differing values) ==
 body { block-size: v1=1169.75px | v2=1190.58px }
 body { height: v1=1169.75px | v2=1190.58px }
 body { perspective-origin: v1=640px 584.875px | v2=640px 595.281px }
 body { transform-origin: v1=640px 584.875px | v2=640px 595.289px }
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --vfr: v1=#2e8b45 | v2=#27793c }
+body { --catink: v1=undefined | v2=#fff }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --vfr: v1=#2e8b45 | v2=#27793c }
+.topbar { --catink: v1=undefined | v2=#fff }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --vfr: v1=#2e8b45 | v2=#27793c }
+.back { --catink: v1=undefined | v2=#fff }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --vfr: v1=#2e8b45 | v2=#27793c }
+.theme-btn { --catink: v1=undefined | v2=#fff }
 h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+h1 { --vfr: v1=#2e8b45 | v2=#27793c }
+h1 { --catink: v1=undefined | v2=#fff }
 .panel { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.panel { --vfr: v1=#2e8b45 | v2=#27793c }
+.panel { --catink: v1=undefined | v2=#fff }
 #pasteBox { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#pasteBox { --vfr: v1=#2e8b45 | v2=#27793c }
+#pasteBox { --catink: v1=undefined | v2=#fff }
+button.primary { caret-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+button.primary { color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+button.primary { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+button.primary { outline-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+button.primary { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+button.primary { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+button.primary { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 button.primary { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.primary { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+button.primary { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+button.primary { --vfr: v1=#2e8b45 | v2=#27793c }
+button.primary { --catink: v1=undefined | v2=#fff }
 button.ghost { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.ghost { --vfr: v1=#2e8b45 | v2=#27793c }
+button.ghost { --catink: v1=undefined | v2=#fff }
 #icaoInput { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#icaoInput { --vfr: v1=#2e8b45 | v2=#27793c }
+#icaoInput { --catink: v1=undefined | v2=#fff }
 input.relay { -webkit-font-smoothing: v1=auto | v2=antialiased }
+input.relay { --vfr: v1=#2e8b45 | v2=#27793c }
+input.relay { --catink: v1=undefined | v2=#fff }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --vfr: v1=#2e8b45 | v2=#27793c }
+footer { --catink: v1=undefined | v2=#fff }
 
-== computed-style diff, dark (16 differing values) ==
+== computed-style diff, dark (37 differing values) ==
 body { block-size: v1=1169.75px | v2=1190.58px }
 body { height: v1=1169.75px | v2=1190.58px }
 body { perspective-origin: v1=640px 584.875px | v2=640px 595.281px }
 body { transform-origin: v1=640px 584.875px | v2=640px 595.289px }
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --catink: v1=undefined | v2=#15171b }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --catink: v1=undefined | v2=#15171b }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --catink: v1=undefined | v2=#15171b }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --catink: v1=undefined | v2=#15171b }
 h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+h1 { --catink: v1=undefined | v2=#15171b }
 .panel { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.panel { --catink: v1=undefined | v2=#15171b }
 #pasteBox { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#pasteBox { --catink: v1=undefined | v2=#15171b }
+button.primary { caret-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.primary { color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.primary { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.primary { outline-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.primary { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.primary { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.primary { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 button.primary { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.primary { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.primary { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.primary { --catink: v1=undefined | v2=#15171b }
 button.ghost { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.ghost { --catink: v1=undefined | v2=#15171b }
 #icaoInput { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#icaoInput { --catink: v1=undefined | v2=#15171b }
 input.relay { -webkit-font-smoothing: v1=auto | v2=antialiased }
+input.relay { --catink: v1=undefined | v2=#15171b }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --catink: v1=undefined | v2=#15171b }
 

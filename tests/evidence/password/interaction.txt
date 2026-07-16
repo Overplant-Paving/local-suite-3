@@ -1,5 +1,5 @@
 EFF wordlist in page: length=7776 (expect 7776) unique=7776 first/mid/last=[abacus, massive, zoom]
-initial char pw (real crypto, pre-stub): "LYA7QDx-&6hIm{_R9YGQ" len=20 bits=129 strength=Overkill crack="7.8e15 millenniums" bar=100%/var(--good)
+initial char pw (real crypto, pre-stub): "gR-HyocC!qo5Z_*Q/$&5" len=20 bits=129 strength=Overkill crack="7.8e15 millenniums" bar=100%/var(--good)
 char 20 (seed 0xC0FFEE): got "a=YD0oT:/kP7%^On{luh" predicted "a=YD0oT:/kP7%^On{luh" match=true
 char entropy: displayed=129 recomputed=20*log2(86)=128.53 roundMatches=true strength=Overkill (expect Overkill >=128)
 char 32 (seed 42): lenval="32" got "{Un!2U?k^)o@{&Z:Yq_G}V+&WHU5.jeP" len=32 predicted match=true bits=206 (recompute 206)

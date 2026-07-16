@@ -105,18 +105,22 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   :root {
     --day: #f4ead0; --night: #232a3a;
     --ok: #3a7d44; --warn: #b0752a; --bad: #b04a4a;
+    --soft-muted: #59606c; /* Phase 4 a11y audit: muted text over the 16% night tint was 3.50 in light */
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --day: #33507a; --night: #10131c;
       --ok: #7dc487; --warn: #d6a24a; --bad: #d67a7a;
+      --soft-muted: #9aa0a8;
     }
   }
   :root[data-theme="light"] {
     --day: #f4ead0; --night: #232a3a; --ok: #3a7d44; --warn: #b0752a; --bad: #b04a4a;
+    --soft-muted: #59606c;
   }
   :root[data-theme="dark"] {
     --day: #33507a; --night: #10131c; --ok: #7dc487; --warn: #d6a24a; --bad: #d67a7a;
+    --soft-muted: #9aa0a8;
   }
   body { padding: 1.6rem 1.25rem 4rem; }
   .wrap { max-width: 1060px; margin: 0 auto; }
@@ -160,6 +164,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   }
   .clock .rm:hover { color: var(--bad); background: var(--chip); }
   .clock.night .sun { color: #b9c4e0; }
+  .clock.night .zone, .clock.night .date, .clock.night .time .sec { color: var(--soft-muted); }
   .clock .sun { position: absolute; bottom: .7rem; right: .8rem; font-size: 1.2rem; opacity: .8; }
   .empty { color: var(--muted); padding: 1.2rem 0; }
   /* planner */

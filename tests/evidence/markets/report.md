@@ -130,3 +130,93 @@ registry row for markets), doubled to 2880 while throttled.
 - `Suite.key("finnhub")` reads via `Suite.store.get`, which JSON-parses: an all-digit API key
   would come back as a number and be treated as missing. Finnhub keys are alphanumeric, so
   this is theoretical; noting it because it applies to every keyed tool using this pattern.
+
+## Phase 4 a11y audit (2026-07-16)
+
+Independent re-verification of the QUALITY.md §2 checklist, executed in the running tool
+(Playwright/Chrome from file://, light + dark, keyboard-only drive of the primary feature,
+contrast computed from getComputedStyle with ancestor alpha-compositing).
+
+| # | Checklist item | Verdict | Evidence |
+|---|---|---|---|
+| 1 | icon-only controls have accessible names | pass | unnamed: (none) |
+| 2 | async/result regions carry aria-live | pass | runtime check below |
+| 3 | keyboard path for every mouse path | pass | keyboard-only drive log below; no positive tabindex ((none)); no traps |
+| 4 | inputs labelled | pass | unlabelled: (none) (labelled: 1) |
+| 5 | contrast, both palettes | fixed (see below); remaining FAILs are the suite-wide --muted flags | full pair tables below |
+| 6 | visible focus indicator | pass | light: all stops show an indicator; dark: all stops show an indicator |
+
+### Contrast — light
+```
+contrast pairs (10 unique fg/bg combos):
+  FAIL 4.1 (need 4.5) fg=#6b7280 bg=#efece4 13.1px/400 — div.caveat "as index proxies);
+      broad i"
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 13.1px/400 — footer "Data: CoinGecko (crypto, keyless"
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 11.5px/400 — div.nm "prev close $211.12"
+  pass 4.93 (need 4.5) fg=#3a7d44 bg=#fffdf9 13.6px/600 — div.chg.up "+0.57% · +$1.21"
+  pass 5.26 (need 4.5) fg=#2f6f6a bg=#f5f3ee 14.4px/400 — a.back "← suite"
+  pass 5.26 (need 4.5) fg=#f5f3ee bg=#2f6f6a 14.4px/600 — button#addBtn.btn "Add"
+  pass 5.74 (need 4.5) fg=#2f6f6a bg=#fffdf9 12.8px/700 — a#changeKey.keylink "change key"
+  pass 5.77 (need 4.5) fg=#b23b3b bg=#fffdf9 13.6px/600 — div.chg.down "-0.31% · 24h"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 27.2px/700 — h1 "Market Snapshot"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> a#changeKey.keylink [outline] -> button.rm [outline] -> button.rm [outline] -> button.rm [outline] -> button.rm [outline] -> input#tickerInput [outline] -> button#addBtn.btn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> a#changeKey.keylink [outline] -> button.rm [outline] -> button.rm [outline] -> button.rm [outline] -> button.rm [outline] -> input#tickerInput [outline] -> button#addBtn.btn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> a#changeKey.keylink [outline] -> button.rm [outline] -> button.rm [outline]
+```
+
+### Contrast — dark
+```
+contrast pairs (10 unique fg/bg combos):
+  pass 5.31 (need 4.5) fg=#e0736b bg=#1d2026 13.6px/600 — div.chg.down "-0.31% · 24h"
+  pass 5.47 (need 4.5) fg=#9aa0a8 bg=#262a31 13.1px/400 — div.caveat "as index proxies);
+      broad i"
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 12.8px/400 — small "· live, in USD"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 13.1px/400 — footer "Data: CoinGecko (crypto, keyless"
+  pass 6.91 (need 4.5) fg=#6fb5ae bg=#1d2026 12.8px/700 — a#changeKey.keylink "change key"
+  pass 7.6 (need 4.5) fg=#6fb5ae bg=#15171b 14.4px/400 — a.back "← suite"
+  pass 7.6 (need 4.5) fg=#15171b bg=#6fb5ae 14.4px/600 — button#addBtn.btn "Add"
+  pass 7.86 (need 4.5) fg=#7dc487 bg=#1d2026 13.6px/600 — div.chg.up "+0.42% · 24h"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 27.2px/700 — h1 "Market Snapshot"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> a#changeKey.keylink [outline] -> button.rm [outline] -> button.rm [outline] -> button.rm [outline] -> button.rm [outline] -> input#tickerInput [outline] -> button#addBtn.btn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> a#changeKey.keylink [outline] -> button.rm [outline] -> button.rm [outline] -> button.rm [outline] -> button.rm [outline] -> input#tickerInput [outline] -> button#addBtn.btn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> a#changeKey.keylink [outline] -> button.rm [outline] -> button.rm [outline]
+```
+
+### Keyboard-only drive + live regions
+```
+### keyboard-only primary-feature drive
+  Tab -> reached ticker input (INPUT#tickerInput after 8 tab(s))
+  Enter in #tickerInput submits -> VTI tile added (keyboard add-ticker path)
+  Tab -> reached VTI remove x (BUTTON after 10 tab(s))
+  Enter on tile x -> VTI removed (keyboard-only remove path)
+
+### aria-live runtime check
+  #crypto: aria-live=polite
+  #cryptoUpdated: aria-live=polite
+  #stocks: aria-live=polite
+  #stockUpdated: aria-live=polite
+  #stockMsg: aria-live=polite
+  #keyMsg: aria-live=polite
+```
+
+### Fixes made (tool-local CSS, all four theme contexts)
+- `.btn` text `#fff` -> `var(--bg)`: white on the dark-theme accent #6fb5ae was 2.36:1; now 5.26:1 light / 7.60:1 dark.
+
+### Suite-wide contrast flags (REPORTED, not fixed locally — core palette)
+
+The light palette's `--muted` (#6b7280) misses WCAG AA 4.5:1 on two core surfaces
+(it passes on `--card` at 4.76, and the dark palette passes everywhere, 5.5-6.8):
+
+| pair | ratio | where it shows in this tool set |
+|---|---|---|
+| `--muted` on `--bg` #f5f3ee | **4.36** | core `footer` rule; tool taglines/hints/stamps on the page background (every tool) |
+| `--muted` on `--chip` #efece4 | **4.10** | core `.chip`; tool-local chip-bg recreations (jobs #dataStamp, markets .caveat, settings/transit/passes `code`, airport chips, hub chips) |
+| `--muted` on `--accent-soft` #e3efed | **4.11** | parks `.code` chip inside picker rows |
+
+Root cause is the palette value, not any one tool: per the audit addendum these are
+suite-wide failures — fixing them tool-by-tool would fork the palette across 71 files.
+Suggested one-line core remedy (NOT applied): darken light `--muted` to ~#5f6670
+(-> 5.23 on --bg, 4.91 on --chip, 5.71 on --card). Decision belongs to core.
+
+### Harness re-runs
+- `node verify-tool.mjs markets` re-run after the modification: exit 0, evidence refreshed (2026-07-16). Computed-style diffs vs v1 now include the documented a11y color deltas.

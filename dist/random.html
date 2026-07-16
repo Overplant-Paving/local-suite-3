@@ -175,7 +175,9 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .coin {
     width: 8rem; height: 8rem; border-radius: 50%; margin: .5rem auto 1rem;
     display: flex; align-items: center; justify-content: center;
-    font-size: 2.4rem; font-weight: 700; color: #fff;
+    /* Phase 4 a11y: was #fff, which fails contrast on the gold face (1.6–2.7:1);
+       the dark ink used by the streak dots passes on both coin faces */
+    font-size: 2.4rem; font-weight: 700; color: #4a3800;
     background: radial-gradient(circle at 35% 30%, #f0c65a, #c69518);
     box-shadow: var(--shadow); border: 3px solid rgba(0,0,0,.08);
   }

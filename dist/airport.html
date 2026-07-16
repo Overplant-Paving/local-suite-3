@@ -102,12 +102,14 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 </style>
 <style>
   /* tool accents: flight-category palette (3-layer, same pattern as core) */
-  :root { --vfr: #2e8b45; --mvfr: #2f6bb0; --ifr: #c0392b; --lifr: #9b3aa0; }
+  /* a11y (Phase 4): light --vfr darkened (white text was 4.3:1, now 5.4:1); --catink keeps
+     the category chip text near-black on the light dark-theme pastels (white was 1.8–3.5) */
+  :root { --vfr: #27793c; --mvfr: #2f6bb0; --ifr: #c0392b; --lifr: #9b3aa0; --catink: #fff; }
   @media (prefers-color-scheme: dark) {
-    :root { --vfr: #5cc078; --mvfr: #64a5e0; --ifr: #e0705f; --lifr: #cf7fd3; }
+    :root { --vfr: #5cc078; --mvfr: #64a5e0; --ifr: #e0705f; --lifr: #cf7fd3; --catink: #15171b; }
   }
-  :root[data-theme="light"] { --vfr: #2e8b45; --mvfr: #2f6bb0; --ifr: #c0392b; --lifr: #9b3aa0; }
-  :root[data-theme="dark"] { --vfr: #5cc078; --mvfr: #64a5e0; --ifr: #e0705f; --lifr: #cf7fd3; }
+  :root[data-theme="light"] { --vfr: #27793c; --mvfr: #2f6bb0; --ifr: #c0392b; --lifr: #9b3aa0; --catink: #fff; }
+  :root[data-theme="dark"] { --vfr: #5cc078; --mvfr: #64a5e0; --ifr: #e0705f; --lifr: #cf7fd3; --catink: #15171b; }
 
   body { min-height: 100vh; }
   code { font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace; }
@@ -139,7 +141,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   input.relay { flex: 1; min-width: 14rem; }
   textarea { width: 100%; min-height: 5rem; resize: vertical; }
   button.primary {
-    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    border: 1px solid var(--accent); background: var(--accent); color: var(--bg); /* a11y: was #fff — 2.4:1 on the dark accent */
     border-radius: 10px; padding: .55rem .95rem; cursor: pointer; font: inherit;
   }
   button.ghost {
@@ -169,7 +171,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .station .top { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; }
   .station .id { font-size: 1.2rem; font-weight: 700; letter-spacing: .02em; }
   .station .cat {
-    font-size: .74rem; font-weight: 700; padding: .12rem .55rem; border-radius: 999px; color: #fff; white-space: nowrap;
+    font-size: .74rem; font-weight: 700; padding: .12rem .55rem; border-radius: 999px; color: var(--catink); white-space: nowrap;
   }
   .cat.vfr { background: var(--vfr); } .cat.mvfr { background: var(--mvfr); }
   .cat.ifr { background: var(--ifr); } .cat.lifr { background: var(--lifr); }
@@ -196,6 +198,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .decoded { margin-top: .9rem; }
   .decoded .headline { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
   .decoded .headline .id { font-size: 1.25rem; font-weight: 700; }
+  .decoded .cat { color: var(--catink); padding: .05rem .5rem; border-radius: 8px; } /* a11y: inherited ink on the colored bg was 3.5:1 light / 1.8:1 dark */
   .decoded .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .6rem .9rem; margin-top: .9rem; }
   .decoded .cell .k { color: var(--muted); font-size: .74rem; text-transform: uppercase; letter-spacing: .05em; }
   .decoded .cell .v { font-size: .98rem; }

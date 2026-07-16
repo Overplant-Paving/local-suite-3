@@ -113,7 +113,15 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .tabs{display:flex;gap:.45rem;margin:1.2rem 0 .3rem;flex-wrap:wrap}
   .tab{border:1px solid var(--line);background:var(--card);color:var(--muted);
     border-radius:999px;padding:.4rem 1rem;font-size:.9rem;cursor:pointer}
-  .tab.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  /* Phase 4 a11y audit: #fff on the dark-theme accent (#6fb5ae) measured 2.36:1 — below
+     the 4.5:1 AA floor. var(--bg) passes both palettes (5.26:1 light / 7.60:1 dark).
+     Same fix on button.act.primary; the fav-on red gets a 3-layer accent (was #c0552d
+     in both palettes, 3.55:1 on the dark card). */
+  :root { --fav-on: #c0552d; }
+  @media (prefers-color-scheme: dark) { :root { --fav-on: #e0766a; } }
+  :root[data-theme="light"] { --fav-on: #c0552d; }
+  :root[data-theme="dark"] { --fav-on: #e0766a; }
+  .tab.on{background:var(--accent);border-color:var(--accent);color:var(--bg)}
   .searchrow{margin-top:.8rem;display:none}
   .searchrow.show{display:block}
   .postcard{background:var(--card);border:1px solid var(--line);border-radius:16px;
@@ -131,8 +139,8 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   button.act{border:1px solid var(--line);background:var(--card);color:var(--ink);
     border-radius:10px;padding:.55rem 1.1rem;cursor:pointer;font-size:.92rem}
   button.act:hover{border-color:var(--accent);color:var(--accent)}
-  button.act.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-  button.act.fav.on{color:#c0552d;border-color:#c0552d}
+  button.act.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+  button.act.fav.on{color:var(--fav-on);border-color:var(--fav-on)}
   section.favs{margin-top:2.4rem}
   section.favs h2{font-size:1.05rem;display:flex;align-items:baseline;gap:.5rem}
   section.favs h2 .n{color:var(--muted);font-weight:500;font-size:.82rem}

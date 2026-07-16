@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-QKTPFSa0uSKqVp9ubaax50Gvz26CDWDWuSZVCVRBPiU='; style-src 'unsafe-inline'; img-src data: https://radar.weather.gov https://cdn.star.nesdis.noaa.gov https://api.zippopotam.us; media-src https://radar.weather.gov https://cdn.star.nesdis.noaa.gov https://api.zippopotam.us; connect-src https://radar.weather.gov https://cdn.star.nesdis.noaa.gov https://api.zippopotam.us; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-QUUEt2bsANyeKw5G6XK/dg1XGLw4KTnBSfImmBRU718='; style-src 'unsafe-inline'; img-src data: https://radar.weather.gov https://cdn.star.nesdis.noaa.gov https://api.zippopotam.us; media-src https://radar.weather.gov https://cdn.star.nesdis.noaa.gov https://api.zippopotam.us; connect-src https://radar.weather.gov https://cdn.star.nesdis.noaa.gov https://api.zippopotam.us; worker-src 'self'; manifest-src 'self'">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Radar & Satellite Viewer · Local Suite</title>
 <style>
@@ -101,6 +101,12 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 }
 </style>
 <style>
+  /* tool accent: first-run error note (3-layer, same pattern as core) —
+     Phase 4 a11y: one hex for both themes failed WCAG AA on the dark card */
+  :root { --errnote: #c0392b; }
+  @media (prefers-color-scheme: dark) { :root { --errnote: #cf695e; } }
+  :root[data-theme="light"] { --errnote: #c0392b; }
+  :root[data-theme="dark"] { --errnote: #cf695e; }
   body { padding: 1.4rem 1.25rem 4rem; }
   .wrap { max-width: 1000px; margin: 0 auto; }
   .topbar { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
@@ -571,7 +577,7 @@ function renderFirstRun(msg) {
     `<div class="panel"><div class="card-msg">
       <div class="big">Set your location</div>
       Radar auto-suggests the nearest NWS station once it knows where you are. (Satellite works without it.)
-      ${msg ? `<div class="notice" style="color:#c0392b">${esc(msg)}</div>` : ""}
+      ${msg ? `<div class="notice" style="color:var(--errnote)">${esc(msg)}</div>` : ""}
       <div class="field"><label for="zip">US ZIP code</label>
         <input id="zip" inputmode="numeric" placeholder="e.g. 10001" maxlength="5"></div>
       <div class="row" style="justify-content:center">

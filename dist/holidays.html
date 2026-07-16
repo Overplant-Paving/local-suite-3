@@ -102,12 +102,19 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 </style>
 <style>
   /* tool accents: warn/good palette (3-layer, same pattern as core) */
-  :root { --warn: #b0752a; --warn-soft: #f0e2ce; --good: #3a7d44; }
+  /* Phase 4 a11y audit: light --warn darkened (was #b0752a — 3.04 on --warn-soft);
+     --bad added for the market-closed badge (the hardcoded #c0492d hit 3.91 light /
+     2.87 dark); --soft-muted for muted text on accent-soft highlighted rows (was 4.11) */
+  :root { --warn: #8a5a1e; --warn-soft: #f0e2ce; --good: #3a7d44;
+    --bad: #a33d24; --soft-muted: #59606c; }
   @media (prefers-color-scheme: dark) {
-    :root { --warn: #d9a05a; --warn-soft: #33291a; --good: #7dc487; }
+    :root { --warn: #d9a05a; --warn-soft: #33291a; --good: #7dc487;
+      --bad: #ee8378; --soft-muted: #9aa0a8; }
   }
-  :root[data-theme="light"] { --warn: #b0752a; --warn-soft: #f0e2ce; --good: #3a7d44; }
-  :root[data-theme="dark"] { --warn: #d9a05a; --warn-soft: #33291a; --good: #7dc487; }
+  :root[data-theme="light"] { --warn: #8a5a1e; --warn-soft: #f0e2ce; --good: #3a7d44;
+    --bad: #a33d24; --soft-muted: #59606c; }
+  :root[data-theme="dark"] { --warn: #d9a05a; --warn-soft: #33291a; --good: #7dc487;
+    --bad: #ee8378; --soft-muted: #9aa0a8; }
 
   body { padding: 2rem 1.25rem 4rem; }
   .wrap { max-width: 1000px; margin: 0 auto; }
@@ -147,11 +154,12 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   tr:last-child td { border-bottom: none; }
   tr.past td { opacity: .5; }
   tr.next td { background: var(--accent-soft); }
+  tr.next td .dow { color: var(--soft-muted); }
   td .name { font-weight: 600; }
   td .dow { color: var(--muted); font-size: .82rem; }
   .tag-obs { font-size: .72rem; color: var(--warn); background: var(--warn-soft); padding: .1rem .45rem; border-radius: 999px; margin-left: .4rem; }
   .badge { font-size: .74rem; padding: .12rem .5rem; border-radius: 999px; white-space: nowrap; }
-  .badge.closed { background: color-mix(in srgb, #c0492d 16%, transparent); color: #c0492d; }
+  .badge.closed { background: color-mix(in srgb, var(--bad) 16%, transparent); color: var(--bad); }
   .badge.early { background: var(--warn-soft); color: var(--warn); }
   .badge.open { background: var(--chip); color: var(--muted); }
 

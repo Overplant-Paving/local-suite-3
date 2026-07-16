@@ -1,28 +1,82 @@
-== computed-style diff, light (12 differing values) ==
+== computed-style diff, light (45 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --visible: v1=#b9822b | v2=#7a520d }
+body { --shadowmark: v1=#8a8f98 | v2=#5c636e }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --visible: v1=#b9822b | v2=#7a520d }
+.back { --shadowmark: v1=#8a8f98 | v2=#5c636e }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --visible: v1=#b9822b | v2=#7a520d }
+.theme-btn { --shadowmark: v1=#8a8f98 | v2=#5c636e }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --visible: v1=#b9822b | v2=#7a520d }
+header h1 { --shadowmark: v1=#8a8f98 | v2=#5c636e }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --visible: v1=#b9822b | v2=#7a520d }
+header .tag { --shadowmark: v1=#8a8f98 | v2=#5c636e }
 #locCard { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#locCard { --visible: v1=#b9822b | v2=#7a520d }
+#locCard { --shadowmark: v1=#8a8f98 | v2=#5c636e }
 #locCard h2 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#locCard h2 { --visible: v1=#b9822b | v2=#7a520d }
+#locCard h2 { --shadowmark: v1=#8a8f98 | v2=#5c636e }
 #zip { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#zip { --visible: v1=#b9822b | v2=#7a520d }
+#zip { --shadowmark: v1=#8a8f98 | v2=#5c636e }
+#zipBtn { caret-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+#zipBtn { color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+#zipBtn { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+#zipBtn { outline-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+#zipBtn { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+#zipBtn { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+#zipBtn { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 #zipBtn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#zipBtn { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+#zipBtn { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+#zipBtn { --visible: v1=#b9822b | v2=#7a520d }
+#zipBtn { --shadowmark: v1=#8a8f98 | v2=#5c636e }
 #geoBtn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#geoBtn { --visible: v1=#b9822b | v2=#7a520d }
+#geoBtn { --shadowmark: v1=#8a8f98 | v2=#5c636e }
 #locErr { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#locErr { --visible: v1=#b9822b | v2=#7a520d }
+#locErr { --shadowmark: v1=#8a8f98 | v2=#5c636e }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --visible: v1=#b9822b | v2=#7a520d }
+footer { --shadowmark: v1=#8a8f98 | v2=#5c636e }
 
-== computed-style diff, dark (12 differing values) ==
+== computed-style diff, dark (33 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --shadowmark: v1=#6b7280 | v2=#9aa0a8 }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --shadowmark: v1=#6b7280 | v2=#9aa0a8 }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --shadowmark: v1=#6b7280 | v2=#9aa0a8 }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --shadowmark: v1=#6b7280 | v2=#9aa0a8 }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --shadowmark: v1=#6b7280 | v2=#9aa0a8 }
 #locCard { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#locCard { --shadowmark: v1=#6b7280 | v2=#9aa0a8 }
 #locCard h2 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#locCard h2 { --shadowmark: v1=#6b7280 | v2=#9aa0a8 }
 #zip { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#zip { --shadowmark: v1=#6b7280 | v2=#9aa0a8 }
+#zipBtn { caret-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+#zipBtn { color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+#zipBtn { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+#zipBtn { outline-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+#zipBtn { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+#zipBtn { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+#zipBtn { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 #zipBtn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#zipBtn { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+#zipBtn { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+#zipBtn { --shadowmark: v1=#6b7280 | v2=#9aa0a8 }
 #geoBtn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#geoBtn { --shadowmark: v1=#6b7280 | v2=#9aa0a8 }
 #locErr { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#locErr { --shadowmark: v1=#6b7280 | v2=#9aa0a8 }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --shadowmark: v1=#6b7280 | v2=#9aa0a8 }
 

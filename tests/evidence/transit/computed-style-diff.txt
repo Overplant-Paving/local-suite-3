@@ -1,4 +1,4 @@
-== computed-style diff, light (28 differing values) ==
+== computed-style diff, light (45 differing values) ==
 body { block-size: v1=893.031px | v2=921.375px }
 body { height: v1=893.031px | v2=921.375px }
 body { perspective-origin: v1=640px 446.516px | v2=640px 460.688px }
@@ -20,7 +20,24 @@ header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .seg { transform-origin: v1=193.133px 15.3906px | v2=166.531px 15.3906px }
 .seg { width: v1=386.266px | v2=333.062px }
 .seg { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.seg button.on { border-block-end-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.seg button.on { border-block-start-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.seg button.on { border-bottom-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.seg button.on { border-inline-end-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.seg button.on { border-inline-start-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.seg button.on { border-left-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.seg button.on { border-right-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.seg button.on { border-top-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.seg button.on { caret-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.seg button.on { color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.seg button.on { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.seg button.on { outline-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.seg button.on { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.seg button.on { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.seg button.on { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 .seg button.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.seg button.on { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.seg button.on { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 .btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .hint { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .board-head .stn { -webkit-font-smoothing: v1=auto | v2=antialiased }
@@ -28,7 +45,7 @@ header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
 #board { -webkit-font-smoothing: v1=auto | v2=antialiased }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
 
-== computed-style diff, dark (28 differing values) ==
+== computed-style diff, dark (45 differing values) ==
 body { block-size: v1=893.031px | v2=921.375px }
 body { height: v1=893.031px | v2=921.375px }
 body { perspective-origin: v1=640px 446.516px | v2=640px 460.688px }
@@ -50,7 +67,24 @@ header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .seg { transform-origin: v1=193.133px 15.3906px | v2=166.531px 15.3906px }
 .seg { width: v1=386.266px | v2=333.062px }
 .seg { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.seg button.on { border-block-end-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.seg button.on { border-block-start-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.seg button.on { border-bottom-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.seg button.on { border-inline-end-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.seg button.on { border-inline-start-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.seg button.on { border-left-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.seg button.on { border-right-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.seg button.on { border-top-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.seg button.on { caret-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.seg button.on { color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.seg button.on { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.seg button.on { outline-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.seg button.on { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.seg button.on { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.seg button.on { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 .seg button.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.seg button.on { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.seg button.on { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 .btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .hint { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .board-head .stn { -webkit-font-smoothing: v1=auto | v2=antialiased }

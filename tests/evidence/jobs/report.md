@@ -161,3 +161,91 @@ the terminal (`--refresh-data`) and already appears in CATALOG.md.
 5. Harness note: the after-interaction screenshot intentionally shows the fake relay-merged
    state (3.3% Jul 2026 etc.) — that is test fixture data proving the merge path, not real
    BLS data. The clean embedded state is in v2-light/dark.png and offline-embedded.png.
+
+## Phase 4 a11y audit (2026-07-16)
+
+Independent re-verification of the QUALITY.md §2 checklist, executed in the running tool
+(Playwright/Chrome from file://, light + dark, keyboard-only drive of the primary feature,
+contrast computed from getComputedStyle with ancestor alpha-compositing).
+
+| # | Checklist item | Verdict | Evidence |
+|---|---|---|---|
+| 1 | icon-only controls have accessible names | pass | unnamed: (none) |
+| 2 | async/result regions carry aria-live | pass | runtime check below |
+| 3 | keyboard path for every mouse path | pass | keyboard-only drive log below; no positive tabindex ((none)); no traps |
+| 4 | inputs labelled | pass | unlabelled: (none) (labelled: 3) |
+| 5 | contrast, both palettes | fixed (see below); remaining FAILs are the suite-wide --muted flags | full pair tables below |
+| 6 | visible focus indicator | pass | light: all stops show an indicator; dark: all stops show an indicator |
+
+### Contrast — light
+```
+contrast pairs (11 unique fg/bg combos):
+  pass 4.08 (need 3) fg=#b06d2b bg=#fffdf9 32px/700 — b "61.5%"
+  FAIL 4.1 (need 4.5) fg=#6b7280 bg=#efece4 12.8px/400 — p#dataStamp.stamp "Data: June 2026 · refreshed mont"
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 13.1px/400 — footer "Data: U.S. Bureau of Labor Stati"
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 13.6px/400 — label "Relay URL"
+  pass 5.11 (need 3) fg=#4a6f9c bg=#fffdf9 32px/700 — b "+57K"
+  pass 5.26 (need 4.5) fg=#2f6f6a bg=#f5f3ee 14.4px/400 — a.back "← suite"
+  pass 5.26 (need 4.5) fg=#f5f3ee bg=#2f6f6a 14.4px/600 — button#relayBtn.btn "Fetch live"
+  pass 5.74 (need 3) fg=#2f6f6a bg=#fffdf9 32px/700 — b "4.2%"
+  pass 5.74 (need 4.5) fg=#2f6f6a bg=#fffdf9 12.8px/400 — a "bls.gov/data"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 27.2px/700 — h1 "Jobs & Unemployment Snapshot"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a [outline] -> select#series [outline] -> textarea#paste [outline] -> button#mergeBtn.btn [outline] -> button#clearBtn.btn [outline] -> input#relay [outline] -> button#relayBtn.btn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> a.linkchip [outline] -> a.linkchip [outline] -> a.linkchip [outline] -> summary [outline] -> a [outline] -> select#series [outline] -> textarea#paste [outline] -> button#mergeBtn.btn [outline] -> button#clearBtn.btn [outline] -> input#relay [outline] -> button#relayBtn.btn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> a.linkchip [outline]
+```
+
+### Contrast — dark
+```
+contrast pairs (11 unique fg/bg combos):
+  pass 5.47 (need 4.5) fg=#9aa0a8 bg=#262a31 12.8px/400 — p#dataStamp.stamp "Data: June 2026 · refreshed mont"
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 11.8px/400 — div.lbl "Unemployment rate"
+  pass 6.46 (need 3) fg=#7ea6d6 bg=#1d2026 32px/700 — b "+57K"
+  pass 6.69 (need 3) fg=#d69a52 bg=#1d2026 32px/700 — b "61.5%"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 13.1px/400 — footer "Data: U.S. Bureau of Labor Stati"
+  pass 6.91 (need 3) fg=#6fb5ae bg=#1d2026 32px/700 — b "4.2%"
+  pass 6.91 (need 4.5) fg=#6fb5ae bg=#1d2026 13.1px/400 — a.linkchip "Employment Situation →"
+  pass 7.6 (need 4.5) fg=#6fb5ae bg=#15171b 14.4px/400 — a.back "← suite"
+  pass 7.6 (need 4.5) fg=#15171b bg=#6fb5ae 14.4px/600 — button#mergeBtn.btn "Merge & refresh"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 27.2px/700 — h1 "Jobs & Unemployment Snapshot"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a [outline] -> select#series [outline] -> textarea#paste [outline] -> button#mergeBtn.btn [outline] -> button#clearBtn.btn [outline] -> input#relay [outline] -> button#relayBtn.btn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> a.linkchip [outline] -> a.linkchip [outline] -> a.linkchip [outline] -> summary [outline] -> a [outline] -> select#series [outline] -> textarea#paste [outline] -> button#mergeBtn.btn [outline] -> button#clearBtn.btn [outline] -> input#relay [outline] -> button#relayBtn.btn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> a.linkchip [outline]
+```
+
+### Keyboard-only drive + live regions
+```
+### keyboard-only primary-feature drive
+  Tab -> reached paste textarea (TEXTAREA#paste after 3 tab(s))
+  Tab -> reached merge button (BUTTON#mergeBtn after 1 tab(s))
+  keyboard paste-merge -> headline 4.2% -> 9.9%, msg "Merged 1 month into the unemp series."
+  Tab -> reached clear button (BUTTON#clearBtn after 1 tab(s))
+  keyboard clear -> "Your updates were cleared. Showing embedded data only."
+
+### aria-live runtime check
+  #pasteMsg: aria-live=polite
+  #relayMsg: aria-live=polite
+  #stats: aria-live=polite
+```
+
+### Fixes made (tool-local CSS, all four theme contexts)
+- `.btn` text `#fff` -> `var(--bg)`: white on the dark-theme accent #6fb5ae was 2.36:1; now 5.26:1 light / 7.60:1 dark. (The light `#dataStamp` muted-on-chip 4.10 is the suite-wide `--muted` flag below, not fixed locally.)
+
+### Suite-wide contrast flags (REPORTED, not fixed locally — core palette)
+
+The light palette's `--muted` (#6b7280) misses WCAG AA 4.5:1 on two core surfaces
+(it passes on `--card` at 4.76, and the dark palette passes everywhere, 5.5-6.8):
+
+| pair | ratio | where it shows in this tool set |
+|---|---|---|
+| `--muted` on `--bg` #f5f3ee | **4.36** | core `footer` rule; tool taglines/hints/stamps on the page background (every tool) |
+| `--muted` on `--chip` #efece4 | **4.10** | core `.chip`; tool-local chip-bg recreations (jobs #dataStamp, markets .caveat, settings/transit/passes `code`, airport chips, hub chips) |
+| `--muted` on `--accent-soft` #e3efed | **4.11** | parks `.code` chip inside picker rows |
+
+Root cause is the palette value, not any one tool: per the audit addendum these are
+suite-wide failures — fixing them tool-by-tool would fork the palette across 71 files.
+Suggested one-line core remedy (NOT applied): darken light `--muted` to ~#5f6670
+(-> 5.23 on --bg, 4.91 on --chip, 5.71 on --card). Decision belongs to core.
+
+### Harness re-runs
+- `node verify-tool.mjs jobs` re-run after the modification: exit 0, evidence refreshed (2026-07-16). Computed-style diffs vs v1 now include the documented a11y color deltas.

@@ -119,3 +119,96 @@ interpolation anywhere (v1 was already DOM-based and that was preserved).
 5. Suite.liveRegion is applied to `#app` (which contains the picker UI, not only results); with
    `aria-live="polite"` on a container that re-renders on each toggle, screen-reader chatter is
    possible but bounded. Kept because both containers receive async result states.
+
+## Phase 4 a11y audit (2026-07-16)
+
+Independent re-verification of the QUALITY.md §2 checklist, executed in the running tool
+(Playwright/Chrome from file://, light + dark, keyboard-only drive of the primary feature,
+contrast computed from getComputedStyle with ancestor alpha-compositing).
+
+| # | Checklist item | Verdict | Evidence |
+|---|---|---|---|
+| 1 | icon-only controls have accessible names | pass | unnamed: (none) |
+| 2 | async/result regions carry aria-live | pass | runtime check below |
+| 3 | keyboard path for every mouse path | pass | keyboard-only drive log below; no positive tabindex ((none)); no traps |
+| 4 | inputs labelled | pass | unlabelled: (none) (labelled: 1) |
+| 5 | contrast, both palettes | fixed (see below); remaining FAILs are the suite-wide --muted flags | full pair tables below |
+| 6 | visible focus indicator | pass | light: all stops show an indicator; dark: all stops show an indicator |
+
+### Contrast — light
+```
+contrast pairs (12 unique fg/bg combos):
+  FAIL 4.11 (need 4.5) fg=#6b7280 bg=#e3efed 11.8px/600 — span.code "yose"
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 13.1px/400 — footer "Data: National Park Service · de"
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 14.1px/400 — div.desc "Store all food in bear boxes."
+  pass 4.93 (need 4.5) fg=#ffffff bg=#9c6420 10.9px/700 — span.cat.k-closure "Park Closure"
+  pass 4.95 (need 4.5) fg=#2f6f6a bg=#e3efed 13.1px/400 — span.pchip "Yosemite National Park"
+  pass 5.26 (need 4.5) fg=#2f6f6a bg=#f5f3ee 12.8px/700 — a "park page →"
+  pass 5.44 (need 4.5) fg=#ffffff bg=#c0392b 10.9px/700 — span.cat.k-danger "Danger"
+  pass 5.74 (need 4.5) fg=#2f6f6a bg=#fffdf9 12.8px/700 — button.ghost "change key"
+  pass 5.83 (need 4.5) fg=#ffffff bg=#2f6f6a 10.9px/700 — span.cat.k-info "Information"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 27.2px/700 — h1 "National Parks Companion"
+  pass 13.39 (need 4.5) fg=#23282e bg=#f5f3ee 17.9px/700 — h2 "Yosemite National Park"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: div.opt [outline] -> a [outline] -> a [outline] -> a [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.ghost [outline] -> button [outline] -> input [outline] -> div.opt [outline] -> a [outline] -> a [outline] -> a [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.ghost [outline] -> button [outline] -> input [outline] -> div.opt [outline] -> a [outline] -> a [outline] -> a [outline] -> (body)
+```
+
+### Contrast — dark
+```
+contrast pairs (12 unique fg/bg combos):
+  pass 5.38 (need 4.5) fg=#15171b bg=#e0685a 10.9px/700 — span.cat.k-danger "Danger"
+  pass 5.64 (need 4.5) fg=#9aa0a8 bg=#1f292b 11.8px/600 — span.code "yose"
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 14.1px/400 — div.desc "Temperatures may exceed 100F."
+  pass 6.3 (need 4.5) fg=#6fb5ae bg=#1f292b 14.4px/600 — span "Yosemite National Park (CA)"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 13.1px/400 — footer "Data: National Park Service · de"
+  pass 6.91 (need 4.5) fg=#6fb5ae bg=#1d2026 12.8px/700 — button.ghost "change key"
+  pass 7.2 (need 4.5) fg=#15171b bg=#d09a53 10.9px/700 — span.cat.k-closure "Park Closure"
+  pass 7.6 (need 4.5) fg=#6fb5ae bg=#15171b 14.4px/400 — a.back "← suite"
+  pass 7.6 (need 4.5) fg=#15171b bg=#6fb5ae 10.9px/700 — span.cat.k-info "Information"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 27.2px/700 — h1 "National Parks Companion"
+  pass 14.25 (need 4.5) fg=#e7e5e0 bg=#15171b 17.9px/700 — h2 "Yosemite National Park"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: div.opt [outline] -> a [outline] -> a [outline] -> a [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.ghost [outline] -> button [outline] -> input [outline] -> div.opt [outline] -> a [outline] -> a [outline] -> a [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.ghost [outline] -> button [outline] -> input [outline] -> div.opt [outline] -> a [outline] -> a [outline] -> a [outline] -> (body)
+```
+
+### Keyboard-only drive + live regions
+```
+### keyboard-only primary-feature drive
+  Tab -> reached park search input (INPUT after 10 tab(s))
+  Tab -> reached Joshua Tree option row (DIV after 1 tab(s))
+  Enter on option row -> Joshua Tree watched; 2 park groups rendered (keyboard-only park selection)
+  Tab -> reached chip remove x button (BUTTON after 11 tab(s))
+  Enter on chip x -> unwatched; back to 1 group (keyboard-only removal)
+
+### aria-live runtime check
+  #app: aria-live=polite
+  #content: aria-live=polite
+```
+
+### Fixes made (tool-local CSS, all four theme contexts)
+- `button.primary` text `#fff` -> `var(--bg)` (was 2.36:1 on the dark-theme accent; now 5.3:1 light / 7.6:1 dark).
+- Alert category badges: light `--closure` #c07f2d -> #9c6420 (white text 3.33 -> 4.93), light `--caution` #b8912a -> #856612 (2.95 -> 5.38); new `--catink` var (#fff light / #15171b dark) replaces the hardcoded `#fff` badge text — on the dark palette's pastel badge colors white was 2.36-3.33, near-black ink is 5.4-8.7. All four theme contexts, in the tool's existing `:root` var block. Alert border-left colors (same vars) stay >=3:1 vs card.
+
+### Notes
+- NPS routes fulfilled with fixture payloads (no key available; no live traffic), suite.key.nps seeded with the test value — same approach as the migration evidence.
+
+### Suite-wide contrast flags (REPORTED, not fixed locally — core palette)
+
+The light palette's `--muted` (#6b7280) misses WCAG AA 4.5:1 on two core surfaces
+(it passes on `--card` at 4.76, and the dark palette passes everywhere, 5.5-6.8):
+
+| pair | ratio | where it shows in this tool set |
+|---|---|---|
+| `--muted` on `--bg` #f5f3ee | **4.36** | core `footer` rule; tool taglines/hints/stamps on the page background (every tool) |
+| `--muted` on `--chip` #efece4 | **4.10** | core `.chip`; tool-local chip-bg recreations (jobs #dataStamp, markets .caveat, settings/transit/passes `code`, airport chips, hub chips) |
+| `--muted` on `--accent-soft` #e3efed | **4.11** | parks `.code` chip inside picker rows |
+
+Root cause is the palette value, not any one tool: per the audit addendum these are
+suite-wide failures — fixing them tool-by-tool would fork the palette across 71 files.
+Suggested one-line core remedy (NOT applied): darken light `--muted` to ~#5f6670
+(-> 5.23 on --bg, 4.91 on --chip, 5.71 on --card). Decision belongs to core.
+
+### Harness re-runs
+- `node verify-tool.mjs parks` re-run after the modification: exit 0, evidence refreshed (2026-07-16). Computed-style diffs vs v1 now include the documented a11y color deltas.

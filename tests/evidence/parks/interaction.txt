@@ -5,7 +5,7 @@ no-key paste field present: true, Save key button: true
 key saved -> suite.key.nps = "TEST-KEY-NOT-REAL-0000"
 parks request made with api_key param = "TEST-KEY-NOT-REAL-0000" (requests so far: parks=1)
 picker rendered: 8 park options; first option: "Acadia National Park (ME) acad"
-parklist cache envelope: t=2026-07-16T03:55:53.753Z v=array[8] sample={"code":"acad","name":"Acadia National Park","states":"ME"}
+parklist cache envelope: t=2026-07-16T06:13:02.250Z v=array[8] sample={"code":"acad","name":"Acadia National Park","states":"ME"}
 empty selection message: "Pick a parkChoose one or more parks above to see their current alerts."
 search "yose" filters options to: 1
 selected chip: "Yosemite National Park
@@ -13,19 +13,19 @@ selected chip: "Yosemite National Park
 alerts request parkCode = "yose"
 keyboard-selected Joshua Tree; suite.parks = ["yose","jotr"]
 alerts request parkCode = "jotr,yose" (sorted codes; requests: alerts=2)
-stamp: "data from Jul 15, 10:55 PM"
+stamp: "data from Jul 16, 1:13 AM"
 group: "Yosemite National Park3 alertspark page →" · park page https://www.nps.gov/yose/ · badges [Danger, Park Closure, Information] · titles: "Extreme Heat Warning in Yosemite Valley", "Tioga Road Closed for Repairs", "Bear Activity: Food Storage Required"
 group: "Joshua Tree National Parkno active alertspark page →" · park page https://www.nps.gov/jotr/ · badges [] · no-alert card: "No active alerts for this park. Enjoy your visit."
 severity sort check (Danger before Closure before Information): [Danger -> Park Closure -> Information]
 alert title link (a.url present): https://www.nps.gov/yose/planyourvisit/conditions.htm
 chip remove button aria-label: "Remove Yosemite National Park"
-after reload: chips = 2, groups = 2, stamp "data from Jul 15, 10:55 PM"
+after reload: chips = 2, groups = 2, stamp "data from Jul 16, 1:13 AM"
 reload served from cache: requests unchanged (parks 1->1, alerts 2->2)
 removed Joshua Tree via chip ×: suite.parks = ["yose"], groups = 1
 change key card: "Add your free NPS key", input prefilled with saved key: true
 403 from API -> invalid-key card: "That key didn't work", input cleared: true
-offline reload: picker from 30-day parklist cache (options: 8), alerts stale stamp: "Offline — cached data from Jul 14, 10:55 PM" (must say Offline), groups: 2
-restored fresh-cache view: stamp "data from Jul 15, 10:55 PM"
+offline reload: picker from 30-day parklist cache (options: 8), alerts stale stamp: "Offline — cached data from Jul 15, 1:13 AM" (must say Offline), groups: 2
+restored fresh-cache view: stamp "data from Jul 16, 1:13 AM"
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
   console.error: Failed to load resource: net::ERR_FAILED

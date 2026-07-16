@@ -113,7 +113,10 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
     border: 1px solid var(--line); background: var(--card); color: var(--muted);
     border-radius: 999px; padding: .35rem .85rem; font-size: .85rem; cursor: pointer;
   }
-  .pill.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  /* Phase 4 a11y audit: #fff on the dark-theme accent (#6fb5ae) measured 2.36:1 — below
+     the 4.5:1 AA floor. var(--bg) passes both palettes (5.26:1 light / 7.60:1 dark)
+     with no visible light-theme change. Same fix on button.go below. */
+  .pill.on { background: var(--accent); border-color: var(--accent); color: var(--bg); }
   .card {
     /* core .card is a flex column; v1 zip cards are plain blocks */
     display: block; flex-direction: row; gap: normal;
@@ -130,7 +133,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .row1 { display: grid; grid-template-columns: 1fr; gap: .7rem; }
   @media (max-width: 520px) { .row2 { grid-template-columns: 1fr; } }
   button.go {
-    margin-top: .8rem; border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    margin-top: .8rem; border: 1px solid var(--accent); background: var(--accent); color: var(--bg);
     border-radius: 10px; padding: .55rem 1.2rem; cursor: pointer; font-size: .95rem;
   }
   button.go:hover { filter: brightness(1.06); }

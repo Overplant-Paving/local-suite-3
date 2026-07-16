@@ -101,6 +101,13 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 }
 </style>
 <style>
+  /* Phase 4 a11y audit: remove-button hover red (was #c0552d in both palettes; 3.55:1 on
+     the dark card) — 3-layer tool accent, same pattern as network.html/geo.html */
+  :root { --rm-hover: #c0552d; }
+  @media (prefers-color-scheme: dark) { :root { --rm-hover: #e0766a; } }
+  :root[data-theme="light"] { --rm-hover: #c0552d; }
+  :root[data-theme="dark"] { --rm-hover: #e0766a; }
+
   body{ padding:1.4rem 1.25rem 4rem; }
   .wrap{max-width:940px;margin:0 auto}
   .topbar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.1rem}
@@ -115,7 +122,9 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .modes{display:flex;gap:.45rem;margin-top:.7rem;flex-wrap:wrap}
   .mode{border:1px solid var(--line);background:var(--card);color:var(--muted);
     border-radius:999px;padding:.32rem .85rem;font-size:.85rem;cursor:pointer}
-  .mode.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  /* Phase 4 a11y audit: #fff on the dark-theme accent (#6fb5ae) measured 2.36:1 — below
+     the 4.5:1 AA floor. var(--bg) passes both palettes (5.26:1 light / 7.60:1 dark). */
+  .mode.on{background:var(--accent);border-color:var(--accent);color:var(--bg)}
   .status{color:var(--muted);font-size:.88rem;margin:1rem 0 .3rem;min-height:1.2em}
   .results{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.9rem;margin-top:.4rem}
   .book{display:flex;gap:.9rem;background:var(--card);border:1px solid var(--line);border-radius:12px;
@@ -146,7 +155,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .saved-item .t b{font-weight:600}
   .saved-item .t span{color:var(--muted);font-size:.85rem}
   .saved-item .rm{border:none;background:none;color:var(--muted);cursor:pointer;font-size:1.1rem;padding:.1rem .4rem}
-  .saved-item .rm:hover{color:#c0552d}
+  .saved-item .rm:hover{color:var(--rm-hover)}
   .saved-empty{color:var(--muted);font-size:.9rem}
   footer{margin-top:2.6rem;font-size:.83rem;padding-top:1rem}
 </style>

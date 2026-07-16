@@ -125,7 +125,9 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .keyrow { display:flex; gap:.6rem; flex-wrap:wrap; }
   .keyrow input { flex:1; min-width:200px; background:var(--bg); border:1px solid var(--line); color:var(--ink);
     border-radius:9px; padding:.6rem .7rem; font:inherit; font-size:.9rem; }
-  .btn { border:none; border-radius:9px; padding:.6rem 1.1rem; cursor:pointer; font:inherit; font-weight:600; font-size:.9rem; background:var(--accent); color:#fff; }
+  /* Phase 4 a11y audit: #fff on the dark-theme accent (#6fb5ae) measured 2.36:1 — below
+     the 4.5:1 AA floor. var(--bg) passes both palettes (5.26:1 light / 7.60:1 dark). */
+  .btn { border:none; border-radius:9px; padding:.6rem 1.1rem; cursor:pointer; font:inherit; font-weight:600; font-size:.9rem; background:var(--accent); color:var(--bg); }
   .btn.ghost { background:transparent; border:1px solid var(--line); color:var(--ink); }
   .btn:hover { filter:brightness(1.05); }
   .controls { display:flex; gap:.7rem; flex-wrap:wrap; align-items:end; }

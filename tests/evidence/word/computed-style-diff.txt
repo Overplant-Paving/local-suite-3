@@ -1,4 +1,4 @@
-== computed-style diff, light (14 differing values) ==
+== computed-style diff, light (23 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .suite-link { -webkit-font-smoothing: v1=auto | v2=antialiased }
@@ -10,11 +10,20 @@ header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .word { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .pos { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .origin { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.act { caret-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+button.act { color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+button.act { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+button.act { outline-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+button.act { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+button.act { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+button.act { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 button.act { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.act { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+button.act { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 #metList { -webkit-font-smoothing: v1=auto | v2=antialiased }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
 
-== computed-style diff, dark (14 differing values) ==
+== computed-style diff, dark (23 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .suite-link { -webkit-font-smoothing: v1=auto | v2=antialiased }
@@ -26,7 +35,16 @@ header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .word { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .pos { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .origin { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.act { caret-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.act { color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.act { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.act { outline-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.act { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.act { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.act { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 button.act { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.act { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.act { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 #metList { -webkit-font-smoothing: v1=auto | v2=antialiased }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
 

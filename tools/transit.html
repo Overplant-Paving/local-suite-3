@@ -31,7 +31,7 @@
   input:focus, select:focus { border-color: var(--accent); }
   .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; margin-bottom: .3rem; flex-wrap: wrap; }
   .seg button { border: none; background: var(--card); color: var(--muted); padding: .4rem 1rem; cursor: pointer; font-size: .88rem; }
-  .seg button.on { background: var(--accent); color: #fff; }
+  .seg button.on { background: var(--accent); color: var(--bg); } /* a11y: was #fff — 2.4:1 on the dark accent */
   .row { display: flex; gap: .7rem; align-items: flex-end; flex-wrap: wrap; }
   .row > .grow { flex: 1; min-width: 180px; }
   .btn { border: 1px solid var(--line); background: var(--chip); color: var(--ink); border-radius: 10px; padding: .55rem .9rem; cursor: pointer; font-size: .9rem; white-space: nowrap; }

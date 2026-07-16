@@ -101,13 +101,14 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 }
 </style>
 <style>
-  /* tool accents (3-layer, same pattern as core) */
-  :root{ --wave:#3a86a8; --swell:#2f6f6a; --wind:#7a6cc4; --temp:#c07a3a; }
+  /* tool accents (3-layer, same pattern as core).
+     Phase 4 a11y: --err split per theme (the single hex failed WCAG AA on the dark card). */
+  :root{ --wave:#3a86a8; --swell:#2f6f6a; --wind:#7a6cc4; --temp:#c07a3a; --err:#b0472f; }
   @media (prefers-color-scheme: dark){
-    :root{ --wave:#6bb6d6; --swell:#6fb5ae; --wind:#a99ce0; --temp:#d99a5a; }
+    :root{ --wave:#6bb6d6; --swell:#6fb5ae; --wind:#a99ce0; --temp:#d99a5a; --err:#c2715f; }
   }
-  :root[data-theme="light"]{ --wave:#3a86a8; --swell:#2f6f6a; --wind:#7a6cc4; --temp:#c07a3a; }
-  :root[data-theme="dark"]{ --wave:#6bb6d6; --swell:#6fb5ae; --wind:#a99ce0; --temp:#d99a5a; }
+  :root[data-theme="light"]{ --wave:#3a86a8; --swell:#2f6f6a; --wind:#7a6cc4; --temp:#c07a3a; --err:#b0472f; }
+  :root[data-theme="dark"]{ --wave:#6bb6d6; --swell:#6fb5ae; --wind:#a99ce0; --temp:#d99a5a; --err:#c2715f; }
 
   body{ padding:1.4rem 1.25rem 4rem; }
   .wrap{ max-width:960px; margin:0 auto; }
@@ -156,7 +157,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .btn{ border:none; border-radius:9px; padding:.6rem .9rem; cursor:pointer; font-weight:600; font-size:.9rem;
     background:var(--accent); color:#fff; }
   .btn.ghost{ background:transparent; border:1px solid var(--line); color:var(--ink); }
-  .err{ color:#b0472f; font-size:.85rem; margin-top:.3rem; min-height:1.1em; }
+  .err{ color:var(--err); font-size:.85rem; margin-top:.3rem; min-height:1.1em; }
   .hidden{ display:none; }
 </style>
 </head>

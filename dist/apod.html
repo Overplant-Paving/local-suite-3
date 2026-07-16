@@ -176,8 +176,10 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
     flex: 1; min-width: 12rem; border: 1px solid var(--line); background: var(--bg);
     color: var(--ink); border-radius: 10px; padding: .45rem .7rem; font: inherit;
   }
+  /* Phase 4 a11y audit: #fff on the dark-theme accent (#6fb5ae) measured 2.36:1 — below
+     the 4.5:1 AA floor. var(--bg) passes both palettes (5.26:1 light / 7.60:1 dark). */
   .keycard button {
-    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    border: 1px solid var(--accent); background: var(--accent); color: var(--bg);
     border-radius: 10px; padding: .45rem .9rem; cursor: pointer; font: inherit;
   }
   .keycard .note { color: var(--muted); margin-top: .5rem; }

@@ -156,3 +156,88 @@ clears (`= ""`) and one fully-static error-card heading literal.
   theme, every selector). Zero geometry/color/layout deltas.
 - v1's `paint()` computes an `upcoming` filter it never uses; kept verbatim (dead but
   harmless) to stay line-for-line — flagging so the Phase 4 audit doesn't rediscover it.
+
+## Phase 4 a11y audit (2026-07-16)
+
+Independent re-verification of the QUALITY.md §2 checklist, executed in the running tool
+(Playwright/Chrome from file://, light + dark, keyboard-only drive of the primary feature,
+contrast computed from getComputedStyle with ancestor alpha-compositing).
+
+| # | Checklist item | Verdict | Evidence |
+|---|---|---|---|
+| 1 | icon-only controls have accessible names | pass | unnamed: (none) |
+| 2 | async/result regions carry aria-live | pass (by design) | runtime check below |
+| 3 | keyboard path for every mouse path | pass | keyboard-only drive log below; no positive tabindex ((none)); no traps |
+| 4 | inputs labelled | pass | unlabelled: (none) (labelled: 0) |
+| 5 | contrast, both palettes | fixed (see below); remaining FAILs are the suite-wide --muted flags | full pair tables below |
+| 6 | visible focus indicator | pass | light: all stops show an indicator; dark: all stops show an indicator |
+
+### Contrast — light
+```
+contrast pairs (9 unique fg/bg combos):
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 13.4px/400 — footer "Data: The Space Devs · Launch Li"
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 12.8px/400 — div.rel "2d 0h ago"
+  pass 4.81 (need 4.5) fg=#83561a bg=#e9dfd1 11.8px/600 — span.badge.tbd "To Be Determined"
+  pass 4.91 (need 4.5) fg=#ab2e1f bg=#f0d8d2 11.8px/600 — span.badge.fail "Launch Failure"
+  pass 5.6 (need 4.5) fg=#2c5f35 bg=#d9e1d6 11.8px/600 — span.badge.go "Go for Launch"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 24px/700 — h1 "Rocket Launch Schedule"
+  pass 13.39 (need 4.5) fg=#23282e bg=#f5f3ee 16.8px/700 — h2#listHead "Upcoming"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 14.61 (need 3) fg=#23282e bg=#fffdf9 38.4px/400 — div.v "2"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#refreshBtn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#refreshBtn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#refreshBtn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#refreshBtn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#refreshBtn [outline] -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#refreshBtn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline]
+```
+
+### Contrast — dark
+```
+contrast pairs (9 unique fg/bg combos):
+  pass 4.63 (need 4.5) fg=#e88574 bg=#423234 11.8px/600 — span.badge.fail "Launch Failure"
+  pass 4.85 (need 4.5) fg=#d69a4c bg=#3e362d 11.8px/600 — span.badge.tbd "To Be Determined"
+  pass 5.46 (need 4.5) fg=#7dc487 bg=#2e3e37 11.8px/600 — span.badge.go "Go for Launch"
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 12.2px/400 — div.eyebrow "Next launch"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 13.4px/400 — footer "Data: The Space Devs · Launch Li"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 12.96 (need 3) fg=#e7e5e0 bg=#1d2026 38.4px/400 — div.v "2"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 24px/700 — h1 "Rocket Launch Schedule"
+  pass 14.25 (need 4.5) fg=#e7e5e0 bg=#15171b 16.8px/700 — h2#listHead "Upcoming"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#refreshBtn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#refreshBtn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#refreshBtn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#refreshBtn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#refreshBtn [outline] -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#refreshBtn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline]
+```
+
+### Keyboard-only drive + live regions
+```
+### keyboard-only primary-feature drive
+  Tab -> reached refresh button (BUTTON#refreshBtn after 3 tab(s))
+  Enter on refresh (network blocked) -> stamp updated to "Live fetch failed — showing cached schedule from 5 min ago."
+
+### aria-live runtime check
+  #stamp: aria-live=polite
+  #next: aria-live=(missing)
+  #list: aria-live=(missing)
+```
+
+### Fixes made (tool-local CSS, all four theme contexts)
+- Status-badge palette (tool `:root` vars, all four contexts): light `--go` #3a7d44 -> #2c5f35 (badge text on its 18% tint 3.90 -> 5.46), light `--tbd` #b0752a -> #83561a (3.12 -> 4.81; also lifts the `.approx` line on the card to 5.0), light `--fail` #c0392b -> #ab2e1f (4.10 -> 4.92); dark `--fail` #e0705f -> #e88574 (4.03 -> 4.63).
+
+### Notes
+- aria-live design note: `#stamp` (Suite.liveRegion) is the announcer and updates on every load outcome (cached / updated / rate-limited / failed) — verified at runtime via the keyboard refresh. `#next`/`#list` are deliberately NOT live: `#next` contains the per-second countdown, which as a live region would announce every tick.
+- Network etiquette: the audit spent ZERO live LL2 requests (cache seeded with a slim-shape fixture; all http aborted). The verify-tool re-run below used the module's budgeted live fetch.
+
+### Suite-wide contrast flags (REPORTED, not fixed locally — core palette)
+
+The light palette's `--muted` (#6b7280) misses WCAG AA 4.5:1 on two core surfaces
+(it passes on `--card` at 4.76, and the dark palette passes everywhere, 5.5-6.8):
+
+| pair | ratio | where it shows in this tool set |
+|---|---|---|
+| `--muted` on `--bg` #f5f3ee | **4.36** | core `footer` rule; tool taglines/hints/stamps on the page background (every tool) |
+| `--muted` on `--chip` #efece4 | **4.10** | core `.chip`; tool-local chip-bg recreations (jobs #dataStamp, markets .caveat, settings/transit/passes `code`, airport chips, hub chips) |
+| `--muted` on `--accent-soft` #e3efed | **4.11** | parks `.code` chip inside picker rows |
+
+Root cause is the palette value, not any one tool: per the audit addendum these are
+suite-wide failures — fixing them tool-by-tool would fork the palette across 71 files.
+Suggested one-line core remedy (NOT applied): darken light `--muted` to ~#5f6670
+(-> 5.23 on --bg, 4.91 on --chip, 5.71 on --card). Decision belongs to core.
+
+### Harness re-runs
+- `node verify-tool.mjs launches` re-run after the modification: exit 0, evidence refreshed (2026-07-16). Computed-style diffs vs v1 now include the documented a11y color deltas.

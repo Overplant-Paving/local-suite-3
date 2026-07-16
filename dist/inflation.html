@@ -102,11 +102,12 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 </style>
 <style>
   /* tool accents (3-layer, same pattern as core) */
-  :root { --core: #b06d2b; --grid: #e9e5db; --pos: #b23b3b; --neg: #3a7d44; }
+  /* a11y (Phase 4): light --core darkened — the small core-CPI figures were 4.1:1 on the card, now 5.1:1 */
+  :root { --core: #9a5f22; --grid: #e9e5db; --pos: #b23b3b; --neg: #3a7d44; }
   @media (prefers-color-scheme: dark) {
     :root { --core: #d69a52; --grid: #262a31; --pos: #e0736b; --neg: #7dc487; }
   }
-  :root[data-theme="light"] { --core: #b06d2b; --grid: #e9e5db; --pos: #b23b3b; --neg: #3a7d44; }
+  :root[data-theme="light"] { --core: #9a5f22; --grid: #e9e5db; --pos: #b23b3b; --neg: #3a7d44; }
   :root[data-theme="dark"] { --core: #d69a52; --grid: #262a31; --pos: #e0736b; --neg: #7dc487; }
 
   body { padding: 1.5rem 1.25rem 4rem; }
@@ -165,7 +166,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .panel .row > div { flex: 1; min-width: 150px; }
   .btn {
     border: none; border-radius: 9px; padding: .6rem 1.1rem; cursor: pointer; font: inherit;
-    font-weight: 600; font-size: .9rem; background: var(--accent); color: #fff;
+    font-weight: 600; font-size: .9rem; background: var(--accent); color: var(--bg); /* a11y: was #fff — 2.4:1 on the dark accent */
   }
   .btn.ghost { background: transparent; border: 1px solid var(--line); color: var(--ink); }
   .btn:hover { filter: brightness(1.05); }

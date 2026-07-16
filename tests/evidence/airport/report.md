@@ -124,3 +124,102 @@ A user-configured relay host is by definition unknown at build time — see conc
 6. The `stationCard` no-data branch ("No live data — open the official page…") is now
    reachable only via relay-mode errors (link-out mode uses `linkoutCard`); kept because v1
    had it and relay users still hit it.
+
+## Phase 4 a11y audit (2026-07-16)
+
+Independent re-verification of the QUALITY.md §2 checklist, executed in the running tool
+(Playwright/Chrome from file://, light + dark, keyboard-only drive of the primary feature,
+contrast computed from getComputedStyle with ancestor alpha-compositing).
+
+| # | Checklist item | Verdict | Evidence |
+|---|---|---|---|
+| 1 | icon-only controls have accessible names | pass | unnamed: (none) |
+| 2 | async/result regions carry aria-live | pass | runtime check below |
+| 3 | keyboard path for every mouse path | pass | keyboard-only drive log below; no positive tabindex ((none)); no traps |
+| 4 | inputs labelled | pass | unlabelled: (none) (labelled: 3) |
+| 5 | contrast, both palettes | fixed (see below); remaining FAILs are the suite-wide --muted flags | full pair tables below |
+| 6 | visible focus indicator | pass | light: all stops show an indicator; dark: all stops show an indicator |
+
+### Contrast — light
+```
+contrast pairs (12 unique fg/bg combos):
+  FAIL 4.1 (need 4.5) fg=#6b7280 bg=#efece4 11.5px/400 — span.chip "official sources"
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 13.4px/400 — footer "· Decoder runs on your machine."
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 13.4px/400 — p.note "and rebuild."
+  pass 5.26 (need 4.5) fg=#f5f3ee bg=#2f6f6a 16px/400 — button#relaySave.primary "Save relay"
+  pass 5.26 (need 4.5) fg=#2f6f6a bg=#f5f3ee 13.4px/400 — a "nasstatus.faa.gov"
+  pass 5.4 (need 4.5) fg=#ffffff bg=#27793c 16px/400 — span.cat.vfr "Visual (VFR)"
+  pass 5.74 (need 4.5) fg=#2f6f6a bg=#fffdf9 13.4px/400 — a "workers.cloudflare.com"
+  pass 12.58 (need 4.5) fg=#23282e bg=#efece4 14.1px/400 — span.mono "KSFO"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 24px/700 — h1 "Airport & Flight-Weather Board"
+  pass 13.39 (need 4.5) fg=#23282e bg=#f5f3ee 12.5px/400 — pre#workerSnippet.mono "export default {
+  async fetch(r"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 14.61 (need 3) fg=#23282e bg=#fffdf9 20px/700 — span.id "KSFO"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: button [outline] -> button#loadBoardBtn.ghost [outline] -> a [outline] -> a [outline] -> a [outline] -> input#relayInput.relay [outline] -> button#relaySave.primary [outline] -> button#relayClear.ghost [outline] -> summary [outline] -> a [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> textarea#pasteBox.mono [outline] -> button#decodeBtn.primary [outline] -> button#sampleBtn.ghost [outline] -> button#clearBtn.ghost [outline] -> input#icaoInput.icao [outline] -> button#addBtn.primary [outline] -> button [outline] -> button#loadBoardBtn.ghost [outline] -> a [outline] -> a [outline] -> a [outline] -> input#relayInput.relay [outline]
+```
+
+### Contrast — dark
+```
+contrast pairs (12 unique fg/bg combos):
+  pass 5.47 (need 4.5) fg=#9aa0a8 bg=#262a31 11.5px/400 — span.chip "official sources"
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 13.6px/400 — span "observed day 14 at 18:56 UTC"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 13.4px/400 — footer "· Decoder runs on your machine."
+  pass 6.91 (need 4.5) fg=#6fb5ae bg=#1d2026 14.1px/400 — summary "Show a small Cloudflare Worker y"
+  pass 7.6 (need 4.5) fg=#15171b bg=#6fb5ae 16px/400 — button#decodeBtn.primary "Decode"
+  pass 7.6 (need 4.5) fg=#6fb5ae bg=#15171b 13.4px/400 — a "METAR ↗"
+  pass 7.92 (need 4.5) fg=#15171b bg=#5cc078 16px/400 — span.cat.vfr "Visual (VFR)"
+  pass 11.44 (need 4.5) fg=#e7e5e0 bg=#262a31 14.1px/400 — span.mono "KSFO"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 12.96 (need 3) fg=#e7e5e0 bg=#1d2026 20px/700 — span.id "KSFO"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 24px/700 — h1 "Airport & Flight-Weather Board"
+  pass 14.25 (need 4.5) fg=#e7e5e0 bg=#15171b 17.3px/700 — h2 "Decode a METAR"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: button [outline] -> button#loadBoardBtn.ghost [outline] -> a [outline] -> a [outline] -> a [outline] -> input#relayInput.relay [outline] -> button#relaySave.primary [outline] -> button#relayClear.ghost [outline] -> summary [outline] -> a [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> textarea#pasteBox.mono [outline] -> button#decodeBtn.primary [outline] -> button#sampleBtn.ghost [outline] -> button#clearBtn.ghost [outline] -> input#icaoInput.icao [outline] -> button#addBtn.primary [outline] -> button [outline] -> button#loadBoardBtn.ghost [outline] -> a [outline] -> a [outline] -> a [outline] -> input#relayInput.relay [outline]
+```
+
+### Keyboard-only drive + live regions
+```
+### keyboard-only primary-feature drive
+  Tab -> reached METAR paste box (TEXTAREA#pasteBox after 14 tab(s))
+  Tab -> reached Decode button (BUTTON#decodeBtn after 1 tab(s))
+  keyboard decode -> category "Visual (VFR)"
+  Tab -> reached ICAO input (INPUT#icaoInput after 3 tab(s))
+  Enter in ICAO input -> KJFK added, 2 link-out cards (keyboard add-airport path)
+  Tab -> reached KJFK chip remove (BUTTON after 3 tab(s))
+  Enter on chip x -> KJFK removed (keyboard removal)
+
+### aria-live runtime check
+  #decodeOut: aria-live=polite
+  #board: aria-live=polite
+  #boardMode: aria-live=polite
+  #boardStamp: aria-live=polite
+```
+
+### Fixes made (tool-local CSS, all four theme contexts)
+- `button.primary` text `#fff` -> `var(--bg)` (2.36:1 on the dark accent -> 7.60:1).
+- Flight-category chips: light `--vfr` #2e8b45 -> #27793c (white text 4.29 -> 5.40); new `--catink` var (#fff light / #15171b dark) for `.station .cat` — white on the dark palette's pastels was 1.80-3.5.
+- `.decoded .cat` now gets `color: var(--catink)` (plus minimal chip padding): the decoder's category chip had NO color rule and rendered inherited ink on the colored background (3.46:1 light / 1.80:1 dark) — an a11y gap inherited verbatim from v1 (v1 airport.html has the same missing rule).
+
+### Notes
+- All network aborted during the audit (aviationweather.gov is CORS-blocked anyway; the tool's default product is the offline decoder + link-out board).
+
+### Suite-wide contrast flags (REPORTED, not fixed locally — core palette)
+
+The light palette's `--muted` (#6b7280) misses WCAG AA 4.5:1 on two core surfaces
+(it passes on `--card` at 4.76, and the dark palette passes everywhere, 5.5-6.8):
+
+| pair | ratio | where it shows in this tool set |
+|---|---|---|
+| `--muted` on `--bg` #f5f3ee | **4.36** | core `footer` rule; tool taglines/hints/stamps on the page background (every tool) |
+| `--muted` on `--chip` #efece4 | **4.10** | core `.chip`; tool-local chip-bg recreations (jobs #dataStamp, markets .caveat, settings/transit/passes `code`, airport chips, hub chips) |
+| `--muted` on `--accent-soft` #e3efed | **4.11** | parks `.code` chip inside picker rows |
+
+Root cause is the palette value, not any one tool: per the audit addendum these are
+suite-wide failures — fixing them tool-by-tool would fork the palette across 71 files.
+Suggested one-line core remedy (NOT applied): darken light `--muted` to ~#5f6670
+(-> 5.23 on --bg, 4.91 on --chip, 5.71 on --card). Decision belongs to core.
+
+### Harness re-runs
+- `node verify-tool.mjs airport` re-run after the modification: exit 0, evidence refreshed (2026-07-16). Computed-style diffs vs v1 now include the documented a11y color deltas.

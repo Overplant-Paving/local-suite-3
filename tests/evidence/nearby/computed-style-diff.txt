@@ -1,4 +1,4 @@
-== computed-style diff, light (14 differing values) ==
+== computed-style diff, light (32 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
@@ -7,14 +7,32 @@ header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .locbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.cat { caret-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.cat { color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.cat { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.cat { outline-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.cat { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.cat { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.cat { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 .cat { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.cat { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.cat { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn.primary { caret-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn.primary { color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn.primary { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn.primary { outline-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn.primary { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn.primary { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn.primary { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 .btn.primary { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn.primary { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
+.btn.primary { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(245, 243, 238) }
 #radius { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .map-wrap { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .list { -webkit-font-smoothing: v1=auto | v2=antialiased }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
 
-== computed-style diff, dark (14 differing values) ==
+== computed-style diff, dark (32 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
@@ -23,8 +41,26 @@ header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .locbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.cat { caret-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.cat { color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.cat { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.cat { outline-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.cat { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.cat { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.cat { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 .cat { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.cat { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.cat { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn.primary { caret-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn.primary { color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn.primary { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn.primary { outline-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn.primary { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn.primary { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn.primary { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 .btn.primary { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn.primary { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.btn.primary { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 #radius { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .map-wrap { -webkit-font-smoothing: v1=auto | v2=antialiased }
 .list { -webkit-font-smoothing: v1=auto | v2=antialiased }

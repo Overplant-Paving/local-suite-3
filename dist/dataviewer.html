@@ -102,11 +102,12 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 </style>
 <style>
   /* tool accents: JSON-type colors + warning tint (3-layer, same pattern as core) */
-  :root { --t-str: #3a7d44; --t-num: #2f6f6a; --t-bool: #9a5cc0; --t-null: #a06a2a; --t-key: #b5544a; --warn: #b0752a; }
+  /* Phase 4 a11y: light --t-bool deepened #9a5cc0 -> #8a53ae (was 4.43:1 on the card) */
+  :root { --t-str: #3a7d44; --t-num: #2f6f6a; --t-bool: #8a53ae; --t-null: #a06a2a; --t-key: #b5544a; --warn: #b0752a; }
   @media (prefers-color-scheme: dark) {
     :root { --t-str: #8fd39b; --t-num: #6fb5ae; --t-bool: #c69ae8; --t-null: #d19a4e; --t-key: #e08a7d; --warn: #d19a4e; }
   }
-  :root[data-theme="light"] { --t-str: #3a7d44; --t-num: #2f6f6a; --t-bool: #9a5cc0; --t-null: #a06a2a; --t-key: #b5544a; --warn: #b0752a; }
+  :root[data-theme="light"] { --t-str: #3a7d44; --t-num: #2f6f6a; --t-bool: #8a53ae; --t-null: #a06a2a; --t-key: #b5544a; --warn: #b0752a; }
   :root[data-theme="dark"] { --t-str: #8fd39b; --t-num: #6fb5ae; --t-bool: #c69ae8; --t-null: #d19a4e; --t-key: #e08a7d; --warn: #d19a4e; }
 
   body { padding: 1.4rem 1.25rem 4rem; }

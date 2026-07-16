@@ -133,8 +133,10 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .row .grow0 { flex: 0 0 auto; }
   .btn { border: 1px solid var(--line); background: var(--chip); color: var(--ink); border-radius: 10px; padding: .55rem .9rem; cursor: pointer; font-size: .9rem; white-space: nowrap; }
   .btn:hover { border-color: var(--accent); color: var(--accent); }
-  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .btn.primary:hover { filter: brightness(1.06); color: #fff; }
+  /* Phase 4 a11y audit: #fff on the dark-theme accent (#6fb5ae) measured 2.36:1 — below
+     the 4.5:1 AA floor. var(--bg) passes both palettes (5.26:1 light / 7.60:1 dark). */
+  .btn.primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .btn.primary:hover { filter: brightness(1.06); color: var(--bg); }
   .hint { font-size: .82rem; color: var(--muted); margin-top: .4rem; }
   .err { color: var(--bad); }
   .res { margin-top: .7rem; display: flex; flex-direction: column; gap: .5rem; }

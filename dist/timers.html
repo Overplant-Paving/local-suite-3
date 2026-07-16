@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-cEbHCGG1Yy8DunnVhcTsStohDHiCILS12Gr5wnWak3k='; style-src 'unsafe-inline'; img-src data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-JNYGZwFCBWE0PKs4SN2PUeaqyHLq8GGnnDmN198YGKE='; style-src 'unsafe-inline'; img-src data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Stopwatch &amp; Timers · Local Suite</title>
 <style>
@@ -101,13 +101,16 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 }
 </style>
 <style>
-  /* tool accent: alarm red (3-layer, same pattern as core) */
-  :root { --alarm: #c05a5a; }
+  /* tool accents: alarm red + deep green for the lap chips (3-layer, same pattern
+     as core). Phase 4 a11y: light --alarm deepened #c05a5a -> #993636 (slowest-lap
+     text was 3.9:1, its chip 3.07:1); --built-deep exists because core --built
+     fails at 3.51:1 on the fastest-lap chip's color-mix background in light. */
+  :root { --alarm: #993636; --built-deep: #2c5f36; }
   @media (prefers-color-scheme: dark) {
-    :root { --alarm: #e07a7a; }
+    :root { --alarm: #e07a7a; --built-deep: #7dc487; }
   }
-  :root[data-theme="light"] { --alarm: #c05a5a; }
-  :root[data-theme="dark"] { --alarm: #e07a7a; }
+  :root[data-theme="light"] { --alarm: #993636; --built-deep: #2c5f36; }
+  :root[data-theme="dark"] { --alarm: #e07a7a; --built-deep: #7dc487; }
 
   body { padding: 1.5rem 1.25rem 4rem; }
   .wrap { max-width: 1060px; margin: 0 auto; }
@@ -174,8 +177,13 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .laps tr.best td { color: var(--built); }
   .laps tr.worst td { color: var(--alarm); }
   .laps .tag { font-size: .72rem; padding: .05rem .4rem; border-radius: 4px; margin-left: .4rem; }
-  .laps .tag.best { background: color-mix(in srgb, var(--built) 20%, transparent); color: var(--built); }
+  .laps .tag.best { background: color-mix(in srgb, var(--built) 20%, transparent); color: var(--built-deep); }
   .laps .tag.worst { background: color-mix(in srgb, var(--alarm) 20%, transparent); color: var(--alarm); }
+  /* a11y (Phase 4): visually-hidden status line for screen readers */
+  .sr {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
   .empty { color: var(--muted); text-align: center; padding: 2.5rem 0; }
   footer { font-size: .82rem; padding-top: 1rem; }
   .hidden { display: none; }
@@ -221,6 +229,10 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
     </div>
     <div class="laps" id="lapsWrap"></div>
   </section>
+
+  <!-- a11y (Phase 4): announces timer/lap events without flooding (the countdown
+       itself repaints every frame, so aria-live on the grid would be unusable) -->
+  <div class="sr" id="announce"></div>
 
   <footer>No network — everything happens on your machine. Timers persist across reloads via saved timestamps.</footer>
 </div>
@@ -444,6 +456,10 @@ Suite.theme.init();
 const $ = id => document.getElementById(id);
 const KEY = "suite.timers.v1";
 
+/* a11y: screen-reader announcements for events the visuals show asynchronously */
+const announceEl = Suite.liveRegion($("announce"));
+function announce(msg) { announceEl.textContent = msg; }
+
 /* ---- WebAudio chimes (distinct tone set per timer) ---- */
 let AC = null;
 function ac() { if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === "suspended") AC.resume(); return AC; }
@@ -505,6 +521,7 @@ function addTimer(name, durMs, start) {
   const t = { id: uid(), name: name || "Timer", dur: durMs, endAt: null, remain: durMs, chime: timers.length, ringing: false };
   if (start) { t.endAt = Date.now() + durMs; t.remain = null; }
   timers.push(t); save(); renderTimers();
+  announce(t.name + " timer " + (start ? "started" : "added") + ", " + fmt(durMs));
   ac(); // prime audio on user gesture
 }
 
@@ -571,11 +588,12 @@ function renderTimers() {
 let lastTitle = "";
 function tick() {
   let changed = false, soonest = null;
+  const justRang = [];
   timers.forEach(t => {
-    if (t.endAt && !t.ringing && Date.now() >= t.endAt) { t.ringing = true; changed = true; }
+    if (t.endAt && !t.ringing && Date.now() >= t.endAt) { t.ringing = true; changed = true; justRang.push(t.name); }
     if (t.endAt && !t.ringing) { const r = t.endAt - Date.now(); if (soonest === null || r < soonest) soonest = r; }
   });
-  if (changed) { save(); renderTimers(); }
+  if (changed) { save(); renderTimers(); announce("Time! " + justRang.join(", ") + " finished."); }
 
   // repaint numbers/progress in place (avoid full re-render each frame)
   const grid = $("timerGrid");
@@ -632,8 +650,10 @@ $("swStart").addEventListener("click", () => {
 $("swLap").addEventListener("click", () => {
   const total = swNow();
   const prev = sw.laps.length ? sw.laps[sw.laps.length - 1].total : 0;
-  sw.laps.push({ n: sw.laps.length + 1, split: total - prev, total });
+  const lap = { n: sw.laps.length + 1, split: total - prev, total };
+  sw.laps.push(lap);
   renderLaps();
+  announce("Lap " + lap.n + " — split " + swFmt(lap.split).replace(/<[^>]+>/g, ""));
 });
 $("swReset").addEventListener("click", () => {
   sw = { running: false, start: 0, elapsed: 0, laps: [] };

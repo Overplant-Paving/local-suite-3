@@ -197,3 +197,92 @@ survived verification almost unchanged. Found and fixed:
   corrected. Added coverage for two unexercised v1 features (links pane, raw-JSON
   fallback).
 - Everything else diffed clean against v1.
+
+## Phase 4 a11y audit (2026-07-16)
+
+Independent re-verification of the QUALITY.md §2 checklist, executed in the running tool
+(Playwright/Chrome from file://, light + dark, keyboard-only drive of the primary feature,
+contrast computed from getComputedStyle with ancestor alpha-compositing).
+
+| # | Checklist item | Verdict | Evidence |
+|---|---|---|---|
+| 1 | icon-only controls have accessible names | pass | unnamed: (none) |
+| 2 | async/result regions carry aria-live | pass | runtime check below |
+| 3 | keyboard path for every mouse path | pass | keyboard-only drive log below; no positive tabindex ((none)); no traps |
+| 4 | inputs labelled | pass | unlabelled: (none) (labelled: 1) |
+| 5 | contrast, both palettes | fixed (see below); remaining FAILs are the suite-wide --muted flags | full pair tables below |
+| 6 | visible focus indicator | pass | light: all stops show an indicator; dark: all stops show an indicator |
+
+### Contrast — light
+```
+contrast pairs (10 unique fg/bg combos):
+  FAIL 4.1 (need 4.5) fg=#6b7280 bg=#efece4 13.1px/400 — code "api.bart.gov"
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 13.1px/400 — footer#foot ", public key). Other feeds are t"
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 13.1px/400 — div.meta "Platform 3 · 9-car · delayed 2 m"
+  pass 5.26 (need 4.5) fg=#f5f3ee bg=#2f6f6a 14.1px/400 — button.on "BART (live)"
+  pass 5.74 (need 4.5) fg=#2f6f6a bg=#fffdf9 13.1px/400 — a "get your free key"
+  pass 5.74 (need 3) fg=#2f6f6a bg=#fffdf9 32px/700 — span.t.first "7"
+  pass 12.58 (need 4.5) fg=#23282e bg=#efece4 14.4px/400 — button#bartRefresh.btn "Refresh"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 27.2px/700 — h1 "Transit Departure Board"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 14.61 (need 3) fg=#23282e bg=#fffdf9 24px/700 — div#boardStn.stn "12th St. Oakland City Center"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.on [outline] -> button [outline] -> button [outline] -> select#bartStn [outline] -> button#bartRefresh.btn [outline] -> a [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.on [outline] -> button [outline] -> button [outline] -> select#bartStn [outline] -> button#bartRefresh.btn [outline] -> a [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.on [outline] -> button [outline] -> button [outline] -> select#bartStn [outline] -> button#bartRefresh.btn [outline]
+```
+
+### Contrast — dark
+```
+contrast pairs (10 unique fg/bg combos):
+  pass 5.47 (need 4.5) fg=#9aa0a8 bg=#262a31 13.1px/400 — code "api.bart.gov"
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 14.1px/400 — button "My agency"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 13.1px/400 — footer#foot ", public key). Other feeds are t"
+  pass 6.91 (need 4.5) fg=#6fb5ae bg=#1d2026 13.1px/400 — a "get your free key"
+  pass 6.91 (need 3) fg=#6fb5ae bg=#1d2026 32px/700 — span.t.first "3"
+  pass 7.6 (need 4.5) fg=#15171b bg=#6fb5ae 14.1px/400 — button.on "BART (live)"
+  pass 11.44 (need 4.5) fg=#e7e5e0 bg=#262a31 14.4px/400 — button#bartRefresh.btn "Refresh"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 12.96 (need 3) fg=#e7e5e0 bg=#1d2026 24px/700 — div#boardStn.stn "12th St. Oakland City Center"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 27.2px/700 — h1 "Transit Departure Board"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.on [outline] -> button [outline] -> button [outline] -> select#bartStn [outline] -> button#bartRefresh.btn [outline] -> a [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.on [outline] -> button [outline] -> button [outline] -> select#bartStn [outline] -> button#bartRefresh.btn [outline] -> a [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button.on [outline] -> button [outline] -> button [outline] -> select#bartStn [outline] -> button#bartRefresh.btn [outline]
+```
+
+### Keyboard-only drive + live regions
+```
+### keyboard-only primary-feature drive
+  Tab -> reached seg: Other agencies button (BUTTON after 5 tab(s))
+  Enter on seg button -> links pane shown: 8 agency cards
+  Tab -> reached seg: BART button (BUTTON after 12 tab(s))
+  Tab -> reached BART station select (SELECT#bartStn after 3 tab(s))
+  ArrowDown on station select -> board station "16th St. Mission" (keyboard station change, one live ETD)
+
+### aria-live runtime check
+  #board: aria-live=polite
+  #boardUpd: aria-live=polite
+  #agencyCard: aria-live=polite
+```
+
+### Fixes made (tool-local CSS, all four theme contexts)
+- `.seg button.on` text `#fff` -> `var(--bg)`: white on the dark-theme accent was 2.36:1; now 5.26:1 light / 7.60:1 dark.
+
+### Notes
+- Live BART used sparingly: one boot load per theme + one keyboard station change (ETD is a 30-second-polling API; this is below normal user traffic).
+
+### Suite-wide contrast flags (REPORTED, not fixed locally — core palette)
+
+The light palette's `--muted` (#6b7280) misses WCAG AA 4.5:1 on two core surfaces
+(it passes on `--card` at 4.76, and the dark palette passes everywhere, 5.5-6.8):
+
+| pair | ratio | where it shows in this tool set |
+|---|---|---|
+| `--muted` on `--bg` #f5f3ee | **4.36** | core `footer` rule; tool taglines/hints/stamps on the page background (every tool) |
+| `--muted` on `--chip` #efece4 | **4.10** | core `.chip`; tool-local chip-bg recreations (jobs #dataStamp, markets .caveat, settings/transit/passes `code`, airport chips, hub chips) |
+| `--muted` on `--accent-soft` #e3efed | **4.11** | parks `.code` chip inside picker rows |
+
+Root cause is the palette value, not any one tool: per the audit addendum these are
+suite-wide failures — fixing them tool-by-tool would fork the palette across 71 files.
+Suggested one-line core remedy (NOT applied): darken light `--muted` to ~#5f6670
+(-> 5.23 on --bg, 4.91 on --chip, 5.71 on --card). Decision belongs to core.
+
+### Harness re-runs
+- `node verify-tool.mjs transit` re-run after the modification: exit 0, evidence refreshed (2026-07-16). Computed-style diffs vs v1 now include the documented a11y color deltas.

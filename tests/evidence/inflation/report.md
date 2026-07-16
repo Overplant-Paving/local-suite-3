@@ -166,3 +166,92 @@ entry). The bls.gov link in the panel and the footer attribution are navigation,
   May 2026 points on the v2 chart coincide with v1's.
 - report.md was written via shell move because the PostToolUse hook blocks Write on
   report.md (expected per HANDOFF.md).
+
+## Phase 4 a11y audit (2026-07-16)
+
+Independent re-verification of the QUALITY.md §2 checklist, executed in the running tool
+(Playwright/Chrome from file://, light + dark, keyboard-only drive of the primary feature,
+contrast computed from getComputedStyle with ancestor alpha-compositing).
+
+| # | Checklist item | Verdict | Evidence |
+|---|---|---|---|
+| 1 | icon-only controls have accessible names | pass | unnamed: (none) |
+| 2 | async/result regions carry aria-live | pass | runtime check below |
+| 3 | keyboard path for every mouse path | pass | keyboard-only drive log below; no positive tabindex ((none)); no traps |
+| 4 | inputs labelled | pass | unlabelled: (none) (labelled: 3) |
+| 5 | contrast, both palettes | fixed (see below); remaining FAILs are the suite-wide --muted flags | full pair tables below |
+| 6 | visible focus indicator | pass | light: all stops show an indicator; dark: all stops show an indicator |
+
+### Contrast — light
+```
+contrast pairs (12 unique fg/bg combos):
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 13.1px/400 — footer#footer "Data: U.S. Bureau of Labor Stati"
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 13.6px/400 — label "Relay base URL"
+  pass 4.95 (need 4.5) fg=#2f6f6a bg=#e3efed 12.8px/400 — p#stamp.stamp "Data: June 2026 · refreshed mont"
+  pass 5.12 (need 3) fg=#9a5f22 bg=#fffdf9 32px/700 — b "+2.6%"
+  pass 5.12 (need 4.5) fg=#9a5f22 bg=#fffdf9 20.8px/600 — div.v "+2.6%"
+  pass 5.26 (need 4.5) fg=#2f6f6a bg=#f5f3ee 14.4px/400 — a.back "← suite"
+  pass 5.26 (need 4.5) fg=#f5f3ee bg=#2f6f6a 14.4px/600 — button#relayBtn.btn "Fetch live"
+  pass 5.74 (need 3) fg=#2f6f6a bg=#fffdf9 32px/700 — b "+3.5%"
+  pass 5.74 (need 4.5) fg=#2f6f6a bg=#fffdf9 12.8px/400 — a "bls.gov/cpi"
+  pass 5.77 (need 3) fg=#b23b3b bg=#fffdf9 25.6px/600 — div.v.up "+3.0%"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 27.2px/700 — h1 "Cost-of-Living Tracker"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a [outline] -> select#series [outline] -> textarea#paste [outline] -> button#mergeBtn.btn [outline] -> button#clearBtn.btn [outline] -> input#relay [outline] -> button#relayBtn.btn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> summary [outline] -> a [outline] -> select#series [outline] -> textarea#paste [outline] -> button#mergeBtn.btn [outline] -> button#clearBtn.btn [outline] -> input#relay [outline] -> button#relayBtn.btn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> summary [outline] -> a [outline] -> select#series [outline] -> textarea#paste [outline]
+```
+
+### Contrast — dark
+```
+contrast pairs (12 unique fg/bg combos):
+  pass 5.31 (need 3) fg=#e0736b bg=#1d2026 25.6px/600 — div.v.up "+3.0%"
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 11.8px/400 — div.lbl "Headline inflation"
+  pass 6.69 (need 4.5) fg=#6fb5ae bg=#1b2425 12.8px/400 — p#stamp.stamp "Data: June 2026 · refreshed mont"
+  pass 6.69 (need 3) fg=#d69a52 bg=#1d2026 32px/700 — b "+2.6%"
+  pass 6.69 (need 4.5) fg=#d69a52 bg=#1d2026 20.8px/600 — div.v "+2.6%"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 13.1px/400 — footer#footer "Data: U.S. Bureau of Labor Stati"
+  pass 6.91 (need 3) fg=#6fb5ae bg=#1d2026 32px/700 — b "+3.5%"
+  pass 6.91 (need 4.5) fg=#6fb5ae bg=#1d2026 20.8px/600 — div.v "+3.5%"
+  pass 7.6 (need 4.5) fg=#6fb5ae bg=#15171b 14.4px/400 — a.back "← suite"
+  pass 7.6 (need 4.5) fg=#15171b bg=#6fb5ae 14.4px/600 — button#mergeBtn.btn "Merge & refresh"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 27.2px/700 — h1 "Cost-of-Living Tracker"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a [outline] -> select#series [outline] -> textarea#paste [outline] -> button#mergeBtn.btn [outline] -> button#clearBtn.btn [outline] -> input#relay [outline] -> button#relayBtn.btn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> summary [outline] -> a [outline] -> select#series [outline] -> textarea#paste [outline] -> button#mergeBtn.btn [outline] -> button#clearBtn.btn [outline] -> input#relay [outline] -> button#relayBtn.btn [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> summary [outline] -> a [outline] -> select#series [outline] -> textarea#paste [outline]
+```
+
+### Keyboard-only drive + live regions
+```
+### keyboard-only primary-feature drive
+  Tab -> reached paste textarea (TEXTAREA#paste after 3 tab(s))
+  Tab -> reached merge button (BUTTON#mergeBtn after 1 tab(s))
+  keyboard paste-merge -> headline +3.5% -> +4.6%, msg "Merged 1 month into headline CPI."
+
+### aria-live runtime check
+  #pasteMsg: aria-live=polite
+  #relayMsg: aria-live=polite
+  #stats: aria-live=polite
+```
+
+### Fixes made (tool-local CSS, all four theme contexts)
+- `.btn` text `#fff` -> `var(--bg)` (2.36:1 on the dark accent -> 7.60:1).
+- Light `--core` #b06d2b -> #9a5f22: the core-CPI figures (20.8px/600 spark values, category cards) were 4.08:1 on the card; now 5.12:1 (4.69 on --bg). Dark `--core` already passed (6.69).
+
+### Suite-wide contrast flags (REPORTED, not fixed locally — core palette)
+
+The light palette's `--muted` (#6b7280) misses WCAG AA 4.5:1 on two core surfaces
+(it passes on `--card` at 4.76, and the dark palette passes everywhere, 5.5-6.8):
+
+| pair | ratio | where it shows in this tool set |
+|---|---|---|
+| `--muted` on `--bg` #f5f3ee | **4.36** | core `footer` rule; tool taglines/hints/stamps on the page background (every tool) |
+| `--muted` on `--chip` #efece4 | **4.10** | core `.chip`; tool-local chip-bg recreations (jobs #dataStamp, markets .caveat, settings/transit/passes `code`, airport chips, hub chips) |
+| `--muted` on `--accent-soft` #e3efed | **4.11** | parks `.code` chip inside picker rows |
+
+Root cause is the palette value, not any one tool: per the audit addendum these are
+suite-wide failures — fixing them tool-by-tool would fork the palette across 71 files.
+Suggested one-line core remedy (NOT applied): darken light `--muted` to ~#5f6670
+(-> 5.23 on --bg, 4.91 on --chip, 5.71 on --card). Decision belongs to core.
+
+### Harness re-runs
+- `node verify-tool.mjs inflation` re-run after the modification: exit 0, evidence refreshed (2026-07-16). Computed-style diffs vs v1 now include the documented a11y color deltas.

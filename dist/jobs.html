@@ -143,7 +143,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .panel textarea { min-height:110px; font-family:ui-monospace, Consolas, monospace; font-size:.82rem; resize:vertical; }
   .panel .row { display:flex; gap:.7rem; flex-wrap:wrap; align-items:end; margin-bottom:.8rem; }
   .panel .row > div { flex:1; min-width:150px; }
-  .btn { border:none; border-radius:9px; padding:.6rem 1.1rem; cursor:pointer; font:inherit; font-weight:600; font-size:.9rem; background:var(--accent); color:#fff; }
+  .btn { border:none; border-radius:9px; padding:.6rem 1.1rem; cursor:pointer; font:inherit; font-weight:600; font-size:.9rem; background:var(--accent); color:var(--bg); } /* a11y: was #fff — 2.4:1 on the dark accent; var(--bg) = 5.3:1 light / 7.6:1 dark */
   .btn.ghost { background:transparent; border:1px solid var(--line); color:var(--ink); }
   .btn:hover { filter:brightness(1.05); }
   .msg { font-size:.85rem; margin-top:.6rem; min-height:1.1rem; }

@@ -150,7 +150,8 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   table.cal .dnum { font-size: .95rem; font-weight: 600; }
   table.cal td.today { outline: 2px solid #2f6f6a; outline-offset: -2px; }
   table.cal .hol { font-size: .62rem; color: #b23; margin-top: 2px; line-height: 1.15; }
-  table.cal .wknd .dnum { color: #999; }
+  /* Phase 4 a11y audit: the sheet's #999/#888 grays were 2.85/3.54 on white — #757575 is 4.6 */
+  table.cal .wknd .dnum { color: #757575; }
 
   /* weekly planner */
   .weekgrid { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
@@ -158,7 +159,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .dayblock { border: 1px solid #cfcac0; border-radius: 5px; padding: 6px 9px; min-height: 74px; }
   .dayblock .dh { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #e3e0d8; padding-bottom: 3px; margin-bottom: 4px; }
   .dayblock .dh b { font-size: .95rem; }
-  .dayblock .dh span { color: #888; font-size: .8rem; }
+  .dayblock .dh span { color: #757575; font-size: .8rem; }
   .dayblock .dh .hol { color: #b23; font-size: .72rem; }
   .lines { background-image: repeating-linear-gradient(#fff 0 22px, #e6e3db 22px 23px); min-height: 46px; }
   .sidebar .box { border: 1px solid #cfcac0; border-radius: 5px; padding: 8px 10px; margin-bottom: 12px; }
@@ -169,7 +170,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   table.habit { width: 100%; border-collapse: collapse; table-layout: fixed; }
   table.habit th, table.habit td { border: 1px solid #cfcac0; text-align: center; }
   table.habit thead th { font-size: .62rem; color: #555; padding: 3px 1px; }
-  table.habit thead th.wd { color: #999; font-weight: 400; }
+  table.habit thead th.wd { color: #757575; font-weight: 400; }
   table.habit td.hname, table.habit th.hname { text-align: left; padding: 5px 8px; font-size: .85rem; width: 150px; font-weight: 500; }
   table.habit td.wknd { background: #fafafa; }
   table.habit tbody td { height: 26px; }

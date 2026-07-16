@@ -38,7 +38,7 @@
   .addrow { display:flex; gap:.6rem; margin-top:.9rem; flex-wrap:wrap; }
   .addrow input { flex:1; min-width:160px; background:var(--bg); border:1px solid var(--line); color:var(--ink);
     border-radius:9px; padding:.55rem .7rem; font:inherit; font-size:.9rem; text-transform:uppercase; }
-  .btn { border:none; border-radius:9px; padding:.55rem 1.1rem; cursor:pointer; font:inherit; font-weight:600; font-size:.9rem; background:var(--accent); color:#fff; }
+  .btn { border:none; border-radius:9px; padding:.55rem 1.1rem; cursor:pointer; font:inherit; font-weight:600; font-size:.9rem; background:var(--accent); color:var(--bg); } /* a11y: was #fff — 2.4:1 on the dark accent; var(--bg) = 5.3:1 light / 7.6:1 dark */
   .btn.ghost { background:transparent; border:1px solid var(--line); color:var(--ink); }
   .btn:hover { filter:brightness(1.05); }
   .keycard { border:1px dashed var(--accent); }

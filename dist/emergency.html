@@ -102,12 +102,22 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 </style>
 <style>
   /* tool accents: emergency red (3-layer, same pattern as core) */
-  :root { --emerg: #c0392b; --emerg-soft: #f7e4e1; }
+  /* Phase 4 a11y audit: --emerg is used both as TEXT (hotline numbers, callout <b>)
+     and as a BACKGROUND under white text (911 banner, metronome stop). One value
+     can't satisfy both in dark mode (text needs lighter, backgrounds darker), so it
+     is split: --emerg (text, 4.5+ on card and --emerg-soft) and --emerg-deep
+     (backgrounds, 4.5+ under #fff). Light --emerg also darkened a step (callout <b>
+     on --emerg-soft was 4.44). */
+  :root { --emerg: #b53427; --emerg-deep: #b53427; --emerg-soft: #f7e4e1;
+    --soft-muted: #59606c; }
   @media (prefers-color-scheme: dark) {
-    :root { --emerg: #e0574a; --emerg-soft: #3a201d; }
+    :root { --emerg: #ec7560; --emerg-deep: #a83a2a; --emerg-soft: #3a201d;
+      --soft-muted: #9aa0a8; }
   }
-  :root[data-theme="light"] { --emerg: #c0392b; --emerg-soft: #f7e4e1; }
-  :root[data-theme="dark"] { --emerg: #e0574a; --emerg-soft: #3a201d; }
+  :root[data-theme="light"] { --emerg: #b53427; --emerg-deep: #b53427; --emerg-soft: #f7e4e1;
+    --soft-muted: #59606c; }
+  :root[data-theme="dark"] { --emerg: #ec7560; --emerg-deep: #a83a2a; --emerg-soft: #3a201d;
+    --soft-muted: #9aa0a8; }
 
   body { padding: 1.5rem 1.25rem 4rem; }
   .wrap { max-width: 860px; margin: 0 auto; }
@@ -118,7 +128,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   header .tag { color: var(--muted); margin-top: .3rem; }
 
   .call911 {
-    background: var(--emerg); color: #fff; border-radius: 14px; padding: 1rem 1.2rem;
+    background: var(--emerg-deep); color: #fff; border-radius: 14px; padding: 1rem 1.2rem;
     margin: 1.2rem 0; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
   }
   .call911 .big { font-size: 2.4rem; font-weight: 800; line-height: 1; }
@@ -163,13 +173,13 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
     border: none; background: var(--accent); color: #fff; border-radius: 10px;
     padding: .6rem 1.1rem; font-size: 1rem; cursor: pointer; font-weight: 600;
   }
-  .metro button.stop { background: var(--emerg); }
+  .metro button.stop { background: var(--emerg-deep); }
   .metro .beat {
     width: 2.4rem; height: 2.4rem; border-radius: 50%; background: var(--card);
     border: 2px solid var(--accent); flex: none; transition: transform .06s, background .06s;
   }
   .metro .beat.on { background: var(--accent); transform: scale(1.18); }
-  .metro .lbl { font-size: .9rem; color: var(--muted); }
+  .metro .lbl { font-size: .9rem; color: var(--soft-muted); } /* on accent-soft: --muted was 4.11 */
   .metro .lbl b { color: var(--ink); }
 
   fieldset.card {

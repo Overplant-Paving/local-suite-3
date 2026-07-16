@@ -8,7 +8,7 @@ viewer matches live localStorage key set: true
 storage summary: "9 key(s) · 332 B"
 viewer row suite.notes.test: size=40 B (UTF-8 bytes, value has multi-byte chars), preview="{"txt":"café ☕ — naïve ünïcode"}"
 export msg: "Backup of 9 key(s) created (750 B). It includes your saved API keys — treat it like a password."
-envelope: format=local-suite.backup.v2, exported=2026-07-16T05:38:19.039Z, keys=9, data entries=9
+envelope: format=local-suite.backup.v2, exported=2026-07-16T06:12:38.769Z, keys=9, data entries=9
 envelope.data verbatim vs live localStorage (9 keys): all byte-identical
 download button enabled after export: true
 download event: suggested filename "local-suite-backup-2026-07-16.json"
@@ -19,7 +19,7 @@ storage summary on wiped profile: "1 key(s) · 5 B"
 restore with empty textarea -> "Paste a backup first (or use “Restore from file…”)."
 restore with invalid JSON -> "Restore failed: that isn't valid JSON."
 restore with wrong format -> "Restore failed: not a Local Suite backup (expected format "local-suite.backup.v2")."
-restore msg: "Restored 9 key(s). Backup dated 2026-07-16T05:38:19.039Z."
+restore msg: "Restored 9 key(s). Backup dated 2026-07-16T06:12:38.769Z."
   round-trip suite.cache.demo.one: byte-identical
   round-trip suite.cache.demo.two: byte-identical
   round-trip suite.focus.settings: byte-identical

@@ -121,7 +121,11 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
     box-shadow: var(--shadow); outline: none;
   }
   input[type=search]:focus { border-color: var(--accent); }
-  button.go { border: none; background: var(--accent); color: #fff; border-radius: 12px; padding: 0 1.2rem; font-size: 1rem; cursor: pointer; }
+  /* Phase 4 a11y audit: #fff on the dark-theme accent/slot colors (#6fb5ae, #cf9a63)
+     measured 2.36:1/2.48:1 — below the 4.5:1 AA floor. var(--bg) passes both palettes
+     on all three fills (accent, --a, --b); no visible light-theme change. Same fix on
+     the slot-pick .on buttons and .basis button.on below. */
+  button.go { border: none; background: var(--accent); color: var(--bg); border-radius: 12px; padding: 0 1.2rem; font-size: 1rem; cursor: pointer; }
   .keyrow { font-size: .82rem; color: var(--muted); margin-bottom: .6rem; }
   .keyrow a { color: var(--accent); cursor: pointer; }
   .keybox { display: none; margin-top: .4rem; gap: .4rem; }
@@ -143,8 +147,8 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
     width: 2rem; height: 2rem; border-radius: 8px; border: 1px solid var(--line);
     background: var(--card); color: var(--muted); font-weight: 700; cursor: pointer;
   }
-  .res .pick button.a.on { background: var(--a); border-color: var(--a); color: #fff; }
-  .res .pick button.b.on { background: var(--b); border-color: var(--b); color: #fff; }
+  .res .pick button.a.on { background: var(--a); border-color: var(--a); color: var(--bg); }
+  .res .pick button.b.on { background: var(--b); border-color: var(--b); color: var(--bg); }
 
   .compare { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1.4rem; }
   .compare.two { grid-template-columns: 1fr 1fr; }
@@ -162,7 +166,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
     border: 1px solid var(--line); background: var(--bg); color: var(--muted);
     border-radius: 999px; padding: .25rem .7rem; font-size: .8rem; cursor: pointer;
   }
-  .basis button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .basis button.on { background: var(--accent); border-color: var(--accent); color: var(--bg); }
   .cal { font-size: 2rem; font-weight: 700; color: var(--accent); line-height: 1; }
   .cal span { font-size: .85rem; color: var(--muted); font-weight: 400; }
   table.nut { width: 100%; border-collapse: collapse; margin-top: .7rem; font-size: .9rem; }

@@ -11,14 +11,18 @@ export const selectors = [
 export const screenshotAfterInteract = true;
 
 /* EPA AQI bands as rendered by the tool (v1 table) — used to compute the EXPECTED
-   band for whatever AQI the live API returns, then compared to what rendered. */
+   band for whatever AQI the live API returns, then compared to what rendered.
+   Phase 4 a11y: the tool now renders the hero NUMBER/CATEGORY text in a theme-aware
+   AA-contrast variant of each band color (`text` below, light-theme value — the harness
+   runs the interaction pass in light theme); the pill/badge backgrounds keep the exact
+   EPA color (`col`). */
 const BANDS = [
-  { max: 50, cat: "Good", col: "#4caf50" },
-  { max: 100, cat: "Moderate", col: "#cbb733" },
-  { max: 150, cat: "Unhealthy for Sensitive Groups", col: "#e08b2f" },
-  { max: 200, cat: "Unhealthy", col: "#d34a3d" },
-  { max: 300, cat: "Very Unhealthy", col: "#8e63c0" },
-  { max: 9999, cat: "Hazardous", col: "#7a3b45" }
+  { max: 50, cat: "Good", col: "#4caf50", text: "#39833c" },
+  { max: 100, cat: "Moderate", col: "#cbb733", text: "#827521" },
+  { max: 150, cat: "Unhealthy for Sensitive Groups", col: "#e08b2f", text: "#a66723" },
+  { max: 200, cat: "Unhealthy", col: "#d34a3d", text: "#cd483b" },
+  { max: 300, cat: "Very Unhealthy", col: "#8e63c0", text: "#8b61bc" },
+  { max: 9999, cat: "Hazardous", col: "#7a3b45", text: "#7a3b45" }
 ];
 const UVBANDS = [
   { max: 2, cat: "Low", col: "#4caf50" },
@@ -62,11 +66,13 @@ export async function interact({ page, log, evidenceDir }) {
      (the tool bands the unrounded value, so the check uses it too) */
   const aqi = raw.current.us_aqi;
   const expected = BANDS.find(b => aqi <= b.max);
-  log(`EPA band check: raw AQI ${aqi} -> expected "${expected.cat}" ${expected.col} (${hexToRgb(expected.col)}); ` +
+  log(`EPA band check: raw AQI ${aqi} -> expected "${expected.cat}", text color ${expected.text} (${hexToRgb(expected.text)}); ` +
     `rendered category "${aqiCat}", color ${aqiColor} -> ` +
-    `${aqiCat === expected.cat && aqiColor === hexToRgb(expected.col) ? "MATCH" : "MISMATCH"}`);
-  const expectedPin = Math.min(100, (aqi / 350) * 100) + "%";
-  log(`scale pin check: expected left=${expectedPin} for raw AQI ${aqi}; rendered ${pinLeft} -> ${expectedPin === pinLeft ? "MATCH" : "MISMATCH"}`);
+    `${aqiCat === expected.cat && aqiColor === hexToRgb(expected.text) ? "MATCH" : "MISMATCH"}`);
+  /* compare numerically — the browser serializes style.left to ~6 significant digits,
+     so a string compare false-MISMATCHes on any AQI whose percentage isn't short */
+  const expectedPin = Math.min(100, (aqi / 350) * 100);
+  log(`scale pin check: expected left=${expectedPin}% for raw AQI ${aqi}; rendered ${pinLeft} -> ${Math.abs(parseFloat(pinLeft) - expectedPin) < 0.001 ? "MATCH" : "MISMATCH"}`);
 
   /* pollutant breakdown (same response) */
   const polls = await page.$$eval(".polls .poll", els =>

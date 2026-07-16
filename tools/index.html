@@ -6,6 +6,12 @@
 <title>Local Suite · Command Center</title>
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
+  /* a11y (Phase 4): warn-chip ink per theme — the single #b0752a was 3.2:1 light / 3.4:1 dark */
+  :root { --warn-ink: #8a5a1d; }
+  @media (prefers-color-scheme: dark) { :root { --warn-ink: #d69a4c; } }
+  :root[data-theme="light"] { --warn-ink: #8a5a1d; }
+  :root[data-theme="dark"] { --warn-ink: #d69a4c; }
+
   body { padding: 2rem 1.25rem 4rem; }
   .wrap { max-width: 1060px; margin: 0 auto; }
   header h1 { font-size: 1.9rem; letter-spacing: -.02em; }
@@ -19,7 +25,7 @@
     border: 1px solid var(--line); background: var(--card); color: var(--muted);
     border-radius: 999px; padding: .28rem .75rem; font-size: .82rem; cursor: pointer;
   }
-  .pill.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .pill.on { background: var(--accent); border-color: var(--accent); color: var(--bg); } /* a11y: was #fff — 2.4:1 on the dark accent */
   .pill.tog.on { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
   section { margin-top: 2.2rem; }
   section h2 { font-size: 1.15rem; display: flex; align-items: baseline; gap: .55rem; }
@@ -32,7 +38,7 @@
   .dot.built { background: var(--built); box-shadow: 0 0 0 3px color-mix(in srgb, var(--built) 22%, transparent); }
   .card .desc { font-size: .88rem; color: var(--muted); flex: 1; }
   .chips { display: flex; flex-wrap: wrap; gap: .35rem; }
-  .chip.warn { background: color-mix(in srgb, #c07f2d 16%, transparent); color: #b0752a; }
+  .chip.warn { background: color-mix(in srgb, #c07f2d 16%, transparent); color: var(--warn-ink); }
   details { border-top: 1px dashed var(--line); padding-top: .5rem; font-size: .82rem; }
   details summary { cursor: pointer; color: var(--accent); user-select: none; }
   details .src { margin-top: .45rem; color: var(--muted); overflow-x: auto; }
@@ -41,6 +47,9 @@
     background: var(--chip); padding: .05rem .3rem; border-radius: 5px;
   }
   .empty { color: var(--muted); text-align: center; padding: 3rem 0; display: none; }
+  /* a11y (Phase 4): visually-hidden live status so screen readers hear filter results */
+  .sr-status { position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
   .hint { margin: 1rem 0 0; padding: .7rem 1rem; background: var(--accent-soft);
     border: 1px solid var(--line); border-radius: 10px; color: var(--ink); font-size: .9rem; }
   footer { margin-top: 3.5rem; padding-top: 1.2rem; }
@@ -69,6 +78,7 @@
     with those files, not here — export it there (Settings &rarr; Backup) and import it here.</p>
 
   <main id="cats"></main>
+  <p class="sr-status" id="resStatus" aria-live="polite"></p>
   <p class="empty" id="empty">Nothing matches — try fewer filters.</p>
 
   <footer>
@@ -207,6 +217,9 @@ function render() {
     catsEl.append(sec);
   }
   emptyEl.style.display = shown ? "none" : "block";
+  /* announce the filter outcome (QUALITY.md §2: result containers are heard, not just seen) */
+  document.getElementById("resStatus").textContent =
+    shown ? shown + (shown === 1 ? " tool shown" : " tools shown") : "Nothing matches — try fewer filters.";
 }
 
 function renderPills() {

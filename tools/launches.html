@@ -7,12 +7,14 @@
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
   /* tool accents: launch-status colors (3-layer, same pattern as core) */
-  :root { --go: #3a7d44; --tbd: #b0752a; --fail: #c0392b; }
+  /* a11y (Phase 4): light values darkened / dark --fail lightened so badge text clears
+     4.5:1 against its own 18% tint over the card (was 3.9/3.1/4.1 light, 4.0 dark-fail) */
+  :root { --go: #2c5f35; --tbd: #83561a; --fail: #ab2e1f; }
   @media (prefers-color-scheme: dark) {
-    :root { --go: #7dc487; --tbd: #d69a4c; --fail: #e0705f; }
+    :root { --go: #7dc487; --tbd: #d69a4c; --fail: #e88574; }
   }
-  :root[data-theme="light"] { --go: #3a7d44; --tbd: #b0752a; --fail: #c0392b; }
-  :root[data-theme="dark"] { --go: #7dc487; --tbd: #d69a4c; --fail: #e0705f; }
+  :root[data-theme="light"] { --go: #2c5f35; --tbd: #83561a; --fail: #ab2e1f; }
+  :root[data-theme="dark"] { --go: #7dc487; --tbd: #d69a4c; --fail: #e88574; }
 
   body { min-height: 100vh; }
   .topbar {

@@ -11,7 +11,7 @@ keyboard select last item (focus+Enter): list .sel="Second Canned Pharmacy"
 MIRROR FALLBACK: request sequence = [primary(overpass-api.de) -> mirror(overpass.kumi.systems)] (primary route-aborted, mirror fulfilled a distinct canned 2-element response)
 mirror render: resStamp="2 found"; names=["<b>Kumi & Mirror</b> Library","Central Branch"] dists=["614 m","1.70 km"] (distance-sorted: node ~620 m before way ~1.7 km); det="630 W 5th St · Mo-Su 10:00-20:00"
 escaping probe: name "<b>Kumi & Mirror</b> Library" rendered as TEXT, injected <b> element present=false; dot title="<b>Kumi & Mirror</b> Library · 614 m"
-STALE PATH (network blocked, cache aged 24 h): rendered from cache, resStamp="2 found · cached 11:13 PM", searchMsg="Offline — cached from 11:13 PM."
+STALE PATH (network blocked, cache aged 24 h): rendered from cache, resStamp="2 found · cached 1:13 AM", searchMsg="Offline — cached from 1:13 AM."
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
   console.error: Failed to load resource: net::ERR_FAILED

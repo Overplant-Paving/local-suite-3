@@ -7,12 +7,15 @@
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
   /* tool accents: alert-category palette (3-layer, same pattern as core) */
-  :root { --danger: #c0392b; --closure: #c07f2d; --caution: #b8912a; --info: #2f6f6a; }
+  /* a11y (Phase 4): light --closure/--caution darkened so white badge text clears 4.5:1
+     (was 3.3/3.0); --catink switches the badge text to near-black on the light dark-theme
+     pastels (white was 2.4–3.3 on them) */
+  :root { --danger: #c0392b; --closure: #9c6420; --caution: #856612; --info: #2f6f6a; --catink: #fff; }
   @media (prefers-color-scheme: dark) {
-    :root { --danger: #e0685a; --closure: #d09a53; --caution: #cbb45a; --info: #6fb5ae; }
+    :root { --danger: #e0685a; --closure: #d09a53; --caution: #cbb45a; --info: #6fb5ae; --catink: #15171b; }
   }
-  :root[data-theme="light"] { --danger: #c0392b; --closure: #c07f2d; --caution: #b8912a; --info: #2f6f6a; }
-  :root[data-theme="dark"] { --danger: #e0685a; --closure: #d09a53; --caution: #cbb45a; --info: #6fb5ae; }
+  :root[data-theme="light"] { --danger: #c0392b; --closure: #9c6420; --caution: #856612; --info: #2f6f6a; --catink: #fff; }
+  :root[data-theme="dark"] { --danger: #e0685a; --closure: #d09a53; --caution: #cbb45a; --info: #6fb5ae; --catink: #15171b; }
 
   body { padding: 1.4rem 1.25rem 4rem; }
   .wrap { max-width: 900px; margin: 0 auto; }
@@ -53,7 +56,7 @@
   .alert.k-info { border-left-color: var(--info); }
   .alert .cat {
     display: inline-block; font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
-    color: #fff; border-radius: 6px; padding: .1rem .45rem; margin-bottom: .35rem;
+    color: var(--catink); border-radius: 6px; padding: .1rem .45rem; margin-bottom: .35rem;
   }
   .cat.k-danger { background: var(--danger); } .cat.k-closure { background: var(--closure); }
   .cat.k-caution { background: var(--caution); } .cat.k-info { background: var(--info); }
@@ -70,7 +73,7 @@
   .card-msg .keyrow { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .6rem; }
   .card-msg .keyrow input { flex: 1; min-width: 200px; }
   button.primary {
-    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+    border: 1px solid var(--accent); background: var(--accent); color: var(--bg); /* a11y: was #fff — 2.4:1 on the dark accent */
     border-radius: 10px; padding: .5rem 1rem; cursor: pointer; font: inherit; font-size: .9rem;
   }
   button.ghost {

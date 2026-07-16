@@ -198,3 +198,92 @@ recorded v1/v2/dist value. MATCH (expected: the tool file was never edited).
 `net::ERR_FAILED` pairs from the designed route-abort/offline sections. Note `suite.word.met`
 now logs `"sepia"` where the Batch D run logged `"brocade"` — that is the known real-date boot
 write (first-pass concern #7) landing on 2026-07-16 instead of 2026-07-15, not a behavior change.
+
+## Phase 4 a11y audit (2026-07-16)
+
+Independent re-verification of the QUALITY.md §2 checklist, executed in the running tool
+(Playwright/Chrome from file://, light + dark, keyboard-only drive of the primary feature,
+contrast computed from getComputedStyle with ancestor alpha-compositing).
+
+| # | Checklist item | Verdict | Evidence |
+|---|---|---|---|
+| 1 | icon-only controls have accessible names | pass | unnamed: (none) |
+| 2 | async/result regions carry aria-live | pass (containment) | runtime check below |
+| 3 | keyboard path for every mouse path | pass | keyboard-only drive log below; no positive tabindex ((none)); no traps |
+| 4 | inputs labelled | pass | unlabelled: (none) (labelled: 0) |
+| 5 | contrast, both palettes | fixed (see below); remaining FAILs are the suite-wide --muted flags | full pair tables below |
+| 6 | visible focus indicator | pass | light: all stops show an indicator; dark: all stops show an indicator |
+
+### Contrast — light
+```
+contrast pairs (8 unique fg/bg combos):
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 13.3px/400 — footer "A curated word list lives in thi"
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 15.7px/400 — div.origin "From Greek 'sepia', cuttlefish, "
+  pass 4.95 (need 4.5) fg=#2f6f6a bg=#e3efed 12.8px/400 — div.pos "noun"
+  pass 5.26 (need 4.5) fg=#f5f3ee bg=#2f6f6a 14.7px/400 — button#anotherBtn.act.primary "Another word"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 24.8px/700 — h1 "Word of the Day & Etymology Desk"
+  pass 13.39 (need 4.5) fg=#23282e bg=#f5f3ee 16.8px/700 — h2 "Words I've met"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 14.61 (need 3) fg=#23282e bg=#fffdf9 43.2px/400 — div.word "sepia"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a.suite-link [outline] -> button#themeBtn.theme-btn [outline] -> button#anotherBtn.act [outline] -> button#fullerBtn.act [outline] -> button#todayBtn.act [outline] -> button.met-chip [outline] -> (body) -> a.suite-link [outline] -> button#themeBtn.theme-btn [outline] -> button#anotherBtn.act [outline] -> button#fullerBtn.act [outline] -> button#todayBtn.act [outline] -> button.met-chip [outline] -> (body) -> a.suite-link [outline] -> button#themeBtn.theme-btn [outline] -> button#anotherBtn.act [outline] -> button#fullerBtn.act [outline] -> button#todayBtn.act [outline] -> button.met-chip [outline] -> (body) -> a.suite-link [outline] -> button#themeBtn.theme-btn [outline] -> button#anotherBtn.act [outline] -> button#fullerBtn.act [outline]
+```
+
+### Contrast — dark
+```
+contrast pairs (8 unique fg/bg combos):
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 14.4px/400 — a.suite-link "← suite"
+  pass 6.3 (need 4.5) fg=#6fb5ae bg=#1f292b 12.8px/400 — div.pos "noun"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 13.3px/400 — footer "A curated word list lives in thi"
+  pass 7.6 (need 4.5) fg=#15171b bg=#6fb5ae 14.7px/400 — button#anotherBtn.act.primary "Another word"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 12.96 (need 3) fg=#e7e5e0 bg=#1d2026 43.2px/400 — div.word "sepia"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 24.8px/700 — h1 "Word of the Day & Etymology Desk"
+  pass 14.25 (need 4.5) fg=#e7e5e0 bg=#15171b 16.8px/700 — h2 "Words I've met"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a.suite-link [outline] -> button#themeBtn.theme-btn [outline] -> button#anotherBtn.act [outline] -> button#fullerBtn.act [outline] -> button#todayBtn.act [outline] -> button.met-chip [outline] -> (body) -> a.suite-link [outline] -> button#themeBtn.theme-btn [outline] -> button#anotherBtn.act [outline] -> button#fullerBtn.act [outline] -> button#todayBtn.act [outline] -> button.met-chip [outline] -> (body) -> a.suite-link [outline] -> button#themeBtn.theme-btn [outline] -> button#anotherBtn.act [outline] -> button#fullerBtn.act [outline] -> button#todayBtn.act [outline] -> button.met-chip [outline] -> (body) -> a.suite-link [outline] -> button#themeBtn.theme-btn [outline] -> button#anotherBtn.act [outline] -> button#fullerBtn.act [outline]
+```
+
+### Keyboard-only drive + live regions
+```
+### keyboard-only primary-feature drive
+  Tab -> reached Another word button (BUTTON#anotherBtn after 3 tab(s))
+  Enter on Another word -> "vignette"
+  Tab -> reached Today's word button (BUTTON#todayBtn after 3 tab(s))
+  Enter on Today's word -> "sepia"
+  Tab -> reached fuller-definition button (BUTTON#fullerBtn after 2 tab(s))
+  Enter on fuller lookup (route-fulfilled) -> rendered: true
+  Tab -> reached words-met chip (BUTTON after 2 tab(s))
+  Enter on met chip -> card shows "sepia"
+
+### aria-live runtime check
+  #wordCard: aria-live=polite
+  #metList: aria-live=polite
+  #fuller: aria-live=(missing)
+```
+
+### Fixes made (tool-local CSS, all four theme contexts)
+- `button.act.primary` text `#fff` -> `var(--bg)` (2.36:1 on the dark accent -> 7.60:1). Embedded WORD_RAW untouched (hash below).
+
+### Notes
+- aria-live note: `#fuller` is rendered INSIDE `#wordCard`, which carries aria-live=polite (Suite.liveRegion) — updates inside a live region are announced; no separate attribute needed. dictionaryapi.dev was route-fulfilled during the audit (no live traffic).
+
+### Suite-wide contrast flags (REPORTED, not fixed locally — core palette)
+
+The light palette's `--muted` (#6b7280) misses WCAG AA 4.5:1 on two core surfaces
+(it passes on `--card` at 4.76, and the dark palette passes everywhere, 5.5-6.8):
+
+| pair | ratio | where it shows in this tool set |
+|---|---|---|
+| `--muted` on `--bg` #f5f3ee | **4.36** | core `footer` rule; tool taglines/hints/stamps on the page background (every tool) |
+| `--muted` on `--chip` #efece4 | **4.10** | core `.chip`; tool-local chip-bg recreations (jobs #dataStamp, markets .caveat, settings/transit/passes `code`, airport chips, hub chips) |
+| `--muted` on `--accent-soft` #e3efed | **4.11** | parks `.code` chip inside picker rows |
+
+Root cause is the palette value, not any one tool: per the audit addendum these are
+suite-wide failures — fixing them tool-by-tool would fork the palette across 71 files.
+Suggested one-line core remedy (NOT applied): darken light `--muted` to ~#5f6670
+(-> 5.23 on --bg, 4.91 on --chip, 5.71 on --card). Decision belongs to core.
+
+### Harness re-runs
+- `node verify-tool.mjs word` re-run after the modification: exit 0, evidence refreshed (2026-07-16). Computed-style diffs vs v1 now include the documented a11y color deltas.
+- Embedded-data byte parity: python re-extraction of WORD_RAW after the edit: 39422 bytes, sha256 1a8cce2e751d488e60884cbd4af073549e65369a4077d6b5b6744be9fc4a7c0b — identical to the recorded v1/v2 hash.

@@ -1,28 +1,95 @@
-== computed-style diff, light (12 differing values) ==
+== computed-style diff, light (67 differing values) ==
+body { block-size: v1=900px | v2=2250.84px }
+body { height: v1=900px | v2=2250.84px }
+body { perspective-origin: v1=640px 450px | v2=640px 1125.42px }
+body { transform-origin: v1=640px 450px | v2=640px 1125.42px }
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --tbd: v1=#b0752a | v2=#83561a }
+body { --fail: v1=#c0392b | v2=#ab2e1f }
+body { --go: v1=#3a7d44 | v2=#2c5f35 }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --tbd: v1=#b0752a | v2=#83561a }
+.topbar { --fail: v1=#c0392b | v2=#ab2e1f }
+.topbar { --go: v1=#3a7d44 | v2=#2c5f35 }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --tbd: v1=#b0752a | v2=#83561a }
+.back { --fail: v1=#c0392b | v2=#ab2e1f }
+.back { --go: v1=#3a7d44 | v2=#2c5f35 }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --tbd: v1=#b0752a | v2=#83561a }
+.theme-btn { --fail: v1=#c0392b | v2=#ab2e1f }
+.theme-btn { --go: v1=#3a7d44 | v2=#2c5f35 }
 h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+h1 { --tbd: v1=#b0752a | v2=#83561a }
+h1 { --fail: v1=#c0392b | v2=#ab2e1f }
+h1 { --go: v1=#3a7d44 | v2=#2c5f35 }
 .sub { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sub { --tbd: v1=#b0752a | v2=#83561a }
+.sub { --fail: v1=#c0392b | v2=#ab2e1f }
+.sub { --go: v1=#3a7d44 | v2=#2c5f35 }
 #refreshBtn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#refreshBtn { --tbd: v1=#b0752a | v2=#83561a }
+#refreshBtn { --fail: v1=#c0392b | v2=#ab2e1f }
+#refreshBtn { --go: v1=#3a7d44 | v2=#2c5f35 }
 .throttle-note { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.throttle-note { --tbd: v1=#b0752a | v2=#83561a }
+.throttle-note { --fail: v1=#c0392b | v2=#ab2e1f }
+.throttle-note { --go: v1=#3a7d44 | v2=#2c5f35 }
+#listHead { block-size: v1=auto | v2=26.0312px }
+#listHead { display: v1=none | v2=block }
+#listHead { height: v1=auto | v2=26.0312px }
+#listHead { inline-size: v1=auto | v2=860px }
+#listHead { perspective-origin: v1=50% 50% | v2=430px 13.0156px }
+#listHead { transform-origin: v1=50% 50% | v2=430px 13.0156px }
+#listHead { width: v1=auto | v2=860px }
 #listHead { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#listHead { --tbd: v1=#b0752a | v2=#83561a }
+#listHead { --fail: v1=#c0392b | v2=#ab2e1f }
+#listHead { --go: v1=#3a7d44 | v2=#2c5f35 }
+.list { block-size: v1=0px | v2=1487.3px }
+.list { height: v1=0px | v2=1487.3px }
+.list { perspective-origin: v1=430px 0px | v2=430px 743.641px }
+.list { transform-origin: v1=430px 0px | v2=430px 743.648px }
 .list { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.list { --tbd: v1=#b0752a | v2=#83561a }
+.list { --fail: v1=#c0392b | v2=#ab2e1f }
+.list { --go: v1=#3a7d44 | v2=#2c5f35 }
+.stamp { block-size: v1=0px | v2=19.8281px }
+.stamp { height: v1=0px | v2=19.8281px }
+.stamp { perspective-origin: v1=430px 0px | v2=430px 9.90625px }
+.stamp { transform-origin: v1=430px 0px | v2=430px 9.91406px }
 .stamp { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.stamp { --tbd: v1=#b0752a | v2=#83561a }
+.stamp { --fail: v1=#c0392b | v2=#ab2e1f }
+.stamp { --go: v1=#3a7d44 | v2=#2c5f35 }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --tbd: v1=#b0752a | v2=#83561a }
+footer { --fail: v1=#c0392b | v2=#ab2e1f }
+footer { --go: v1=#3a7d44 | v2=#2c5f35 }
 
-== computed-style diff, dark (12 differing values) ==
+== computed-style diff, dark (24 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --fail: v1=#e0705f | v2=#e88574 }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --fail: v1=#e0705f | v2=#e88574 }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --fail: v1=#e0705f | v2=#e88574 }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --fail: v1=#e0705f | v2=#e88574 }
 h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+h1 { --fail: v1=#e0705f | v2=#e88574 }
 .sub { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.sub { --fail: v1=#e0705f | v2=#e88574 }
 #refreshBtn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#refreshBtn { --fail: v1=#e0705f | v2=#e88574 }
 .throttle-note { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.throttle-note { --fail: v1=#e0705f | v2=#e88574 }
 #listHead { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#listHead { --fail: v1=#e0705f | v2=#e88574 }
 .list { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.list { --fail: v1=#e0705f | v2=#e88574 }
 .stamp { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.stamp { --fail: v1=#e0705f | v2=#e88574 }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --fail: v1=#e0705f | v2=#e88574 }
 

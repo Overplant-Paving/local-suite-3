@@ -129,3 +129,96 @@ the harness records no `net::ERR` entries.
   a11y re-verification wants the full pattern suite-wide.
 - The initial on-load password is generated with real `crypto.getRandomValues` (logged
   pre-stub); all deterministic assertions apply to post-stub generations only — by design.
+
+## Phase 4 a11y audit (2026-07-16)
+
+Independent re-verification of the QUALITY.md §2 checklist, executed in the running tool
+(Playwright/Chrome from file://, light + dark, keyboard-only drive of the primary feature,
+contrast computed from getComputedStyle with ancestor alpha-compositing).
+
+| # | Checklist item | Verdict | Evidence |
+|---|---|---|---|
+| 1 | icon-only controls have accessible names | pass | unnamed: (none) |
+| 2 | async/result regions carry aria-live | pass | runtime check below |
+| 3 | keyboard path for every mouse path | pass | keyboard-only drive log below; no positive tabindex ((none)); no traps |
+| 4 | inputs labelled | pass | unlabelled: (none) (labelled: 1) |
+| 5 | contrast, both palettes | fixed (see below); remaining FAILs are the suite-wide --muted flags | full pair tables below |
+| 6 | visible focus indicator | pass | light: all stops show an indicator; dark: all stops show an indicator |
+
+### Contrast — light
+```
+contrast pairs (9 unique fg/bg combos):
+  FAIL 4.36 (need 4.5) fg=#6b7280 bg=#f5f3ee 13.1px/400 — footer "No network — everything happens "
+  pass 4.76 (need 4.5) fg=#6b7280 bg=#fffdf9 13.1px/400 — p.hint "and a few brackets, so codes are"
+  pass 4.95 (need 4.5) fg=#2f6f6a bg=#e3efed 13.8px/400 — span.tg.on "a–z lowercase"
+  pass 5.26 (need 4.5) fg=#2f6f6a bg=#f5f3ee 14.4px/400 — a.back "← suite"
+  pass 5.26 (need 4.5) fg=#f5f3ee bg=#2f6f6a 14.4px/400 — button#tabChar.tab.on "Password"
+  pass 5.74 (need 4.5) fg=#2f6f6a bg=#fffdf9 14.7px/400 — button#copy.btn.ghost "Copy"
+  pass 13.39 (need 3) fg=#23282e bg=#f5f3ee 25.6px/700 — h1 "Password & Passphrase Generator"
+  pass 13.39 (need 4.5) fg=#23282e bg=#f5f3ee 18.4px/400 — div#pw.pw "23Euvj,aAbbBpcNtv-8@"
+  pass 14.61 (need 4.5) fg=#23282e bg=#fffdf9 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#regen.btn [outline] -> button#copy.btn [outline] -> button#tabChar.tab [outline] -> button#tabPhrase.tab [outline] -> input#len [outline] -> span.tg [outline] -> span.tg [outline] -> span.tg [outline] -> span.tg [outline] -> span.tg [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#regen.btn [outline] -> button#copy.btn [outline] -> button#tabChar.tab [outline] -> button#tabPhrase.tab [outline] -> input#len [outline] -> span.tg [outline] -> span.tg [outline] -> span.tg [outline] -> span.tg [outline] -> span.tg [outline]
+```
+
+### Contrast — dark
+```
+contrast pairs (9 unique fg/bg combos):
+  pass 6.19 (need 4.5) fg=#9aa0a8 bg=#1d2026 13.6px/400 — span "Strength:"
+  pass 6.3 (need 4.5) fg=#6fb5ae bg=#1f292b 13.8px/400 — span.tg.on "!@#$ symbols"
+  pass 6.81 (need 4.5) fg=#9aa0a8 bg=#15171b 13.1px/400 — footer "No network — everything happens "
+  pass 6.91 (need 4.5) fg=#6fb5ae bg=#1d2026 14.7px/400 — button#copy.btn.ghost "Copy"
+  pass 7.6 (need 4.5) fg=#6fb5ae bg=#15171b 14.4px/400 — a.back "← suite"
+  pass 7.6 (need 4.5) fg=#15171b bg=#6fb5ae 14.7px/400 — button#regen.btn "↻ Generate"
+  pass 12.96 (need 4.5) fg=#e7e5e0 bg=#1d2026 13.6px/400 — button#themeBtn.theme-btn "◐ theme"
+  pass 14.25 (need 3) fg=#e7e5e0 bg=#15171b 25.6px/700 — h1 "Password & Passphrase Generator"
+  pass 14.25 (need 4.5) fg=#e7e5e0 bg=#15171b 18.4px/400 — div#pw.pw "#Vi0dpB?%?j9{F^W2&Gb"
+focus visibility (25-Tab walk): all stops show an indicator
+  tab order: a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#regen.btn [outline] -> button#copy.btn [outline] -> button#tabChar.tab [outline] -> button#tabPhrase.tab [outline] -> input#len [outline] -> span.tg [outline] -> span.tg [outline] -> span.tg [outline] -> span.tg [outline] -> span.tg [outline] -> (body) -> a.back [outline] -> button#themeBtn.theme-btn [outline] -> button#regen.btn [outline] -> button#copy.btn [outline] -> button#tabChar.tab [outline] -> button#tabPhrase.tab [outline] -> input#len [outline] -> span.tg [outline] -> span.tg [outline] -> span.tg [outline] -> span.tg [outline] -> span.tg [outline]
+```
+
+### Keyboard-only drive + live regions
+```
+### keyboard-only primary-feature drive
+  Tab -> reached regenerate button (BUTTON#regen after 3 tab(s))
+  Enter on regen -> new password generated
+  Tab -> reached copy button (BUTTON#copy after 1 tab(s))
+  Enter on copy -> toast "Copied to clipboard" (aria-live=polite)
+  Tab -> reached passphrase tab (BUTTON#tabPhrase after 2 tab(s))
+  Enter on phrase tab -> panel shown=true
+  Tab -> reached Capitalize pill (span role=button) (SPAN after 3 tab(s))
+  Space on pill -> aria-pressed=true
+  Enter on pill -> aria-pressed=false
+  Tab -> reached words range slider (INPUT#words after 9 tab(s))
+  ArrowRight on slider -> words 6 -> 7 (regenerated)
+
+### aria-live runtime check
+  #pw: aria-live=polite
+  #toast: aria-live=polite
+```
+
+### Fixes made (tool-local CSS, all four theme contexts)
+- `.btn` and `.tab.on` text `#fff` -> `var(--bg)` (2.36:1 on the dark accent -> 7.60:1). Embedded EFF wordlist untouched (hash below).
+
+### Notes
+- The `.tg` option pills (span role=button tabindex=0) honor both Enter and Space, flip aria-pressed, and sit in the natural tab order — verified keyboard-only. Sliders respond to arrow keys and regenerate.
+
+### Suite-wide contrast flags (REPORTED, not fixed locally — core palette)
+
+The light palette's `--muted` (#6b7280) misses WCAG AA 4.5:1 on two core surfaces
+(it passes on `--card` at 4.76, and the dark palette passes everywhere, 5.5-6.8):
+
+| pair | ratio | where it shows in this tool set |
+|---|---|---|
+| `--muted` on `--bg` #f5f3ee | **4.36** | core `footer` rule; tool taglines/hints/stamps on the page background (every tool) |
+| `--muted` on `--chip` #efece4 | **4.10** | core `.chip`; tool-local chip-bg recreations (jobs #dataStamp, markets .caveat, settings/transit/passes `code`, airport chips, hub chips) |
+| `--muted` on `--accent-soft` #e3efed | **4.11** | parks `.code` chip inside picker rows |
+
+Root cause is the palette value, not any one tool: per the audit addendum these are
+suite-wide failures — fixing them tool-by-tool would fork the palette across 71 files.
+Suggested one-line core remedy (NOT applied): darken light `--muted` to ~#5f6670
+(-> 5.23 on --bg, 4.91 on --chip, 5.71 on --card). Decision belongs to core.
+
+### Harness re-runs
+- `node verify-tool.mjs password` re-run after the modification: exit 0, evidence refreshed (2026-07-16). Computed-style diffs vs v1 now include the documented a11y color deltas.
+- Embedded-data byte parity: python re-extraction of EFF_WORDS after the edit: 62143 bytes, sha256 c523ba7b5e0d3f77cc6cf0d83bed3f250143c0c90c255d6a646dd992f8453675, 7776/7776 unique words — identical to the recorded v1/v2 hash.

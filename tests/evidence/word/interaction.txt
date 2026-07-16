@@ -7,7 +7,7 @@ same-date reload -> "candid" (deterministic repeat)
 "Today's word" -> "candid" (back to the 2026-07-29 word)
 LIVE lookup "candid" -> phonetic: "/ˈkæn.dɪd/"
   first sense: "noun — A spontaneous or unposed photograph. “His portraits looked stiff and formal but his candids s..."
-  cache envelope suite.cache.word.candid: {"t":1785344400294,"entries":1,"word":"candid"}
+  cache envelope suite.cache.word.candid: {"t":1785344400301,"entries":1,"word":"candid"}
 suite.word.met after visits: ["candid","anthology","sepia"]
 after reload — met persisted: ["candid","anthology","sepia"]; chips: [candid, anthology, sepia]; count badge: "· 3"
 met chip "anthology" click -> card shows "anthology"

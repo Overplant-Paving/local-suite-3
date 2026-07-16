@@ -101,13 +101,17 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 }
 </style>
 <style>
-  /* tool accents (3-layer, same pattern as core) */
-  :root { --snow: #3f7cbf; --low: #c99a1e; --high: #3a7d44; --star: #d9a521; --bar: #dfe6ee; }
+  /* tool accents (3-layer, same pattern as core).
+     Phase 4 a11y (light theme): --low darkened #c99a1e -> #a37d18 (the below-median bar
+     fill needed 3:1 against the --bar track), --star darkened #d9a521 -> #b88c1c (the ★
+     glyph needs 3:1 against the card); --err split per theme (the single hex failed
+     WCAG AA on the dark card). */
+  :root { --snow: #3f7cbf; --low: #a37d18; --high: #3a7d44; --star: #b88c1c; --bar: #dfe6ee; --err: #c0392b; }
   @media (prefers-color-scheme: dark) {
-    :root { --snow: #6aa3d9; --low: #e0be55; --high: #7dc487; --star: #e0be55; --bar: #2c3340; }
+    :root { --snow: #6aa3d9; --low: #e0be55; --high: #7dc487; --star: #e0be55; --bar: #2c3340; --err: #cf695e; }
   }
-  :root[data-theme="light"] { --snow: #3f7cbf; --low: #c99a1e; --high: #3a7d44; --star: #d9a521; --bar: #dfe6ee; }
-  :root[data-theme="dark"] { --snow: #6aa3d9; --low: #e0be55; --high: #7dc487; --star: #e0be55; --bar: #2c3340; }
+  :root[data-theme="light"] { --snow: #3f7cbf; --low: #a37d18; --high: #3a7d44; --star: #b88c1c; --bar: #dfe6ee; --err: #c0392b; }
+  :root[data-theme="dark"] { --snow: #6aa3d9; --low: #e0be55; --high: #7dc487; --star: #e0be55; --bar: #2c3340; --err: #cf695e; }
 
   body { padding: 1.4rem 1.25rem 4rem; }
   .wrap { max-width: 960px; margin: 0 auto; }
@@ -139,7 +143,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
     border-radius: 9px; padding: .55rem .9rem; cursor: pointer; font-size: .9rem;
   }
   .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .err { color: #c0392b; font-size: .82rem; }
+  .err { color: var(--err); font-size: .82rem; }
   .section-h { margin: 1.9rem 0 .2rem; font-size: .82rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .9rem; margin-top: .7rem; }
   .st {
@@ -149,7 +153,8 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .st .top { display: flex; justify-content: space-between; align-items: start; gap: .5rem; }
   .st .name { font-weight: 600; font-size: 1.05rem; line-height: 1.25; }
   .st .sub { font-size: .8rem; color: var(--muted); margin-top: .1rem; }
-  .star { background: none; border: none; cursor: pointer; font-size: 1.15rem; line-height: 1; color: var(--line); flex: none; padding: 0; }
+  /* Phase 4 a11y: the unstarred ★ was var(--line) (~1.3:1 vs the card — invisible); muted passes 3:1 */
+  .star { background: none; border: none; cursor: pointer; font-size: 1.15rem; line-height: 1; color: var(--muted); flex: none; padding: 0; }
   .star.on { color: var(--star); }
   .readings { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
   .reading { background: var(--chip); border-radius: 10px; padding: .55rem .65rem; }
