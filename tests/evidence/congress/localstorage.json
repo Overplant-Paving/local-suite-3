@@ -1,0 +1,20 @@
+{
+  "v1": {
+    "suite.state": "CA",
+    "suite.cache.congress.members.CA": "{\"t\":1784174117580,\"v\":[{\"bioguideId\":\"A000001\",\"name\":\"Alvarez, Maria\",\"partyName\":\"Democratic\",\"state\":\"California\",\"terms\":{\"item\":[{\"chamber\":\"Sen…(624 chars)",
+    "suite.cache.congress.bills": "{\"t\":1784174117513,\"v\":[{\"congress\":119,\"type\":\"HR\",\"number\":\"4275\",\"title\":\"Departments of Labor, Health and Human Services, and Education Appropriat…(1150 chars)",
+    "suite.key.congress": "FAKE-KEY-FOR-ROUTE-INTERCEPTION-TEST",
+    "suite.cache.congress.sponsored.A000001": "{\"t\":1784174117646,\"v\":[{\"congress\":119,\"type\":\"S\",\"number\":\"2101\",\"title\":\"Wildfire Resilience and Recovery Act\",\"introducedDate\":\"2026-06-16\",\"lates…(460 chars)",
+    "suite.theme": "dark"
+  },
+  "v2": {
+    "suite.state": "CA",
+    "suite.cache.congress.members.CA": "{\"t\":1784174116761,\"v\":[{\"bioguideId\":\"A000001\",\"name\":\"Alvarez, Maria\",\"partyName\":\"Democratic\",\"state\":\"California\",\"terms\":{\"item\":[{\"chamber\":\"Sen…(624 chars)",
+    "suite.cache.congress.bills": "{\"t\":1784174116761,\"v\":[{\"congress\":119,\"type\":\"HR\",\"number\":\"4275\",\"title\":\"Departments of Labor, Health and Human Services, and Education Appropriat…(1150 chars)",
+    "suite.key.congress": "FAKE-KEY-FOR-ROUTE-INTERCEPTION-TEST",
+    "suite.cache.congress.sponsored.A000001": "{\"t\":1784174116761,\"v\":[{\"congress\":119,\"type\":\"S\",\"number\":\"2101\",\"title\":\"Wildfire Resilience and Recovery Act\",\"introducedDate\":\"2026-06-16\",\"lates…(460 chars)",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}

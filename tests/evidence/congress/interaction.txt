@@ -1,0 +1,22 @@
+no-key designed state: title="Add your free Congress.gov key"; body starts "The Congress.gov API needs a free key. Get one instantly at api.data.gov/signup (one key works for every api.data.gov service). Then paste i…"
+no-key designed state: paste field=true, button="Save key", signup link=https://api.data.gov/signup/, tabs hidden=true
+key saved: localStorage["suite.key.congress"] = "FAKE-KEY-FOR-ROUTE-INTERCEPTION-TEST" (bare string, byte-identical to typed value: true)
+fetch attempted with key: https://api.congress.gov/v3/bill?format=json&limit=250&sort=updateDate+desc&api_key=FAKE-KEY-FOR-ROUTE-INTERCEPTION-TEST
+recent tab: 5 bill cards; first: HR 4275 · 119th Congress — "Departments of Labor, Health and Human Services, and Education Appropriations Act, 2027"
+recent tab stamp: "data from Jul 15, 10:55 PM"
+hostile title rendered as text: true ("<script>document.title="pwned"</script> "Hostile" & <b>Bold<…"); injected <script>/<b> in list: false; document.title: "Congress Tracker · Local Suite"
+passed tab: 3 of 5 bills pass the 8-day passage filter: HR 4275 · 119th Congress [passed] · HJ RES 52 · 119th Congress [passed] · S RES 301 · 119th Congress [passed]
+delegation CA: 4 members, senate-first: Alvarez, Maria (Senate · Democratic) · Bennett, John (Senate · Republican) · Chen, David (House · Democratic · District 12) · Okafor, Grace (House · Independent · District 3)
+suite.state written: "CA"
+member expanded via keyboard Enter (aria-expanded false -> true); sponsored bills: S 2101 — Wildfire Resilience and Recovery Act · S 1988 — Coastal Communities Housing Act
+sponsored fetch carried key: true
+cache suite.cache.congress.members.CA: t=1784174116318 v=array[4]
+cache suite.cache.congress.bills: t=1784174116164 v=array[5]
+cache suite.cache.congress.sponsored.A000001: t=1784174116367 v=array[2]
+change-key card: title="Add your free Congress.gov key", input prefilled with saved key: true
+invalid-key gate: 403 re-shows key card — "That key didn't work" (24h-old cache present but NOT silently served)
+offline-stale: 5 bill cards rendered from back-dated cache; stamp: "offline — data from Jul 14, 10:55 PM"
+restored (fresh cache, no refetch): "data from Jul 15, 10:55 PM"
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED

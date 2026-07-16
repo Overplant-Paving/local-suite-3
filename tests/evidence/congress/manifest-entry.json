@@ -1,0 +1,26 @@
+{
+  "id": "congress",
+  "file": "congress.html",
+  "name": "Congress Tracker",
+  "cat": "civic",
+  "cx": "M",
+  "desc": "Recent bills, what passed this week, your delegation's activity.",
+  "network": "keyed",
+  "key": {
+    "name": "congress",
+    "signup": "https://api.congress.gov/sign-up/",
+    "demo": false
+  },
+  "endpoints": [
+    "https://api.congress.gov"
+  ],
+  "storage": [
+    "suite.theme",
+    "suite.key.congress",
+    "suite.state",
+    "suite.cache.congress.*"
+  ],
+  "cacheTtlMin": 360,
+  "since": "v1",
+  "flags": []
+}
