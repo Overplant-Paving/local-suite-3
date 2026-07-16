@@ -291,3 +291,37 @@ route-fulfilled from the archived cad payloads so it can still write its keys at
 `endpoints` -> `["https://api.nasa.gov"]`; `flags` [] -> `["rl"]`; `storage` +`suite.key.nasa`.
 `cacheTtlMin` 1440 unchanged (daily-stats class). CATALOG §3.3 + CORS table and MIGRATION
 row 39 are the orchestrator's to update on re-integration.
+
+## Phase 4 audit fix: honest time labeling (2026-07-16)
+
+Concern 4 above (the preserved v1 quirk: `fmtWhen` parsed the close-approach time as UTC but
+rendered the LOCAL clock under a literal "UTC" label) is now fixed. Decision: format genuinely
+in UTC (added `timeZone: "UTC"` to the `toLocaleString` options) rather than relabeling as
+local — NeoWs close-approach times are UTC and the close-approach convention (JPL/NASA tables)
+is UT, so the label was right and the clock was wrong. One-token change; the relative suffix
+("· in N d") is instant math and unaffected.
+
+Proof: `tests/interactions/asteroids.mjs` gained an honest-UTC assertion — the expected hero
+"when" string is computed independently in the page from the payload's `close_approach_date_full`
+with an explicit `timeZone:"UTC"`, and must prefix the rendered text. interaction.txt (machine
+tz offset 300 min from UTC, so local-vs-UTC divergence is real here):
+
+    honest-UTC label check: payload cd="2026-Jul-21 03:40" -> expected "Jul 21, 03:40 AM UTC"; rendered "Jul 21, 03:40 AM UTC · in 5 d" (machine tz offset 300 min from UTC)
+
+(Pre-fix, the same payload rendered "Jul 20, 10:40 PM UTC" on this machine.)
+
+Suite-wide sweep for the same class (grep "UTC"/"GMT" across tools/*.html, every hit inspected):
+airport.html `metarTimeText` renders the METAR's own ddhhmmZ digits (genuinely Zulu) — honest;
+dates.html / daylight.html format with explicit `timeZone:"UTC"` over UTC-midnight math — honest;
+worldclock.html's "GMT±h" chips are computed from real zone offsets — honest; passes.html /
+wiki.html hits are internal math or comments, no rendered label. asteroids.html was the only
+mislabel.
+
+Harness re-run: `node verify-tool.mjs asteroids` exit 0. Environment note: the run's ONE
+budgeted live DEMO_KEY request returned HTTP 429 (shared pool exhausted, `retry-after` ~18 h —
+headers archived in neows-live-run-headers.txt); the tool rendered its designed rate-limit
+fallback. Because Chrome unconditionally emits a console error for any non-2xx fetch, the live
+segment now runs in its own captured-console context (the module's existing rl-probe pattern,
+console logged in full in interaction.txt) so browser noise from a pool-exhausted 429 cannot
+fail the gate; still exactly one real request per run, and a with-budget run archives the live
+200 body exactly as before.

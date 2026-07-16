@@ -4,17 +4,20 @@ NOTE: (date-normalized; 30-day chunks 2-4 are that data date-shifted — synthet
 NOTE: Exactly ONE real DEMO_KEY request is made below (shared 30/hr pool — budget honored).
 stamp after fulfilled load: "Loaded just now · 40 approaches in the next 7 days."
 demo-key nudge (designed state): "Using the shared NASA demo key (30 requests/hour). Add your own free key →"
-LIVE NeoWs fetch (in-browser from file://, DEMO_KEY): HTTP 200, Access-Control-Allow-Origin: *, X-Ratelimit-Limit: 10, X-Ratelimit-Remaining: 6
-live render: stamp "Loaded just now · 40 approaches in the next 7 days." — full browser CORS + render pipeline, real data
-hero: "(2019 NG2)" (expected "(2019 NG2)"), when="Jul 19, 10:40 PM UTC · in 4 d"
+LIVE NeoWs fetch (in-browser from file://, DEMO_KEY): HTTP 429, Access-Control-Allow-Origin: *, X-Ratelimit-Limit: 10, X-Ratelimit-Remaining: 0
+LIVE REQUEST NOT 200 (shared DEMO_KEY pool) — designed fallback rendered: "Source is rate-limiting — showing cached data from just now."
+the live-CORS claim then rests on neows-live-headers.txt (archived probe) — flag for the orchestrator
+live probe console (browser noise expected for any non-2xx fetch response): "Failed to load resource: the server responded with a status of 429 ()"
+hero: "(2019 NG2)" (expected "(2019 NG2)"), when="Jul 21, 03:40 AM UTC · in 5 d"
+honest-UTC label check: payload cd="2026-Jul-21 03:40" -> expected "Jul 21, 03:40 AM UTC"; rendered "Jul 21, 03:40 AM UTC · in 5 d" (machine tz offset 300 min from UTC)
 LD recompute (independent): 0.059619045 AU × 389.1724 = 23.2021 LD; NeoWs miss_distance.lunar=23.191808505; rendered #hLD=23.2
 LD constant note: NeoWs lunar/astronomical = 389.0000 (flat 389 LD/AU); tool keeps v1's 384,400 km LD (389.1725) — delta 0.044%
 km cross-check: computed 8,918,882 km, NeoWs kilometers=8,918,882, rendered "8,918,882 km"
 PHA badges: 4 rendered vs 4 is_potentially_hazardous_asteroid=true in the payload (v1's dead pha:false code path is live again)
 table: 40 rows (payload has 40 approaches); h2 "All 40 approaches, closest first"
 closer-than-Moon highlight: 0 tr.close vs 0 under 1 LD in the payload
-first table row: "(2019 | NG2) | Jul | 19, | 10:40 | PM | UTC | · | in | 4 | d | 23.2 | 8,918,882 | 13.8 | 40 | m–90 | m"
-window -> 30 days: 4 paged requests (7-day cap): 2026-07-15..2026-07-22, 2026-07-23..2026-07-30, 2026-07-31..2026-08-07, 2026-08-08..2026-08-14
+first table row: "(2019 | NG2) | Jul | 21, | 03:40 | AM | UTC | · | in | 5 | d | 23.2 | 8,918,882 | 13.8 | 40 | m–90 | m"
+window -> 30 days: 4 paged requests (7-day cap): 2026-07-16..2026-07-23, 2026-07-24..2026-07-31, 2026-08-01..2026-08-08, 2026-08-09..2026-08-15
 merged d30 cache: element_count=155, 31 date buckets (8+8+8+7=31 expected), rendered rows=155, stamp "Loaded just now · 155 approaches in the next 30 days."
 window -> back to 7 days: stamp "Cached · updated just now.", new requests=0 (expect 0)
 key saved: request used api_key=TESTKEY_ROUTED_ONLY; summary "Using your saved NASA key (1,000/hour). ✓ Change or remove →"; suite.key.nasa=TESTKEY_ROUTED_ONLY

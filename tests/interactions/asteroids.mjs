@@ -129,31 +129,49 @@ export async function interact({ page, log, evidenceDir }) {
   if (!/demo key/.test(nudge)) throw new Error("demo-key nudge missing: " + nudge);
   log(`demo-key nudge (designed state): "${nudge}"`);
 
-  /* ---- THE ONE LIVE REQUEST: refresh with routing passed through ---- */
-  liveMode = true;
-  const respP = page.waitForResponse(r => NEOWS_RE.test(r.url()), { timeout: 30000 });
-  await page.click("#refreshBtn");
-  const resp = await respP;
-  liveMode = false;
-  const h = resp.headers();
-  const liveStatus = resp.status();
-  let liveBody = null;
-  try { liveBody = await resp.text(); } catch (e) { /* body unavailable on failure */ }
-  log(`LIVE NeoWs fetch (in-browser from file://, DEMO_KEY): HTTP ${liveStatus}, ` +
-    `Access-Control-Allow-Origin: ${h["access-control-allow-origin"] || "ABSENT"}, ` +
-    `X-Ratelimit-Limit: ${h["x-ratelimit-limit"]}, X-Ratelimit-Remaining: ${h["x-ratelimit-remaining"]}`);
-  writeFileSync(join(evidenceDir, "neows-live-run-headers.txt"),
-    `url: ${resp.url()}\nstatus: ${liveStatus}\nfetched: ${new Date().toISOString()}\n` +
-    Object.entries(h).map(([k, v]) => `${k}: ${v}`).join("\n") + "\n");
-  if (liveStatus === 200 && liveBody) {
-    writeFileSync(join(evidenceDir, "neows-live-run-d7.json"), liveBody);
-    await page.waitForFunction(() => /^Loaded just now/.test(document.getElementById("stamp").textContent), { timeout: 15000 });
-    log(`live render: stamp "${await stamp(page)}" — full browser CORS + render pipeline, real data`);
-  } else {
-    // Shared pool exhausted at run time: the rl designed state IS the correct behavior; say so.
-    await page.waitForFunction(() => /rate-limiting|Live fetch failed/.test(document.getElementById("stamp").textContent), { timeout: 15000 });
-    log(`LIVE REQUEST NOT 200 (shared DEMO_KEY pool) — designed fallback rendered: "${await stamp(page)}"`);
-    log(`the live-CORS claim then rests on neows-live-headers.txt (archived probe) — flag for the orchestrator`);
+  /* ---- THE ONE LIVE REQUEST: refresh with routing passed through ----
+     Phase 4 adjustment: runs in its OWN context (the rl-probe pattern below, same
+     justification): Chrome unconditionally logs a console error for ANY non-2xx fetch
+     response, so when the shared DEMO_KEY pool is exhausted at run time (observed
+     2026-07-16: HTTP 429 with retry-after ~18 h) that browser noise — not a tool
+     defect; the tool renders its designed fallback — would fail the console gate on
+     the gated page. The probe's console is captured and logged in full below. Still
+     exactly ONE real request per run. */
+  {
+    const liveCtx = await page.context().browser().newContext();
+    const lp = await liveCtx.newPage();
+    const liveConsole = [];
+    lp.on("console", m => { if (m.type() === "error") liveConsole.push(m.text()); });
+    await lp.goto(page.url());
+    await waitForView(lp); // initial load route-fulfilled, as on the gated page
+    liveMode = true;
+    const respP = lp.waitForResponse(r => NEOWS_RE.test(r.url()), { timeout: 30000 });
+    await lp.click("#refreshBtn");
+    const resp = await respP;
+    liveMode = false;
+    const h = resp.headers();
+    const liveStatus = resp.status();
+    let liveBody = null;
+    try { liveBody = await resp.text(); } catch (e) { /* body unavailable on failure */ }
+    log(`LIVE NeoWs fetch (in-browser from file://, DEMO_KEY): HTTP ${liveStatus}, ` +
+      `Access-Control-Allow-Origin: ${h["access-control-allow-origin"] || "ABSENT"}, ` +
+      `X-Ratelimit-Limit: ${h["x-ratelimit-limit"]}, X-Ratelimit-Remaining: ${h["x-ratelimit-remaining"]}`);
+    writeFileSync(join(evidenceDir, "neows-live-run-headers.txt"),
+      `url: ${resp.url()}\nstatus: ${liveStatus}\nfetched: ${new Date().toISOString()}\n` +
+      Object.entries(h).map(([k, v]) => `${k}: ${v}`).join("\n") + "\n");
+    if (liveStatus === 200 && liveBody) {
+      writeFileSync(join(evidenceDir, "neows-live-run-d7.json"), liveBody);
+      await lp.waitForFunction(() => /^Loaded just now/.test(document.getElementById("stamp").textContent), { timeout: 15000 });
+      log(`live render: stamp "${await stamp(lp)}" — full browser CORS + render pipeline, real data`);
+    } else {
+      // Shared pool exhausted at run time: the rl designed state IS the correct behavior; say so.
+      await lp.waitForFunction(() => /rate-limiting|Live fetch failed/.test(document.getElementById("stamp").textContent), { timeout: 15000 });
+      log(`LIVE REQUEST NOT 200 (shared DEMO_KEY pool) — designed fallback rendered: "${await stamp(lp)}"`);
+      log(`the live-CORS claim then rests on neows-live-headers.txt (archived probe) — flag for the orchestrator`);
+    }
+    log(`live probe console (browser noise expected for any non-2xx fetch response): ` +
+      (liveConsole.length ? liveConsole.map(s => JSON.stringify(s)).join(", ") : "(none)"));
+    await liveCtx.close();
   }
 
   /* ---- LD math: recompute independently from what the page actually cached/rendered ---- */
@@ -178,7 +196,22 @@ export async function interact({ page, log, evidenceDir }) {
   const heroName = (await page.locator(".hero .name").innerText()).trim();
   const heroLD = parseFloat((await page.locator("#hLD").innerText()).trim());
   const heroKM = (await page.locator("#hKM").innerText()).replace(/\s+/g, " ").trim();
-  log(`hero: "${heroName}" (expected "${top.name}"), when="${(await page.locator(".hero .when").innerText()).trim()}"`);
+  const heroWhen = (await page.locator(".hero .when").innerText()).trim();
+  log(`hero: "${heroName}" (expected "${top.name}"), when="${heroWhen}"`);
+
+  /* ---- Phase 4 audit fix: honest time labeling. The hero "when" is labeled "UTC",
+     so the clock shown must be the payload's UTC close-approach time — computed here
+     independently with an explicit timeZone:"UTC" — not the local rendering of it
+     (the preserved v1 quirk showed local time under the UTC label). ---- */
+  const expectWhen = await page.evaluate(cd => {
+    const m = cd.match(/(\d{4})-(\w{3})-(\d{2})\s+(\d{2}):(\d{2})/);
+    const mo = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(m[2]);
+    const d = new Date(Date.UTC(+m[1], mo, +m[3], +m[4], +m[5]));
+    return d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC";
+  }, top.cd);
+  log(`honest-UTC label check: payload cd="${top.cd}" -> expected "${expectWhen}"; ` +
+    `rendered "${heroWhen}" (machine tz offset ${new Date().getTimezoneOffset()} min from UTC)`);
+  if (!heroWhen.startsWith(expectWhen)) throw new Error(`hero "when" is not the UTC time its label claims: "${heroWhen}" vs "${expectWhen}"`);
   log(`LD recompute (independent): ${top.au} AU × ${AU_LD.toFixed(4)} = ${ldComputed.toFixed(4)} LD; ` +
     `NeoWs miss_distance.lunar=${top.lunarApi}; rendered #hLD=${heroLD}`);
   log(`LD constant note: NeoWs lunar/astronomical = ${(top.lunarApi / top.au).toFixed(4)} (flat 389 LD/AU); ` +
