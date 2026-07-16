@@ -143,3 +143,92 @@ listed here anyway for the EA re-audit:
    that was a transient Met-image load failure during the screenshot pass (dynamic content), not
    a style regression; the archived run shows only the pre-approved `-webkit-font-smoothing`
    diff in both themes.
+
+## Phase 4 escaping audit (line-by-line)
+
+Audit of `tools/art.html` against the post-fix file (line numbers below are current).
+`Suite.esc` escapes `&<>"'`, so it is safe in text nodes and double-quoted attribute values.
+
+### Dynamic-markup site inventory (complete)
+
+| # | Line | Sink | Interpolated data | Provenance | Verdict |
+|---|---|---|---|---|---|
+| 1 | 137 | `postcard.innerHTML` (no-artwork card) | none | constant | safe |
+| 2 | 141–156 | `postcard.innerHTML` (renderWork) | `esc(w.title)` in `alt="…"` and `<h2>` | remote (AIC/Met) or localStorage favorite | esc'd, attr context double-quoted — safe |
+| 3 | 141–156 | same | `imgSrc` presence check (markup branch only; value never interpolated) | remote/stored URL | safe — see fix F1 |
+| 4 | 146 | same | `(note \|\| "Artwork of the day")` — NOT re-escaped | local literals at 3 call sites; 4th (search) is `'Search: “' + esc(term) + '”'` + `fmtWhen()` (locale-formatted local number, no markup chars) | safe by call-site contract — every `note` caller enumerated: showToday (literal + fmtWhen), another (literal + fmtWhen), aicSearch (esc'd term + fmtWhen), renderFavs openFav (literal). Deliberately unescaped to avoid double-escaping the search label. |
+| 5 | 148 | same | `esc(w.artist \|\| "Unknown artist")` | remote/stored | esc'd — safe |
+| 6 | 149 | same | `[esc(w.date), esc(w.medium)].filter(Boolean).join(" · ")` | remote/stored | each element esc'd before join — safe |
+| 7 | 150 | same | `esc(srcName)` | local ternary over two literals | safe |
+| 8 | 154 | same | `(isFav ? ' on' : '')`, `(isFav ? '★ Favorited' : '☆ Favorite')` | local boolean | safe |
+| 9 | 161 | `frame.innerHTML` (image error) | ternary over two string literals (`w.source === "aic"` used only as a comparison) | constant | safe |
+| 10 | 163 | `img.src = imgSrc` (property) | remote/stored URL (Met constant, AIC `https://www.artic.edu/iiif/2/<image_id>/…`, or favorites read back from localStorage) | **was UNSAFE-adjacent** (no scheme guard; `w.img` round-trips through `suite.art.favorites`) | FIXED — F1 |
+| 11 | 221 | `postcard.innerHTML` (searching card) | none | constant | safe |
+| 12 | 228 | `postcard.innerHTML` (no-hits card) | `esc(term)` | user input | esc'd — safe |
+| 13 | 231 (renderWork note arg) | via site 4 | `esc(term)` + `fmtWhen(r.t)` | user input / local number | esc'd — safe |
+| 14 | 234, 258, 261 | `postcard.innerHTML` (error/loading cards) | none | constants | safe |
+| 15 | 247–248 | `setAttribute("aria-pressed", …)` | `String(boolean)` | local | safe sink (no HTML parsing) |
+| 16 | 293, 300 | `textContent =` (fav button, count) | local | safe sink |
+| 17 | 301, 303 | `grid.innerHTML = ""` | none | constant | safe |
+| 18 | 308–310 | `el.innerHTML` (renderFavs card) | `esc(favImg)` in `src="…"`; `esc(w.title)`, `esc(w.artist \|\| "")` | localStorage favorites (originally remote AIC/Met data — attacker-influenceable via tampered/legacy storage) | esc'd for the double-quoted attr + text contexts; URL **was scheme-unguarded** | FIXED — F1 |
+| 19 | 319 | `setAttribute("aria-label", "Show favorite: " + (w.title \|\| "artwork"))` | stored title | safe sink (attribute set via API, not parsed as HTML) |
+
+No `outerHTML`, `insertAdjacentHTML`, `document.write`, `href`, `style`, or data-built `title`
+attributes exist in the file. The tool uses string concatenation exclusively (no template
+literals), matching the migration report.
+
+### Fixes
+
+- **F1 — http(s) scheme guard on image URLs (the only fix needed).** New `imgURL(u)` helper
+  (line 102): a URL reaches an `<img src>` only if it is a string matching `/^https?:\/\//i`;
+  anything else renders the existing no-image state. Applied at both sinks: `renderWork`
+  (lines 140/142/159/163 — markup branch + property assignment) and `renderFavs` (lines
+  307–309 — attribute interpolation, still `esc()`d). Rationale: `w.img` is remote-derived
+  AND round-trips through `suite.art.favorites` in localStorage, so a tampered or legacy
+  entry could carry a `javascript:` (or other non-http) URL to the src sinks. All legitimate
+  URLs (embedded Met set, constructed AIC iiif) are https, so behavior is unchanged for real
+  data — verified by the harness (live Met + AIC images still load, `naturalWidth` 599/843).
+- No other site required changes: every remote/user string was already `Suite.esc()`d at
+  every interpolation, including both attribute contexts, exactly as the migration report
+  claimed.
+
+### Adversarial probe (tests/interactions/art.mjs, appended to `interact()`)
+
+Isolated browser context; `api.artic.edu` pool + search route-fulfilled with a hostile record
+arming `window.__pwned` via every interpolated field (`title` `<img onerror>`, `artist_display`
+`"><script>`, `date_display` attr-breakout, `medium_display` `<svg onload>`, `image_id`
+`"><img onerror>`); localStorage pre-seeded with a tampered favorite whose `img` is a
+`javascript:` URL; a hostile user-typed search term exercises both `esc(term)` sites; image
+hosts fulfilled with a 1x1 png. The probe **throws** (failing the harness) on any `__pwned`
+bit, any injected node/attribute, or if the payloads fail to render as literal text.
+
+Evidence (interaction.txt lines 23–33, `escaping-probe.png`):
+
+- `javascript:` favorite: `img rendered=false (scheme guard) placeholder=true` — the tampered
+  URL never reaches a src; caption still renders.
+- Hostile pool record: `pwned=undefined scripts=0 svgs=0 injected-imgs=0 on*-attrs=0`; title,
+  artist, and meta render the payloads as literal text; the hostile `image_id` stays inside
+  the https iiif path (`https://www.artic.edu/iiif/2/"><img …/full/843,/0/default.jpg` — inert
+  as a URL, esc'd where written to markup).
+- Hostile favorite in grid: `scripts=0 injected-imgs=0 on*-attrs=0 img schemes=["https"]`,
+  captions literal.
+- Hostile search term: literal in the `Search: "…"` label, `injected-imgs=0`; hostile term in
+  the no-hits message renders literally, `scripts=0`.
+- Verdict line: `escaping probe verdict: INERT — __pwned=undefined, injected nodes/attrs=0,
+  probe-context console errors=(none)`.
+
+### Harness
+
+`node verify-tool.mjs art` — exit 0 (this run, post-fix, probe included). Console: the 4
+expected `net::ERR_FAILED` from the deliberate offline phase only (non-hard). The www.artic.edu
+headless-403 concern did not recur this run (iiif image loaded, `naturalWidth=843`).
+
+### Allowlist status
+
+`tests/escape-allowlist.json` contains **no entries for art.html** (the concatenation style
+never tripped the `--check` heuristic), and the audit adds none. The five expressions
+pre-declared in "escape allowlist requests" above were each re-verified line-by-line: all
+remain safe as reasoned, with one hardening — the `renderFavs` image-URL claim ("scheme fixed,
+no `javascript:` risk") was true for freshly constructed URLs but not for URLs read back from
+tampered/legacy localStorage; F1 closes that gap. No previously-allowlisted expression is
+unsafe. No allowlist revisions needed.

@@ -128,6 +128,147 @@ export async function interact({ page, log, evidenceDir }) {
   log(`  offline frame state: "${(await page.textContent("#postcard .frame")).replace(/\s+/g, " ").trim()}"`);
   await page.screenshot({ path: `${evidenceDir}/offline-stale.png`, fullPage: true });
   await page.context().unroute(/^https?:/);
+
+  /* ---- Phase 4 escaping audit: adversarial route-fulfilled payloads ----
+     Isolated context (no cache/localStorage contamination of the parity run above).
+     api.artic.edu pool + search responses carry hostile strings in every remote field
+     the tool interpolates (title, artist_display, date_display, medium_display,
+     image_id); localStorage is pre-seeded with a tampered favorite whose img is a
+     javascript: URL. Every payload arms window.__pwned — the probe THROWS if any
+     bit gets set or any injected node appears, so the harness cannot pass on a
+     regression. Image hosts are fulfilled with a 1x1 png for determinism. */
+  const ARM = bit => `window.__pwned=(window.__pwned||0)|${bit}`;
+  const hostileRow = {
+    id: 666001,
+    title: '<img src=x onerror="' + ARM(1) + '">',
+    artist_display: '"><script>' + ARM(2) + '<' + '/script>hostile artist\nsecond line dropped by split',
+    date_display: '" onmouseover="' + ARM(4) + '" x="1897',
+    medium_display: '<svg onload="' + ARM(8) + '">oil on hostility',
+    image_id: '"><img src=x onerror="' + ARM(16) + '"',
+    is_public_domain: true
+  };
+  const PNG1x1 = Buffer.from(
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==", "base64");
+  const pctx = await page.context().browser().newContext();
+  const perrs = [];
+  await pctx.route(/^https:\/\/api\.artic\.edu\/api\/v1\/artworks\/search\?/, r => {
+    const q = new URL(r.request().url()).searchParams.get("q") || "";
+    r.fulfill({ status: 200, contentType: "application/json",
+      body: JSON.stringify({ data: q.startsWith("emptyprobe") ? [] : [hostileRow] }) });
+  });
+  await pctx.route(/^https:\/\/api\.artic\.edu\/api\/v1\/artworks\?/, r =>
+    r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ data: [hostileRow] }) }));
+  await pctx.route(/^https:\/\/(www\.artic\.edu|images\.metmuseum\.org)\//, r =>
+    r.fulfill({ status: 200, contentType: "image/png", body: PNG1x1 }));
+  await pctx.addInitScript(fav => {
+    localStorage.setItem("suite.theme", "light");
+    localStorage.setItem("suite.art.favorites", JSON.stringify(fav));
+  }, [{ id: "evil:js", source: "met", title: "tampered favorite (javascript: img)", artist: "storage tamperer",
+        date: "", medium: "", img: "javascript:" + ARM(32) }]);
+  const pp = await pctx.newPage();
+  pp.on("pageerror", e => perrs.push("PAGEERROR: " + String(e)));
+  pp.on("console", m => { if (m.type() === "error" && !m.text().includes("net::ERR")) perrs.push(m.text()); });
+  await pp.goto(page.url());
+  await pp.waitForFunction(() => !!document.querySelector("#postcard .caption h2"), { timeout: 20000 });
+
+  /* probe 1: javascript:-scheme favorite from tampered storage must not reach <img src> */
+  const favProbe = await pp.evaluate(() => {
+    const item = document.querySelector("#favGrid .fav-item");
+    const img = item && item.querySelector("img");
+    return { items: document.querySelectorAll("#favGrid .fav-item").length,
+             imgRendered: !!img, src: img ? img.getAttribute("src") : null,
+             placeholder: !!(item && item.querySelector("div[style]")),
+             cap: item ? item.querySelector(".cap b").textContent : null };
+  });
+  log(`escaping probe · javascript: favorite: img rendered=${favProbe.imgRendered} (scheme guard) ` +
+      `placeholder=${favProbe.placeholder} cap="${favProbe.cap}"`);
+  if (favProbe.imgRendered) throw new Error("ESCAPING PROBE FAILED: javascript: URL reached fav <img src>: " + favProbe.src);
+
+  /* probe 2: hostile AIC pool record through the daily-pick postcard render */
+  await pp.click("#tabAic");
+  await pp.waitForFunction(() =>
+    (document.querySelector("#postcard .caption h2") || {}).textContent?.includes("onerror"), { timeout: 20000 });
+  const poolProbe = await pp.evaluate(() => {
+    const pc = document.getElementById("postcard");
+    const frameImg = pc.querySelector(".frame img");
+    return {
+      pwned: window.__pwned,
+      scripts: pc.querySelectorAll("script").length,
+      svgs: pc.querySelectorAll("svg").length,
+      injected: [...pc.querySelectorAll("img")].filter(i => i.getAttribute("src") === "x").length,
+      onAttrs: [...pc.querySelectorAll("*")].filter(e =>
+        e.getAttribute("onerror") || e.getAttribute("onload") || e.getAttribute("onmouseover")).length,
+      title: pc.querySelector("h2").textContent,
+      artist: pc.querySelector(".artist").textContent,
+      meta: pc.querySelector(".meta").textContent,
+      frameImgSrc: frameImg ? frameImg.getAttribute("src") : null
+    };
+  });
+  log(`escaping probe · hostile pool record: pwned=${poolProbe.pwned} scripts=${poolProbe.scripts} ` +
+      `svgs=${poolProbe.svgs} injected-imgs=${poolProbe.injected} on*-attrs=${poolProbe.onAttrs}`);
+  log(`  inert text: title="${poolProbe.title}" artist="${poolProbe.artist}"`);
+  log(`  inert text: meta="${poolProbe.meta}"`);
+  log(`  frame img src (hostile image_id stays inside the https iiif path): ${poolProbe.frameImgSrc}`);
+
+  /* probe 3: favorite the hostile work — renderFavs grid (title/artist/img attr contexts) */
+  await pp.click("#favBtn");
+  const gridProbe = await pp.evaluate(() => {
+    const g = document.getElementById("favGrid");
+    return {
+      pwned: window.__pwned,
+      scripts: g.querySelectorAll("script").length,
+      injected: [...g.querySelectorAll("img")].filter(i => i.getAttribute("src") === "x").length,
+      onAttrs: [...g.querySelectorAll("*")].filter(e =>
+        e.getAttribute("onerror") || e.getAttribute("onload") || e.getAttribute("onmouseover")).length,
+      caps: [...g.querySelectorAll(".cap b")].map(b => b.textContent),
+      imgSchemes: [...g.querySelectorAll("img")].map(i => (i.getAttribute("src") || "").split(":")[0])
+    };
+  });
+  log(`escaping probe · hostile favorite in grid: pwned=${gridProbe.pwned} scripts=${gridProbe.scripts} ` +
+      `injected-imgs=${gridProbe.injected} on*-attrs=${gridProbe.onAttrs} img schemes=${JSON.stringify(gridProbe.imgSchemes)}`);
+  log(`  inert captions: ${JSON.stringify(gridProbe.caps)}`);
+
+  /* probe 4: hostile user-typed search term (esc(term) in the result label) */
+  const hostileTerm = '"><img src=x onerror="' + ARM(64) + '">';
+  await pp.fill("#q", hostileTerm);
+  await pp.keyboard.press("Enter");
+  await pp.waitForFunction(() => {
+    const l = document.querySelector("#postcard .label");
+    return l && l.textContent.startsWith("Search:");
+  }, { timeout: 20000 });
+  const termProbe = await pp.evaluate(t => {
+    const pc = document.getElementById("postcard");
+    return { pwned: window.__pwned,
+             injected: [...pc.querySelectorAll("img")].filter(i => i.getAttribute("src") === "x").length,
+             labelHasLiteralTerm: pc.querySelector(".label").textContent.includes(t) };
+  }, hostileTerm);
+  log(`escaping probe · hostile search term in label: pwned=${termProbe.pwned} ` +
+      `injected-imgs=${termProbe.injected} literal term in label=${termProbe.labelHasLiteralTerm}`);
+  await pp.screenshot({ path: `${evidenceDir}/escaping-probe.png`, fullPage: true });
+
+  /* probe 5: hostile term through the no-hits message (the other esc(term) site) */
+  await pp.fill("#q", 'emptyprobe<script>' + ARM(128) + '<' + '/script>');
+  await pp.keyboard.press("Enter");
+  await pp.waitForFunction(() => !!document.querySelector("#postcard .broken"), { timeout: 20000 });
+  const emptyProbe = await pp.evaluate(() => ({
+    pwned: window.__pwned,
+    scripts: document.getElementById("postcard").querySelectorAll("script").length,
+    msg: document.querySelector("#postcard .broken").textContent
+  }));
+  log(`escaping probe · hostile term in no-hits message: pwned=${emptyProbe.pwned} scripts=${emptyProbe.scripts}`);
+  log(`  inert text: "${emptyProbe.msg}"`);
+
+  /* verdict — throw on ANY evidence of execution or injection */
+  const pwnedFinal = await pp.evaluate(() => window.__pwned);
+  const injections = poolProbe.scripts + poolProbe.svgs + poolProbe.injected + poolProbe.onAttrs +
+    gridProbe.scripts + gridProbe.injected + gridProbe.onAttrs + termProbe.injected + emptyProbe.scripts;
+  if (pwnedFinal !== undefined) throw new Error("ESCAPING PROBE FAILED: payload executed, __pwned=" + pwnedFinal);
+  if (injections !== 0) throw new Error("ESCAPING PROBE FAILED: hostile markup reached the DOM (" + injections + " nodes/attrs)");
+  if (!poolProbe.title.includes('<img src=x') || !termProbe.labelHasLiteralTerm)
+    throw new Error("ESCAPING PROBE FAILED: hostile payload not rendered as literal text");
+  log(`escaping probe verdict: INERT — __pwned=${pwnedFinal}, injected nodes/attrs=${injections}, ` +
+      `probe-context console errors=${perrs.length ? JSON.stringify(perrs) : "(none)"}`);
+  await pctx.close();
 }
 
 /* Same state-writing actions on v1 so localStorage parity compares equal key sets:
