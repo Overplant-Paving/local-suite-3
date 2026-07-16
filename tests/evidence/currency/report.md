@@ -138,3 +138,66 @@ per business day; API-AND-RELAY.md §2).
 - v1's status line built `esc(v.date)` into a string assigned via `textContent` (double-escape
   would have shown literals for entity-bearing dates); v2 drops the redundant `esc` in the
   `textContent` assignment — identical output for real dates (`YYYY-MM-DD`).
+## Phase 4 a11y audit (2026-07-16)
+
+Re-verification of the QUALITY.md §2 checklist, executed against the running tool from
+`file://` with `tests/phase4-a11y-net.mjs` — all network route-fulfilled from shape-matched
+payloads behind a catch-all abort (zero live requests during the audit). Machine log:
+`phase4-a11y.json` in this directory. Verdict: **pass-as-was**.
+
+| checklist item | verdict | evidence |
+|---|---|---|
+| 1. icon-only controls have accessible names | pass | `button#swapBtn.swap` text="\u21c4" -> aria-label="Swap" |
+| 2. async result regions carry aria-live | pass | `#status` -> `aria-live=polite`; `#convResult` -> `aria-live=polite`; `#trendNote` -> `aria-live=polite`; `#trendErr` -> `aria-live=polite` |
+| 3. keyboard path for every mouse path | pass | primary flow driven keyboard-only (log below); no positive tabindex; no traps |
+| 4. inputs labelled | pass | `input#amt[text]` (label[for]); `select#from[select-one]` (label[for]); `select#to[select-one]` (label[for]) |
+| 5. contrast AA, both palettes | pass* | measured table below; remaining failures are suite-palette pairs (flagged, not fixable locally) |
+| 6. visible focus indicator | pass | Tab-focus on `button.fx `: `solid 2px rgb(47, 111, 106)` vs blurred `none 3px rgb(35, 40, 46)` |
+
+### Keyboard-only drive of the primary feature (page.keyboard only)
+
+- KEYBOARD: amount typed -> result: 250 USD = 215.5 EUR 1 USD = 0.8620 EUR
+- KEYBOARD: 'to' select arrowed -> GBP -> result: 250 USD = 185.5 GBP 1 USD = 0.7420 GBP
+- KEYBOARD: swap via Enter -> from=GBP to=USD
+- KEYBOARD: board button Enter -> trend switched: GBP · 30-day trend
+
+### Contrast measurements (computed from getComputedStyle, ancestor-composited backgrounds)
+
+Light palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| #status | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| #convResult | `#23282e` | `#fffdf9` | 14.61 | 3 | pass |
+| #convResult small | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .fx .code | `#23282e` | `#fffdf9` | 14.61 | 4.5 | pass |
+| .fx .name | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .fx .rate | `#23282e` | `#fffdf9` | 14.61 | 4.5 | pass |
+| #trendNote | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .errbox (probe) | `#b23b3b` | `#fffdf9` | 5.77 | 4.5 | pass |
+| .swap | `#23282e` | `#fffdf9` | 14.61 | 4.5 | pass |
+
+Dark palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| #status | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| #convResult | `#e7e5e0` | `#1d2026` | 12.96 | 3 | pass |
+| #convResult small | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .fx .code | `#e7e5e0` | `#1d2026` | 12.96 | 4.5 | pass |
+| .fx .name | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .fx .rate | `#e7e5e0` | `#1d2026` | 12.96 | 4.5 | pass |
+| #trendNote | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .errbox (probe) | `#e0736b` | `#1d2026` | 5.31 | 4.5 | pass |
+| .swap | `#e7e5e0` | `#1d2026` | 12.96 | 4.5 | pass |
+
+### Suite-wide contrast failures — flagged, NOT fixed locally (core palette)
+
+- Light `--muted` `#6b7280` on `--bg` `#f5f3ee` = **4.36:1** (needs 4.5) — affects: `#status`, `header .tag`.
+- Same pair passes in dark (6.8:1). A ~one-step darker light `--muted` (e.g. `#61686f`, 4.9:1 on `--bg`) would clear every instance suite-wide; decision belongs to the orchestrator, not this tool.
+
+### Verification
+
+- not modified — no re-run required (Batch B evidence stands).

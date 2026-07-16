@@ -1,26 +1,90 @@
-== computed-style diff, light (11 differing values) ==
+== computed-style diff, light (55 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --c2: v1=#b0752a | v2=#955d12 }
+body { --c3: v1=#6b7280 | v2=#565e66 }
+body { --c1: v1=#c0492d | v2=#ad3a20 }
+body { --on-accent: v1=undefined | v2=#fff }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --c2: v1=#b0752a | v2=#955d12 }
+.topbar { --c3: v1=#6b7280 | v2=#565e66 }
+.topbar { --c1: v1=#c0492d | v2=#ad3a20 }
+.topbar { --on-accent: v1=undefined | v2=#fff }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --c2: v1=#b0752a | v2=#955d12 }
+.back { --c3: v1=#6b7280 | v2=#565e66 }
+.back { --c1: v1=#c0492d | v2=#ad3a20 }
+.back { --on-accent: v1=undefined | v2=#fff }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --c2: v1=#b0752a | v2=#955d12 }
+.theme-btn { --c3: v1=#6b7280 | v2=#565e66 }
+.theme-btn { --c1: v1=#c0492d | v2=#ad3a20 }
+.theme-btn { --on-accent: v1=undefined | v2=#fff }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --c2: v1=#b0752a | v2=#955d12 }
+header h1 { --c3: v1=#6b7280 | v2=#565e66 }
+header h1 { --c1: v1=#c0492d | v2=#ad3a20 }
+header h1 { --on-accent: v1=undefined | v2=#fff }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --c2: v1=#b0752a | v2=#955d12 }
+header .tag { --c3: v1=#6b7280 | v2=#565e66 }
+header .tag { --c1: v1=#c0492d | v2=#ad3a20 }
+header .tag { --on-accent: v1=undefined | v2=#fff }
 .controls select { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.controls select { --c2: v1=#b0752a | v2=#955d12 }
+.controls select { --c3: v1=#6b7280 | v2=#565e66 }
+.controls select { --c1: v1=#c0492d | v2=#ad3a20 }
+.controls select { --on-accent: v1=undefined | v2=#fff }
 .filters button { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.filters button { --c2: v1=#b0752a | v2=#955d12 }
+.filters button { --c3: v1=#6b7280 | v2=#565e66 }
+.filters button { --c1: v1=#c0492d | v2=#ad3a20 }
+.filters button { --on-accent: v1=undefined | v2=#fff }
 .summary { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.summary { --c2: v1=#b0752a | v2=#955d12 }
+.summary { --c3: v1=#6b7280 | v2=#565e66 }
+.summary { --c1: v1=#c0492d | v2=#ad3a20 }
+.summary { --on-accent: v1=undefined | v2=#fff }
 .legend { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.legend { --c2: v1=#b0752a | v2=#955d12 }
+.legend { --c3: v1=#6b7280 | v2=#565e66 }
+.legend { --c1: v1=#c0492d | v2=#ad3a20 }
+.legend { --on-accent: v1=undefined | v2=#fff }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --c2: v1=#b0752a | v2=#955d12 }
+footer { --c3: v1=#6b7280 | v2=#565e66 }
+footer { --c1: v1=#c0492d | v2=#ad3a20 }
+footer { --on-accent: v1=undefined | v2=#fff }
 
-== computed-style diff, dark (11 differing values) ==
+== computed-style diff, dark (31 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --on-accent: v1=undefined | v2=#15171b }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --on-accent: v1=undefined | v2=#15171b }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --on-accent: v1=undefined | v2=#15171b }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --on-accent: v1=undefined | v2=#15171b }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --on-accent: v1=undefined | v2=#15171b }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --on-accent: v1=undefined | v2=#15171b }
 .controls select { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.controls select { --on-accent: v1=undefined | v2=#15171b }
+.filters button { caret-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.filters button { color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.filters button { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.filters button { outline-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.filters button { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.filters button { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.filters button { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 .filters button { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.filters button { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.filters button { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.filters button { --on-accent: v1=undefined | v2=#15171b }
 .summary { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.summary { --on-accent: v1=undefined | v2=#15171b }
 .legend { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.legend { --on-accent: v1=undefined | v2=#15171b }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --on-accent: v1=undefined | v2=#15171b }
 

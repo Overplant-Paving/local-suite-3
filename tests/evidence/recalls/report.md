@@ -104,3 +104,80 @@ href, and the https recall still links. interaction.txt:
 Harness re-run: `node verify-tool.mjs recalls` exit 0 (net::ERR console lines are the
 documented exemption from the deliberately-blocked passes). CPSC cache stashed/restored
 around the probe, so the parity snapshot keeps the real payload.
+
+## Phase 4 a11y audit (2026-07-16)
+
+Re-verification of the QUALITY.md §2 checklist, executed against the running tool from
+`file://` with `tests/phase4-a11y-net.mjs` — all network route-fulfilled from shape-matched
+payloads behind a catch-all abort (zero live requests during the audit). Machine log:
+`phase4-a11y.json` in this directory. Verdict: **fixed**.
+
+| checklist item | verdict | evidence |
+|---|---|---|
+| 1. icon-only controls have accessible names | pass | none present |
+| 2. async result regions carry aria-live | pass | `#foodList` -> `aria-live=polite`; `#carList` -> `aria-live=polite`; `#prodList` -> `aria-live=polite` |
+| 3. keyboard path for every mouse path | pass | primary flow driven keyboard-only (log below); no positive tabindex; no traps |
+| 4. inputs labelled | pass | `select#stateSel[select-one]` (label[for]); `input#carMake[text]` (aria-label); `input#carModel[text]` (aria-label); `input#carYear[number]` (aria-label) |
+| 5. contrast AA, both palettes | fixed | measured table below; remaining failures are suite-palette pairs (flagged, not fixable locally) |
+| 6. visible focus indicator | pass | Tab-focus on `button#addCar.primary`: `solid 2px rgb(47, 111, 106)` vs blurred `none 3px rgb(255, 255, 255)` |
+
+### Keyboard-only drive of the primary feature (page.keyboard only)
+
+- KEYBOARD: vehicle added via typing + Enter -> 2 NHTSA recalls rendered; remove button aria-label="Remove 2020 Honda Accord"
+- KEYBOARD: state select ArrowDown -> CO -> food list reloaded
+- KEYBOARD: Enter on remove -> vehicle removed
+
+### Contrast measurements (computed from getComputedStyle, ancestor-composited backgrounds)
+
+Light palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| .locrow | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| .badge.c1 | `#ffffff` | `#c0392b` | 5.44 | 4.5 | pass |
+| .badge.c2 | `#ffffff` | `#a2661f` | 4.71 | 4.5 | pass |
+| .badge.c3 (probe) | `#ffffff` | `#6b7280` | 4.83 | 4.5 | pass |
+| .badge.park (probe) | `#ffffff` | `#c0392b` | 5.44 | 4.5 | pass |
+| .rec .date | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .rec .firm | `#2f6f6a` | `#fffdf9` | 5.74 | 4.5 | pass |
+| .rec .reason | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .carhead .cn | `#23282e` | `#e3efed` | 12.61 | 4.5 | pass |
+| .carhead .cc | `#5a6068` | `#e3efed` | 5.39 | 4.5 | pass |
+| button.x | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| button.primary | `#ffffff` | `#2f6f6a` | 5.83 | 4.5 | pass |
+| .panel .sub | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+
+Dark palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| .locrow | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| .badge.c1 | `#15171b` | `#e0685a` | 5.38 | 4.5 | pass |
+| .badge.c2 | `#15171b` | `#d09a53` | 7.20 | 4.5 | pass |
+| .badge.c3 (probe) | `#15171b` | `#9aa0a8` | 6.81 | 4.5 | pass |
+| .badge.park (probe) | `#15171b` | `#e0685a` | 5.38 | 4.5 | pass |
+| .rec .date | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .rec .firm | `#6fb5ae` | `#1d2026` | 6.91 | 4.5 | pass |
+| .rec .reason | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .carhead .cn | `#e7e5e0` | `#1f292b` | 11.81 | 4.5 | pass |
+| .carhead .cc | `#9aa0a8` | `#1f292b` | 5.64 | 4.5 | pass |
+| button.x | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| button.primary | `#15171b` | `#6fb5ae` | 7.60 | 4.5 | pass |
+| .panel .sub | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+
+### Fixes made (tool-local CSS/vars; no behavior changes beyond the one noted)
+
+- Light `--c2` darkened `#c07f2d` -> `#a2661f` (white Class II badge text was 3.33:1; now 4.7:1).
+- `--on-accent` var: all `.badge` fills and `button.primary` use dark ink in the dark palette (white on the dark pastel fills measured 2.49-3.33:1; now 5.4-7.2:1).
+- `--cc-ink` var: the vehicle recall-count line on the accent-soft car header was muted-on-soft 4.11:1 in light; now `#5a6068` (5.4:1). Dark keeps the muted gray (5.6:1, passed).
+
+### Suite-wide contrast failures — flagged, NOT fixed locally (core palette)
+
+- Light `--muted` `#6b7280` on `--bg` `#f5f3ee` = **4.36:1** (needs 4.5) — affects: `.locrow`, `.panel .sub`, `header .tag`.
+- Same pair passes in dark (6.8:1). A ~one-step darker light `--muted` (e.g. `#61686f`, 4.9:1 on `--bg`) would clear every instance suite-wide; decision belongs to the orchestrator, not this tool.
+
+### Verification
+
+- `node verify-tool.mjs recalls` -> exit 0 (live openFDA/NHTSA/CPSC, add/remove vehicle, offline paths green).

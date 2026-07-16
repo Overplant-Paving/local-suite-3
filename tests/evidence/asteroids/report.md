@@ -325,3 +325,76 @@ segment now runs in its own captured-console context (the module's existing rl-p
 console logged in full in interaction.txt) so browser noise from a pool-exhausted 429 cannot
 fail the gate; still exactly one real request per run, and a with-budget run archives the live
 200 body exactly as before.
+
+## Phase 4 a11y audit (2026-07-16)
+
+Re-verification of the QUALITY.md §2 checklist, executed against the running tool from
+`file://` with `tests/phase4-a11y-net.mjs` — all network route-fulfilled from shape-matched
+payloads behind a catch-all abort (zero live requests during the audit). Machine log:
+`phase4-a11y.json` in this directory. Verdict: **fixed**.
+
+| checklist item | verdict | evidence |
+|---|---|---|
+| 1. icon-only controls have accessible names | pass | none present |
+| 2. async result regions carry aria-live | pass | `#view` -> `aria-live=polite`; `#stamp` -> `aria-live=polite` |
+| 3. keyboard path for every mouse path | pass | primary flow driven keyboard-only (log below); no positive tabindex; no traps |
+| 4. inputs labelled | pass | `input#keyInput[text]` (aria-label); `select#window[select-one]` (wrapped label) |
+| 5. contrast AA, both palettes | fixed | measured table below; remaining failures are suite-palette pairs (flagged, not fixable locally) |
+| 6. visible focus indicator | pass | Tab-focus on `a.back`: `solid 2px rgb(47, 111, 106)` vs blurred `none 3px rgb(107, 114, 128)` |
+
+### Keyboard-only drive of the primary feature (page.keyboard only)
+
+- KEYBOARD: key pasted + Enter -> saved + reload (route-fulfilled); summary: Using your saved NASA key (1,000/hour). ✓ Change or remove →
+- KEYBOARD: Use demo -> key cleared; suite.key.nasa=null
+- KEYBOARD: window select ArrowDown -> change fired -> view reloaded; rows=40
+- KEYBOARD: refresh via Enter -> forced reload (route-fulfilled)
+
+### Contrast measurements (computed from getComputedStyle, ancestor-composited backgrounds)
+
+Light palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| .sub | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| .hero .label | `#a04518` | `#fffdf9` | 6.15 | 4.5 | pass |
+| .hero .when | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .hero .big .num | `#23282e` | `#fffdf9` | 14.61 | 3 | pass |
+| .hero .big .lbl | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .pha | `#a04518` | `#e8d9ce` | 4.54 | 4.5 | pass |
+| #view th | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| tr.close td (forced class) | `#23282e` | `#e8d9ce` | 10.78 | 4.5 | pass |
+| .keycard summary | `#2f6f6a` | `#fffdf9` | 5.74 | 4.5 | pass |
+| .keycard button#keySave | `#ffffff` | `#2f6f6a` | 5.83 | 4.5 | pass |
+| #stamp | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| .foot-note | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+
+Dark palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| .sub | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| .hero .label | `#e8895c` | `#1d2026` | 6.34 | 4.5 | pass |
+| .hero .when | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .hero .big .num | `#e7e5e0` | `#1d2026` | 12.96 | 3 | pass |
+| .hero .big .lbl | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .pha | `#e8895c` | `#3b2c27` | 5.21 | 4.5 | pass |
+| #view th | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| tr.close td (forced class) | `#e7e5e0` | `#3b2c27` | 10.64 | 4.5 | pass |
+| .keycard summary | `#6fb5ae` | `#1d2026` | 6.91 | 4.5 | pass |
+| .keycard button#keySave | `#15171b` | `#6fb5ae` | 7.60 | 4.5 | pass |
+| #stamp | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| .foot-note | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+
+### Fixes made (tool-local CSS/vars; no behavior changes beyond the one noted)
+
+- Light `--near` darkened `#c0562b` -> `#a04518` (and the `--near-soft` color-mix base with it): the hero label measured 4.49:1 on the card and the PHA badge 3.41:1 on `--near-soft`; now 6.2:1 / 4.9:1. Dark palette values untouched (passed).
+- `--on-accent` var: `.keycard button` label dark ink in the dark palette (white on dark `--accent` was 2.36:1; now 7.6:1).
+
+### Suite-wide contrast failures — flagged, NOT fixed locally (core palette)
+
+- Light `--muted` `#6b7280` on `--bg` `#f5f3ee` = **4.36:1** (needs 4.5) — affects: `#stamp`, `#view th`, `.foot-note`, `.sub`.
+- Same pair passes in dark (6.8:1). A ~one-step darker light `--muted` (e.g. `#61686f`, 4.9:1 on `--bg`) would clear every instance suite-wide; decision belongs to the orchestrator, not this tool.
+
+### Verification
+
+- verify-tool.mjs SKIPPED by orchestrator directive: the interaction module fires exactly one LIVE NeoWs request and the shared DEMO_KEY pool 429'd earlier today — no live NASA requests were allowed. The audit harness validated the modified file end-to-end against the ARCHIVED real payload (neows-live-d7.json): full keyboard flow, render, key save/clear, console clean. Re-run verify-tool.mjs after the DEMO_KEY pool resets.

@@ -1,0 +1,405 @@
+{
+  "tool": "fedregister",
+  "when": "2026-07-16T06:21:24.411Z",
+  "log": [
+    "today's issue rendered (route-fulfilled): 6 docs; stats: 6 DOCUMENTS 2 RULES 1 PROPOSED 2 NOTICES 1 PRESIDENTIAL",
+    "KEYBOARD: Enter on Rules pill -> filtered to 2 docs; aria-pressed=true",
+    "KEYBOARD: date typed into date input -> change -> reloaded for 2026-07-14",
+    "KEYBOARD: agency chip toggled ON; aria-pressed=true; visible docs=2",
+    "live ok: #list aria-live=polite",
+    "live ok: #stats aria-live=polite",
+    "live ok: #stamp aria-live=polite",
+    "label ok: input#dateInput[date] (wrapped)",
+    "no positive tabindex anywhere",
+    "focus-visible ok on button.achip (solid 2px rgb(47, 111, 106) vs blurred none 3px rgb(107, 114, 128))",
+    "console: clean (only expected aborted-request noise: 0 lines)"
+  ],
+  "contrast": {
+    "light": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 15.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": ".stat b",
+        "why": "accent stat number on page bg",
+        "suite": false,
+        "fg": "#2f6f6a",
+        "bg": "#f5f3ee",
+        "ratio": 5.26,
+        "sizePx": 24,
+        "weight": 700,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": ".stat span",
+        "why": "muted stat label on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": ".pill:not(.on)",
+        "why": "muted pill on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".pill.on",
+        "why": "active pill white on accent",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#2f6f6a",
+        "ratio": 5.83,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.t-rule",
+        "why": "rule badge white on --rule",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#9a6522",
+        "ratio": 4.93,
+        "sizePx": 11.2,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.t-prorule",
+        "why": "proposed badge white on --prorule",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#2f6f6a",
+        "ratio": 5.83,
+        "sizePx": 11.2,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.t-notice (probe)",
+        "why": "notice badge white on --notice",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#6b7280",
+        "ratio": 4.83,
+        "sizePx": 11.2,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.t-presdoc (probe)",
+        "why": "presidential badge white on --presdoc",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#8a4b8a",
+        "ratio": 6.08,
+        "sizePx": 11.2,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".doc .agencies",
+        "why": "accent agencies line on card",
+        "suite": false,
+        "fg": "#2f6f6a",
+        "bg": "#fffdf9",
+        "ratio": 5.74,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".doc .abstract",
+        "why": "muted abstract on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 14.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".achip:not(.on)",
+        "why": "muted agency chip on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".achip.on",
+        "why": "accent-on-soft active agency chip",
+        "suite": false,
+        "fg": "#2f6f6a",
+        "bg": "#e3efed",
+        "ratio": 4.95,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#stamp",
+        "why": "muted stamp on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      }
+    ],
+    "dark": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 15.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".stat b",
+        "why": "accent stat number on page bg",
+        "suite": false,
+        "fg": "#6fb5ae",
+        "bg": "#15171b",
+        "ratio": 7.6,
+        "sizePx": 24,
+        "weight": 700,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": ".stat span",
+        "why": "muted stat label on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".pill:not(.on)",
+        "why": "muted pill on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".pill.on",
+        "why": "active pill white on accent",
+        "suite": false,
+        "fg": "#15171b",
+        "bg": "#6fb5ae",
+        "ratio": 7.6,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.t-rule",
+        "why": "rule badge white on --rule",
+        "suite": false,
+        "fg": "#15171b",
+        "bg": "#d09a53",
+        "ratio": 7.2,
+        "sizePx": 11.2,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.t-prorule",
+        "why": "proposed badge white on --prorule",
+        "suite": false,
+        "fg": "#15171b",
+        "bg": "#6fb5ae",
+        "ratio": 7.6,
+        "sizePx": 11.2,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.t-notice (probe)",
+        "why": "notice badge white on --notice",
+        "suite": false,
+        "fg": "#15171b",
+        "bg": "#9aa0a8",
+        "ratio": 6.81,
+        "sizePx": 11.2,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.t-presdoc (probe)",
+        "why": "presidential badge white on --presdoc",
+        "suite": false,
+        "fg": "#15171b",
+        "bg": "#c092c0",
+        "ratio": 6.93,
+        "sizePx": 11.2,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".doc .agencies",
+        "why": "accent agencies line on card",
+        "suite": false,
+        "fg": "#6fb5ae",
+        "bg": "#1d2026",
+        "ratio": 6.91,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".doc .abstract",
+        "why": "muted abstract on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 14.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".achip:not(.on)",
+        "why": "muted agency chip on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".achip.on",
+        "why": "accent-on-soft active agency chip",
+        "suite": false,
+        "fg": "#6fb5ae",
+        "bg": "#1b2425",
+        "ratio": 6.69,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#stamp",
+        "why": "muted stamp on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "generic": {
+    "iconOnly": [],
+    "labels": [
+      {
+        "desc": "input#dateInput[date]",
+        "hidden": false,
+        "wrapped": true,
+        "forLabel": false,
+        "aria": false,
+        "ok": true
+      }
+    ],
+    "positiveTabindex": [],
+    "imgs": []
+  },
+  "focus": {
+    "ok": true,
+    "el": "button.achip",
+    "focused": "solid 2px rgb(47, 111, 106)",
+    "blurred": "none 3px rgb(107, 114, 128)"
+  },
+  "live": [
+    {
+      "sel": "#list",
+      "live": "polite"
+    },
+    {
+      "sel": "#stats",
+      "live": "polite"
+    },
+    {
+      "sel": "#stamp",
+      "live": "polite"
+    }
+  ],
+  "failures": [
+    "CONTRAST(light,suite-wide): header .tag 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): .stat span 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): #stamp 4.36 < 4.5"
+  ],
+  "consoleLight": [],
+  "network": {
+    "fulfilled": 14,
+    "catchAllAborted": [],
+    "deliberateAbort": []
+  }
+}

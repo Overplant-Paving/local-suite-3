@@ -160,3 +160,80 @@ flow through `textContent`/property assignment, which is inherently escaped.
 - Live-run counts (91 docs, 37 agencies, 8/6/76/1 split) are of course date-specific; the
   numbers cross-check internally (stats sum, chip count = filtered count, pill filter = badge
   count).
+
+## Phase 4 a11y audit (2026-07-16)
+
+Re-verification of the QUALITY.md §2 checklist, executed against the running tool from
+`file://` with `tests/phase4-a11y-net.mjs` — all network route-fulfilled from shape-matched
+payloads behind a catch-all abort (zero live requests during the audit). Machine log:
+`phase4-a11y.json` in this directory. Verdict: **fixed**.
+
+| checklist item | verdict | evidence |
+|---|---|---|
+| 1. icon-only controls have accessible names | pass | none present |
+| 2. async result regions carry aria-live | pass | `#list` -> `aria-live=polite`; `#stats` -> `aria-live=polite`; `#stamp` -> `aria-live=polite` |
+| 3. keyboard path for every mouse path | pass | primary flow driven keyboard-only (log below); no positive tabindex; no traps |
+| 4. inputs labelled | pass | `input#dateInput[date]` (wrapped label) |
+| 5. contrast AA, both palettes | fixed | measured table below; remaining failures are suite-palette pairs (flagged, not fixable locally) |
+| 6. visible focus indicator | pass | Tab-focus on `button.achip`: `solid 2px rgb(47, 111, 106)` vs blurred `none 3px rgb(107, 114, 128)` |
+
+### Keyboard-only drive of the primary feature (page.keyboard only)
+
+- KEYBOARD: Enter on Rules pill -> filtered to 2 docs; aria-pressed=true
+- KEYBOARD: date typed into date input -> change -> reloaded for 2026-07-14
+- KEYBOARD: agency chip toggled ON; aria-pressed=true; visible docs=2
+
+### Contrast measurements (computed from getComputedStyle, ancestor-composited backgrounds)
+
+Light palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| .stat b | `#2f6f6a` | `#f5f3ee` | 5.26 | 3 | pass |
+| .stat span | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| .pill:not(.on) | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .pill.on | `#ffffff` | `#2f6f6a` | 5.83 | 4.5 | pass |
+| .badge.t-rule | `#ffffff` | `#9a6522` | 4.93 | 4.5 | pass |
+| .badge.t-prorule | `#ffffff` | `#2f6f6a` | 5.83 | 4.5 | pass |
+| .badge.t-notice (probe) | `#ffffff` | `#6b7280` | 4.83 | 4.5 | pass |
+| .badge.t-presdoc (probe) | `#ffffff` | `#8a4b8a` | 6.08 | 4.5 | pass |
+| .doc .agencies | `#2f6f6a` | `#fffdf9` | 5.74 | 4.5 | pass |
+| .doc .abstract | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .achip:not(.on) | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .achip.on | `#2f6f6a` | `#e3efed` | 4.95 | 4.5 | pass |
+| #stamp | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+
+Dark palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| .stat b | `#6fb5ae` | `#15171b` | 7.60 | 3 | pass |
+| .stat span | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| .pill:not(.on) | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .pill.on | `#15171b` | `#6fb5ae` | 7.60 | 4.5 | pass |
+| .badge.t-rule | `#15171b` | `#d09a53` | 7.20 | 4.5 | pass |
+| .badge.t-prorule | `#15171b` | `#6fb5ae` | 7.60 | 4.5 | pass |
+| .badge.t-notice (probe) | `#15171b` | `#9aa0a8` | 6.81 | 4.5 | pass |
+| .badge.t-presdoc (probe) | `#15171b` | `#c092c0` | 6.93 | 4.5 | pass |
+| .doc .agencies | `#6fb5ae` | `#1d2026` | 6.91 | 4.5 | pass |
+| .doc .abstract | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .achip:not(.on) | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .achip.on | `#6fb5ae` | `#1b2425` | 6.69 | 4.5 | pass |
+| #stamp | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+
+### Fixes made (tool-local CSS/vars; no behavior changes beyond the one noted)
+
+- Light `--rule` darkened `#b0752a` -> `#9a6522` (white RULE badge text was 3.87:1; now 4.9:1).
+- `--on-accent` var: document-type badges, the active type pill, and the Retry button use dark ink `#15171b` in the dark palette — white on the dark pastel badge fills measured 2.36-2.64:1; now 4.8-7.2:1.
+- (harness) interactions/fedregister.mjs: pre-publication-window fallback — the FR publishes ~6 AM ET, so a run before that finds today's issue legitimately empty (API answers count:0, verified live); the module now steps back to the latest populated issue, identically for v1, keeping cache-key parity.
+
+### Suite-wide contrast failures — flagged, NOT fixed locally (core palette)
+
+- Light `--muted` `#6b7280` on `--bg` `#f5f3ee` = **4.36:1** (needs 4.5) — affects: `#stamp`, `.stat span`, `header .tag`.
+- Same pair passes in dark (6.8:1). A ~one-step darker light `--muted` (e.g. `#61686f`, 4.9:1 on `--bg`) would clear every instance suite-wide; decision belongs to the orchestrator, not this tool.
+
+### Verification
+
+- `node verify-tool.mjs fedregister` -> exit 0 (live FR fetch for the latest populated issue — 91 docs for 2026-07-15 — pills, agency chips, offline-stale + offline-uncached-date paths green).

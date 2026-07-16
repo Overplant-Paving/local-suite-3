@@ -1,0 +1,356 @@
+{
+  "tool": "dictionary",
+  "when": "2026-07-16T06:21:45.770Z",
+  "log": [
+    "initial lookup rendered (route-fulfilled): serendipity",
+    "autofocus lands on #q",
+    "KEYBOARD: typed word + Enter -> rendered: perspicacious",
+    "KEYBOARD: Enter on synonym chip \"fixture\" -> looked up (role=button tabindex=0 path)",
+    "KEYBOARD: history chip Enter -> re-lookup: fixture",
+    "audio button present with aria-label: Play pronunciation",
+    "live ok: #result aria-live=polite",
+    "icon-only ok: button.audio-btn text=\"🔊\" aria-label=\"Play pronunciation\"",
+    "label ok: input#q[search] (aria)",
+    "no positive tabindex anywhere",
+    "focus-visible ok on span.hchip (solid 2px rgb(47, 111, 106) vs blurred none 3px rgb(107, 114, 128))",
+    "console: clean (only expected aborted-request noise: 0 lines)"
+  ],
+  "contrast": {
+    "light": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 15.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": ".word-head h2",
+        "why": "headword on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 32,
+        "weight": 700,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": ".phon",
+        "why": "muted phonetic on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 16.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".pos h3",
+        "why": "accent part-of-speech on card",
+        "suite": false,
+        "fg": "#2f6f6a",
+        "bg": "#fffdf9",
+        "ratio": 5.74,
+        "sizePx": 16,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".example",
+        "why": "muted example on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 14.7,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".synchip:not(.ant)",
+        "why": "accent synonym chip on --bg chip",
+        "suite": false,
+        "fg": "#2f6f6a",
+        "bg": "#f5f3ee",
+        "ratio": 5.26,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".synchip.ant",
+        "why": "antonym chip color on --bg chip",
+        "suite": false,
+        "fg": "#b0522a",
+        "bg": "#f5f3ee",
+        "ratio": 4.63,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".synrow .lbl",
+        "why": "muted row label on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 11.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".src-note",
+        "why": "muted source note on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".hchip",
+        "why": "muted history chip on page bg",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".gobtn",
+        "why": "search button white on accent",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#2f6f6a",
+        "ratio": 5.83,
+        "sizePx": 16,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".audio-btn",
+        "why": "accent audio button on --bg",
+        "suite": false,
+        "fg": "#2f6f6a",
+        "bg": "#f5f3ee",
+        "ratio": 5.26,
+        "sizePx": 16,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      }
+    ],
+    "dark": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 15.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".word-head h2",
+        "why": "headword on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 32,
+        "weight": 700,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": ".phon",
+        "why": "muted phonetic on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 16.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".pos h3",
+        "why": "accent part-of-speech on card",
+        "suite": false,
+        "fg": "#6fb5ae",
+        "bg": "#1d2026",
+        "ratio": 6.91,
+        "sizePx": 16,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".example",
+        "why": "muted example on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 14.7,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".synchip:not(.ant)",
+        "why": "accent synonym chip on --bg chip",
+        "suite": false,
+        "fg": "#6fb5ae",
+        "bg": "#15171b",
+        "ratio": 7.6,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".synchip.ant",
+        "why": "antonym chip color on --bg chip",
+        "suite": false,
+        "fg": "#e08b62",
+        "bg": "#15171b",
+        "ratio": 6.87,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".synrow .lbl",
+        "why": "muted row label on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 11.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".src-note",
+        "why": "muted source note on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".hchip",
+        "why": "muted history chip on page bg",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".gobtn",
+        "why": "search button white on accent",
+        "suite": false,
+        "fg": "#15171b",
+        "bg": "#6fb5ae",
+        "ratio": 7.6,
+        "sizePx": 16,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".audio-btn",
+        "why": "accent audio button on --bg",
+        "suite": false,
+        "fg": "#6fb5ae",
+        "bg": "#15171b",
+        "ratio": 7.6,
+        "sizePx": 16,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "generic": {
+    "iconOnly": [
+      {
+        "desc": "button.audio-btn",
+        "text": "🔊",
+        "ariaLabel": "Play pronunciation",
+        "title": "Play pronunciation",
+        "ok": true
+      }
+    ],
+    "labels": [
+      {
+        "desc": "input#q[search]",
+        "hidden": false,
+        "wrapped": false,
+        "forLabel": false,
+        "aria": true,
+        "ok": true
+      }
+    ],
+    "positiveTabindex": [],
+    "imgs": []
+  },
+  "focus": {
+    "ok": true,
+    "el": "span.hchip",
+    "focused": "solid 2px rgb(47, 111, 106)",
+    "blurred": "none 3px rgb(107, 114, 128)"
+  },
+  "live": [
+    {
+      "sel": "#result",
+      "live": "polite"
+    }
+  ],
+  "failures": [
+    "CONTRAST(light,suite-wide): header .tag 4.36 < 4.5"
+  ],
+  "consoleLight": [],
+  "network": {
+    "fulfilled": 6,
+    "catchAllAborted": [],
+    "deliberateAbort": []
+  }
+}

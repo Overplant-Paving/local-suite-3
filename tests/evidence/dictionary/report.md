@@ -230,3 +230,75 @@ Harness: `node verify-tool.mjs dictionary` exit 0 (2026-07-16 run; the 6
 requests, filtered by design). Note: this run required the verify-tool.mjs line-98
 string-literal fix (raw newline -> `\n`) landed by the orchestrator — the harness at
 the previous HEAD did not parse.
+
+## Phase 4 a11y audit (2026-07-16)
+
+Re-verification of the QUALITY.md §2 checklist, executed against the running tool from
+`file://` with `tests/phase4-a11y-net.mjs` — all network route-fulfilled from shape-matched
+payloads behind a catch-all abort (zero live requests during the audit). Machine log:
+`phase4-a11y.json` in this directory. Verdict: **fixed**.
+
+| checklist item | verdict | evidence |
+|---|---|---|
+| 1. icon-only controls have accessible names | pass | `button.audio-btn` text="\ud83d\udd0a" -> aria-label="Play pronunciation" |
+| 2. async result regions carry aria-live | pass | `#result` -> `aria-live=polite` |
+| 3. keyboard path for every mouse path | pass | primary flow driven keyboard-only (log below); no positive tabindex; no traps |
+| 4. inputs labelled | pass | `input#q[search]` (aria-label) |
+| 5. contrast AA, both palettes | fixed | measured table below; remaining failures are suite-palette pairs (flagged, not fixable locally) |
+| 6. visible focus indicator | pass | Tab-focus on `span.hchip`: `solid 2px rgb(47, 111, 106)` vs blurred `none 3px rgb(107, 114, 128)` |
+
+### Keyboard-only drive of the primary feature (page.keyboard only)
+
+- KEYBOARD: typed word + Enter -> rendered: perspicacious
+- KEYBOARD: Enter on synonym chip "fixture" -> looked up (role=button tabindex=0 path)
+- KEYBOARD: history chip Enter -> re-lookup: fixture
+
+### Contrast measurements (computed from getComputedStyle, ancestor-composited backgrounds)
+
+Light palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| .word-head h2 | `#23282e` | `#fffdf9` | 14.61 | 3 | pass |
+| .phon | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .pos h3 | `#2f6f6a` | `#fffdf9` | 5.74 | 4.5 | pass |
+| .example | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .synchip:not(.ant) | `#2f6f6a` | `#f5f3ee` | 5.26 | 4.5 | pass |
+| .synchip.ant | `#b0522a` | `#f5f3ee` | 4.63 | 4.5 | pass |
+| .synrow .lbl | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .src-note | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .hchip | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .gobtn | `#ffffff` | `#2f6f6a` | 5.83 | 4.5 | pass |
+| .audio-btn | `#2f6f6a` | `#f5f3ee` | 5.26 | 4.5 | pass |
+
+Dark palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| .word-head h2 | `#e7e5e0` | `#1d2026` | 12.96 | 3 | pass |
+| .phon | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .pos h3 | `#6fb5ae` | `#1d2026` | 6.91 | 4.5 | pass |
+| .example | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .synchip:not(.ant) | `#6fb5ae` | `#15171b` | 7.60 | 4.5 | pass |
+| .synchip.ant | `#e08b62` | `#15171b` | 6.87 | 4.5 | pass |
+| .synrow .lbl | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .src-note | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .hchip | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .gobtn | `#15171b` | `#6fb5ae` | 7.60 | 4.5 | pass |
+| .audio-btn | `#6fb5ae` | `#15171b` | 7.60 | 4.5 | pass |
+
+### Fixes made (tool-local CSS/vars; no behavior changes beyond the one noted)
+
+- Added the standard 3-layer tool-var block (the tool had none): `--ant` themes the antonym chip color — the hardcoded `#b0522a` measured 3.49:1 on the dark chip background; dark now `#e08b62` (6.9:1); light keeps `#b0522a` (4.63:1, passed).
+- `--on-accent` var: `.gobtn` label dark ink in the dark palette (white on dark `--accent` was 2.36:1; now 7.6:1).
+
+### Suite-wide contrast failures — flagged, NOT fixed locally (core palette)
+
+- Light `--muted` `#6b7280` on `--bg` `#f5f3ee` = **4.36:1** (needs 4.5) — affects: `header .tag`.
+- Same pair passes in dark (6.8:1). A ~one-step darker light `--muted` (e.g. `#61686f`, 4.9:1 on `--bg`) would clear every instance suite-wide; decision belongs to the orchestrator, not this tool.
+
+### Verification
+
+- `node verify-tool.mjs dictionary` -> exit 0 (live dictionaryapi.dev lookups, synonym chips, history, offline recall green).

@@ -2,19 +2,19 @@ first-run food panel: "Choose your state above to see food recalls affecting it.
 first-run vehicle panel: "No vehicles yet. Add one above and its open recalls will appear here."
 CPSC (live, boot): prodN = "40 recent"
 CPSC first card: "THE RECALLED RANGES' FRONT-MOUNTED KNOBS… Jul 9, 2026 Best Buy Recalls Insignia® Gas Ranges Due to Risk of Serious Injury from a Fire Hazard Insignia Front Control Gas Ranges This recall involves Insignia gas ranges with"
-CPSC cache envelope: 40 recalls cached at 2026-07-16T05:37:20.471Z
+CPSC cache envelope: 40 recalls cached at 2026-07-16T06:23:19.531Z
 CPSC sample recall: {"title":"Best Buy Recalls Insignia® Gas Ranges Due to Risk of Serious Injury from a Fire Hazard","date":"2026-07-09T00:00:00","hazard":"The recalled ranges' front-mounted knobs can be activated accidentally by humans or pets, posing a risk of serious injury from a fire hazard.","url":"https://www.cpsc.gov/Recalls/2026/Best-Buy-Recalls-Insignia-Gas-Ranges-Due-to-Risk-of-Serious-Injury-from-a-Fire-Hazard"}
 state derived from suite.location: stateSel = "CA" (expect CA)
 FDA (live): foodN = "30"
 FDA first card: "CLASS I Jun 15, 2026 · Ongoing FIRST STREET Dark Chocolate Raisins Net Wt. 9 oz. (255g) UPC 797565011830 INGREDIENTS: DARK CHOCOLATE (SUGAR, CHOCOLATE LIQUOR, COCOA BUTTER, MILK FAT, SOY LEC… Western Mixers Produce & Nuts, Inc. Reason: Undeclared peanuts."
-FDA cache envelope: 30 results cached at 2026-07-16T05:37:21.332Z
+FDA cache envelope: 30 results cached at 2026-07-16T06:23:20.389Z
 FDA sample recall: {"classification":"Class I","firm":"Western Mixers Produce & Nuts, Inc.","product":"FIRST STREET Dark Chocolate Raisins Net Wt. 9 oz. (255g) UPC 797565011830  INGREDIENTS: DARK CHOCOLA","initiated":"20260615","status":"Ongoing"}
 suite.state after manual pick: CA
 add clicked with empty fields: suite.cars = null (expect null), panel = "No vehicles yet. Add one above and its open recalls will appear here."
 vehicle added: vehN = "1 vehicle", header = "2020 Honda Odyssey"
 NHTSA (live): carcount-0 = "14 recalls"
 NHTSA first card: "BACK OVER PREVENTION: SENSING SYSTEM: CA… 20V438000 · Jul 28, 2020 American Honda Motor Co. (Honda) is recalling certain 2019-2020 Odyssey vehicles. Water may get into the rearview camera mounting holes and enter the camera lens and cause a distorted image, or"
-NHTSA cache envelope: 14 recalls cached at 2026-07-16T05:37:22.068Z
+NHTSA cache envelope: 14 recalls cached at 2026-07-16T06:23:20.555Z
 NHTSA sample recall: {"campaign":"20V438000","component":"BACK OVER PREVENTION: SENSING SYSTEM: CAMERA","received":"28/07/2020","summary":"American Honda Motor Co. (Honda) is recalling certain 2019-2020 Odyssey vehicles.  Water may get int"}
 suite.cars = [{"make":"Honda","model":"Odyssey","year":"2020"}]
 after remove: vehicle panel = "No vehicles yet. Add one above and its open recalls will appear here.", suite.cars = []

@@ -1,0 +1,281 @@
+{
+  "tool": "iss",
+  "when": "2026-07-16T06:21:20.180Z",
+  "log": [
+    "stats rendered from route-fulfilled position: 34.31°N lat",
+    "KEYBOARD: Enter on location chip opens form; aria-expanded=true",
+    "KEYBOARD: ZIP + Enter -> location saved, form closed; chip now: 📍 Beverly Hills, CA",
+    "KEYBOARD: Esc closes the location form (overlay path)",
+    "distance stat present after location: 5 stat blocks",
+    "live ok: #errbar aria-live=polite",
+    "live ok: #locErr aria-live=polite",
+    "live note: #stats repaints every 5 s from polling — aria-live deliberately omitted there (would announce continuously); the state-change regions (#errbar, #locErr) are live.",
+    "label ok: input#zipInput[text] (aria)",
+    "no positive tabindex anywhere",
+    "focus-visible ok on a.back (solid 2px rgb(47, 111, 106) vs blurred none 3px rgb(107, 114, 128))",
+    "console: clean (only expected aborted-request noise: 0 lines)"
+  ],
+  "contrast": {
+    "light": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 15.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": ".stat b",
+        "why": "stat value on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 27.2,
+        "weight": 700,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": ".stat span",
+        "why": "muted stat label on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 11.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".legend",
+        "why": "muted legend on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#visInfo",
+        "why": "muted visibility line on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".errbar (probe)",
+        "why": "tool error color on page bg",
+        "suite": false,
+        "fg": "#c0392b",
+        "bg": "#f5f3ee",
+        "ratio": 4.9,
+        "sizePx": 13.6,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#locErr",
+        "why": "loc error color on card",
+        "suite": false,
+        "fg": "#c0392b",
+        "bg": "#fffdf9",
+        "ratio": 5.35,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".locchip",
+        "why": "chip ink on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "footer",
+        "why": "muted footer on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      }
+    ],
+    "dark": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 15.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".stat b",
+        "why": "stat value on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 27.2,
+        "weight": 700,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": ".stat span",
+        "why": "muted stat label on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 11.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".legend",
+        "why": "muted legend on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#visInfo",
+        "why": "muted visibility line on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".errbar (probe)",
+        "why": "tool error color on page bg",
+        "suite": false,
+        "fg": "#f07167",
+        "bg": "#15171b",
+        "ratio": 6.21,
+        "sizePx": 13.6,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#locErr",
+        "why": "loc error color on card",
+        "suite": false,
+        "fg": "#f07167",
+        "bg": "#1d2026",
+        "ratio": 5.64,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".locchip",
+        "why": "chip ink on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "footer",
+        "why": "muted footer on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "generic": {
+    "iconOnly": [],
+    "labels": [
+      {
+        "desc": "input#zipInput[text]",
+        "hidden": false,
+        "wrapped": false,
+        "forLabel": false,
+        "aria": true,
+        "ok": true
+      }
+    ],
+    "positiveTabindex": [],
+    "imgs": []
+  },
+  "focus": {
+    "ok": true,
+    "el": "a.back",
+    "focused": "solid 2px rgb(47, 111, 106)",
+    "blurred": "none 3px rgb(107, 114, 128)"
+  },
+  "live": [
+    {
+      "sel": "#errbar",
+      "live": "polite"
+    },
+    {
+      "sel": "#locErr",
+      "live": "polite"
+    }
+  ],
+  "failures": [
+    "CONTRAST(light,suite-wide): header .tag 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): footer 4.36 < 4.5"
+  ],
+  "consoleLight": [],
+  "network": {
+    "fulfilled": 4,
+    "catchAllAborted": [],
+    "deliberateAbort": []
+  }
+}

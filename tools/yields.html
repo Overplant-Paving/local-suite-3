@@ -45,7 +45,10 @@
   .barrow .lab { font-size: .88rem; font-weight: 600; }
   .barrow .bars { display: flex; flex-direction: column; gap: 3px; }
   .bar { height: 15px; border-radius: 4px; display: flex; align-items: center; min-width: 2px; }
-  .bar span { font-size: .72rem; color: var(--muted); margin-left: .4rem; white-space: nowrap; }
+  /* Phase 4 a11y audit: the value label renders ON the colored fill (muted-on-fill was
+     1.1-1.2:1) — a card-colored chip keeps it AA-readable over any of the three series */
+  .bar span { font-size: .72rem; color: var(--muted); margin-left: .4rem; white-space: nowrap;
+    background: var(--card); padding: 0 .35rem; border-radius: 4px; line-height: 1.35; }
 
   .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
   table { border-collapse: collapse; width: 100%; background: var(--card); font-size: .92rem; }

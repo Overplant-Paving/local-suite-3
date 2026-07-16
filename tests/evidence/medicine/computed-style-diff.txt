@@ -1,30 +1,91 @@
-== computed-style diff, light (13 differing values) ==
+== computed-style diff, light (45 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --warn: v1=#b0752a | v2=#955d12 }
+body { --on-accent: v1=undefined | v2=#fff }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --warn: v1=#b0752a | v2=#955d12 }
+.topbar { --on-accent: v1=undefined | v2=#fff }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --warn: v1=#b0752a | v2=#955d12 }
+.back { --on-accent: v1=undefined | v2=#fff }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --warn: v1=#b0752a | v2=#955d12 }
+.theme-btn { --on-accent: v1=undefined | v2=#fff }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --warn: v1=#b0752a | v2=#955d12 }
+header h1 { --on-accent: v1=undefined | v2=#fff }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --warn: v1=#b0752a | v2=#955d12 }
+header .tag { --on-accent: v1=undefined | v2=#fff }
 #q { outline-offset: v1=0px | v2=2px }
 #q { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#q { --warn: v1=#b0752a | v2=#955d12 }
+#q { --on-accent: v1=undefined | v2=#fff }
 button.go { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.go { --warn: v1=#b0752a | v2=#955d12 }
+button.go { --on-accent: v1=undefined | v2=#fff }
 #history { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#history { --warn: v1=#b0752a | v2=#955d12 }
+#history { --on-accent: v1=undefined | v2=#fff }
+.disclaimer { border-block-end-color: v1=color(srgb 0.812549 0.710588 0.569412) | v2=color(srgb 0.770196 0.672941 0.531765) }
+.disclaimer { border-block-start-color: v1=color(srgb 0.812549 0.710588 0.569412) | v2=color(srgb 0.770196 0.672941 0.531765) }
+.disclaimer { border-bottom-color: v1=color(srgb 0.812549 0.710588 0.569412) | v2=color(srgb 0.770196 0.672941 0.531765) }
+.disclaimer { border-inline-end-color: v1=color(srgb 0.812549 0.710588 0.569412) | v2=color(srgb 0.770196 0.672941 0.531765) }
+.disclaimer { border-inline-start-color: v1=color(srgb 0.812549 0.710588 0.569412) | v2=color(srgb 0.770196 0.672941 0.531765) }
+.disclaimer { border-left-color: v1=color(srgb 0.812549 0.710588 0.569412) | v2=color(srgb 0.770196 0.672941 0.531765) }
+.disclaimer { border-right-color: v1=color(srgb 0.812549 0.710588 0.569412) | v2=color(srgb 0.770196 0.672941 0.531765) }
+.disclaimer { border-top-color: v1=color(srgb 0.812549 0.710588 0.569412) | v2=color(srgb 0.770196 0.672941 0.531765) }
 .disclaimer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.disclaimer { --warn: v1=#b0752a | v2=#955d12 }
+.disclaimer { --on-accent: v1=undefined | v2=#fff }
 #results { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#results { --warn: v1=#b0752a | v2=#955d12 }
+#results { --on-accent: v1=undefined | v2=#fff }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --warn: v1=#b0752a | v2=#955d12 }
+footer { --on-accent: v1=undefined | v2=#fff }
 
-== computed-style diff, dark (13 differing values) ==
+== computed-style diff, dark (42 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --on-accent: v1=undefined | v2=#15171b }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --on-accent: v1=undefined | v2=#15171b }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --on-accent: v1=undefined | v2=#15171b }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --on-accent: v1=undefined | v2=#15171b }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --on-accent: v1=undefined | v2=#15171b }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --on-accent: v1=undefined | v2=#15171b }
 #q { outline-offset: v1=0px | v2=2px }
 #q { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#q { --on-accent: v1=undefined | v2=#15171b }
+button.go { border-block-end-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.go { border-block-start-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.go { border-bottom-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.go { border-inline-end-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.go { border-inline-start-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.go { border-left-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.go { border-right-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.go { border-top-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.go { caret-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.go { color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.go { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.go { outline-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.go { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.go { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.go { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 button.go { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.go { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.go { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+button.go { --on-accent: v1=undefined | v2=#15171b }
 #history { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#history { --on-accent: v1=undefined | v2=#15171b }
 .disclaimer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.disclaimer { --on-accent: v1=undefined | v2=#15171b }
 #results { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#results { --on-accent: v1=undefined | v2=#15171b }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --on-accent: v1=undefined | v2=#15171b }
 

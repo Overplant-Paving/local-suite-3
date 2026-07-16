@@ -10,7 +10,7 @@ sample reason: "Reason: Undeclared peanuts."
 .desc has zero child elements (remote text rendered inert): true
 "More detail" expanded: "Quantity: 29 cases (6 - 9oz packages/case) = 174 packages · Distribution: Product was distributed to a single retail customer who further distributed product to their California located stores. · Codes: Lot: 260562 BB: 022527 · Firm location: Ontario"
 live #list .stamp: "Showing up to 50 most recent · data just now"
-suite.cache.foodrecalls.CA envelope after live load: {"t":1784147277353,"payloadShape":"object","results":50}
+suite.cache.foodrecalls.CA envelope after live load: {"t":1784183196301,"payloadShape":"object","results":50}
 note: no all-states view exists in this tool (every view is one state + nationwide)
 filter Class I: #summary="7 of 50 recent recalls affecting California (Class I)", cards=7
 filter buttons aria-pressed: ["all=false","1=true","2=false","3=false"]

@@ -1,18 +1,18 @@
-live stats rendered: ["27.18°N LATITUDE","119.42°E LONGITUDE","425 km ALTITUDE · 264 MI","27,566 km/h SPEED · 17,129 MPH","6,768 mi FROM LOS ANGELES, CA"]
-response evidence (suite.cache.iss.pos payload): lat=27.177206989374 lon=119.42182421382 altitude=425.40675098472 km velocity=27566.48205921 km/h visibility=eclipsed t=1784136479783
-visibility line (needs suite.location): "In Earth's shadow · below your horizon"
+live stats rendered: ["51.60°S LATITUDE","29.77°E LONGITUDE","434 km ALTITUDE · 269 MI","27,552 km/h SPEED · 17,120 MPH","10,439 mi FROM LOS ANGELES, CA"]
+response evidence (suite.cache.iss.pos payload): lat=-51.596613298418 lon=29.769917379118 altitude=433.6648138742 km velocity=27552.132630961 km/h visibility=daylight t=1784182953432
+visibility line (needs suite.location): "In daylight · below your horizon"
 errbar while online (should be empty): ""
 map painted: {"landRings":8,"overlayPaths":2,"overlayCircles":3,"footprintEllipses":1} (8 land rings; overlay paths = night+terminator; circles = sun + you + ISS)
-poll cycle 2: t 1784136479783 -> 1784136486908; position 27.18,119.42 -> 27.04,119.56
+poll cycle 2: t 1784182953432 -> 1784182953802; position -51.60,29.77 -> -51.60,29.77
 overlay paths after 2nd poll (night + terminator + ground track = 3): 3
 locchip toggles form: open=true, chip aria-expanded=true
 after ZIP 90210 lookup chip reads: "📍 Beverly Hills, CA"
 suite.location now: {"lat":34.0901,"lon":-118.4065,"label":"Beverly Hills, CA"}
 form closed after lookup: true
-distance stat repainted for new location: "6,760 mi FROM BEVERLY HILLS, CA"
+distance stat repainted for new location: "10,455 mi FROM BEVERLY HILLS, CA"
 Esc closes form: open=false, chip aria-expanded=false
-stale state errbar: "Offline — position cached from 12:28 PM Jul 14 — retrying…"
-stale stats rendered from 24h-old cache: ["27.04°N LATITUDE","119.56°E LONGITUDE","425 km ALTITUDE · 264 MI","27,566 km/h SPEED · 17,129 MPH","6,760 mi FROM BEVERLY HILLS, CA"]
+stale state errbar: "Offline — position cached from 1:22 AM Jul 15 — retrying…"
+stale stats rendered from 24h-old cache: ["51.61°S LATITUDE","29.97°E LONGITUDE","434 km ALTITUDE · 269 MI","27,552 km/h SPEED · 17,120 MPH","10,455 mi FROM BEVERLY HILLS, CA"]
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
   console.error: Failed to load resource: net::ERR_FAILED

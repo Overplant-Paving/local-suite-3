@@ -1,0 +1,321 @@
+{
+  "tool": "treasury",
+  "when": "2026-07-16T06:10:31.719Z",
+  "log": [
+    "all three sections rendered route-fulfilled (FiscalData WAFs headless UAs — environment failure per orchestrator): debt=$37,123,456,789,012",
+    "KEYBOARD: tool is passive (auto-loads; no mouse-only interactions) — links/theme reachable by Tab, verified in the generic pass",
+    "live ok: #hero aria-live=polite",
+    "live ok: #ratesBox aria-live=polite",
+    "live ok: #auctionsBox aria-live=polite",
+    "no positive tabindex anywhere",
+    "focus-visible ok on a.back (solid 2px rgb(47, 111, 106) vs blurred none 3px rgb(47, 111, 106))",
+    "console: clean (only expected aborted-request noise: 0 lines)"
+  ],
+  "contrast": {
+    "light": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 16,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": ".hero .debt",
+        "why": "accent debt figure on card",
+        "suite": false,
+        "fg": "#2f6f6a",
+        "bg": "#fffdf9",
+        "ratio": 5.74,
+        "sizePx": 52.8,
+        "weight": 700,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": ".hero .lbl",
+        "why": "muted label on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".hero .asof",
+        "why": "muted asof on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 13.6,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".sparkmeta .chg",
+        "why": "trend change color on card",
+        "suite": false,
+        "fg": "#c0492d",
+        "bg": "#fffdf9",
+        "ratio": 4.88,
+        "sizePx": 13.6,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".pc .v",
+        "why": "per-person value on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 24,
+        "weight": 700,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": ".pc .k",
+        "why": "muted per-person label on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#ratesBox th",
+        "why": "muted table header on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 11.5,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#ratesBox td.rate",
+        "why": "rate cell on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 14.7,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#ratesStamp",
+        "why": "muted stamp on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": "section .note",
+        "why": "muted section note on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 13.6,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      }
+    ],
+    "dark": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 16,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".hero .debt",
+        "why": "accent debt figure on card",
+        "suite": false,
+        "fg": "#6fb5ae",
+        "bg": "#1d2026",
+        "ratio": 6.91,
+        "sizePx": 52.8,
+        "weight": 700,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": ".hero .lbl",
+        "why": "muted label on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".hero .asof",
+        "why": "muted asof on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 13.6,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".sparkmeta .chg",
+        "why": "trend change color on card",
+        "suite": false,
+        "fg": "#e0715a",
+        "bg": "#1d2026",
+        "ratio": 5.19,
+        "sizePx": 13.6,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".pc .v",
+        "why": "per-person value on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 24,
+        "weight": 700,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": ".pc .k",
+        "why": "muted per-person label on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#ratesBox th",
+        "why": "muted table header on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 11.5,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#ratesBox td.rate",
+        "why": "rate cell on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 14.7,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#ratesStamp",
+        "why": "muted stamp on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "section .note",
+        "why": "muted section note on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 13.6,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "generic": {
+    "iconOnly": [],
+    "labels": [],
+    "positiveTabindex": [],
+    "imgs": []
+  },
+  "focus": {
+    "ok": true,
+    "el": "a.back",
+    "focused": "solid 2px rgb(47, 111, 106)",
+    "blurred": "none 3px rgb(47, 111, 106)"
+  },
+  "live": [
+    {
+      "sel": "#hero",
+      "live": "polite"
+    },
+    {
+      "sel": "#ratesBox",
+      "live": "polite"
+    },
+    {
+      "sel": "#auctionsBox",
+      "live": "polite"
+    }
+  ],
+  "failures": [
+    "CONTRAST(light,suite-wide): header .tag 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): #ratesStamp 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): section .note 4.36 < 4.5"
+  ],
+  "consoleLight": [],
+  "network": {
+    "fulfilled": 8,
+    "catchAllAborted": [],
+    "deliberateAbort": []
+  }
+}

@@ -1,0 +1,376 @@
+{
+  "tool": "foodrecalls",
+  "when": "2026-07-16T06:21:43.750Z",
+  "log": [
+    "recalls rendered for CA (route-fulfilled): 3; summary: 3 of 3 recent recalls affecting California",
+    "KEYBOARD: Class I filter via Enter -> 1 rows; aria-pressed=true",
+    "KEYBOARD: More detail summary Enter -> open=true",
+    "KEYBOARD: state ArrowDown -> CO -> reloaded",
+    "live ok: #summary aria-live=polite",
+    "live ok: #list aria-live=polite",
+    "label ok: select#stateSel[select-one] (wrapped)",
+    "no positive tabindex anywhere",
+    "focus-visible ok on button.on (solid 2px rgb(47, 111, 106) vs blurred none 3px rgb(255, 255, 255))",
+    "console: clean (only expected aborted-request noise: 0 lines)"
+  ],
+  "contrast": {
+    "light": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 16,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": "#summary",
+        "why": "muted summary on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 14.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": ".badge.c1",
+        "why": "Class I text on --c1-soft",
+        "suite": false,
+        "fg": "#ad3a20",
+        "bg": "#f6e2dc",
+        "ratio": 4.95,
+        "sizePx": 11.5,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.c2",
+        "why": "Class II text on --c2-soft",
+        "suite": false,
+        "fg": "#955d12",
+        "bg": "#f4ead6",
+        "ratio": 4.57,
+        "sizePx": 11.5,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.c3",
+        "why": "Class III text on --c3-soft",
+        "suite": false,
+        "fg": "#565e66",
+        "bg": "#eceae4",
+        "ratio": 5.47,
+        "sizePx": 11.5,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".r .date",
+        "why": "muted date on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".r .desc",
+        "why": "description on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 16,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".r .reason b",
+        "why": "muted 'Reason:' bold on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 14.7,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".r .kv",
+        "why": "muted kv line on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 13.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".r details summary",
+        "why": "accent summary on card",
+        "suite": false,
+        "fg": "#2f6f6a",
+        "bg": "#fffdf9",
+        "ratio": 5.74,
+        "sizePx": 13.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".filters button:not(.on)",
+        "why": "muted filter on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".filters button.on",
+        "why": "active filter white on accent",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#2f6f6a",
+        "ratio": 5.83,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".legend",
+        "why": "muted legend on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      }
+    ],
+    "dark": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 16,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#summary",
+        "why": "muted summary on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 14.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.c1",
+        "why": "Class I text on --c1-soft",
+        "suite": false,
+        "fg": "#e0765a",
+        "bg": "#3a231c",
+        "ratio": 4.81,
+        "sizePx": 11.5,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.c2",
+        "why": "Class II text on --c2-soft",
+        "suite": false,
+        "fg": "#d3a25a",
+        "bg": "#33291a",
+        "ratio": 6.17,
+        "sizePx": 11.5,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.c3",
+        "why": "Class III text on --c3-soft",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#262a31",
+        "ratio": 5.47,
+        "sizePx": 11.5,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".r .date",
+        "why": "muted date on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".r .desc",
+        "why": "description on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 16,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".r .reason b",
+        "why": "muted 'Reason:' bold on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 14.7,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".r .kv",
+        "why": "muted kv line on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 13.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".r details summary",
+        "why": "accent summary on card",
+        "suite": false,
+        "fg": "#6fb5ae",
+        "bg": "#1d2026",
+        "ratio": 6.91,
+        "sizePx": 13.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".filters button:not(.on)",
+        "why": "muted filter on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".filters button.on",
+        "why": "active filter white on accent",
+        "suite": false,
+        "fg": "#15171b",
+        "bg": "#6fb5ae",
+        "ratio": 7.6,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".legend",
+        "why": "muted legend on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "generic": {
+    "iconOnly": [],
+    "labels": [
+      {
+        "desc": "select#stateSel[select-one]",
+        "hidden": false,
+        "wrapped": true,
+        "forLabel": false,
+        "aria": false,
+        "ok": true
+      }
+    ],
+    "positiveTabindex": [],
+    "imgs": []
+  },
+  "focus": {
+    "ok": true,
+    "el": "button.on",
+    "focused": "solid 2px rgb(47, 111, 106)",
+    "blurred": "none 3px rgb(255, 255, 255)"
+  },
+  "live": [
+    {
+      "sel": "#summary",
+      "live": "polite"
+    },
+    {
+      "sel": "#list",
+      "live": "polite"
+    }
+  ],
+  "failures": [
+    "CONTRAST(light,suite-wide): header .tag 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): #summary 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): .legend 4.36 < 4.5"
+  ],
+  "consoleLight": [],
+  "network": {
+    "fulfilled": 4,
+    "catchAllAborted": [],
+    "deliberateAbort": []
+  }
+}

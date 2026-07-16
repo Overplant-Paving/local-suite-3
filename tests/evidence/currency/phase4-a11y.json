@@ -1,0 +1,341 @@
+{
+  "tool": "currency",
+  "when": "2026-07-16T06:11:29.521Z",
+  "log": [
+    "board + trend rendered (route-fulfilled): 12 currencies; status: Rates as of 2026-07-16 · European Central Bank via Frankfurter",
+    "KEYBOARD: amount typed -> result: 250 USD = 215.5 EUR 1 USD = 0.8620 EUR",
+    "KEYBOARD: 'to' select arrowed -> GBP -> result: 250 USD = 185.5 GBP 1 USD = 0.7420 GBP",
+    "KEYBOARD: swap via Enter -> from=GBP to=USD",
+    "KEYBOARD: board button Enter -> trend switched: GBP · 30-day trend",
+    "live ok: #status aria-live=polite",
+    "live ok: #convResult aria-live=polite",
+    "live ok: #trendNote aria-live=polite",
+    "live ok: #trendErr aria-live=polite",
+    "icon-only ok: button#swapBtn.swap text=\"⇄\" aria-label=\"Swap\"",
+    "label ok: input#amt[text] (label[for])",
+    "label ok: select#from[select-one] (label[for])",
+    "label ok: select#to[select-one] (label[for])",
+    "no positive tabindex anywhere",
+    "focus-visible ok on button.fx  (solid 2px rgb(47, 111, 106) vs blurred none 3px rgb(35, 40, 46))",
+    "console: clean (only expected aborted-request noise: 0 lines)"
+  ],
+  "contrast": {
+    "light": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 15.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": "#status",
+        "why": "muted status on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": "#convResult",
+        "why": "conversion result on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 21.6,
+        "weight": 600,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": "#convResult small",
+        "why": "muted unit rate on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 13.6,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".fx .code",
+        "why": "board code on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 15.2,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".fx .name",
+        "why": "muted board name on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 11.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".fx .rate",
+        "why": "board rate on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 20,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#trendNote",
+        "why": "muted trend note on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".errbox (probe)",
+        "why": "error color on card",
+        "suite": false,
+        "fg": "#b23b3b",
+        "bg": "#fffdf9",
+        "ratio": 5.77,
+        "sizePx": 14.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".swap",
+        "why": "swap button ink on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 17.6,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      }
+    ],
+    "dark": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 15.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#status",
+        "why": "muted status on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#convResult",
+        "why": "conversion result on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 21.6,
+        "weight": 600,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": "#convResult small",
+        "why": "muted unit rate on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 13.6,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".fx .code",
+        "why": "board code on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 15.2,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".fx .name",
+        "why": "muted board name on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 11.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".fx .rate",
+        "why": "board rate on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 20,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#trendNote",
+        "why": "muted trend note on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".errbox (probe)",
+        "why": "error color on card",
+        "suite": false,
+        "fg": "#e0736b",
+        "bg": "#1d2026",
+        "ratio": 5.31,
+        "sizePx": 14.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".swap",
+        "why": "swap button ink on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 17.6,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "generic": {
+    "iconOnly": [
+      {
+        "desc": "button#swapBtn.swap",
+        "text": "⇄",
+        "ariaLabel": "Swap",
+        "title": "Swap currencies",
+        "ok": true
+      }
+    ],
+    "labels": [
+      {
+        "desc": "input#amt[text]",
+        "hidden": false,
+        "wrapped": false,
+        "forLabel": true,
+        "aria": false,
+        "ok": true
+      },
+      {
+        "desc": "select#from[select-one]",
+        "hidden": false,
+        "wrapped": false,
+        "forLabel": true,
+        "aria": false,
+        "ok": true
+      },
+      {
+        "desc": "select#to[select-one]",
+        "hidden": false,
+        "wrapped": false,
+        "forLabel": true,
+        "aria": false,
+        "ok": true
+      }
+    ],
+    "positiveTabindex": [],
+    "imgs": []
+  },
+  "focus": {
+    "ok": true,
+    "el": "button.fx ",
+    "focused": "solid 2px rgb(47, 111, 106)",
+    "blurred": "none 3px rgb(35, 40, 46)"
+  },
+  "live": [
+    {
+      "sel": "#status",
+      "live": "polite"
+    },
+    {
+      "sel": "#convResult",
+      "live": "polite"
+    },
+    {
+      "sel": "#trendNote",
+      "live": "polite"
+    },
+    {
+      "sel": "#trendErr",
+      "live": "polite"
+    }
+  ],
+  "failures": [
+    "CONTRAST(light,suite-wide): header .tag 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): #status 4.36 < 4.5"
+  ],
+  "consoleLight": [],
+  "network": {
+    "fulfilled": 6,
+    "catchAllAborted": [],
+    "deliberateAbort": []
+  }
+}

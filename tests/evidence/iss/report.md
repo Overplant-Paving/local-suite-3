@@ -127,3 +127,69 @@ The cache exists only for the stale-offline fallback, which never pretends fresh
   stat-block styling parity is additionally covered by the .stat CSS being carried over verbatim.
 - localStorage writes now occur every 5 s while the tab is open (the ~500 B cache envelope).
   Deliberate consequence of the good-citizen cache; negligible churn, flagging for awareness.
+
+## Phase 4 a11y audit (2026-07-16)
+
+Re-verification of the QUALITY.md §2 checklist, executed against the running tool from
+`file://` with `tests/phase4-a11y-net.mjs` — all network route-fulfilled from shape-matched
+payloads behind a catch-all abort (zero live requests during the audit). Machine log:
+`phase4-a11y.json` in this directory. Verdict: **fixed**.
+
+| checklist item | verdict | evidence |
+|---|---|---|
+| 1. icon-only controls have accessible names | pass | none present |
+| 2. async result regions carry aria-live | pass | `#errbar` -> `aria-live=polite`; `#locErr` -> `aria-live=polite` |
+| 3. keyboard path for every mouse path | pass | primary flow driven keyboard-only (log below); no positive tabindex; no traps |
+| 4. inputs labelled | pass | `input#zipInput[text]` (aria-label) |
+| 5. contrast AA, both palettes | fixed | measured table below; remaining failures are suite-palette pairs (flagged, not fixable locally) |
+| 6. visible focus indicator | pass | Tab-focus on `a.back`: `solid 2px rgb(47, 111, 106)` vs blurred `none 3px rgb(107, 114, 128)` |
+
+### Keyboard-only drive of the primary feature (page.keyboard only)
+
+- KEYBOARD: Enter on location chip opens form; aria-expanded=true
+- KEYBOARD: ZIP + Enter -> location saved, form closed; chip now: 📍 Beverly Hills, CA
+- KEYBOARD: Esc closes the location form (overlay path)
+- live note: #stats repaints every 5 s from polling — aria-live deliberately omitted there (would announce continuously); the state-change regions (#errbar, #locErr) are live.
+
+### Contrast measurements (computed from getComputedStyle, ancestor-composited backgrounds)
+
+Light palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| .stat b | `#23282e` | `#fffdf9` | 14.61 | 3 | pass |
+| .stat span | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .legend | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| #visInfo | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .errbar (probe) | `#c0392b` | `#f5f3ee` | 4.90 | 4.5 | pass |
+| #locErr | `#c0392b` | `#fffdf9` | 5.35 | 4.5 | pass |
+| .locchip | `#23282e` | `#fffdf9` | 14.61 | 4.5 | pass |
+| footer | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+
+Dark palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| .stat b | `#e7e5e0` | `#1d2026` | 12.96 | 3 | pass |
+| .stat span | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .legend | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| #visInfo | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .errbar (probe) | `#f07167` | `#15171b` | 6.21 | 4.5 | pass |
+| #locErr | `#f07167` | `#1d2026` | 5.64 | 4.5 | pass |
+| .locchip | `#e7e5e0` | `#1d2026` | 12.96 | 4.5 | pass |
+| footer | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+
+### Fixes made (tool-local CSS/vars; no behavior changes beyond the one noted)
+
+- `--err` var (all four theme contexts): `.errbar` and `#locErr` used `--iss` (`#d9534f`) as text — 3.57:1 / 3.90:1 in light. Error text now `#c0392b` light / `#f07167` dark (4.9:1 / 6.2:1). `--iss` itself is untouched (map marker + footprint fills, non-text).
+
+### Suite-wide contrast failures — flagged, NOT fixed locally (core palette)
+
+- Light `--muted` `#6b7280` on `--bg` `#f5f3ee` = **4.36:1** (needs 4.5) — affects: `footer`, `header .tag`.
+- Same pair passes in dark (6.8:1). A ~one-step darker light `--muted` (e.g. `#61686f`, 4.9:1 on `--bg`) would clear every instance suite-wide; decision belongs to the orchestrator, not this tool.
+
+### Verification
+
+- `node verify-tool.mjs iss` -> exit 0 (live wheretheiss.at polling, ZIP path, offline-stale path green).

@@ -4,7 +4,7 @@ first definition: "A combination of events which have come together by chance to
 synonym chips rendered: [chance, luck, chance, luck]
 antonym chips rendered: [Murphy's law, perfect storm, Murphy's law, perfect storm]
 source note: "Source: dictionaryapi.dev"
-cache envelope written: t=1784180158892 source=dictionaryapi.dev meanings=1 audio=https://api.dictionaryapi.dev/media/pronunciations/en/serendipity-au.mp3
+cache envelope written: t=1784183225236 source=dictionaryapi.dev meanings=1 audio=https://api.dictionaryapi.dev/media/pronunciations/en/serendipity-au.mp3
 audio button present: true aria-label="Play pronunciation"
 Enter-submitted lookup rendered: "ephemeral"
   first definition: "Something which lasts for a short period of time."
@@ -15,7 +15,7 @@ history chip click re-rendered: "ephemeral" note="Source: dictionaryapi.dev"
 not-found state: "No definition found for “zzxqwvv”. Check the spelling, or it may be a word neither dictionary covers."
 gibberish NOT pushed to history (v1 parity): [ephemeral, ephemeron, serendipity]
 offline reload rendered word: "ephemeral"
-offline stale note: "Offline — cached from 7/8/2026, 12:36:00 AM · Source: dictionaryapi.dev"
+offline stale note: "Offline — cached from 7/8/2026, 1:27:06 AM · Source: dictionaryapi.dev"
 restored (fresh cache, no refetch): "ephemeral" note="Source: dictionaryapi.dev"
 PROBE hostile dictionaryapi payload: __pwned=undefined injected-elements=0
   headword rendered as literal text: true; phonetic="/<svg onload="window.__pwned=2">/"

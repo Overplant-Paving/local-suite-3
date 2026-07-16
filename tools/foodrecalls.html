@@ -7,23 +7,30 @@
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
   /* tool accents: recall classification scale (3-layer, same pattern as core) */
+  /* Phase 4 a11y audit: light class colors darkened (badge text on the -soft washes was
+     3.98 / 3.24 / 4.02 : 1) — #c0492d -> #ad3a20, #b0752a -> #955d12, #6b7280 -> #565e66;
+     all now >= 4.5:1. --on-accent: the active filter pill label in the dark palette. */
   :root {
-    --c1: #c0492d; --c2: #b0752a; --c3: #6b7280;
+    --c1: #ad3a20; --c2: #955d12; --c3: #565e66;
     --c1-soft: #f6e2dc; --c2-soft: #f4ead6; --c3-soft: #eceae4;
+    --on-accent: #fff;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --c1: #e0765a; --c2: #d3a25a; --c3: #9aa0a8;
       --c1-soft: #3a231c; --c2-soft: #33291a; --c3-soft: #262a31;
+      --on-accent: #15171b;
     }
   }
   :root[data-theme="light"] {
-    --c1: #c0492d; --c2: #b0752a; --c3: #6b7280;
+    --c1: #ad3a20; --c2: #955d12; --c3: #565e66;
     --c1-soft: #f6e2dc; --c2-soft: #f4ead6; --c3-soft: #eceae4;
+    --on-accent: #fff;
   }
   :root[data-theme="dark"] {
     --c1: #e0765a; --c2: #d3a25a; --c3: #9aa0a8;
     --c1-soft: #3a231c; --c2-soft: #33291a; --c3-soft: #262a31;
+    --on-accent: #15171b;
   }
   body { padding: 1.5rem 1.25rem 4rem; }
   .wrap { max-width: 820px; margin: 0 auto; }
@@ -42,7 +49,7 @@
     border: 1px solid var(--line); background: var(--card); color: var(--muted);
     border-radius: 999px; padding: .25rem .7rem; font-size: .82rem; cursor: pointer;
   }
-  .filters button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .filters button.on { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
   .summary { color: var(--muted); font-size: .88rem; margin: .3rem 0 .2rem; }
   .r {
     background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--c3);

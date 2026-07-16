@@ -1,0 +1,324 @@
+{
+  "tool": "illness",
+  "when": "2026-07-16T06:21:39.765Z",
+  "log": [
+    "wastewater level: Moderate; admissions tiles: 3",
+    "KEYBOARD: state select ArrowDown -> CO -> both panels reloaded (route-fulfilled)",
+    "live ok: #wwBody aria-live=polite",
+    "live ok: #admBody aria-live=polite",
+    "label ok: select#stateSel[select-one] (label[for])",
+    "no positive tabindex anywhere",
+    "focus-visible ok on a. (solid 2px rgb(47, 111, 106) vs blurred none 3px rgb(47, 111, 106))",
+    "console: clean (only expected aborted-request noise: 0 lines)"
+  ],
+  "contrast": {
+    "light": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 16,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": ".bignum",
+        "why": "level word (tool status color) on card",
+        "suite": false,
+        "fg": "#b35c15",
+        "bg": "#fffdf9",
+        "ratio": 4.64,
+        "sizePx": 35.2,
+        "weight": 600,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": "#wwBody .trend",
+        "why": "muted trend line on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 14.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".adm:nth-child(1) .lbl",
+        "why": "COVID label (--covid) on card",
+        "suite": false,
+        "fg": "#7a48ea",
+        "bg": "#fffdf9",
+        "ratio": 5.24,
+        "sizePx": 12.8,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".adm:nth-child(2) .lbl",
+        "why": "flu label (--flu) on card",
+        "suite": false,
+        "fg": "#b35c15",
+        "bg": "#fffdf9",
+        "ratio": 4.64,
+        "sizePx": 12.8,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".adm:nth-child(3) .lbl",
+        "why": "RSV label (--rsv) on card",
+        "suite": false,
+        "fg": "#3a7d97",
+        "bg": "#fffdf9",
+        "ratio": 4.53,
+        "sizePx": 12.8,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".adm .val",
+        "why": "admissions value on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 24,
+        "weight": 600,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": ".adm .meta",
+        "why": "muted meta on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".note",
+        "why": "muted note on accent-soft",
+        "suite": false,
+        "fg": "#5a6068",
+        "bg": "#e3efed",
+        "ratio": 5.39,
+        "sizePx": 13.6,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#wwBody .stamp",
+        "why": "muted stamp on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".legend",
+        "why": "legend text on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      }
+    ],
+    "dark": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 16,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".bignum",
+        "why": "level word (tool status color) on card",
+        "suite": false,
+        "fg": "#e0995a",
+        "bg": "#1d2026",
+        "ratio": 6.9,
+        "sizePx": 35.2,
+        "weight": 600,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": "#wwBody .trend",
+        "why": "muted trend line on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 14.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".adm:nth-child(1) .lbl",
+        "why": "COVID label (--covid) on card",
+        "suite": false,
+        "fg": "#a586f2",
+        "bg": "#1d2026",
+        "ratio": 5.67,
+        "sizePx": 12.8,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".adm:nth-child(2) .lbl",
+        "why": "flu label (--flu) on card",
+        "suite": false,
+        "fg": "#e0995a",
+        "bg": "#1d2026",
+        "ratio": 6.9,
+        "sizePx": 12.8,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".adm:nth-child(3) .lbl",
+        "why": "RSV label (--rsv) on card",
+        "suite": false,
+        "fg": "#6aa9bf",
+        "bg": "#1d2026",
+        "ratio": 6.25,
+        "sizePx": 12.8,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".adm .val",
+        "why": "admissions value on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 24,
+        "weight": 600,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": ".adm .meta",
+        "why": "muted meta on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".note",
+        "why": "muted note on accent-soft",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1b2425",
+        "ratio": 5.99,
+        "sizePx": 13.6,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#wwBody .stamp",
+        "why": "muted stamp on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".legend",
+        "why": "legend text on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "generic": {
+    "iconOnly": [],
+    "labels": [
+      {
+        "desc": "select#stateSel[select-one]",
+        "hidden": false,
+        "wrapped": false,
+        "forLabel": true,
+        "aria": false,
+        "ok": true
+      }
+    ],
+    "positiveTabindex": [],
+    "imgs": []
+  },
+  "focus": {
+    "ok": true,
+    "el": "a.",
+    "focused": "solid 2px rgb(47, 111, 106)",
+    "blurred": "none 3px rgb(47, 111, 106)"
+  },
+  "live": [
+    {
+      "sel": "#wwBody",
+      "live": "polite"
+    },
+    {
+      "sel": "#admBody",
+      "live": "polite"
+    }
+  ],
+  "failures": [
+    "CONTRAST(light,suite-wide): header .tag 4.36 < 4.5"
+  ],
+  "consoleLight": [],
+  "network": {
+    "fulfilled": 8,
+    "catchAllAborted": [],
+    "deliberateAbort": []
+  }
+}

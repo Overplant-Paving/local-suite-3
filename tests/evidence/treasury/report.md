@@ -160,3 +160,66 @@ section stamps.)
    effect (screenshots confirm identical header layout).
 5. Screenshot parity is exact: the v1/v2 PNGs came out byte-identical in size per theme with
    live data in both, because the extracted core CSS reproduces v1's computed styles exactly.
+
+## Phase 4 a11y audit (2026-07-16)
+
+Re-verification of the QUALITY.md §2 checklist, executed against the running tool from
+`file://` with `tests/phase4-a11y-net.mjs` — all network route-fulfilled from shape-matched
+payloads behind a catch-all abort (zero live requests during the audit). Machine log:
+`phase4-a11y.json` in this directory. Verdict: **pass-as-was**.
+
+| checklist item | verdict | evidence |
+|---|---|---|
+| 1. icon-only controls have accessible names | pass | none present |
+| 2. async result regions carry aria-live | pass | `#hero` -> `aria-live=polite`; `#ratesBox` -> `aria-live=polite`; `#auctionsBox` -> `aria-live=polite` |
+| 3. keyboard path for every mouse path | pass | primary flow driven keyboard-only (log below); no positive tabindex; no traps |
+| 4. inputs labelled | pass | no form controls |
+| 5. contrast AA, both palettes | pass* | measured table below; remaining failures are suite-palette pairs (flagged, not fixable locally) |
+| 6. visible focus indicator | pass | Tab-focus on `a.back`: `solid 2px rgb(47, 111, 106)` vs blurred `none 3px rgb(47, 111, 106)` |
+
+### Keyboard-only drive of the primary feature (page.keyboard only)
+
+- KEYBOARD: tool is passive (auto-loads; no mouse-only interactions) — links/theme reachable by Tab, verified in the generic pass
+
+### Contrast measurements (computed from getComputedStyle, ancestor-composited backgrounds)
+
+Light palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| .hero .debt | `#2f6f6a` | `#fffdf9` | 5.74 | 3 | pass |
+| .hero .lbl | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .hero .asof | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .sparkmeta .chg | `#c0492d` | `#fffdf9` | 4.88 | 4.5 | pass |
+| .pc .v | `#23282e` | `#fffdf9` | 14.61 | 3 | pass |
+| .pc .k | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| #ratesBox th | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| #ratesBox td.rate | `#23282e` | `#fffdf9` | 14.61 | 4.5 | pass |
+| #ratesStamp | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| section .note | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+
+Dark palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| .hero .debt | `#6fb5ae` | `#1d2026` | 6.91 | 3 | pass |
+| .hero .lbl | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .hero .asof | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .sparkmeta .chg | `#e0715a` | `#1d2026` | 5.19 | 4.5 | pass |
+| .pc .v | `#e7e5e0` | `#1d2026` | 12.96 | 3 | pass |
+| .pc .k | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| #ratesBox th | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| #ratesBox td.rate | `#e7e5e0` | `#1d2026` | 12.96 | 4.5 | pass |
+| #ratesStamp | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| section .note | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+
+### Suite-wide contrast failures — flagged, NOT fixed locally (core palette)
+
+- Light `--muted` `#6b7280` on `--bg` `#f5f3ee` = **4.36:1** (needs 4.5) — affects: `#ratesStamp`, `header .tag`, `section .note`.
+- Same pair passes in dark (6.8:1). A ~one-step darker light `--muted` (e.g. `#61686f`, 4.9:1 on `--bg`) would clear every instance suite-wide; decision belongs to the orchestrator, not this tool.
+
+### Verification
+
+- not modified — no re-run required (Batch B evidence stands). Audit ran fully route-fulfilled: FiscalData WAFs headless UAs (environment failure per the orchestrator ruling), so no live requests were attempted.

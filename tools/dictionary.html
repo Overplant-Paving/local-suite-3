@@ -6,6 +6,16 @@
 <title>Dictionary &amp; Thesaurus · Local Suite</title>
 <link rel="stylesheet" href="../core/suite.css" data-suite-inline>
 <style>
+  /* tool accents (3-layer, same pattern as core) — added by the Phase 4 a11y audit:
+     the hardcoded antonym red #b0522a was 3.49:1 on the dark chip background, and the
+     search-button label needs dark ink on the light dark-mode accent (white was 2.36:1) */
+  :root { --ant: #b0522a; --on-accent: #fff; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ant: #e08b62; --on-accent: #15171b; }
+  }
+  :root[data-theme="light"] { --ant: #b0522a; --on-accent: #fff; }
+  :root[data-theme="dark"] { --ant: #e08b62; --on-accent: #15171b; }
+
   body { padding: 1.4rem 1.25rem 4rem; }
   .wrap { max-width: 780px; margin: 0 auto; }
   .topbar { display: flex; align-items: center; gap: .8rem; }
@@ -14,7 +24,7 @@
   header .tag { color: var(--muted); margin-top: .3rem; max-width: 46rem; font-size: .95rem; }
   .searchrow { display: flex; gap: .5rem; margin: 1.3rem 0 .3rem; }
   .search { flex: 1; font-size: 1.05rem; font-family: inherit; }
-  .gobtn { border: 1px solid var(--accent); background: var(--accent); color: #fff; border-radius: 12px; padding: 0 1.2rem; cursor: pointer; font-size: 1rem; }
+  .gobtn { border: 1px solid var(--accent); background: var(--accent); color: var(--on-accent); border-radius: 12px; padding: 0 1.2rem; cursor: pointer; font-size: 1rem; }
   .gobtn:hover { filter: brightness(1.06); }
   .history { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1.2rem; min-height: 1.2rem; }
   .hchip { border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 999px; padding: .2rem .7rem; font-size: .82rem; cursor: pointer; }
@@ -33,7 +43,7 @@
   .synrow { margin-top: .35rem; font-size: .88rem; }
   .synrow .lbl { color: var(--muted); text-transform: uppercase; letter-spacing: .05em; font-size: .72rem; margin-right: .3rem; }
   .synchip { display: inline-block; border: 1px solid var(--line); background: var(--bg); color: var(--accent); border-radius: 999px; padding: .12rem .6rem; font-size: .82rem; cursor: pointer; margin: .15rem .2rem .15rem 0; }
-  .synchip.ant { color: #b0522a; }
+  .synchip.ant { color: var(--ant); }
   .synchip:hover { border-color: var(--accent); background: var(--accent-soft); }
   .msg { padding: 1.1rem 1.2rem; border-radius: 12px; background: var(--accent-soft); font-size: .95rem; }
   .msg.err { background: color-mix(in srgb, #c0402d 14%, transparent); }

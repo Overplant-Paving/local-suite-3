@@ -9,7 +9,7 @@ live "ibuprofen" recalls: 8 row(s) rendered
 live "ibuprofen"   recall[0] Class II — Children's Ibuprofen Oral Suspension, USP, 100 mg per 5mL, 4 FL OZ (120 mL) bottle, Manufactured for: Taro Pharmaceuticals U.S.A., Inc., Haw
 live "ibuprofen"   recall[1] Class II — Acetaminophen and Ibuprofen (NSAID) Tablets, 250 mg/125 mg a). 144-count packets (NDC# 72657-157-74), b). 216-count packets( 72657-157-76),D
 live "ibuprofen"   recall[2] Class III · least serious — IBU (ibuprofen) 600 mg tablets, 500-count bottle, Rx Only, Distributor: Dr. Reddy's Laboratories Inc., Princeton, NJ 08540, Made in India, N
-cache envelope written: suite.cache.medicine.ibuprofen {t:1784147472743, label:true, recalls:8}
+cache envelope written: suite.cache.medicine.ibuprofen {t:1784183186780, label:true, recalls:8}
 nonsense "zzxqblorptan" title: "No match"
 nonsense body: "No FDA label or recall found for “zzxqblorptan”. Try the other name (brand vs. generic), or check spelling."
 nonsense cached: false (v1 never caches no-match)

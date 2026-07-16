@@ -187,3 +187,76 @@ iNat keys and the new eBird key).
   2 from v1 (localStorage parity), 0 to eBird, 0 to zippopotam.us, plus lazy-loaded photo
   images. No retries, no loops. (The harness was run twice — a first full run, then a re-run
   after adding the `live-photos.png` capture — so double that for the session total.)
+## Phase 4 a11y audit (2026-07-16)
+
+Re-verification of the QUALITY.md §2 checklist, executed against the running tool from
+`file://` with `tests/phase4-a11y-net.mjs` — all network route-fulfilled from shape-matched
+payloads behind a catch-all abort (zero live requests during the audit). Machine log:
+`phase4-a11y.json` in this directory. Verdict: **fixed**.
+
+| checklist item | verdict | evidence |
+|---|---|---|
+| 1. icon-only controls have accessible names | pass | none present |
+| 2. async result regions carry aria-live | pass | `#count` -> `aria-live=polite`; `#ebirdBody .err` -> `aria-live=polite` |
+| 3. keyboard path for every mouse path | pass | primary flow driven keyboard-only (log below); no positive tabindex; no traps |
+| 4. inputs labelled | pass | `input#rgToggle[checkbox]` (wrapped label); `input[text]` (aria-label) |
+| 5. contrast AA, both palettes | fixed | measured table below; remaining failures are suite-palette pairs (flagged, not fixable locally) |
+| 6. visible focus indicator | pass | Tab-focus on `a.`: `solid 2px rgb(47, 111, 106)` vs blurred `none 3px rgb(47, 111, 106)` |
+
+### Keyboard-only drive of the primary feature (page.keyboard only)
+
+- KEYBOARD: ZIP typed + Enter -> location set -> 3 observation cards rendered (route-fulfilled)
+- KEYBOARD: Space on research-grade toggle -> refetch, now 5 cards incl. needs-ID
+- KEYBOARD: eBird token Enter-saved -> aborted request -> designed error card: eBird request failed
+- KEYBOARD: Forget token -> keycard restored; suite.key.ebird=null
+
+### Contrast measurements (computed from getComputedStyle, ancestor-composited backgrounds)
+
+Light palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| #count | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| .obs .cn | `#23282e` | `#fffdf9` | 14.61 | 4.5 | pass |
+| .obs .sn | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .obs .meta | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| #main .stamp | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| .obs .qg:not(.research) | `#ffffff` | `#5e5e59` | 6.54 | 4.5 | pass |
+| .obs .qg.research | `#ffffff` | `#3a7d44` | 5.00 | 4.5 | pass |
+| .locchip | `#23282e` | `#fffdf9` | 14.61 | 4.5 | pass |
+| .err (probe) | `#c0392b` | `#fffdf9` | 5.35 | 4.5 | pass |
+| #ebirdBody .btn.primary | `#ffffff` | `#2f6f6a` | 5.83 | 4.5 | pass |
+| footer | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+
+Dark palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| #count | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| .obs .cn | `#e7e5e0` | `#1d2026` | 12.96 | 4.5 | pass |
+| .obs .sn | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .obs .meta | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| #main .stamp | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| .obs .qg:not(.research) | `#ffffff` | `#0f1114` | 18.93 | 4.5 | pass |
+| .obs .qg.research | `#15171b` | `#7dc487` | 8.65 | 4.5 | pass |
+| .locchip | `#e7e5e0` | `#1d2026` | 12.96 | 4.5 | pass |
+| .err (probe) | `#e0765a` | `#1d2026` | 5.37 | 4.5 | pass |
+| #ebirdBody .btn.primary | `#15171b` | `#6fb5ae` | 7.60 | 4.5 | pass |
+| footer | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+
+### Fixes made (tool-local CSS/vars; no behavior changes beyond the one noted)
+
+- `--on-accent` var (all four theme contexts): `.btn.primary` label and the research-grade badge now use dark ink `#15171b` in the dark palette (white on dark-mode `--accent`/`--research` measured 2.36:1 / 2.08:1; now 7.6:1 / 8.6:1).
+- `--err` var: `.err` was hardcoded `#c0392b` in both palettes (3.00:1 on the dark card); dark now `#e0765a` (5.4:1).
+- eBird results list gets `Suite.liveRegion()` — the birds list arrived silently after fetch (the keycard error region was already live; matches the fedregister/recalls whole-list pattern).
+
+### Suite-wide contrast failures — flagged, NOT fixed locally (core palette)
+
+- Light `--muted` `#6b7280` on `--bg` `#f5f3ee` = **4.36:1** (needs 4.5) — affects: `#count`, `#main .stamp`, `footer`, `header .tag`.
+- Same pair passes in dark (6.8:1). A ~one-step darker light `--muted` (e.g. `#61686f`, 4.9:1 on `--bg`) would clear every instance suite-wide; decision belongs to the orchestrator, not this tool.
+
+### Verification
+
+- `node verify-tool.mjs wildlife` -> exit 0 (live iNaturalist fetch, photos loaded, offline-stale path green).

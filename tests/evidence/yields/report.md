@@ -152,3 +152,68 @@ outputs too). The remaining unwrapped expressions are provably local:
 - The theme-capture screenshots were taken ~0.7 s after load with live fetches in flight on
   both versions; both completed in time here (all four shots show full data). If a rerun
   ever catches one side mid-skeleton, that is capture-timing, not a parity defect.
+
+## Phase 4 a11y audit (2026-07-16)
+
+Re-verification of the QUALITY.md §2 checklist, executed against the running tool from
+`file://` with `tests/phase4-a11y-net.mjs` — all network route-fulfilled from shape-matched
+payloads behind a catch-all abort (zero live requests during the audit). Machine log:
+`phase4-a11y.json` in this directory. Verdict: **fixed**.
+
+| checklist item | verdict | evidence |
+|---|---|---|
+| 1. icon-only controls have accessible names | pass | none present |
+| 2. async result regions carry aria-live | pass | `#savings` -> `aria-live=polite`; `#termStamp` -> `aria-live=polite`; `#cmpStamp` -> `aria-live=polite` |
+| 3. keyboard path for every mouse path | pass | primary flow driven keyboard-only (log below); no positive tabindex; no traps |
+| 4. inputs labelled | pass | no form controls |
+| 5. contrast AA, both palettes | fixed | measured table below; remaining failures are suite-palette pairs (flagged, not fixable locally) |
+| 6. visible focus indicator | pass | Tab-focus on `a.back`: `solid 2px rgb(47, 111, 106)` vs blurred `none 3px rgb(47, 111, 106)` |
+
+### Keyboard-only drive of the primary feature (page.keyboard only)
+
+- KEYBOARD: tool is passive (auto-loads; only link is the yield-curve link-out) — Tab reach verified in the generic pass
+
+### Contrast measurements (computed from getComputedStyle, ancestor-composited backgrounds)
+
+Light palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| .savings .pill .v | `#2f6f6a` | `#fffdf9` | 5.74 | 3 | pass |
+| .savings .pill .k | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .savings .blurb | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| td.grp | `#2f6f6a` | `#e3efed` | 4.95 | 4.5 | pass |
+| #termBox td.num | `#23282e` | `#fffdf9` | 14.61 | 4.5 | pass |
+| .bar span | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .legend | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| .btnlink | `#2f6f6a` | `#e3efed` | 4.95 | 4.5 | pass |
+| #termStamp | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+
+Dark palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| .savings .pill .v | `#6fb5ae` | `#1d2026` | 6.91 | 3 | pass |
+| .savings .pill .k | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .savings .blurb | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| td.grp | `#6fb5ae` | `#1f292b` | 6.30 | 4.5 | pass |
+| #termBox td.num | `#e7e5e0` | `#1d2026` | 12.96 | 4.5 | pass |
+| .bar span | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .legend | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| .btnlink | `#6fb5ae` | `#1f292b` | 6.30 | 4.5 | pass |
+| #termStamp | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+
+### Fixes made (tool-local CSS/vars; no behavior changes beyond the one noted)
+
+- `.bar span` (the %-value labels in the now/3mo/1yr comparison) rendered ON the colored bar fills — muted-on-fill measured 1.21:1 light / 1.12:1 dark, i.e. unreadable. The label now carries a small card-colored chip (`background: var(--card)`, 4px radius): 4.76:1 light / 6.19:1 dark over every series. Verified visually in v2-light.png (labels legible at each bar's origin).
+
+### Suite-wide contrast failures — flagged, NOT fixed locally (core palette)
+
+- Light `--muted` `#6b7280` on `--bg` `#f5f3ee` = **4.36:1** (needs 4.5) — affects: `#termStamp`, `.legend`, `header .tag`.
+- Same pair passes in dark (6.8:1). A ~one-step darker light `--muted` (e.g. `#61686f`, 4.9:1 on `--bg`) would clear every instance suite-wide; decision belongs to the orchestrator, not this tool.
+
+### Verification
+
+- `node verify-tool.mjs yields` -> exit 0 (live FiscalData via the module's de-headless UA rewrite, offline-stale path green).

@@ -1,11 +1,11 @@
 first-run setup card visible: true
 locbar chip: "📍 Los Angeles, CA · change"
 count line: "36 recent sightings"
-stamp: "Updated 3:30 PM"
+stamp: "Updated 1:22 AM"
 observation cards rendered (research-grade): 36
-first card: species "🐦 Red-whiskered Bulbul", sci "Pycnonotus jocosus", badge "research grade", meta "2 h ago 9 mi view →"
-live iNaturalist response in cache envelope suite.cache.wildlife.34.05,-118.24.rg: 36 observations (cached at 2026-07-15T20:30:05.259Z); sample taxon "Red-whiskered Bulbul" quality_grade=research
-photos: 12/36 <img> loaded (naturalWidth>0); hosts: inaturalist-open-data.s3.amazonaws.com, static.inaturalist.org
+first card: species "🐛 Southern Masked Chafer", sci "Cyclocephala lurida", badge "research grade", meta "2 h ago 15 mi view →"
+live iNaturalist response in cache envelope suite.cache.wildlife.34.05,-118.24.rg: 36 observations (cached at 2026-07-16T06:22:14.944Z); sample taxon "Southern Masked Chafer" quality_grade=research
+photos: 1/36 <img> loaded (naturalWidth>0); hosts: inaturalist-open-data.s3.amazonaws.com, static.inaturalist.org
 after research-grade toggle OFF: count "36 recent sightings", cards 36, badge mix includes "needs ID": true
 .all cache key written: true
 eBird section visible: true
@@ -13,7 +13,7 @@ eBird no-key keycard: "eBird needs a free API token. Get one in seconds at ebird
 eBird signup link: https://ebird.org/api/keygen
 token saved -> suite.key.ebird = TEST-TOKEN-NOT-REAL; request (aborted by harness) error card: "eBird request failed"
 forget token -> suite.key.ebird = null, keycard shown again: true
-offline stale stamp: "Offline — cached from 3:30 PM Jul 14"
+offline stale stamp: "Offline — cached from 1:22 AM Jul 15"
 offline: 36 cached cards still render; photo fallback icons (images unreachable): 18
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:

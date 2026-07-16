@@ -1,0 +1,346 @@
+{
+  "tool": "medicine",
+  "when": "2026-07-16T06:21:41.753Z",
+  "log": [
+    "autofocus lands on #q",
+    "KEYBOARD: search + Enter -> label rendered: Tylenol; recalls card: 1 entries",
+    "KEYBOARD: Enter on closed section summary -> open=true",
+    "KEYBOARD: history chip Enter -> re-ran search (cache-served)",
+    "live ok: #results aria-live=polite",
+    "label ok: input#q[search] (aria)",
+    "no positive tabindex anywhere",
+    "focus-visible ok on button. (solid 2px rgb(47, 111, 106) vs blurred none 3px rgb(107, 114, 128))",
+    "console: clean (only expected aborted-request noise: 0 lines)"
+  ],
+  "contrast": {
+    "light": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 16,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": ".disclaimer",
+        "why": "disclaimer body on --warn-soft",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#f4ead6",
+        "ratio": 12.43,
+        "sizePx": 14.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".disclaimer b",
+        "why": "--warn bold lead on --warn-soft",
+        "suite": false,
+        "fg": "#955d12",
+        "bg": "#f4ead6",
+        "ratio": 4.57,
+        "sizePx": 14.4,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".drughead .gen",
+        "why": "muted generic line on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 15.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".pill",
+        "why": "muted pill on --chip",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#efece4",
+        "ratio": 4.1,
+        "sizePx": 12.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": "details.sec > summary",
+        "why": "section summary on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 16,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "details.sec.danger > summary",
+        "why": "--bad danger summary on card",
+        "suite": false,
+        "fg": "#c0492d",
+        "bg": "#fffdf9",
+        "ratio": 4.88,
+        "sizePx": 16,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".recalls .cls",
+        "why": "recall class label (c2 --warn) on card",
+        "suite": false,
+        "fg": "#955d12",
+        "bg": "#fffdf9",
+        "ratio": 5.37,
+        "sizePx": 11.8,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".recalls .rmeta",
+        "why": "muted recall meta on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".history button",
+        "why": "muted history chip on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "button.go",
+        "why": "search button white on accent",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#2f6f6a",
+        "ratio": 5.83,
+        "sizePx": 16,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".stamp",
+        "why": "muted stamp on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      }
+    ],
+    "dark": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 16,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".disclaimer",
+        "why": "disclaimer body on --warn-soft",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#33291a",
+        "ratio": 11.33,
+        "sizePx": 14.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".disclaimer b",
+        "why": "--warn bold lead on --warn-soft",
+        "suite": false,
+        "fg": "#d3a25a",
+        "bg": "#33291a",
+        "ratio": 6.17,
+        "sizePx": 14.4,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".drughead .gen",
+        "why": "muted generic line on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 15.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".pill",
+        "why": "muted pill on --chip",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#262a31",
+        "ratio": 5.47,
+        "sizePx": 12.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "details.sec > summary",
+        "why": "section summary on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 16,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "details.sec.danger > summary",
+        "why": "--bad danger summary on card",
+        "suite": false,
+        "fg": "#e0765a",
+        "bg": "#1d2026",
+        "ratio": 5.37,
+        "sizePx": 16,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".recalls .cls",
+        "why": "recall class label (c2 --warn) on card",
+        "suite": false,
+        "fg": "#d3a25a",
+        "bg": "#1d2026",
+        "ratio": 7.06,
+        "sizePx": 11.8,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".recalls .rmeta",
+        "why": "muted recall meta on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".history button",
+        "why": "muted history chip on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "button.go",
+        "why": "search button white on accent",
+        "suite": false,
+        "fg": "#15171b",
+        "bg": "#6fb5ae",
+        "ratio": 7.6,
+        "sizePx": 16,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".stamp",
+        "why": "muted stamp on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "generic": {
+    "iconOnly": [],
+    "labels": [
+      {
+        "desc": "input#q[search]",
+        "hidden": false,
+        "wrapped": false,
+        "forLabel": false,
+        "aria": true,
+        "ok": true
+      }
+    ],
+    "positiveTabindex": [],
+    "imgs": []
+  },
+  "focus": {
+    "ok": true,
+    "el": "button.",
+    "focused": "solid 2px rgb(47, 111, 106)",
+    "blurred": "none 3px rgb(107, 114, 128)"
+  },
+  "live": [
+    {
+      "sel": "#results",
+      "live": "polite"
+    }
+  ],
+  "failures": [
+    "CONTRAST(light,suite-wide): header .tag 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): .pill 4.1 < 4.5"
+  ],
+  "consoleLight": [],
+  "network": {
+    "fulfilled": 4,
+    "catchAllAborted": [],
+    "deliberateAbort": []
+  }
+}

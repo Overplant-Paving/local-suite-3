@@ -5,21 +5,21 @@ live auction row: 6-Week | 3.706% | inv. rate | 2.84× | Jul 14, 2026
 live auction row: 8-Week | 3.706% | inv. rate | 2.95× | Jul 9, 2026
 live auction row: 13-Week | 3.849% | inv. rate | 2.84× | Jul 13, 2026
 live auction row: 17-Week | 3.845% | inv. rate | 3.35× | Jul 15, 2026
-live term stamp: "Data from Jul 15, 2026, 3:33 PM (just now)"
+live term stamp: "Data from Jul 16, 2026, 1:26 AM (just now)"
 live compare: Bills: 3.71% / 3.70% / 4.31%
 live compare: Notes: 3.28% / 3.21% / 3.05%
 live compare: Bonds: 3.43% / 3.39% / 3.30%
 live compare: TIPS: 1.09% / 1.00% / 0.88%
 live compare: FRN: 3.51% / 3.63% / 4.37%
 live legend: "Now · Jun 2026 Mar 2026 Jun 2025"
-live compare stamp: "Data from Jul 15, 2026, 3:33 PM (just now)"
+live compare stamp: "Data from Jul 16, 2026, 1:26 AM (just now)"
 cache suite.cache.yields.auctions: v is array=true, 23 rows, first={"type":"Bill","term":"4-Week","auction":"2026-07-09","rate":3.691,"rateKind":"inv. rate","btc":2.64}
 cache suite.cache.yields.compare: v.series array=true, 5 series, dates={"dNow":"2026-06-30","d3":"2026-03-31","d1y":"2025-06-30"}
-offline stale term stamp: "Offline — cached from Jul 14, 2026, 3:33 PM (1 day(s) ago)"
-offline stale compare stamp: "Offline — cached from Jul 14, 2026, 3:33 PM (1 day(s) ago)"
+offline stale term stamp: "Offline — cached from Jul 15, 2026, 1:26 AM (1 day(s) ago)"
+offline stale compare stamp: "Offline — cached from Jul 15, 2026, 1:26 AM (1 day(s) ago)"
 offline stale 4-week pill: "3.69%"
 offline stale auction row: 4-Week | 3.691% | inv. rate | 2.64× | Jul 9, 2026
-restored (from fresh cache, no refetch): term stamp="Data from Jul 15, 2026, 3:33 PM (just now)"
+restored (from fresh cache, no refetch): term stamp="Data from Jul 16, 2026, 1:26 AM (just now)"
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
   console.error: Failed to load resource: net::ERR_FAILED

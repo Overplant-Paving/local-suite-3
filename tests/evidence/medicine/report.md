@@ -61,3 +61,75 @@ none — the tool renders all remote FDA prose via `createElement`/`textContent`
 4. **The recalls-only split state ("No label found ... recalls below") and the no-cache error card were not exercised live** — both are v1 code kept verbatim, and finding a deterministic live trigger (a term with recalls but no label; a network failure with no cache on a first-ever search) was not worth hammering the API. Flagging per the honesty rule.
 5. **v1 quirk preserved, not fixed**: if a term has a good cache and a later refetch returns empty (label null + no recalls), v1 overwrites the cache with the empty pair and renders "No label found". v2 keeps this behavior — parity rules say no behavior changes, and with the 24 h TTL the window for it is now smaller than in v1.
 6. Offline reload renders header/history/disclaimer (not blank); results appear once a search is run — identical to v1, which never auto-searches on load. The stale card language is v1's own "(cached)" stamp with data age rather than the weather-style "Offline —" banner; adding a new banner would be a feature addition, which the parity rules forbid.
+## Phase 4 a11y audit (2026-07-16)
+
+Re-verification of the QUALITY.md §2 checklist, executed against the running tool from
+`file://` with `tests/phase4-a11y-net.mjs` — all network route-fulfilled from shape-matched
+payloads behind a catch-all abort (zero live requests during the audit). Machine log:
+`phase4-a11y.json` in this directory. Verdict: **fixed**.
+
+| checklist item | verdict | evidence |
+|---|---|---|
+| 1. icon-only controls have accessible names | pass | none present |
+| 2. async result regions carry aria-live | pass | `#results` -> `aria-live=polite` |
+| 3. keyboard path for every mouse path | pass | primary flow driven keyboard-only (log below); no positive tabindex; no traps |
+| 4. inputs labelled | pass | `input#q[search]` (aria-label) |
+| 5. contrast AA, both palettes | fixed | measured table below; remaining failures are suite-palette pairs (flagged, not fixable locally) |
+| 6. visible focus indicator | pass | Tab-focus on `button.`: `solid 2px rgb(47, 111, 106)` vs blurred `none 3px rgb(107, 114, 128)` |
+
+### Keyboard-only drive of the primary feature (page.keyboard only)
+
+- KEYBOARD: search + Enter -> label rendered: Tylenol; recalls card: 1 entries
+- KEYBOARD: Enter on closed section summary -> open=true
+- KEYBOARD: history chip Enter -> re-ran search (cache-served)
+
+### Contrast measurements (computed from getComputedStyle, ancestor-composited backgrounds)
+
+Light palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| .disclaimer | `#23282e` | `#f4ead6` | 12.43 | 4.5 | pass |
+| .disclaimer b | `#955d12` | `#f4ead6` | 4.57 | 4.5 | pass |
+| .drughead .gen | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .pill | `#6b7280` | `#efece4` | 4.10 | 4.5 | **FAIL (suite palette)** |
+| details.sec > summary | `#23282e` | `#fffdf9` | 14.61 | 4.5 | pass |
+| details.sec.danger > summary | `#c0492d` | `#fffdf9` | 4.88 | 4.5 | pass |
+| .recalls .cls | `#955d12` | `#fffdf9` | 5.37 | 4.5 | pass |
+| .recalls .rmeta | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .history button | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| button.go | `#ffffff` | `#2f6f6a` | 5.83 | 4.5 | pass |
+| .stamp | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+
+Dark palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| .disclaimer | `#e7e5e0` | `#33291a` | 11.33 | 4.5 | pass |
+| .disclaimer b | `#d3a25a` | `#33291a` | 6.17 | 4.5 | pass |
+| .drughead .gen | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .pill | `#9aa0a8` | `#262a31` | 5.47 | 4.5 | pass |
+| details.sec > summary | `#e7e5e0` | `#1d2026` | 12.96 | 4.5 | pass |
+| details.sec.danger > summary | `#e0765a` | `#1d2026` | 5.37 | 4.5 | pass |
+| .recalls .cls | `#d3a25a` | `#1d2026` | 7.06 | 4.5 | pass |
+| .recalls .rmeta | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .history button | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| button.go | `#15171b` | `#6fb5ae` | 7.60 | 4.5 | pass |
+| .stamp | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+
+### Fixes made (tool-local CSS/vars; no behavior changes beyond the one noted)
+
+- Light `--warn` darkened `#b0752a` -> `#955d12`: `.disclaimer b` on the warn-soft wash was 3.24:1 and the Class II `.cls` recall label 3.81:1 on the card; now 4.6:1 / 5.4:1. Dark untouched (6.2:1 / 7.1:1).
+- `--on-accent` var: `button.go` label dark ink in the dark palette (white on dark `--accent` was 2.36:1; now 7.6:1).
+
+### Suite-wide contrast failures — flagged, NOT fixed locally (core palette)
+
+- Light `--muted` `#6b7280` on `--bg` `#f5f3ee` = **4.36:1** (needs 4.5) — affects: `.pill`, `header .tag`.
+- Light `--muted` on `--chip` `#efece4` = **4.10:1** — the same pair as core's `.chip` class.
+- Same pair passes in dark (6.8:1). A ~one-step darker light `--muted` (e.g. `#61686f`, 4.9:1 on `--bg`) would clear every instance suite-wide; decision belongs to the orchestrator, not this tool.
+
+### Verification
+
+- `node verify-tool.mjs medicine` -> exit 0 (live openFDA label + enforcement, history, offline paths green).

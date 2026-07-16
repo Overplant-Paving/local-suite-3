@@ -1,28 +1,64 @@
-== computed-style diff, light (12 differing values) ==
+== computed-style diff, light (36 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --rule: v1=#b0752a | v2=#9a6522 }
+body { --on-accent: v1=undefined | v2=#fff }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --rule: v1=#b0752a | v2=#9a6522 }
+.topbar { --on-accent: v1=undefined | v2=#fff }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --rule: v1=#b0752a | v2=#9a6522 }
+.back { --on-accent: v1=undefined | v2=#fff }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --rule: v1=#b0752a | v2=#9a6522 }
+.theme-btn { --on-accent: v1=undefined | v2=#fff }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --rule: v1=#b0752a | v2=#9a6522 }
+header h1 { --on-accent: v1=undefined | v2=#fff }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --rule: v1=#b0752a | v2=#9a6522 }
+header .tag { --on-accent: v1=undefined | v2=#fff }
 label.field { -webkit-font-smoothing: v1=auto | v2=antialiased }
+label.field { --rule: v1=#b0752a | v2=#9a6522 }
+label.field { --on-accent: v1=undefined | v2=#fff }
 #dateInput { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#dateInput { --rule: v1=#b0752a | v2=#9a6522 }
+#dateInput { --on-accent: v1=undefined | v2=#fff }
 .stats { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.stats { --rule: v1=#b0752a | v2=#9a6522 }
+.stats { --on-accent: v1=undefined | v2=#fff }
 .pills { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.pills { --rule: v1=#b0752a | v2=#9a6522 }
+.pills { --on-accent: v1=undefined | v2=#fff }
 .list { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.list { --rule: v1=#b0752a | v2=#9a6522 }
+.list { --on-accent: v1=undefined | v2=#fff }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --rule: v1=#b0752a | v2=#9a6522 }
+footer { --on-accent: v1=undefined | v2=#fff }
 
-== computed-style diff, dark (12 differing values) ==
+== computed-style diff, dark (24 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --on-accent: v1=undefined | v2=#15171b }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --on-accent: v1=undefined | v2=#15171b }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --on-accent: v1=undefined | v2=#15171b }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --on-accent: v1=undefined | v2=#15171b }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --on-accent: v1=undefined | v2=#15171b }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --on-accent: v1=undefined | v2=#15171b }
 label.field { -webkit-font-smoothing: v1=auto | v2=antialiased }
+label.field { --on-accent: v1=undefined | v2=#15171b }
 #dateInput { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#dateInput { --on-accent: v1=undefined | v2=#15171b }
 .stats { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.stats { --on-accent: v1=undefined | v2=#15171b }
 .pills { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.pills { --on-accent: v1=undefined | v2=#15171b }
 .list { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.list { --on-accent: v1=undefined | v2=#15171b }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --on-accent: v1=undefined | v2=#15171b }
 

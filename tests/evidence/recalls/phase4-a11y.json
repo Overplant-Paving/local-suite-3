@@ -1,0 +1,433 @@
+{
+  "tool": "recalls",
+  "when": "2026-07-16T06:21:26.497Z",
+  "log": [
+    "food recalls rendered for CA (route-fulfilled): 3",
+    "CPSC product recalls rendered: 2",
+    "KEYBOARD: vehicle added via typing + Enter -> 2 NHTSA recalls rendered; remove button aria-label=\"Remove 2020 Honda Accord\"",
+    "KEYBOARD: state select ArrowDown -> CO -> food list reloaded",
+    "KEYBOARD: Enter on remove -> vehicle removed",
+    "live ok: #foodList aria-live=polite",
+    "live ok: #carList aria-live=polite",
+    "live ok: #prodList aria-live=polite",
+    "label ok: select#stateSel[select-one] (label[for])",
+    "label ok: input#carMake[text] (aria)",
+    "label ok: input#carModel[text] (aria)",
+    "label ok: input#carYear[number] (aria)",
+    "no positive tabindex anywhere",
+    "focus-visible ok on button#addCar.primary (solid 2px rgb(47, 111, 106) vs blurred none 3px rgb(255, 255, 255))",
+    "console: clean (only expected aborted-request noise: 0 lines)"
+  ],
+  "contrast": {
+    "light": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 15.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": ".locrow",
+        "why": "muted locrow on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 14.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": ".badge.c1",
+        "why": "Class I badge white on --c1",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#c0392b",
+        "ratio": 5.44,
+        "sizePx": 10.9,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.c2",
+        "why": "Class II badge white on --c2",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#a2661f",
+        "ratio": 4.71,
+        "sizePx": 10.9,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.c3 (probe)",
+        "why": "Class III badge white on --c3",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#6b7280",
+        "ratio": 4.83,
+        "sizePx": 10.9,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.park (probe)",
+        "why": "park badge white on --danger",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#c0392b",
+        "ratio": 5.44,
+        "sizePx": 10.9,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".rec .date",
+        "why": "muted date on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".rec .firm",
+        "why": "accent firm on card",
+        "suite": false,
+        "fg": "#2f6f6a",
+        "bg": "#fffdf9",
+        "ratio": 5.74,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".rec .reason",
+        "why": "muted reason on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 14.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".carhead .cn",
+        "why": "car name on accent-soft header",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#e3efed",
+        "ratio": 12.61,
+        "sizePx": 15.2,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".carhead .cc",
+        "why": "muted count on accent-soft header",
+        "suite": false,
+        "fg": "#5a6068",
+        "bg": "#e3efed",
+        "ratio": 5.39,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "button.x",
+        "why": "muted remove button on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "button.primary",
+        "why": "primary button white on accent",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#2f6f6a",
+        "ratio": 5.83,
+        "sizePx": 14.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".panel .sub",
+        "why": "muted panel sub on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      }
+    ],
+    "dark": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 15.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".locrow",
+        "why": "muted locrow on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 14.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.c1",
+        "why": "Class I badge white on --c1",
+        "suite": false,
+        "fg": "#15171b",
+        "bg": "#e0685a",
+        "ratio": 5.38,
+        "sizePx": 10.9,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.c2",
+        "why": "Class II badge white on --c2",
+        "suite": false,
+        "fg": "#15171b",
+        "bg": "#d09a53",
+        "ratio": 7.2,
+        "sizePx": 10.9,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.c3 (probe)",
+        "why": "Class III badge white on --c3",
+        "suite": false,
+        "fg": "#15171b",
+        "bg": "#9aa0a8",
+        "ratio": 6.81,
+        "sizePx": 10.9,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".badge.park (probe)",
+        "why": "park badge white on --danger",
+        "suite": false,
+        "fg": "#15171b",
+        "bg": "#e0685a",
+        "ratio": 5.38,
+        "sizePx": 10.9,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".rec .date",
+        "why": "muted date on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".rec .firm",
+        "why": "accent firm on card",
+        "suite": false,
+        "fg": "#6fb5ae",
+        "bg": "#1d2026",
+        "ratio": 6.91,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".rec .reason",
+        "why": "muted reason on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 14.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".carhead .cn",
+        "why": "car name on accent-soft header",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1f292b",
+        "ratio": 11.81,
+        "sizePx": 15.2,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".carhead .cc",
+        "why": "muted count on accent-soft header",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1f292b",
+        "ratio": 5.64,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "button.x",
+        "why": "muted remove button on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "button.primary",
+        "why": "primary button white on accent",
+        "suite": false,
+        "fg": "#15171b",
+        "bg": "#6fb5ae",
+        "ratio": 7.6,
+        "sizePx": 14.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".panel .sub",
+        "why": "muted panel sub on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "generic": {
+    "iconOnly": [],
+    "labels": [
+      {
+        "desc": "select#stateSel[select-one]",
+        "hidden": false,
+        "wrapped": false,
+        "forLabel": true,
+        "aria": false,
+        "ok": true
+      },
+      {
+        "desc": "input#carMake[text]",
+        "hidden": false,
+        "wrapped": false,
+        "forLabel": false,
+        "aria": true,
+        "ok": true
+      },
+      {
+        "desc": "input#carModel[text]",
+        "hidden": false,
+        "wrapped": false,
+        "forLabel": false,
+        "aria": true,
+        "ok": true
+      },
+      {
+        "desc": "input#carYear[number]",
+        "hidden": false,
+        "wrapped": false,
+        "forLabel": false,
+        "aria": true,
+        "ok": true
+      }
+    ],
+    "positiveTabindex": [],
+    "imgs": []
+  },
+  "focus": {
+    "ok": true,
+    "el": "button#addCar.primary",
+    "focused": "solid 2px rgb(47, 111, 106)",
+    "blurred": "none 3px rgb(255, 255, 255)"
+  },
+  "live": [
+    {
+      "sel": "#foodList",
+      "live": "polite"
+    },
+    {
+      "sel": "#carList",
+      "live": "polite"
+    },
+    {
+      "sel": "#prodList",
+      "live": "polite"
+    }
+  ],
+  "failures": [
+    "CONTRAST(light,suite-wide): header .tag 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): .locrow 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): .panel .sub 4.36 < 4.5"
+  ],
+  "consoleLight": [],
+  "network": {
+    "fulfilled": 10,
+    "catchAllAborted": [],
+    "deliberateAbort": []
+  }
+}

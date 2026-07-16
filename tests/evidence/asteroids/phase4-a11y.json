@@ -1,0 +1,363 @@
+{
+  "tool": "asteroids",
+  "when": "2026-07-16T06:21:22.177Z",
+  "log": [
+    "initial 7-day load rendered from the ARCHIVED NeoWs payload (no live NASA request): stamp \"Loaded just now · 40 approaches in the next 7 days.\"",
+    "KEYBOARD: key pasted + Enter -> saved + reload (route-fulfilled); summary: Using your saved NASA key (1,000/hour). ✓ Change or remove →",
+    "KEYBOARD: Use demo -> key cleared; suite.key.nasa=null",
+    "KEYBOARD: window select ArrowDown -> change fired -> view reloaded; rows=40",
+    "KEYBOARD: refresh via Enter -> forced reload (route-fulfilled)",
+    "live ok: #view aria-live=polite",
+    "live ok: #stamp aria-live=polite",
+    "label ok: input#keyInput[text] (aria)",
+    "label ok: select#window[select-one] (wrapped)",
+    "no positive tabindex anywhere",
+    "focus-visible ok on a.back (solid 2px rgb(47, 111, 106) vs blurred none 3px rgb(107, 114, 128))",
+    "console: clean (only expected aborted-request noise: 0 lines)"
+  ],
+  "contrast": {
+    "light": [
+      {
+        "name": ".sub",
+        "why": "muted sub on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 14.7,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": ".hero .label",
+        "why": "--near label on card",
+        "suite": false,
+        "fg": "#a04518",
+        "bg": "#fffdf9",
+        "ratio": 6.15,
+        "sizePx": 12.5,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".hero .when",
+        "why": "muted when on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 14.7,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".hero .big .num",
+        "why": "hero numbers on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 30.4,
+        "weight": 400,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": ".hero .big .lbl",
+        "why": "muted hero labels on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 12.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".pha",
+        "why": "--near PHA badge on --near-soft",
+        "suite": false,
+        "fg": "#a04518",
+        "bg": "#e8d9ce",
+        "ratio": 4.54,
+        "sizePx": 10.9,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#view th",
+        "why": "muted table header on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 12.5,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": "tr.close td (forced class)",
+        "why": "ink on --near-soft highlight row",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#e8d9ce",
+        "ratio": 10.78,
+        "sizePx": 14.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".keycard summary",
+        "why": "accent summary on card",
+        "suite": false,
+        "fg": "#2f6f6a",
+        "bg": "#fffdf9",
+        "ratio": 5.74,
+        "sizePx": 14.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".keycard button#keySave",
+        "why": "key button label on accent",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#2f6f6a",
+        "ratio": 5.83,
+        "sizePx": 14.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#stamp",
+        "why": "muted stamp on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": ".foot-note",
+        "why": "muted foot-note on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      }
+    ],
+    "dark": [
+      {
+        "name": ".sub",
+        "why": "muted sub on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 14.7,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".hero .label",
+        "why": "--near label on card",
+        "suite": false,
+        "fg": "#e8895c",
+        "bg": "#1d2026",
+        "ratio": 6.34,
+        "sizePx": 12.5,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".hero .when",
+        "why": "muted when on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 14.7,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".hero .big .num",
+        "why": "hero numbers on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 30.4,
+        "weight": 400,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": ".hero .big .lbl",
+        "why": "muted hero labels on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 12.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".pha",
+        "why": "--near PHA badge on --near-soft",
+        "suite": false,
+        "fg": "#e8895c",
+        "bg": "#3b2c27",
+        "ratio": 5.21,
+        "sizePx": 10.9,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#view th",
+        "why": "muted table header on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 12.5,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "tr.close td (forced class)",
+        "why": "ink on --near-soft highlight row",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#3b2c27",
+        "ratio": 10.64,
+        "sizePx": 14.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".keycard summary",
+        "why": "accent summary on card",
+        "suite": false,
+        "fg": "#6fb5ae",
+        "bg": "#1d2026",
+        "ratio": 6.91,
+        "sizePx": 14.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".keycard button#keySave",
+        "why": "key button label on accent",
+        "suite": false,
+        "fg": "#15171b",
+        "bg": "#6fb5ae",
+        "ratio": 7.6,
+        "sizePx": 14.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#stamp",
+        "why": "muted stamp on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".foot-note",
+        "why": "muted foot-note on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "generic": {
+    "iconOnly": [],
+    "labels": [
+      {
+        "desc": "input#keyInput[text]",
+        "hidden": false,
+        "wrapped": false,
+        "forLabel": false,
+        "aria": true,
+        "ok": true
+      },
+      {
+        "desc": "select#window[select-one]",
+        "hidden": false,
+        "wrapped": true,
+        "forLabel": false,
+        "aria": false,
+        "ok": true
+      }
+    ],
+    "positiveTabindex": [],
+    "imgs": []
+  },
+  "focus": {
+    "ok": true,
+    "el": "a.back",
+    "focused": "solid 2px rgb(47, 111, 106)",
+    "blurred": "none 3px rgb(107, 114, 128)"
+  },
+  "live": [
+    {
+      "sel": "#view",
+      "live": "polite"
+    },
+    {
+      "sel": "#stamp",
+      "live": "polite"
+    }
+  ],
+  "failures": [
+    "CONTRAST(light,suite-wide): .sub 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): #view th 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): #stamp 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): .foot-note 4.36 < 4.5"
+  ],
+  "consoleLight": [],
+  "network": {
+    "fulfilled": 10,
+    "catchAllAborted": [],
+    "deliberateAbort": []
+  }
+}

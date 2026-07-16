@@ -92,3 +92,71 @@ The only `innerHTML` writes are static literals (skeletons, `= ""`, the legend s
   test). Harness filters `net::ERR`; `verify-tool.mjs` exited 0. No real console errors.
 - **CA cache reuse across phases** is intentional cache-key-per-state behavior; the stale phase ages
   that cache past TTL to force the offline render. All phases exercised end-to-end, no shortcuts.
+
+## Phase 4 a11y audit (2026-07-16)
+
+Re-verification of the QUALITY.md §2 checklist, executed against the running tool from
+`file://` with `tests/phase4-a11y-net.mjs` — all network route-fulfilled from shape-matched
+payloads behind a catch-all abort (zero live requests during the audit). Machine log:
+`phase4-a11y.json` in this directory. Verdict: **fixed**.
+
+| checklist item | verdict | evidence |
+|---|---|---|
+| 1. icon-only controls have accessible names | pass | none present |
+| 2. async result regions carry aria-live | pass | `#wwBody` -> `aria-live=polite`; `#admBody` -> `aria-live=polite` |
+| 3. keyboard path for every mouse path | pass | primary flow driven keyboard-only (log below); no positive tabindex; no traps |
+| 4. inputs labelled | pass | `select#stateSel[select-one]` (label[for]) |
+| 5. contrast AA, both palettes | fixed | measured table below; remaining failures are suite-palette pairs (flagged, not fixable locally) |
+| 6. visible focus indicator | pass | Tab-focus on `a.`: `solid 2px rgb(47, 111, 106)` vs blurred `none 3px rgb(47, 111, 106)` |
+
+### Keyboard-only drive of the primary feature (page.keyboard only)
+
+- KEYBOARD: state select ArrowDown -> CO -> both panels reloaded (route-fulfilled)
+
+### Contrast measurements (computed from getComputedStyle, ancestor-composited backgrounds)
+
+Light palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#6b7280` | `#f5f3ee` | 4.36 | 4.5 | **FAIL (suite palette)** |
+| .bignum | `#b35c15` | `#fffdf9` | 4.64 | 3 | pass |
+| #wwBody .trend | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .adm:nth-child(1) .lbl | `#7a48ea` | `#fffdf9` | 5.24 | 4.5 | pass |
+| .adm:nth-child(2) .lbl | `#b35c15` | `#fffdf9` | 4.64 | 4.5 | pass |
+| .adm:nth-child(3) .lbl | `#3a7d97` | `#fffdf9` | 4.53 | 4.5 | pass |
+| .adm .val | `#23282e` | `#fffdf9` | 14.61 | 3 | pass |
+| .adm .meta | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .note | `#5a6068` | `#e3efed` | 5.39 | 4.5 | pass |
+| #wwBody .stamp | `#6b7280` | `#fffdf9` | 4.76 | 4.5 | pass |
+| .legend | `#23282e` | `#fffdf9` | 14.61 | 4.5 | pass |
+
+Dark palette:
+
+| target | fg | bg | ratio | needs | verdict |
+|---|---|---|---|---|---|
+| header .tag | `#9aa0a8` | `#15171b` | 6.81 | 4.5 | pass |
+| .bignum | `#e0995a` | `#1d2026` | 6.90 | 3 | pass |
+| #wwBody .trend | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .adm:nth-child(1) .lbl | `#a586f2` | `#1d2026` | 5.67 | 4.5 | pass |
+| .adm:nth-child(2) .lbl | `#e0995a` | `#1d2026` | 6.90 | 4.5 | pass |
+| .adm:nth-child(3) .lbl | `#6aa9bf` | `#1d2026` | 6.25 | 4.5 | pass |
+| .adm .val | `#e7e5e0` | `#1d2026` | 12.96 | 3 | pass |
+| .adm .meta | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .note | `#9aa0a8` | `#1b2425` | 5.99 | 4.5 | pass |
+| #wwBody .stamp | `#9aa0a8` | `#1d2026` | 6.19 | 4.5 | pass |
+| .legend | `#e7e5e0` | `#1d2026` | 12.96 | 4.5 | pass |
+
+### Fixes made (tool-local CSS/vars; no behavior changes beyond the one noted)
+
+- Light `--covid` `#8a5cf6` -> `#7a48ea` and `--flu` `#d9772e` -> `#b35c15`: the small `.adm .lbl` tile labels measured 4.18:1 / 3.12:1 on the card; now 5.2:1 / 4.7:1 (chart lines shift a shade darker with them; `--rsv` already passed at 4.53:1). Dark palette untouched.
+- `--note-ink` var: the surveillance `.note` on the accent-soft wash was muted-on-soft 4.11:1 in light; now `#5a6068` (5.4:1); dark keeps the muted gray (5.99:1, passed).
+
+### Suite-wide contrast failures — flagged, NOT fixed locally (core palette)
+
+- Light `--muted` `#6b7280` on `--bg` `#f5f3ee` = **4.36:1** (needs 4.5) — affects: `header .tag`.
+- Same pair passes in dark (6.8:1). A ~one-step darker light `--muted` (e.g. `#61686f`, 4.9:1 on `--bg`) would clear every instance suite-wide; decision belongs to the orchestrator, not this tool.
+
+### Verification
+
+- `node verify-tool.mjs illness` -> exit 0 (live CDC Socrata fetches, state switch, offline-stale path green).

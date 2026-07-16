@@ -1,38 +1,95 @@
-== computed-style diff, light (17 differing values) ==
+== computed-style diff, light (41 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --on-accent: v1=undefined | v2=#fff }
+body { --ant: v1=undefined | v2=#b0522a }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --on-accent: v1=undefined | v2=#fff }
+.topbar { --ant: v1=undefined | v2=#b0522a }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --on-accent: v1=undefined | v2=#fff }
+.back { --ant: v1=undefined | v2=#b0522a }
 .theme-btn { float: v1=none | v2=right }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --on-accent: v1=undefined | v2=#fff }
+.theme-btn { --ant: v1=undefined | v2=#b0522a }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --on-accent: v1=undefined | v2=#fff }
+header h1 { --ant: v1=undefined | v2=#b0522a }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --on-accent: v1=undefined | v2=#fff }
+header .tag { --ant: v1=undefined | v2=#b0522a }
 .searchrow { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.searchrow { --on-accent: v1=undefined | v2=#fff }
+.searchrow { --ant: v1=undefined | v2=#b0522a }
 .search { outline-color: v1=rgb(35, 40, 46) | v2=rgb(47, 111, 106) }
 .search { outline-offset: v1=0px | v2=2px }
 .search { outline-style: v1=none | v2=solid }
 .search { outline-width: v1=3px | v2=2px }
 .search { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.search { --on-accent: v1=undefined | v2=#fff }
+.search { --ant: v1=undefined | v2=#b0522a }
 .gobtn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.gobtn { --on-accent: v1=undefined | v2=#fff }
+.gobtn { --ant: v1=undefined | v2=#b0522a }
 #history { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#history { --on-accent: v1=undefined | v2=#fff }
+#history { --ant: v1=undefined | v2=#b0522a }
 #result { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#result { --on-accent: v1=undefined | v2=#fff }
+#result { --ant: v1=undefined | v2=#b0522a }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --on-accent: v1=undefined | v2=#fff }
+footer { --ant: v1=undefined | v2=#b0522a }
 
-== computed-style diff, dark (17 differing values) ==
+== computed-style diff, dark (50 differing values) ==
 body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+body { --on-accent: v1=undefined | v2=#15171b }
+body { --ant: v1=undefined | v2=#e08b62 }
 .topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { --on-accent: v1=undefined | v2=#15171b }
+.topbar { --ant: v1=undefined | v2=#e08b62 }
 .back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { --on-accent: v1=undefined | v2=#15171b }
+.back { --ant: v1=undefined | v2=#e08b62 }
 .theme-btn { float: v1=none | v2=right }
 .theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { --on-accent: v1=undefined | v2=#15171b }
+.theme-btn { --ant: v1=undefined | v2=#e08b62 }
 header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { --on-accent: v1=undefined | v2=#15171b }
+header h1 { --ant: v1=undefined | v2=#e08b62 }
 header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { --on-accent: v1=undefined | v2=#15171b }
+header .tag { --ant: v1=undefined | v2=#e08b62 }
 .searchrow { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.searchrow { --on-accent: v1=undefined | v2=#15171b }
+.searchrow { --ant: v1=undefined | v2=#e08b62 }
 .search { outline-color: v1=rgb(231, 229, 224) | v2=rgb(111, 181, 174) }
 .search { outline-offset: v1=0px | v2=2px }
 .search { outline-style: v1=none | v2=solid }
 .search { outline-width: v1=3px | v2=2px }
 .search { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.search { --on-accent: v1=undefined | v2=#15171b }
+.search { --ant: v1=undefined | v2=#e08b62 }
+.gobtn { caret-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.gobtn { color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.gobtn { column-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.gobtn { outline-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.gobtn { row-rule-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.gobtn { text-decoration-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.gobtn { text-emphasis-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
 .gobtn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.gobtn { -webkit-text-fill-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.gobtn { -webkit-text-stroke-color: v1=rgb(255, 255, 255) | v2=rgb(21, 23, 27) }
+.gobtn { --on-accent: v1=undefined | v2=#15171b }
+.gobtn { --ant: v1=undefined | v2=#e08b62 }
 #history { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#history { --on-accent: v1=undefined | v2=#15171b }
+#history { --ant: v1=undefined | v2=#e08b62 }
 #result { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#result { --on-accent: v1=undefined | v2=#15171b }
+#result { --ant: v1=undefined | v2=#e08b62 }
 footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { --on-accent: v1=undefined | v2=#15171b }
+footer { --ant: v1=undefined | v2=#e08b62 }
 

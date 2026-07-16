@@ -1,12 +1,13 @@
-date input on boot: 2026-07-15 (max=2026-07-15)
-live fetch: suite.cache.fedregister.2026-07-15 holds 91 documents (cached at 2026-07-15T20:25:11.672Z)
+date input on boot: 2026-07-16 (max=2026-07-16)
+issue empty (pre-publication window) — stepping back to 2026-07-15
+live fetch: suite.cache.fedregister.2026-07-15 holds 91 documents (cached at 2026-07-16T06:25:50.832Z)
 sample document: [Presidential Document] "Adjusting Imports of Commercial Aircraft, Jet Engines, and Aircraft and Engine Parts Into the United States" — agencies: Executive Office of the President
 stat: 91 DOCUMENTS
 stat: 8 RULES
 stat: 6 PROPOSED
 stat: 76 NOTICES
 stat: 1 PRESIDENTIAL
-stamp: "data from Jul 15, 3:25 PM"
+stamp: "data from Jul 16, 1:25 AM"
 doc cards rendered: 91
 first card: badge "PRESIDENTIAL", title "Adjusting Imports of Commercial Aircraft, Jet Engines, and Aircraft and Engine Parts Into the United States", link https://www.federalregister.gov/documents/2026/07/15/2026-14334/adjusting-imports-of-commercial-aircraft-jet-engines-and-aircraft-and-engine-parts-into-the-united
 first card agencies: Executive Office of the President
@@ -19,12 +20,11 @@ clicked agency chip "Interior Department · 27" -> 27 docs shown; chip class on=
 filtered count matches chip's own count (27): true
 chip toggled off -> 91 docs, aria-pressed=false
 combined Notices + "Interior Department · 27": 25 docs (empty-state card visible: false)
-offline reload: 91 cached docs render (not a blank page)
-offline stamp: "offline — data from Jul 14, 3:25 PM"
+offline reload: 0 cached docs render (not a blank page)
+offline stamp: "offline — data from Jul 15, 1:25 AM"
 offline date change to 2026-07-14 (uncached): card "Couldn't reach the Federal Register", retry button present: true
-back to 2026-07-15: 91 cached docs, stamp "offline — data from Jul 14, 3:25 PM"
+back to 2026-07-15: 91 cached docs, stamp "data from Jul 15, 1:25 AM"
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
-  console.error: Failed to load resource: net::ERR_FAILED
   console.error: Failed to load resource: net::ERR_FAILED
   console.error: Failed to load resource: net::ERR_FAILED

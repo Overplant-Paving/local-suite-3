@@ -39,11 +39,42 @@ const isoOf = d =>
 const statTexts = page => page.locator("#stats .stat").allInnerTexts()
   .then(a => a.map(s => s.replace(/\s+/g, " ").trim()));
 
+/* Phase 4 robustness fix: the Federal Register publishes its daily issue ~6 AM ET, so a
+   harness run in the pre-publication window finds TODAY's issue legitimately empty (the
+   API answers count:0 — verified live) and every doc-dependent step below would hang.
+   When that happens, step back to the most recent populated issue and run the full
+   interaction against that date instead. Applied identically to v1 (v1Interact below)
+   so the cache key sets still compare equal. */
+async function settleOnPopulatedDate(page, log) {
+  await page.waitForFunction(() => {
+    const l = document.getElementById("list");
+    if (l.querySelector(".doc")) return true;
+    const h = l.querySelector(".card-msg h3");
+    return !!h && h.textContent !== "Loading…";
+  }, null, { timeout: 30000 });
+  let date = isoOf(new Date());
+  for (let back = 1; back <= 4 && !(await page.locator("#list .doc").count()); back++) {
+    date = isoOf(new Date(Date.now() - back * 86400000));
+    log(`issue empty (pre-publication window) — stepping back to ${date}`);
+    await page.evaluate(v => {
+      const el = document.getElementById("dateInput");
+      el.value = v;
+      el.dispatchEvent(new Event("change", { bubbles: true }));
+    }, date);
+    await page.waitForFunction(() => {
+      const l = document.getElementById("list");
+      if (l.querySelector(".doc")) return true;
+      const h = l.querySelector(".card-msg h3");
+      return !!h && h.textContent !== "Loading…" && !h.textContent.startsWith("Loading");
+    }, null, { timeout: 30000 });
+  }
+  return date;
+}
+
 export async function interact({ page, log, evidenceDir }) {
-  /* ---- live fetch: today's documents ---- */
-  await waitSettled(page);
-  const today = isoOf(new Date());
+  /* ---- live fetch: today's documents (or the latest populated issue — see above) ---- */
   log(`date input on boot: ${await page.inputValue("#dateInput")} (max=${await page.getAttribute("#dateInput", "max")})`);
+  const today = await settleOnPopulatedDate(page, log);
 
   const env = await page.evaluate(t => {
     const raw = localStorage.getItem("suite.cache.fedregister." + t);
@@ -124,8 +155,9 @@ export async function interact({ page, log, evidenceDir }) {
   log(`offline stamp: "${(await page.locator("#stamp").innerText()).trim()}"`);
   await page.screenshot({ path: evidenceDir + "/offline-stale.png", fullPage: true });
 
-  /* date change to an uncached date while offline -> error card with Retry (v1 UX) */
-  const prev = isoOf(new Date(Date.now() - 86400000));
+  /* date change to an uncached date while offline -> error card with Retry (v1 UX).
+     One day before the WORKING date — never fetched, whichever date we settled on. */
+  const prev = isoOf(new Date(new Date(today + "T12:00:00").getTime() - 86400000));
   await setDate(page, prev);
   await waitSettled(page);
   log(`offline date change to ${prev} (uncached): card "${(await page.locator("#list .card-msg h3").innerText()).trim()}", ` +
@@ -143,10 +175,5 @@ export async function interact({ page, log, evidenceDir }) {
    its live load settle makes the localStorage key sets compare equal. The offline date
    change in v2 wrote no key (fetch failed, nothing cached), so no further action needed. */
 export async function v1Interact({ page }) {
-  await page.waitForFunction(() => {
-    const l = document.getElementById("list");
-    if (l.querySelector(".doc")) return true;
-    const h = l.querySelector(".card-msg h3");
-    return !!h && h.textContent !== "Loading…";
-  }, null, { timeout: 30000 });
+  await settleOnPopulatedDate(page, () => {}); // same pre-publication fallback as v2
 }

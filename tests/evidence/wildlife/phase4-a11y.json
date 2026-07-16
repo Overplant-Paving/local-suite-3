@@ -1,0 +1,385 @@
+{
+  "tool": "wildlife",
+  "when": "2026-07-16T06:21:17.938Z",
+  "log": [
+    "first-run card shown (no location)",
+    "KEYBOARD: ZIP typed + Enter -> location set -> 3 observation cards rendered (route-fulfilled)",
+    "count line: 3 recent sightings",
+    "KEYBOARD: Space on research-grade toggle -> refetch, now 5 cards incl. needs-ID",
+    "KEYBOARD: eBird token Enter-saved -> aborted request -> designed error card: eBird request failed",
+    "KEYBOARD: Forget token -> keycard restored; suite.key.ebird=null",
+    "live ok: #count aria-live=polite",
+    "live ok: #ebirdBody .err aria-live=polite",
+    "label ok: input#rgToggle[checkbox] (wrapped)",
+    "label ok: input[text] (aria)",
+    "no positive tabindex anywhere",
+    "focus-visible ok on a. (solid 2px rgb(47, 111, 106) vs blurred none 3px rgb(47, 111, 106))",
+    "console: clean (only expected aborted-request noise: 1 lines)"
+  ],
+  "contrast": {
+    "light": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 15.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": "#count",
+        "why": "muted count on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 13.6,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": ".obs .cn",
+        "why": "card title on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 16,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".obs .sn",
+        "why": "muted sci name on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".obs .meta",
+        "why": "muted meta on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#main .stamp",
+        "why": "muted stamp on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": ".obs .qg:not(.research)",
+        "why": "badge white on scrim (no-photo card)",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#5e5e59",
+        "ratio": 6.54,
+        "sizePx": 10.9,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".obs .qg.research",
+        "why": "research badge white on --research",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#3a7d44",
+        "ratio": 5,
+        "sizePx": 10.9,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".locchip",
+        "why": "chip ink on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".err (probe)",
+        "why": "tool error color on card",
+        "suite": false,
+        "fg": "#c0392b",
+        "bg": "#fffdf9",
+        "ratio": 5.35,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#ebirdBody .btn.primary",
+        "why": "primary button label on accent",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#2f6f6a",
+        "ratio": 5.83,
+        "sizePx": 14.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "footer",
+        "why": "muted footer on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      }
+    ],
+    "dark": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 15.2,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#count",
+        "why": "muted count on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 13.6,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".obs .cn",
+        "why": "card title on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 16,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".obs .sn",
+        "why": "muted sci name on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".obs .meta",
+        "why": "muted meta on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#main .stamp",
+        "why": "muted stamp on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 12.8,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".obs .qg:not(.research)",
+        "why": "badge white on scrim (no-photo card)",
+        "suite": false,
+        "fg": "#ffffff",
+        "bg": "#0f1114",
+        "ratio": 18.93,
+        "sizePx": 10.9,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".obs .qg.research",
+        "why": "research badge white on --research",
+        "suite": false,
+        "fg": "#15171b",
+        "bg": "#7dc487",
+        "ratio": 8.65,
+        "sizePx": 10.9,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".locchip",
+        "why": "chip ink on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".err (probe)",
+        "why": "tool error color on card",
+        "suite": false,
+        "fg": "#e0765a",
+        "bg": "#1d2026",
+        "ratio": 5.37,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#ebirdBody .btn.primary",
+        "why": "primary button label on accent",
+        "suite": false,
+        "fg": "#15171b",
+        "bg": "#6fb5ae",
+        "ratio": 7.6,
+        "sizePx": 14.4,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "footer",
+        "why": "muted footer on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "generic": {
+    "iconOnly": [],
+    "labels": [
+      {
+        "desc": "input#rgToggle[checkbox]",
+        "hidden": false,
+        "wrapped": true,
+        "forLabel": false,
+        "aria": false,
+        "ok": true
+      },
+      {
+        "desc": "input[text]",
+        "hidden": false,
+        "wrapped": false,
+        "forLabel": false,
+        "aria": true,
+        "ok": true
+      }
+    ],
+    "positiveTabindex": [],
+    "imgs": [
+      {
+        "src": "https://static.inaturalist.org/photos/1/medium.jpg",
+        "alt": "Western Fence Lizard",
+        "ok": true
+      },
+      {
+        "src": "https://static.inaturalist.org/photos/2/medium.jpg",
+        "alt": "Anna's Hummingbird",
+        "ok": true
+      },
+      {
+        "src": "https://static.inaturalist.org/photos/5/medium.jpg",
+        "alt": "Mule Deer",
+        "ok": true
+      }
+    ]
+  },
+  "focus": {
+    "ok": true,
+    "el": "a.",
+    "focused": "solid 2px rgb(47, 111, 106)",
+    "blurred": "none 3px rgb(47, 111, 106)"
+  },
+  "live": [
+    {
+      "sel": "#count",
+      "live": "polite"
+    },
+    {
+      "sel": "#ebirdBody .err",
+      "live": "polite"
+    }
+  ],
+  "failures": [
+    "CONTRAST(light,suite-wide): header .tag 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): #count 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): #main .stamp 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): footer 4.36 < 4.5"
+  ],
+  "consoleLight": [
+    "Failed to load resource: net::ERR_FAILED"
+  ],
+  "network": {
+    "fulfilled": 14,
+    "catchAllAborted": [],
+    "deliberateAbort": [
+      "https://api.ebird.org/v2/data/obs/geo/recent?lat=34.090&lng=-118.406&dist=25&maxResults=25",
+      "https://api.ebird.org/v2/data/obs/geo/recent?lat=34.090&lng=-118.406&dist=25&maxResults=25"
+    ]
+  }
+}

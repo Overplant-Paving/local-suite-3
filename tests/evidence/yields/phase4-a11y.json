@@ -1,0 +1,297 @@
+{
+  "tool": "yields",
+  "when": "2026-07-16T06:21:37.927Z",
+  "log": [
+    "savings pills: 4.91% / 4.21%; term rows=9; compare bars=5",
+    "KEYBOARD: tool is passive (auto-loads; only link is the yield-curve link-out) — Tab reach verified in the generic pass",
+    "live ok: #savings aria-live=polite",
+    "live ok: #termStamp aria-live=polite",
+    "live ok: #cmpStamp aria-live=polite",
+    "no positive tabindex anywhere",
+    "focus-visible ok on a.back (solid 2px rgb(47, 111, 106) vs blurred none 3px rgb(47, 111, 106))",
+    "console: clean (only expected aborted-request noise: 0 lines)"
+  ],
+  "contrast": {
+    "light": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 16,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": ".savings .pill .v",
+        "why": "accent pill value on card",
+        "suite": false,
+        "fg": "#2f6f6a",
+        "bg": "#fffdf9",
+        "ratio": 5.74,
+        "sizePx": 32,
+        "weight": 700,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": ".savings .pill .k",
+        "why": "muted pill label on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".savings .blurb",
+        "why": "muted blurb on card",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 14.7,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "td.grp",
+        "why": "accent-on-soft group header cell",
+        "suite": false,
+        "fg": "#2f6f6a",
+        "bg": "#e3efed",
+        "ratio": 4.95,
+        "sizePx": 12.5,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#termBox td.num",
+        "why": "rate cell on card",
+        "suite": false,
+        "fg": "#23282e",
+        "bg": "#fffdf9",
+        "ratio": 14.61,
+        "sizePx": 14.7,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".bar span",
+        "why": "bar value label over the colored bar fill",
+        "suite": false,
+        "fg": "#6b7280",
+        "bg": "#fffdf9",
+        "ratio": 4.76,
+        "sizePx": 11.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".legend",
+        "why": "muted legend on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      },
+      {
+        "name": ".btnlink",
+        "why": "accent-on-soft link button",
+        "suite": false,
+        "fg": "#2f6f6a",
+        "bg": "#e3efed",
+        "ratio": 4.95,
+        "sizePx": 14.7,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#termStamp",
+        "why": "muted stamp on page bg",
+        "suite": true,
+        "fg": "#6b7280",
+        "bg": "#f5f3ee",
+        "ratio": 4.36,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": false
+      }
+    ],
+    "dark": [
+      {
+        "name": "header .tag",
+        "why": "muted tag on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 16,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".savings .pill .v",
+        "why": "accent pill value on card",
+        "suite": false,
+        "fg": "#6fb5ae",
+        "bg": "#1d2026",
+        "ratio": 6.91,
+        "sizePx": 32,
+        "weight": 700,
+        "threshold": 3,
+        "pass": true
+      },
+      {
+        "name": ".savings .pill .k",
+        "why": "muted pill label on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".savings .blurb",
+        "why": "muted blurb on card",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 14.7,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "td.grp",
+        "why": "accent-on-soft group header cell",
+        "suite": false,
+        "fg": "#6fb5ae",
+        "bg": "#1f292b",
+        "ratio": 6.3,
+        "sizePx": 12.5,
+        "weight": 700,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#termBox td.num",
+        "why": "rate cell on card",
+        "suite": false,
+        "fg": "#e7e5e0",
+        "bg": "#1d2026",
+        "ratio": 12.96,
+        "sizePx": 14.7,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".bar span",
+        "why": "bar value label over the colored bar fill",
+        "suite": false,
+        "fg": "#9aa0a8",
+        "bg": "#1d2026",
+        "ratio": 6.19,
+        "sizePx": 11.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".legend",
+        "why": "muted legend on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 13.1,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": ".btnlink",
+        "why": "accent-on-soft link button",
+        "suite": false,
+        "fg": "#6fb5ae",
+        "bg": "#1f292b",
+        "ratio": 6.3,
+        "sizePx": 14.7,
+        "weight": 600,
+        "threshold": 4.5,
+        "pass": true
+      },
+      {
+        "name": "#termStamp",
+        "why": "muted stamp on page bg",
+        "suite": true,
+        "fg": "#9aa0a8",
+        "bg": "#15171b",
+        "ratio": 6.81,
+        "sizePx": 12.5,
+        "weight": 400,
+        "threshold": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "generic": {
+    "iconOnly": [],
+    "labels": [],
+    "positiveTabindex": [],
+    "imgs": []
+  },
+  "focus": {
+    "ok": true,
+    "el": "a.back",
+    "focused": "solid 2px rgb(47, 111, 106)",
+    "blurred": "none 3px rgb(47, 111, 106)"
+  },
+  "live": [
+    {
+      "sel": "#savings",
+      "live": "polite"
+    },
+    {
+      "sel": "#termStamp",
+      "live": "polite"
+    },
+    {
+      "sel": "#cmpStamp",
+      "live": "polite"
+    }
+  ],
+  "failures": [
+    "CONTRAST(light,suite-wide): header .tag 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): .legend 4.36 < 4.5",
+    "CONTRAST(light,suite-wide): #termStamp 4.36 < 4.5"
+  ],
+  "consoleLight": [],
+  "network": {
+    "fulfilled": 4,
+    "catchAllAborted": [],
+    "deliberateAbort": []
+  }
+}
