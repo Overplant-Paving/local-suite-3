@@ -6,6 +6,15 @@
 > historical. Still live: §Batch D, §Phase 2 exit, §Open items (plus: nearby's one live
 > Overpass query is deferred on an upstream outage — task chip pending; rerun
 > `verify-tool.mjs nearby` after recovery).
+>
+> **§Batch D is COMPLETE too (2026-07-16):** 71/71 migrated; gates + smoke 72/72 green
+> (`tests/evidence/batchD/gates.txt`); embedded segments byte-exact through the build.
+> **Phase 2 exit: every gate green EXCEPT the v1 archive note** — this session's permissions
+> deny writing to `../Local Suite`. The user (or a session with that permission) should
+> create `../Local Suite/README.md` declaring: v1 is the read-only reference implementation,
+> frozen at commit `7088cab` (= the v2 repo's `v1-import` tag); all 71 tools migrated to
+> Local Suite 2 on 2026-07-16 with parity evidence under its `tests/evidence/`; do not edit —
+> then commit it there and tick Phase 2 in ROADMAP.md.
 
 Written 2026-07-15 by the session that executed Phase 0 through most of Phase 2. The session
 hit its model usage limit twice; the second cut killed all 13 in-flight Batch C subagents.

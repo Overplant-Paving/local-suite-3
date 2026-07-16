@@ -27,7 +27,11 @@ Standing rules for the executing agent:
 - [x] Version-control hazard fixed (home-dir `.git` removed; v1 suite committed as `7088cab` on `main` in `../Local Suite`)
 - [x] Phase 0 — Foundation (2026-07-15 — evidence: `tests/evidence/phase0/gates.txt`)
 - [x] Phase 1 — Core machinery, proven on pilots (2026-07-15 — 3 pilots at Definition of Done; CSP verdict: full hashes, all 3 browsers, recorded in ARCHITECTURE D6 addendum; evidence: `tests/evidence/{focus,weather,index,phase1}/`)
-- [ ] Phase 2 — Full migration (Batches A–C done 2026-07-16: 68/71 migrated, evidence per tool + `tests/evidence/batchC/gates.txt`; Batch D — password, word, passes — remains)
+- [ ] Phase 2 — Full migration: 71/71 migrated 2026-07-16, all gates green, smoke 72/72
+  (`tests/evidence/batchC/gates.txt`, `tests/evidence/batchD/gates.txt`; Batch D byte-exact
+  hashes proven v1==source==dist per tool). **One exit item open:** the v1 read-only-archive
+  README commit in `../Local Suite` — the session's permission settings deny writes there;
+  needs the user (text drafted, see HANDOFF.md). Tick this box when it lands.
 - [ ] Phase 3 — PWA + GitHub sharing
 - [ ] Phase 4 — Suite-wide audit → tag `v2.0`
 

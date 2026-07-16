@@ -25,14 +25,16 @@ reference; never modify it).
 - Keep it simple. The user has explicitly rejected elaborate machinery for small problems.
   No new infrastructure, services, or accounts — everything lives in this one repo.
 
-## Project state (as of 2026-07-16, session 2)
+## Project state (as of 2026-07-16, end of session 2)
 
-- Phases 0-1 done; Phase 2: Batches A + B + C done (68/71 tools migrated, evidence archived,
-  gates + smoke 69/69 green — `tests/evidence/batchC/gates.txt`). `build.py --refresh-data`
-  implemented and live-verified against the two `@suite:bls` markers. Open: nearby's one live
-  Overpass query deferred on a documented upstream outage (rerun `verify-tool.mjs nearby`
-  after recovery). **Next: Batch D (password, word, passes — byte-exact embedded-data
-  specials; see HANDOFF.md §Batch D), then Phase 2 exit.** Phases 3-4 not started.
+- Phases 0-1 done; **Phase 2: 71/71 tools migrated** (Batches A-D), all gates green, smoke
+  72/72 (`tests/evidence/batchC/gates.txt`, `tests/evidence/batchD/gates.txt`); Batch D
+  embedded-data segments proven byte-exact v1==source==dist (per-tool data-integrity.txt).
+  `build.py --refresh-data` implemented + live-verified. **Phase 2 exit lacks ONE item:**
+  the v1 read-only-archive README commit in `../Local Suite` (permission-denied this
+  session; drafted in HANDOFF.md — needs the user). Open deferrals: nearby's live Overpass
+  probe (upstream outage — task chip pending); word's 404 mapping code-reviewed only.
+  Phases 3-4 not started.
 - v1 is committed in `../Local Suite` on `main` (commit `7088cab`, 175 files), imported here
   as the `v1-import` tag.
 - Distribution model: this repo goes on GitHub; Pages serves `dist/`; sharing = the link or the
