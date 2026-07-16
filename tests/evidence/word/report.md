@@ -135,3 +135,66 @@ URLs only (confirmed for dictionary.html in commit d638678), so no false positiv
    same key on load, so parity holds regardless of run date.
 8. report.md was written via scratchpad + shell copy because a PostToolUse hook can block
    direct Writes to report.md (expected per HANDOFF.md).
+
+## Phase 4 escaping audit (independent second pass)
+
+Second-pass auditor, 2026-07-16. `tools/word.html` re-read in full; the inventory below was
+rebuilt from scratch (including a sink sweep: `innerHTML | insertAdjacentHTML | outerHTML |
+document.write | setAttribute | srcdoc | dynamic href/src`) and only then compared with the
+first-pass table.
+
+### First-pass inventory verification — AGREE on all six sites
+
+| # | site | second-pass verdict |
+|---|---|---|
+| 1 | `renderMet` empty branch (word.html:505) | AGREE — literal `""`, no interpolation |
+| 2 | `renderMet` chips (word.html:507) | AGREE — `esc(w)` ×2; the `data-w="…"` double-quoted **attribute context** is safe because `Suite.esc` (core/suite.js:152) escapes all five of `& < > " '`. Provenance: localStorage (user-influenced) — correctly treated as hostile. Chip click resolves via strict `===` against the embedded `WORDS` list, so `show()` can only ever receive embedded entries. |
+| 3 | `show()` card (word.html:521–532) | AGREE — 5 interpolations (`toLocaleDateString`, word, pos, def, origin), all esc'd; remaining markup literal |
+| 4 | `fetchFuller` loading note (word.html:551) | AGREE — fully static |
+| 5 | `fetchFuller` result (word.html:560–575) | AGREE — 5 interpolations (`phon`, `partOfSpeech`, `definition`, `example`, stale-note `toLocaleString`), all esc'd; 4 are remote (dictionaryapi.dev) |
+| 6 | `fetchFuller` catch (word.html:582) | AGREE — `esc(msg)`; `msg` is one of four fixed local strings (the `HTTP <n>` digits come from a `^HTTP (\d+)$` capture, digits only), esc'd anyway |
+
+Interpolation count re-verified: 13. Attribute contexts beyond site 2: **none** — both `href`s
+in the file are static (`../core/suite.css`, `index.html`); dictionaryapi.dev `sourceUrls` and
+`phonetics[].audio` are **never rendered or dereferenced** by this tool, so there is no URL/href
+sink for remote data. `metCount` uses `textContent`; `empty.style.display` is a literal.
+`tests/escape-allowlist.json` has no `word.html` entry — consistent with the first pass ("none
+requested"), and none is needed. No unsafe site found; **zero changes to `tools/word.html`**.
+
+### New findings / fixes
+
+- **Gap fixed (audit step 4): the interaction module had no adversarial probe.** The migration
+  proved live rendering but never proved hostile-payload inertness. Extended
+  `tests/interactions/word.mjs` with two probes (they `throw` — failing the harness — if
+  anything executes or materializes):
+  1. **Element context**: `api.dictionaryapi.dev` route-FULFILLED with a hostile entry —
+     `<img onerror>` phonetic, `<svg onload>` phonetics text, `javascript:` audio **and**
+     `javascript:` `sourceUrls`, `<script>` partOfSpeech, quote-breaking `definition` with an
+     `<iframe srcdoc>`, attribute-breakout `example`. Asserts: no `window.__xss`, zero
+     `img/svg/script/iframe/a` elements inside `#fuller`, zero `on*`/`javascript:` attributes,
+     and the hostile markup visible as plain text.
+  2. **Attribute context**: `"><img src=x onerror=window.__xss=8>` unshifted into
+     `suite.word.met` + reload. Asserts: no execution, no injected elements in `#metList`, and
+     the chip's `dataset.w`/text round-trip the hostile string intact (quote-escape held).
+  Both probes passed first run: `interaction.txt` lines 19–21 ("inert: __xss=null, injected
+  els=0, on*/javascript: attrs=0" / "injected imgs=0, chip attribute round-trips intact=true"),
+  screenshot `hostile-probe.png`. The probes scrub their hostile cache/met entries afterward so
+  the rest of the evidence stays representative; no live traffic (fulfilled route).
+- Incidental observation, not a change of mine: during the audit's first harness attempt,
+  `tests/verify-tool.mjs` was momentarily unparseable (line 98's `\n` escape appeared as a raw
+  newline); minutes later the working tree was again byte-identical to the committed blob
+  (`e74ae43`) and parsed fine — repaired externally mid-session. This audit did not touch it.
+
+### Data-integrity re-check (WORD_RAW, byte-exact-protected)
+
+Extraction one-liner from `data-integrity.txt` replayed against `tools/word.html` after the
+audit: **39422 bytes, sha256
+`1a8cce2e751d488e60884cbd4af073549e65369a4077d6b5b6744be9fc4a7c0b`** — identical to the
+recorded v1/v2/dist value. MATCH (expected: the tool file was never edited).
+
+### Harness
+
+`node verify-tool.mjs word` → **exit 0**; console clean apart from the harness-filtered
+`net::ERR_FAILED` pairs from the designed route-abort/offline sections. Note `suite.word.met`
+now logs `"sepia"` where the Batch D run logged `"brocade"` — that is the known real-date boot
+write (first-pass concern #7) landing on 2026-07-16 instead of 2026-07-15, not a behavior change.

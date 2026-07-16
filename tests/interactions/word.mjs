@@ -122,6 +122,75 @@ export async function interact({ page, log, evidenceDir }) {
   await page.screenshot({ path: `${evidenceDir}/offline-stale.png`, fullPage: true });
   await page.context().unroute(/^https?:/);
 
+  /* ---- Phase 4 adversarial escaping probe (element context) ----
+     route-FULFIL a hostile dictionaryapi.dev payload: markup injection in every
+     rendered field (phonetic, partOfSpeech, definition, example) plus
+     javascript: sourceUrls/audio (never rendered by the tool — proven inert
+     here). No live traffic; must throw if anything executes or materializes. */
+  const HOSTILE = {
+    word: "anthology",
+    phonetic: '<img src=x onerror="window.__xss=1">',
+    phonetics: [{ text: '<svg onload="window.__xss=2">', audio: "javascript:window.__xss=3" }],
+    sourceUrls: ["javascript:window.__xss=4"],
+    meanings: [{
+      partOfSpeech: "<script>window.__xss=5<\/script>",
+      definitions: [{
+        definition: '"><iframe srcdoc="<script>parent.__xss=6<\/script>"></iframe>',
+        example: '" onmouseover="window.__xss=7',
+      }],
+    }],
+  };
+  await page.route(apiRoute, r => r.fulfill({
+    status: 200, contentType: "application/json", body: JSON.stringify([HOSTILE]) }));
+  await page.evaluate(() => { Math.random = () => 0.5; }); // reload above cleared the stub
+  await page.click("#anotherBtn");                          // -> "anthology" (no cache entry)
+  await page.click("#fullerBtn");
+  await fullerDone(page);
+  const probe1 = await page.evaluate(() => ({
+    xss: window.__xss === undefined ? null : window.__xss,
+    injectedEls: document.querySelectorAll("#fuller img, #fuller svg, #fuller script, #fuller iframe, #fuller a").length,
+    hostileAttrs: [...document.querySelectorAll("#fuller *")].filter(el =>
+      [...el.attributes].some(a => a.name.startsWith("on") || /^\s*javascript:/i.test(a.value))).length,
+    phonText: (document.querySelector("#fuller .phon") || {}).textContent || "",
+    senseText: (document.querySelector("#fuller .sense") || {}).textContent || "",
+  }));
+  if (probe1.xss !== null || probe1.injectedEls || probe1.hostileAttrs ||
+      !probe1.phonText.includes("<img src=x") || !probe1.senseText.includes('"><iframe'))
+    throw new Error("ADVERSARIAL PROBE (element context) FAILED: " + JSON.stringify(probe1));
+  log(`ADVERSARIAL fulfil (hostile definitions + javascript: sourceUrls) -> inert: __xss=${probe1.xss}, injected els=${probe1.injectedEls}, on*/javascript: attrs=${probe1.hostileAttrs}`);
+  log(`  hostile markup rendered as text — phon: "${probe1.phonText.slice(0, 40)}..." sense: "${probe1.senseText.slice(0, 60)}..."`);
+  await page.unroute(apiRoute);
+  // scrub the hostile cache envelope so it can't taint later evidence/snapshots
+  await page.evaluate(() => localStorage.removeItem("suite.cache.word.anthology"));
+
+  /* ---- Phase 4 adversarial escaping probe (attribute context) ----
+     hostile word in suite.word.met (localStorage is user-influenced): the
+     met chip interpolates it into data-w="..." — a quote-escape must hold. */
+  const EVIL = '"><img src=x onerror=window.__xss=8>';
+  await page.evaluate(w => {
+    const m = JSON.parse(localStorage.getItem("suite.word.met") || "[]");
+    m.unshift(w); localStorage.setItem("suite.word.met", JSON.stringify(m));
+  }, EVIL);
+  await page.reload();          // fresh window.__xss; boot renders the met list
+  await waitCard(page);
+  const probe2 = await page.evaluate(w => ({
+    xss: window.__xss === undefined ? null : window.__xss,
+    injectedImgs: document.querySelectorAll("#metList img").length,
+    chipIntact: [...document.querySelectorAll("#metList .met-chip")]
+      .some(c => c.dataset.w === w && c.textContent === w),
+  }), EVIL);
+  if (probe2.xss !== null || probe2.injectedImgs || !probe2.chipIntact)
+    throw new Error("ADVERSARIAL PROBE (attribute context) FAILED: " + JSON.stringify(probe2));
+  log(`ADVERSARIAL met-list word (data-w attribute context) -> inert: __xss=${probe2.xss}, injected imgs=${probe2.injectedImgs}, chip attribute round-trips intact=${probe2.chipIntact}`);
+  await page.screenshot({ path: `${evidenceDir}/hostile-probe.png`, fullPage: true });
+  // restore the met list so remaining evidence stays representative
+  await page.evaluate(w => {
+    const m = JSON.parse(localStorage.getItem("suite.word.met") || "[]").filter(x => x !== w);
+    localStorage.setItem("suite.word.met", JSON.stringify(m));
+  }, EVIL);
+  await page.reload();
+  await waitCard(page);
+
   /* ---- restore a fresh-cache view for the after shot (no refetch) ---- */
   await page.evaluate(() => {
     for (const k of Object.keys(localStorage))

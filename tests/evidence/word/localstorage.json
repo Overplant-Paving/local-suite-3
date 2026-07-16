@@ -1,11 +1,11 @@
 {
   "v1": {
-    "suite.word.met": "[\"brocade\"]",
+    "suite.word.met": "[\"sepia\"]",
     "suite.theme": "dark"
   },
   "v2": {
     "suite.cache.word.candid": "{\"t\":1785430800000,\"v\":[{\"word\":\"candid\",\"phonetic\":\"/ˈkæn.dɪd/\",\"phonetics\":[{\"text\":\"/ˈkæn.dɪd/\",\"audio\":\"\"},{\"text\":\"/ˈkæn.dɪd/\",\"audio\":\"https://a…(1123 chars)",
-    "suite.word.met": "[\"candid\",\"tundra\",\"anthology\",\"brocade\"]",
+    "suite.word.met": "[\"candid\",\"tundra\",\"anthology\",\"sepia\"]",
     "suite.theme": "dark"
   },
   "keysOnlyInV1": [],

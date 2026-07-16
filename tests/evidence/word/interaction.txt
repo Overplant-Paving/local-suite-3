@@ -7,15 +7,18 @@ same-date reload -> "candid" (deterministic repeat)
 "Today's word" -> "candid" (back to the 2026-07-29 word)
 LIVE lookup "candid" -> phonetic: "/ˈkæn.dɪd/"
   first sense: "noun — A spontaneous or unposed photograph. “His portraits looked stiff and formal but his candids s..."
-  cache envelope suite.cache.word.candid: {"t":1785344400279,"entries":1,"word":"candid"}
-suite.word.met after visits: ["candid","anthology","brocade"]
-after reload — met persisted: ["candid","anthology","brocade"]; chips: [candid, anthology, brocade]; count badge: "· 3"
+  cache envelope suite.cache.word.candid: {"t":1785344400294,"entries":1,"word":"candid"}
+suite.word.met after visits: ["candid","anthology","sepia"]
+after reload — met persisted: ["candid","anthology","sepia"]; chips: [candid, anthology, sepia]; count badge: "· 3"
 met chip "anthology" click -> card shows "anthology"
 clock advanced to 2026-07-30, "Today's word" -> "tundra" (independent recomputation predicts "tundra")
 route-abort (no cache) -> designed state note: "Couldn't reach the dictionary — the embedded origin above still stands."
   embedded card still stands — def: "a vast, treeless arctic region..." origin: "Origin. From Russian, from a Sami word for an upla..."
 offline + stale cache -> cached sense renders: "noun — A spontaneous or unposed photograph. “His portraits l..."
   stale note: "Offline — cached definition from Jul 28, 12:00 PM."
+ADVERSARIAL fulfil (hostile definitions + javascript: sourceUrls) -> inert: __xss=null, injected els=0, on*/javascript: attrs=0
+  hostile markup rendered as text — phon: "<img src=x onerror="window.__xss=1">..." sense: "<script>window.__xss=5</script> — "><iframe srcdoc="<script>..."
+ADVERSARIAL met-list word (data-w attribute context) -> inert: __xss=null, injected imgs=0, chip attribute round-trips intact=true
 restored (fresh cache, served without refetch): "candid" fuller present: true
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
