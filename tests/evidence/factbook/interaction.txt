@@ -19,5 +19,11 @@ offline country lookup "Kenya": h2="Kenya"
   facts: Capital=Nairobi | Population=54,000,000 approx. | Currency=KES Kenyan shilling | Languages=Swahili, English | Region=Africa
   flag: codepoints U+1F1F0 U+1F1EA aria-label="Flag of Kenya"
 offline verdict: zero-network tool — everything works with the network blocked; no stale card exists by design
+escape probe (suggest): injected els=0 payload-as-literal-text=true
+escape probe (country card): __xss=undefined script/img/svg/iframe/a inside card=0 name-as-literal-text=true flag aria-label intact=true hostile-ISO2 flag astral-only=true pop(NaN)="— approx."
+escape probe (state chip): attrs=[class,data-name] on*-attrs=0 injected els=0 data-name attr round-trips to raw string=true
+escape probe (state card): __xss=undefined injected els=0 nickname-as-literal-text=true javascript: hrefs in document=0
+  h2="Evil " onfocus="window.__xss=7" x="><img src=x onerror=window.__xss=8> (ZZ)"
+escape probe verdict: all hostile payloads inert in every sink (text + attribute contexts)
 theme toggle: light -> dark, aria-pressed=true
 console: clean (no errors)

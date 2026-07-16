@@ -149,3 +149,82 @@ expect these hosts on factbook's (empty) endpoint list.
 5. MIGRATION.md's burn-down row for factbook (Net column `cors`) will be wrong once this lands
    as offline — orchestrator updates the table in the migration commit (I may not touch
    MIGRATION.md).
+
+## Phase 4 escaping audit (line-by-line)
+
+Audited 2026-07-16 against `tools/factbook.html` (zero-network tool: both datasets are embedded
+constants; there is no remote provenance anywhere). `esc` is `Suite.esc` (escapes `& < > " '`,
+so it is attribute-safe in double- and single-quoted contexts).
+
+### Complete dynamic-markup site inventory
+
+Sinks present: `innerHTML` only (7 assignments). No `outerHTML`, `insertAdjacentHTML`,
+`document.write`, and no `href`/`src`/`style`/`title` attribute built from data — the only
+`setAttribute` calls write `aria-pressed` from `String(boolean)`. User input (`#q`, `#qs`
+values) is never interpolated into markup: it is used only for array filtering and `.value`
+assignment (`pick()`).
+
+| # | location (line) | sink | interpolated expression | provenance | verdict |
+|---|---|---|---|---|---|
+| 1 | renderCountry (~324) | `countryCard.innerHTML`, `aria-label="..."` attr | `esc(c.name)` | embedded constant | esc'd correctly (quote-safe) |
+| 2 | renderCountry (~324) | text | `flagEmoji(c.code)` | embedded constant | provably safe (see proof below) |
+| 3 | renderCountry (~325) | text (`<h2>`) | `esc(c.name)` | embedded constant | esc'd correctly |
+| 4 | renderCountry (~326) | text (`.official`) | `esc(c.region)`, `esc(c.code)` | embedded constant | esc'd correctly |
+| 5 | renderCountry (~329) | text (Capital fact) | `esc(c.capital)` | embedded constant | esc'd correctly |
+| 6 | renderCountry (~330) | text (Population fact) | `fmtNum(c.pop)` | `parseInt` of embedded constant | provably safe: `"—"` or `toLocaleString("en-US")` (digits/commas only) |
+| 7 | renderCountry (~331–333) | text (facts) | `esc(c.currency)`, `esc(c.languages)`, `esc(c.region)` | embedded constant | esc'd correctly |
+| 8 | updateSuggest (~342) | `suggestEl.innerHTML = ""` | none | — | constant |
+| 9 | updateSuggest (~346) | `suggestEl.innerHTML` ("No match" row) | none | — | constant |
+| 10 | updateSuggest (~348) | `data-i="..."` attr | `i` | `Array.prototype.map` index | provably safe (integer) |
+| 11 | updateSuggest (~348) | text (button label) | `flagEmoji(c.code)`, `esc(c.name)` | embedded constant | provably safe / esc'd correctly |
+| 12 | renderStateCard (~442–448) | `stateCard.innerHTML`, text | `esc(s.name)`, `esc(s.abbr)`, `esc(s.nickname)` (x2), `esc(s.capital)`, `esc(s.admitted)` | embedded constant | esc'd correctly |
+| 13 | renderStateCard (~446) | text (Population fact) | `fmtNum(s.pop)` | `parseInt` of embedded constant | provably safe |
+| 14 | drawStateGrid (~457) | `stateGrid.innerHTML`, `data-name="..."` attr | `esc(s.name)` | embedded constant | esc'd correctly — `Suite.esc` escapes `"`, closing v1's quote-blind gap; `dataset.name` entity-decodes back to the raw string, so the chip-click lookup still matches (probe-proven) |
+| 15 | drawStateGrid (~457) | text (chip label + pop) | `esc(s.name)`, `fmtNum(s.pop)` | embedded constant | esc'd correctly / provably safe |
+| 16 | qs input handler (~471) | `stateCard.innerHTML = ""` | none | — | constant |
+
+`flagEmoji` proof: for any 2-char input the output codepoints are `0x1F1E6 + charCodeAt(i) - 65`
+with `charCodeAt` in `[0, 0xFFFF]`, i.e. every output codepoint lies in `[U+1F1A5, U+2F1A4]` —
+always astral-plane, never an ASCII metacharacter; non-2-char input returns the constant
+white-flag emoji. Confirmed empirically with the hostile code `"<` (rendered U+1F1C7 U+1F1E1).
+
+### Fixes made
+
+None required — zero UNSAFE sites. Every interpolation is `Suite.esc()`-wrapped, a map-index
+integer, `fmtNum` output, or `flagEmoji` output. No behavior changed in the tool; the tool file
+was not modified by this audit.
+
+### Adversarial probe (added to tests/interactions/factbook.mjs)
+
+The tool has no network data source to route-fulfil, so the probe injects hostile rows into the
+embedded `COUNTRIES`/`STATES` arrays in-page (top-level lexical bindings, reachable from
+`page.evaluate`) and drives the REAL render paths: `updateSuggest -> pick -> renderCountry` and
+`drawStateGrid -> chip click -> renderStateCard`. Payloads cover `<img onerror>`, `<svg onload>`,
+`"><script>`, `"><iframe src=javascript:>`, single-quote/double-quote attribute breakouts,
+`javascript:` strings in URL-ish fields, and a hostile 2-char ISO2 code through `flagEmoji`.
+
+Evidence (interaction.txt lines 22–27): suggest dropdown 0 injected elements, payload as literal
+text; country card `__xss=undefined`, 0 `script/img/svg/iframe/a` elements, name literal in
+`<h2>`, flag `aria-label` attribute intact, hostile-ISO2 flag astral-only, NaN pop renders "—";
+state chip attributes exactly `[class, data-name]` with 0 `on*` attributes and `dataset.name`
+round-tripping to the raw string (chip-click lookup then found the hostile row — the card
+rendered from it); state card `__xss=undefined`, 0 injected elements, nickname literal, 0
+`javascript:` hrefs in the whole document. The probe throws (failing the harness) on any
+violation. Post-interaction screenshot `v2-after-interaction.png` shows the hostile state card
+rendered as inert text.
+
+### Harness
+
+`node verify-tool.mjs factbook` — exit 0, console clean (no errors). Note: at audit start
+`tests/verify-tool.mjs` itself had a syntax error (line 98's string literal contained a raw
+newline instead of `\n`), which made the harness fail to parse for every tool; reported to the
+orchestrator, fixed centrally, then the real harness was re-run green.
+
+### Allowlist status
+
+`tests/escape-allowlist.json` contains NO factbook entries — correct, and none are needed: all
+dynamic sites use string concatenation with `esc()`/provably-safe values, so the `--check`
+template-literal heuristic has nothing to flag. The three unescaped expression classes the
+migration report pre-declared (`flagEmoji(code)`, `fmtNum(pop)`, the `data-i` map index) are
+confirmed safe by construction and by the probe. No previously-allowlisted expression exists,
+so none needed revision.
