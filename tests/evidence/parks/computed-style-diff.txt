@@ -1,0 +1,26 @@
+== computed-style diff, light (11 differing values) ==
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card-msg { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card-msg h3 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.keyrow input { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.primary { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+
+== computed-style diff, dark (11 differing values) ==
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card-msg { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card-msg h3 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.keyrow input { -webkit-font-smoothing: v1=auto | v2=antialiased }
+button.primary { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+

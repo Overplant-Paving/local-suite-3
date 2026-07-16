@@ -1,0 +1,26 @@
+{
+  "id": "parks",
+  "file": "parks.html",
+  "name": "National Parks Companion",
+  "cat": "civic",
+  "cx": "S",
+  "desc": "Alerts, closures, and events for the parks you're visiting.",
+  "network": "keyed",
+  "key": {
+    "name": "nps",
+    "signup": "https://www.nps.gov/subjects/developer/get-started.htm",
+    "demo": false
+  },
+  "endpoints": [
+    "https://developer.nps.gov"
+  ],
+  "storage": [
+    "suite.theme",
+    "suite.key.nps",
+    "suite.parks",
+    "suite.cache.parks.*"
+  ],
+  "cacheTtlMin": 360,
+  "since": "v1",
+  "flags": []
+}
