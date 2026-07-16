@@ -163,7 +163,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 65 | airport.html | space | blocked | — | C | remove `.example` → link-out card to aviationweather.gov | ✅ `tests/evidence/airport/` |
 | 66 | jobs.html | money | blocked | — | C | remove `.example` → embedded monthly BLS data | ⬜ |
 | 67 | inflation.html | money | blocked | — | C | remove `.example` → embedded monthly BLS data | ✅ `tests/evidence/inflation/` |
-| 68 | transit.html | local | blocked/key | bart (new) | C | externalize BART key (v1 `transit.html:163`); custom feed → link-out card | ⬜ |
+| 68 | transit.html | local | blocked/key | bart (new) | C | externalize BART key (v1 `transit.html:163`); custom feed → link-out card | ✅ `tests/evidence/transit/` |
 | 69 | password.html | util | off | — | D | LD (62 KB EFF wordlist — must survive build byte-exact) | ⬜ |
 | 70 | word.html | util/ref | cors | — | D | LD (embedded dictionary) · EA | ⬜ |
 | 71 | passes.html | space | cors | — | D | LD (SGP4 math + TLE handling) | ⬜ |

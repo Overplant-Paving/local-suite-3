@@ -1393,6 +1393,36 @@
       "flags": [
         "embedded-data"
       ]
+    },
+    {
+      "id": "transit",
+      "file": "transit.html",
+      "name": "Transit Departure Board",
+      "cat": "local",
+      "cx": "L",
+      "desc": "Next departures for your stop, big-type. Scope per city — GTFS varies wildly.",
+      "network": "keyed",
+      "key": {
+        "name": "bart",
+        "signup": "https://api.bart.gov/api/register.aspx",
+        "demo": true
+      },
+      "endpoints": [
+        "https://api.bart.gov"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.transit.bartStation",
+        "suite.transit.customUrl",
+        "suite.transit.agencyLink",
+        "suite.cache.transit.bartstations",
+        "suite.cache.transit.etd.*",
+        "suite.key.bart",
+        "suite.relay.url"
+      ],
+      "cacheTtlMin": 1,
+      "since": "v1",
+      "flags": []
     }
   ]
 }

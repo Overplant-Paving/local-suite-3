@@ -1,0 +1,60 @@
+== computed-style diff, light (28 differing values) ==
+body { block-size: v1=893.031px | v2=921.375px }
+body { height: v1=893.031px | v2=921.375px }
+body { perspective-origin: v1=640px 446.516px | v2=640px 460.688px }
+body { transform-origin: v1=640px 446.516px | v2=640px 460.688px }
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { float: v1=none | v2=right }
+.theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card { block-size: v1=164.047px | v2=192.391px }
+.card { height: v1=164.047px | v2=192.391px }
+.card { perspective-origin: v1=430px 82.0156px | v2=430px 96.1875px }
+.card { transform-origin: v1=430px 82.0234px | v2=430px 96.1953px }
+.card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.seg { inline-size: v1=386.266px | v2=333.062px }
+.seg { perspective-origin: v1=193.125px 15.3906px | v2=166.531px 15.3906px }
+.seg { transform-origin: v1=193.133px 15.3906px | v2=166.531px 15.3906px }
+.seg { width: v1=386.266px | v2=333.062px }
+.seg { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.seg button.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.hint { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.board-head .stn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.board-head .upd { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#board { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+
+== computed-style diff, dark (28 differing values) ==
+body { block-size: v1=893.031px | v2=921.375px }
+body { height: v1=893.031px | v2=921.375px }
+body { perspective-origin: v1=640px 446.516px | v2=640px 460.688px }
+body { transform-origin: v1=640px 446.516px | v2=640px 460.688px }
+body { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.topbar { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.back { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.theme-btn { float: v1=none | v2=right }
+.theme-btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header h1 { -webkit-font-smoothing: v1=auto | v2=antialiased }
+header .tag { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.card { block-size: v1=164.047px | v2=192.391px }
+.card { height: v1=164.047px | v2=192.391px }
+.card { perspective-origin: v1=430px 82.0156px | v2=430px 96.1875px }
+.card { transform-origin: v1=430px 82.0234px | v2=430px 96.1953px }
+.card { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.seg { inline-size: v1=386.266px | v2=333.062px }
+.seg { perspective-origin: v1=193.125px 15.3906px | v2=166.531px 15.3906px }
+.seg { transform-origin: v1=193.133px 15.3906px | v2=166.531px 15.3906px }
+.seg { width: v1=386.266px | v2=333.062px }
+.seg { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.seg button.on { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.btn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.hint { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.board-head .stn { -webkit-font-smoothing: v1=auto | v2=antialiased }
+.board-head .upd { -webkit-font-smoothing: v1=auto | v2=antialiased }
+#board { -webkit-font-smoothing: v1=auto | v2=antialiased }
+footer { -webkit-font-smoothing: v1=auto | v2=antialiased }
+

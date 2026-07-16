@@ -1,0 +1,23 @@
+{
+  "v1": {
+    "suite.transit.customUrl": "https://feed.test/departures.json",
+    "suite.cache.transit.bartstations": "{\"t\":1784174414944,\"v\":[{\"abbr\":\"12TH\",\"name\":\"12th St. Oakland City Center\"},{\"abbr\":\"16TH\",\"name\":\"16th St. Mission\"},{\"abbr\":\"19TH\",\"name\":\"19th St…(2027 chars)",
+    "suite.transit.bartStation": "EMBR",
+    "suite.theme": "dark"
+  },
+  "v2": {
+    "suite.cache.transit.etd.EMBR": "{\"t\":1784174414510,\"v\":{\"?xml\":{\"@version\":\"1.0\",\"@encoding\":\"utf-8\"},\"root\":{\"@id\":\"1\",\"uri\":{\"#cdata-section\":\"http://api.bart.gov/api/etd.aspx?cmd=…(3147 chars)",
+    "suite.transit.bartStation": "EMBR",
+    "suite.transit.customUrl": "https://feed.test/departures.json",
+    "suite.transit.agencyLink": "https://www.transitchicago.com/traintracker/",
+    "suite.cache.transit.etd.12TH": "{\"t\":1784088014265,\"v\":{\"?xml\":{\"@version\":\"1.0\",\"@encoding\":\"utf-8\"},\"root\":{\"@id\":\"1\",\"uri\":{\"#cdata-section\":\"http://api.bart.gov/api/etd.aspx?cmd=…(2601 chars)",
+    "suite.cache.transit.bartstations": "{\"t\":1784088014265,\"v\":[{\"abbr\":\"12TH\",\"name\":\"12th St. Oakland City Center\"},{\"abbr\":\"16TH\",\"name\":\"16th St. Mission\"},{\"abbr\":\"19TH\",\"name\":\"19th St…(2027 chars)",
+    "suite.theme": "dark"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": [
+    "suite.cache.transit.etd.EMBR",
+    "suite.transit.agencyLink",
+    "suite.cache.transit.etd.12TH"
+  ]
+}

@@ -1,0 +1,48 @@
+live: BART station list loaded — 50 stations in the select
+live: station "12th St. Oakland City Center" · "Updated 11:00:13 PM" · 4 destinations:
+live:   Antioch -> [2 min, 21m, 37m] (Platform 3 · 9-car · delayed 7 min)
+live:   Berryessa -> [13 min, 33m, 53m] (Platform 2 · 6-car)
+live:   SFO/Millbrae -> [13 min, 30m, 50m] (Platform 2 · 9-car · delayed 2 min)
+live:   Richmond -> [17 min, 17m, 34m] (Platform 1 · 6-car · delayed 2 min)
+key nudge: hidden=false text="Using BART's shared public key — get your free key." signup=https://api.bart.gov/api/register.aspx
+Suite.key("bart"): stored=null -> value=MW9S-E7SL-26DU-VV8V isDemo=true
+source grep: the literal BART key is not in the tool markup/script (core supplies it)
+live EMBR: station "Embarcadero" · "Updated 11:00:13 PM" · 5 destinations:
+live EMBR:   Richmond -> [6 min, 23m, 34m] (Platform 2 · 6-car · delayed 7 min)
+live EMBR:   SFO/Millbrae -> [7 min, 23m, 42m] (Platform 1 · 9-car · delayed 5 min)
+live EMBR:   Antioch -> [10 min, 27m, 43m] (Platform 2 · 9-car · delayed 7 min)
+live EMBR:   Dublin/Pleasanton -> [13 min, 32m, 52m] (Platform 2 · 6-car)
+live EMBR:   Daly City -> [14 min, 33m, 53m] (Platform 1 · 6-car · delayed 1 min)
+stored station: suite.transit.bartStation=EMBR
+agency link-out card: "Open your departure board ↗" -> https://www.transitchicago.com/traintracker/ (host label "www.transitchicago.com", target=_blank, rel=noopener)
+links pane: 8 agency cards, boardCard display="none"
+links pane:   MTA (New York) -> new.mta.info
+links pane:   WMATA (DC Metro) -> www.wmata.com
+links pane:   CTA (Chicago) -> www.transitchicago.com
+links pane:   MBTA (Boston) -> www.mbta.com
+links pane:   SEPTA (Philadelphia) -> www.septa.org
+links pane:   LA Metro -> www.metro.net
+links pane:   Sound Transit (Seattle) -> www.soundtransit.org
+links pane:   TfL (London) -> tfl.gov.uk
+custom direct (GTFS-rt JSON): station "Custom feed" · "Updated 11:00 PM" · 3 destinations:
+custom direct (GTFS-rt JSON):   Red Line -> [4 min] (stop STN-04)
+custom direct (GTFS-rt JSON):   Blue Line -> [11 min] (stop STN-04)
+custom direct (GTFS-rt JSON):   trip-77 -> [20 min] (stop STN-09)
+relay request observed: https://relay.test/w?url=https%3A%2F%2Ffeed.test%2Fdepartures.json
+relay contract ok: true
+relay upd stamp: "Updated 11:00 PM · via relay"
+custom via relay (plain array): station "Custom feed" · "Updated 11:00 PM · via relay" · 2 destinations:
+custom via relay (plain array):   Airport -> [7 min] (Platform 2)
+custom via relay (plain array):   Downtown -> [9 min]
+raw fallback: hint="Couldn't recognise a departure structure — here's the raw response so you can see what the…" pre="{ "hello": "world", "not": "a departure shape" }"
+offline-stale upd stamp: "Offline — cached from 11:00 PM" (class: upd stale)
+offline-stale: station "Embarcadero" · "Offline — cached from 11:00 PM" · 5 destinations:
+offline-stale:   Richmond -> [6 min, 23m, 34m] (Platform 2 · 6-car · delayed 7 min)
+offline-stale:   SFO/Millbrae -> [7 min, 23m, 42m] (Platform 1 · 9-car · delayed 5 min)
+offline-stale:   Antioch -> [10 min, 27m, 43m] (Platform 2 · 9-car · delayed 7 min)
+offline-stale:   Dublin/Pleasanton -> [13 min, 32m, 52m] (Platform 2 · 6-car)
+offline-stale:   Daly City -> [14 min, 33m, 53m] (Platform 1 · 6-car · delayed 1 min)
+recovery after unroute: "Updated 11:00:14 PM"
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
