@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-1UX7YVQYOWCyGFDnuQnHVXYC7UVM7zCT6HYwvAWsUTA='; style-src 'unsafe-inline'; img-src data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-k0wYuMbvnAW2RU2V0Qsrnt8V0PvlSCSGd/DzPx/xFlw='; style-src 'unsafe-inline'; img-src data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Local Suite · Command Center</title>
 <style>
@@ -142,6 +142,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
     background: var(--chip); padding: .05rem .3rem; border-radius: 5px;
   }
   .empty { color: var(--muted); text-align: center; padding: 3rem 0; display: none; }
+  .card.wip { opacity: .82; border-style: dashed; }
   /* a11y (Phase 4): visually-hidden live status so screen readers hear filter results */
   .sr-status { position: absolute; width: 1px; height: 1px; overflow: hidden;
     clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
@@ -518,6 +519,34 @@ function render() {
     const grid = document.createElement("div");
     grid.className = "grid";
     tools.forEach(t => grid.append(card(t)));
+    sec.append(h2, grid);
+    catsEl.append(sec);
+  }
+  /* games: meteor-patrol is deliberately PARKED (ROADMAP Phase 4 item 5) — a designed
+     work-in-progress state, not a shipped tool. The card renders only in the unfiltered
+     view (it is not searchable content) and links nowhere until the game ships. */
+  if (!state.q && !state.cat && !state.offline && !state.nokey) {
+    const sec = document.createElement("section");
+    const h2 = document.createElement("h2");
+    h2.textContent = CAT_LABEL.games + " ";
+    const n = document.createElement("span");
+    n.className = "n";
+    n.textContent = "in the workshop";
+    h2.append(n);
+    const grid = document.createElement("div");
+    grid.className = "grid";
+    const card = document.createElement("article");
+    card.className = "card wip";
+    const name = document.createElement("h3");
+    name.textContent = "Meteor Patrol";
+    const desc = document.createElement("p");
+    desc.className = "desc";
+    desc.textContent = "The v1 arcade prototype is being brought up to suite quality — sprites, theme, and all. It ships in a later release; nothing here is broken.";
+    const chip = document.createElement("span");
+    chip.className = "chip";
+    chip.textContent = "work in progress";
+    card.append(name, desc, chip);
+    grid.append(card);
     sec.append(h2, grid);
     catsEl.append(sec);
   }

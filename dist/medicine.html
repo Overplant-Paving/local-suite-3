@@ -102,12 +102,15 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 </style>
 <style>
   /* tool accents: recall/warning palette (3-layer, same pattern as core) */
-  :root { --warn: #b0752a; --bad: #c0492d; --warn-soft: #f4ead6; }
+  /* Phase 4 a11y audit: light --warn darkened #b0752a -> #955d12 — its text uses
+     (.disclaimer b on --warn-soft was 3.24:1, .recalls .c2 .cls on the card 3.81:1;
+     now 4.6:1 / 5.4:1). --on-accent: the search button label in the dark palette. */
+  :root { --warn: #955d12; --bad: #c0492d; --warn-soft: #f4ead6; --on-accent: #fff; }
   @media (prefers-color-scheme: dark) {
-    :root { --warn: #d3a25a; --bad: #e0765a; --warn-soft: #33291a; }
+    :root { --warn: #d3a25a; --bad: #e0765a; --warn-soft: #33291a; --on-accent: #15171b; }
   }
-  :root[data-theme="light"] { --warn: #b0752a; --bad: #c0492d; --warn-soft: #f4ead6; }
-  :root[data-theme="dark"] { --warn: #d3a25a; --bad: #e0765a; --warn-soft: #33291a; }
+  :root[data-theme="light"] { --warn: #955d12; --bad: #c0492d; --warn-soft: #f4ead6; --on-accent: #fff; }
+  :root[data-theme="dark"] { --warn: #d3a25a; --bad: #e0765a; --warn-soft: #33291a; --on-accent: #15171b; }
 
   body { padding: 1.5rem 1.25rem 4rem; line-height: 1.6; }
   .wrap { max-width: 780px; margin: 0 auto; }
@@ -123,7 +126,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   }
   input[type=search]:focus { border-color: var(--accent); }
   button.go {
-    border: none; background: var(--accent); color: #fff; border-radius: 12px;
+    border: none; background: var(--accent); color: var(--on-accent); border-radius: 12px;
     padding: 0 1.2rem; font-size: 1rem; cursor: pointer;
   }
   .history { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .1rem; min-height: 1.4rem; }
