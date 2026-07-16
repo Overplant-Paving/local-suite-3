@@ -155,7 +155,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 57 | apod.html | space | key | nasa (demo) | C | RL (DEMO_KEY 30/hr) | ⬜ |
 | 58 | nutrition.html | health | key | usda (demo) | C | RL | ✅ `tests/evidence/nutrition/` |
 | 59 | congress.html | civic | key | congress | C | | ✅ `tests/evidence/congress/` |
-| 60 | gas.html | money | key | eia | C | | ⬜ |
+| 60 | gas.html | money | key | eia | C | | ✅ `tests/evidence/gas/` |
 | 61 | parks.html | civic | key | nps | C | | ✅ `tests/evidence/parks/` |
 | 62 | markets.html | money | key | finnhub | C | RL (CoinGecko keyless path) | ⬜ |
 | 63 | launches.html | space | cors | — | C | RL (15 req/hr — TTL + backoff) | ⬜ |

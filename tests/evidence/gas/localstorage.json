@@ -1,0 +1,36 @@
+{
+  "v1": {
+    "suite.cache.gas.R40.EPMR": "{\"t\":1784174389690,\"v\":[{\"period\":\"2026-06-22\",\"value\":3.447,\"units\":\"$/GAL\",\"name\":\"Regular Gasoline\"},{\"period\":\"2026-06-29\",\"value\":3.401,\"units\":\"…(343 chars)",
+    "suite.cache.gas.R10.EPMR": "{\"t\":1784174389683,\"v\":[{\"period\":\"2026-06-22\",\"value\":3.347,\"units\":\"$/GAL\",\"name\":\"Regular Gasoline\"},{\"period\":\"2026-06-29\",\"value\":3.301,\"units\":\"…(343 chars)",
+    "suite.cache.gas.R30.EPMR": "{\"t\":1784174389688,\"v\":[{\"period\":\"2026-06-22\",\"value\":2.897,\"units\":\"$/GAL\",\"name\":\"Regular Gasoline\"},{\"period\":\"2026-06-29\",\"value\":2.851,\"units\":\"…(344 chars)",
+    "suite.key.eia": "TESTKEY-LOCAL-HARNESS",
+    "suite.cache.gas.R10.EPD2D": "{\"t\":1784174389727,\"v\":[{\"period\":\"2026-06-22\",\"value\":3.897,\"units\":\"$/GAL\",\"name\":\"No 2 Diesel\"},{\"period\":\"2026-06-29\",\"value\":3.851,\"units\":\"$/GAL…(324 chars)",
+    "suite.cache.gas.R30.EPD2D": "{\"t\":1784174389729,\"v\":[{\"period\":\"2026-06-22\",\"value\":3.447,\"units\":\"$/GAL\",\"name\":\"No 2 Diesel\"},{\"period\":\"2026-06-29\",\"value\":3.401,\"units\":\"$/GAL…(323 chars)",
+    "suite.cache.gas.R20.EPD2D": "{\"t\":1784174389724,\"v\":[{\"period\":\"2025-05-26\",\"value\":3.445,\"units\":\"$/GAL\",\"name\":\"No 2 Diesel\"},{\"period\":\"2025-06-02\",\"value\":3.41,\"units\":\"$/GAL\"…(4512 chars)",
+    "suite.cache.gas.R20.EPMR": "{\"t\":1784174389716,\"v\":[{\"period\":\"2025-05-26\",\"value\":2.895,\"units\":\"$/GAL\",\"name\":\"Regular Gasoline\"},{\"period\":\"2025-06-02\",\"value\":2.86,\"units\":\"$…(4814 chars)",
+    "suite.cache.gas.R50.EPMR": "{\"t\":1784174389692,\"v\":[{\"period\":\"2026-06-22\",\"value\":4.247,\"units\":\"$/GAL\",\"name\":\"Regular Gasoline\"},{\"period\":\"2026-06-29\",\"value\":4.201,\"units\":\"…(343 chars)",
+    "suite.cache.gas.R50.EPD2D": "{\"t\":1784174389731,\"v\":[{\"period\":\"2026-06-22\",\"value\":4.797,\"units\":\"$/GAL\",\"name\":\"No 2 Diesel\"},{\"period\":\"2026-06-29\",\"value\":4.751,\"units\":\"$/GAL…(324 chars)",
+    "suite.cache.gas.NUS.EPMR": "{\"t\":1784174389669,\"v\":[{\"period\":\"2026-06-22\",\"value\":3.247,\"units\":\"$/GAL\",\"name\":\"Regular Gasoline\"},{\"period\":\"2026-06-29\",\"value\":3.201,\"units\":\"…(343 chars)",
+    "suite.cache.gas.NUS.EPD2D": "{\"t\":1784174389725,\"v\":[{\"period\":\"2026-06-22\",\"value\":3.797,\"units\":\"$/GAL\",\"name\":\"No 2 Diesel\"},{\"period\":\"2026-06-29\",\"value\":3.751,\"units\":\"$/GAL…(324 chars)",
+    "suite.theme": "dark",
+    "suite.cache.gas.R40.EPD2D": "{\"t\":1784174389730,\"v\":[{\"period\":\"2026-06-22\",\"value\":3.997,\"units\":\"$/GAL\",\"name\":\"No 2 Diesel\"},{\"period\":\"2026-06-29\",\"value\":3.951,\"units\":\"$/GAL…(324 chars)"
+  },
+  "v2": {
+    "suite.cache.gas.R40.EPMR": "{\"t\":1784084388860,\"v\":[{\"period\":\"2026-06-22\",\"value\":3.447,\"units\":\"$/GAL\",\"name\":\"Regular Gasoline\"},{\"period\":\"2026-06-29\",\"value\":3.401,\"units\":\"…(343 chars)",
+    "suite.cache.gas.R10.EPMR": "{\"t\":1784084388860,\"v\":[{\"period\":\"2026-06-22\",\"value\":3.347,\"units\":\"$/GAL\",\"name\":\"Regular Gasoline\"},{\"period\":\"2026-06-29\",\"value\":3.301,\"units\":\"…(343 chars)",
+    "suite.cache.gas.R30.EPMR": "{\"t\":1784084388860,\"v\":[{\"period\":\"2026-06-22\",\"value\":2.897,\"units\":\"$/GAL\",\"name\":\"Regular Gasoline\"},{\"period\":\"2026-06-29\",\"value\":2.851,\"units\":\"…(344 chars)",
+    "suite.key.eia": "TESTKEY-LOCAL-HARNESS",
+    "suite.cache.gas.R10.EPD2D": "{\"t\":1784084388860,\"v\":[{\"period\":\"2026-06-22\",\"value\":3.897,\"units\":\"$/GAL\",\"name\":\"No 2 Diesel\"},{\"period\":\"2026-06-29\",\"value\":3.851,\"units\":\"$/GAL…(324 chars)",
+    "suite.cache.gas.R30.EPD2D": "{\"t\":1784084388860,\"v\":[{\"period\":\"2026-06-22\",\"value\":3.447,\"units\":\"$/GAL\",\"name\":\"No 2 Diesel\"},{\"period\":\"2026-06-29\",\"value\":3.401,\"units\":\"$/GAL…(323 chars)",
+    "suite.cache.gas.R20.EPD2D": "{\"t\":1784084388861,\"v\":[{\"period\":\"2025-05-26\",\"value\":3.445,\"units\":\"$/GAL\",\"name\":\"No 2 Diesel\"},{\"period\":\"2025-06-02\",\"value\":3.41,\"units\":\"$/GAL\"…(4512 chars)",
+    "suite.cache.gas.R20.EPMR": "{\"t\":1784084388861,\"v\":[{\"period\":\"2025-05-26\",\"value\":2.895,\"units\":\"$/GAL\",\"name\":\"Regular Gasoline\"},{\"period\":\"2025-06-02\",\"value\":2.86,\"units\":\"$…(4814 chars)",
+    "suite.cache.gas.R50.EPMR": "{\"t\":1784084388861,\"v\":[{\"period\":\"2026-06-22\",\"value\":4.247,\"units\":\"$/GAL\",\"name\":\"Regular Gasoline\"},{\"period\":\"2026-06-29\",\"value\":4.201,\"units\":\"…(343 chars)",
+    "suite.cache.gas.R50.EPD2D": "{\"t\":1784084388861,\"v\":[{\"period\":\"2026-06-22\",\"value\":4.797,\"units\":\"$/GAL\",\"name\":\"No 2 Diesel\"},{\"period\":\"2026-06-29\",\"value\":4.751,\"units\":\"$/GAL…(324 chars)",
+    "suite.cache.gas.NUS.EPMR": "{\"t\":1784084388861,\"v\":[{\"period\":\"2026-06-22\",\"value\":3.247,\"units\":\"$/GAL\",\"name\":\"Regular Gasoline\"},{\"period\":\"2026-06-29\",\"value\":3.201,\"units\":\"…(343 chars)",
+    "suite.cache.gas.NUS.EPD2D": "{\"t\":1784084388861,\"v\":[{\"period\":\"2026-06-22\",\"value\":3.797,\"units\":\"$/GAL\",\"name\":\"No 2 Diesel\"},{\"period\":\"2026-06-29\",\"value\":3.751,\"units\":\"$/GAL…(324 chars)",
+    "suite.theme": "dark",
+    "suite.cache.gas.R40.EPD2D": "{\"t\":1784084388861,\"v\":[{\"period\":\"2026-06-22\",\"value\":3.997,\"units\":\"$/GAL\",\"name\":\"No 2 Diesel\"},{\"period\":\"2026-06-29\",\"value\":3.951,\"units\":\"$/GAL…(324 chars)"
+  },
+  "keysOnlyInV1": [],
+  "keysOnlyInV2": []
+}

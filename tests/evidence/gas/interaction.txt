@@ -1,0 +1,44 @@
+NOTE: EIA has no demo tier and no real key exists in this environment; every api.eia.gov
+NOTE: request in this run is route-fulfilled with deterministic payloads in the real EIA v2
+NOTE: shape. The no-key designed state, paste-key mechanics, render pipeline, key-rejection
+NOTE: UX, theme redraw, and stale path are what this run proves. No live request was made.
+no-key state: keycard visible=true, mainCard visible=false, natlCard visible=false
+keycard copy: "Add a free EIA key" / "The EIA API needs a free key (instant, no cost). Register at eia.gov/opendata/register.php, then paste the key here. It's stored only on this machine."
+signup link href: https://www.eia.gov/opendata/register.php
+save with empty field -> keyMsg: "Paste your key first." (class=msg err)
+after key save: keycard visible=false, stored suite.key.eia="TESTKEY-LOCAL-HARNESS"
+hero price: "$3.100 / gal" (expected $3.100 / gal)
+hero meta: "United States · Regular Gasoline Week of Jul 13, 2026 · ▼ 0.052 vs prior week"
+compare cards: 1 week ago = $3.152 | ~1 year ago = $3.027 | 1-year change = +$0.073
+  expected: 1 week ago $3.152, ~1 year ago $3.027, 1-year change +$0.073
+trend chart: 2 paths (area+line), 5 grid lines, 12 axis labels, 1 end dot, line stroke=#2f6f6a (light --accent #2f6f6a), role=img, aria-label="52-week price trend chart"
+all-regions sub: "· Regular gasoline, latest week"
+  region NUS: "$3.100" (expected $3.100)
+  region R10: "$3.200" (expected $3.200)
+  region R20: "$2.950" (expected $2.950)
+  region R30: "$2.750" (expected $2.750)
+  region R40: "$3.300" (expected $3.300)
+  region R50: "$4.100" (expected $4.100)
+cache keys: suite.cache.gas.NUS.EPMR, suite.cache.gas.R10.EPMR, suite.cache.gas.R20.EPMR, suite.cache.gas.R30.EPMR, suite.cache.gas.R40.EPMR, suite.cache.gas.R50.EPMR
+envelope suite.cache.gas.NUS.EPMR: v is processed-rows array=true, 4 rows, asc=true, last={period:2026-07-13, value:3.1, units:$/GAL, name:"Regular Gasoline"} (v1 envelope shape)
+area -> R20: hero "$2.950 / gal" (expected $2.950), meta "Midwest (PADD 2) · Regular Gasoline Week of Jul 13, 2026 · ▼ 0.052 vs prior week"
+product -> EPD2D (diesel): hero "$3.500 / gal" (expected $3.500), all-regions sub "· Diesel (No. 2), latest week", NUS cell "$3.650" (expected $3.650)
+refresh: cache t renewed (1784174388038 -> 1784174388108), hero re-rendered
+theme redraw: chart line stroke #2f6f6a (light) -> #6fb5ae (dark --accent #6fb5ae) after theme click
+key rejected (HTTP 403): "That key was rejected by EIA. Enter a different key."
+rekey link: keycard visible=true, mainCard visible=false
+network error, no cache: "Couldn't reach EIA (Failed to fetch). It caches weekly — try Refresh in a bit."
+empty data set: "No data returned for this region/fuel combination."
+offline stale reload: hero "$3.100 / gal" still rendered from aged cache
+  stale note: "Offline — cached from 9:59 PM Jul 14."
+  all-regions stale note: "Offline — cached from 9:59 PM Jul 14.", NUS cell "$3.100"
+  chart still rendered: 2 paths
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED

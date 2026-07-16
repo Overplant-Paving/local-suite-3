@@ -1,0 +1,25 @@
+{
+  "id": "gas",
+  "file": "gas.html",
+  "name": "Gas Price Tracker",
+  "cat": "money",
+  "cx": "S",
+  "desc": "National and regional gas/diesel averages with trend lines.",
+  "network": "keyed",
+  "key": {
+    "name": "eia",
+    "signup": "https://www.eia.gov/opendata/register.php",
+    "demo": false
+  },
+  "endpoints": [
+    "https://api.eia.gov"
+  ],
+  "storage": [
+    "suite.theme",
+    "suite.key.eia",
+    "suite.cache.gas.*"
+  ],
+  "cacheTtlMin": 1440,
+  "since": "v1",
+  "flags": []
+}
