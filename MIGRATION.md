@@ -158,7 +158,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 60 | gas.html | money | key | eia | C | | ✅ `tests/evidence/gas/` |
 | 61 | parks.html | civic | key | nps | C | | ✅ `tests/evidence/parks/` |
 | 62 | markets.html | money | key | finnhub | C | RL (CoinGecko keyless path) | ✅ `tests/evidence/markets/` |
-| 63 | launches.html | space | cors | — | C | RL (15 req/hr — TTL + backoff) | ⬜ |
+| 63 | launches.html | space | cors | — | C | RL (15 req/hr — TTL + backoff) | ✅ `tests/evidence/launches/` |
 | 64 | nearby.html | local | cors | — | C | RL (Overpass — TTL + mirror fallback) | ⬜ |
 | 65 | airport.html | space | blocked | — | C | remove `.example` → link-out card to aviationweather.gov | ✅ `tests/evidence/airport/` |
 | 66 | jobs.html | money | blocked | — | C | remove `.example` → embedded monthly BLS data | ⬜ |

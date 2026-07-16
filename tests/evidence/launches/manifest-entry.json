@@ -1,0 +1,21 @@
+{
+  "id": "launches",
+  "file": "launches.html",
+  "name": "Rocket Launch Schedule",
+  "cat": "space",
+  "cx": "S",
+  "desc": "Upcoming launches worldwide with countdowns and mission blurbs.",
+  "network": "cors-open",
+  "key": null,
+  "endpoints": [
+    "https://ll.thespacedevs.com"
+  ],
+  "storage": [
+    "suite.theme",
+    "suite.cache.launches.upcoming",
+    "suite.launches.backoffUntil"
+  ],
+  "cacheTtlMin": 60,
+  "since": "v1",
+  "flags": ["rl"]
+}

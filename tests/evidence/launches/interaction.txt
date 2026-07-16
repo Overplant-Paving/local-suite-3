@@ -1,0 +1,21 @@
+live fetch evidence (suite.cache.launches.upcoming): 10 launches cached at 2026-07-16T03:59:14.072Z; payload shape = raw LL2 (v2 fetchJSON)
+first cached launch: {"name":"Falcon 9 Block 5 | SDA Tranche 1 Transport Layer E","net":"2026-07-16T20:32:27Z","status":"Go","precision":"Second"}
+next mission card: rname="Falcon 9 Block 5 | SDA Tranche 1 Transport Layer E" prov="SpaceX · Vandenberg SFB, CA, USA" badge="Go for Launch"
+stamp after cache-served reload: "Cached · updated just now." (fresh cache within the 1 h TTL — no request spent)
+list rows rendered: 10; listHead visible: true
+first list row: "Falcon 9 Block 5 | SDA Tranche 1 Transport Layer EGo for Launch 🚀 Falcon 9 📍 Space Launch Complex 4E, Vandenberg SFB, CA, USA 🛰 PO Tranche 1 Transport Layer E is one of six missions by the United States Space Force Space Development Agency (SDA) for the Proliferated Warfighter Space Architecture (PWSA) Tranche 1 Transport Layer constellation, which will provide assured, resilient, low-… Jul 16, 03:32 PM T- 16h 33m"
+mission blurbs rendered (textContent, so remote text is inert): 10; first blurb starts "Tranche 1 Transport Layer E is one of six missions by the United States Space Fo"
+countdown ticks under page.clock: t0=["0","16","33","12"] +3s=["0","16","33","09"] +60s=["0","16","32","12"]
+when line: "Thu, Jul 16, 03:32 PM (America/Chicago)"
+429 segment: p2 first paint served from fresh cache, API hits so far = 0 (expect 0)
+429 response -> stamp: "Rate limit reached — showing cached schedule from 2 hr ago."; cached rows still rendered: 10; API hits = 1 (expect 1)
+backoff written: suite.launches.backoffUntil=1784177954654 (~60 min ahead = TTL doubled to 2 h effective)
+static throttle note visible: "This feed is rate-limited to about 15 requests/hour, so the page serves its cached copy and only fetches fresh data once an hour."
+backoff honored on reload: stamp="Source is rate-limiting — showing cached data from 2 hr ago."; API hits still = 1 (no new request inside the backoff window)
+offline stale stamp: "Live fetch failed — showing cached schedule from 24 hr ago."
+offline: next card still renders "Falcon 9 Block 5 | SDA Tranche 1 Transport Layer E"; cached rows 10
+refresh button offline: stamp="Live fetch failed — showing cached schedule from 24 hr ago." (button listener exercised; cache-first paint kept the schedule visible)
+theme toggle: light -> dark, aria-pressed=true
+CONSOLE ISSUES:
+  console.error: Failed to load resource: net::ERR_FAILED
+  console.error: Failed to load resource: net::ERR_FAILED
