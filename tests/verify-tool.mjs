@@ -95,8 +95,7 @@ const v1Styles = hasV1 ? await capture(v1Url, "v1") : null;
 const v2Styles = await capture(v2Url, "v2");
 
 let styleReport = hasV1 ? "" :
-  "(new-in-v2 tool — no v1 original; parity N/A. Both-theme captures are in v2-*.png.)
-";
+  "(new-in-v2 tool — no v1 original; parity N/A. Both-theme captures are in v2-*.png.)\n";
 for (const theme of hasV1 ? ["light", "dark"] : []) {
   const lines = [];
   for (const sel of selectors) {
