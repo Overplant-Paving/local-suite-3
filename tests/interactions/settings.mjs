@@ -153,11 +153,29 @@ export async function interact({ page, log, evidenceDir }) {
   }));
   log(`tamper guard: evil.key=${postTamper.evil}, localStorageBomb=${postTamper.bomb}, suite.bad.nonstring=${postTamper.nonstring} (all must be null), suite.tamper.ok=${JSON.stringify(postTamper.ok)} (written)`);
 
+  /* v2 backup compatibility: restoring only suite.location must replace, not be
+     overwritten by, the collection that already exists in this v3 profile. */
+  const v2LocationBackup = {
+    format: "local-suite.backup.v2", exported: "2026-07-15T00:00:00Z", keys: 1,
+    data: { "suite.location": JSON.stringify({ lat: 55, lon: 66, label: "Restored legacy" }) }
+  };
+  await page.fill("#restoreText", JSON.stringify(v2LocationBackup));
+  await page.click("#restoreBtn");
+  const v2Restored = await page.evaluate(() => ({
+    mirror: JSON.parse(localStorage.getItem("suite.location")),
+    collection: JSON.parse(localStorage.getItem("suite.locations"))
+  }));
+  log(`v2 location-only restore wins over prior v3 collection: ${JSON.stringify(v2Restored)}`);
+  // Restore the full seed snapshot so the remaining checks retain their known baseline.
+  await page.fill("#restoreText", backupJson);
+  await page.click("#restoreBtn");
+
   /* ================= 3. key manager ================= */
   const nasa = 'div.keyrow[data-key="nasa"]';
   log(`nasa status before set (demo fallback): "${await txt(page, nasa + " .kstatus")}"`);
   log(`finnhub status (restored custom key): "${await txt(page, 'div.keyrow[data-key="finnhub"] .kstatus')}"`);
   log(`finnhub input masked: type=${await page.getAttribute('div.keyrow[data-key="finnhub"] input', "type")}`);
+  log(`aviationstack key row available for Flight Tracker: count=${await page.locator('div.keyrow[data-key="aviationstack"]').count()}, status="${await txt(page, 'div.keyrow[data-key="aviationstack"] .kstatus')}"`);
 
   await page.fill(nasa + " input", "TESTKEY-NASA-LOCAL-HARNESS");
   await page.press(nasa + " input", "Enter"); // a11y: Enter saves
@@ -243,18 +261,57 @@ export async function interact({ page, log, evidenceDir }) {
   await page.click('#themeSeg button[data-th="light"]');
   log(`theme -> light: ${JSON.stringify(await segState())}`);
 
-  log(`location current (restored seed): "${await txt(page, "#locCur")}"`);
+  const migrated = await page.evaluate(() => ({
+    legacy: JSON.parse(localStorage.getItem("suite.location")),
+    collection: JSON.parse(localStorage.getItem("suite.locations"))
+  }));
+  log(`v2 location migration: ${JSON.stringify(migrated)}`);
+  log(`location current (restored seed): "${await txt(page, "#locCur")}", saved rows=${await page.locator("#locList .locitem").count()}`);
+
+  await page.click("#locAddBtn");
+  await page.fill("#locLabel", "London");
   await page.fill("#locLat", "abc");
   await page.click("#locSaveBtn");
   log(`location save with invalid lat -> "${await txt(page, "#locMsg")}"`);
   await page.fill("#locLat", "51.5");
   await page.fill("#locLon", "-0.12");
-  await page.fill("#locLabel", "London");
-  await page.press("#locLabel", "Enter"); // a11y: Enter saves
-  log(`location saved via Enter: suite.location=${await page.evaluate(() => localStorage.getItem("suite.location"))}, ` +
-    `current="${await txt(page, "#locCur")}", msg="${await txt(page, "#locMsg")}"`);
-  await page.click("#locClearBtn");
-  log(`location cleared: suite.location=${await page.evaluate(() => JSON.stringify(localStorage.getItem("suite.location")))}, current="${await txt(page, "#locCur")}"`);
+  await page.press("#locLon", "Enter"); // a11y: Enter saves
+  log(`London added: suite.locations=${await page.evaluate(() => localStorage.getItem("suite.locations"))}, rows=${await page.locator("#locList .locitem").count()}, msg="${await txt(page, "#locMsg")}"`);
+
+  // Switching mirrors suite.location, resets ambiguous derived choices, and preserves
+  // safe scoped/global caches.
+  await page.evaluate(() => {
+    localStorage.setItem("suite.cache.location-switch-probe", JSON.stringify({ t: Date.now(), v: "safe scoped data" }));
+    localStorage.setItem("suite.radar.station", "OLD-STATION");
+    localStorage.setItem("suite.state", "OLD");
+  });
+  await page.click('.locitem[data-location-id="london"] button:has-text("Use")');
+  const afterSwitch = await page.evaluate(() => ({
+    mirror: JSON.parse(localStorage.getItem("suite.location")),
+    collection: JSON.parse(localStorage.getItem("suite.locations")),
+    safeCache: localStorage.getItem("suite.cache.location-switch-probe"),
+    radarStation: localStorage.getItem("suite.radar.station"),
+    state: localStorage.getItem("suite.state")
+  }));
+  log(`London activated: ${JSON.stringify(afterSwitch)}, current="${await txt(page, "#locCur")}", msg="${await txt(page, "#locMsg")}"`);
+
+  // Editing active coordinates increments its revision and resets derived station state.
+  await page.click('.locitem[data-location-id="london"] button:has-text("Edit")');
+  await page.evaluate(() => localStorage.setItem("suite.normals.station", "OLD-NORMALS-STATION"));
+  await page.fill("#locLat", "51.51");
+  await page.click("#locSaveBtn");
+  const afterEdit = await page.evaluate(() => ({
+    mirror: JSON.parse(localStorage.getItem("suite.location")),
+    collection: JSON.parse(localStorage.getItem("suite.locations")),
+    normalsStation: localStorage.getItem("suite.normals.station"),
+    focus: document.activeElement && document.activeElement.id
+  }));
+  log(`active London edited: ${JSON.stringify(afterEdit)}, msg="${await txt(page, "#locMsg")}"`);
+
+  // Deleting the active entry falls back to the migrated v2 location and mirrors it.
+  page.once("dialog", d => d.accept());
+  await page.click('.locitem[data-location-id="london"] button:has-text("Delete")');
+  log(`active London deleted: mirror=${await page.evaluate(() => localStorage.getItem("suite.location"))}, collection=${await page.evaluate(() => localStorage.getItem("suite.locations"))}, rows=${await page.locator("#locList .locitem").count()}, msg="${await txt(page, "#locMsg")}"`);
 
   /* ================= 6. per-key delete + cache purge ================= */
   const delSel = 'button[aria-label="Delete suite.tamper.ok"]';
@@ -263,6 +320,10 @@ export async function interact({ page, log, evidenceDir }) {
   log(`after delete: suite.tamper.ok=${await page.evaluate(() => JSON.stringify(localStorage.getItem("suite.tamper.ok")))}, ` +
     `storage msg="${await txt(page, "#storageMsg")}"`);
 
+  await page.evaluate(() => {
+    localStorage.setItem("suite.cache.purge-test.one", JSON.stringify({ t: Date.now(), v: 1 }));
+    localStorage.setItem("suite.cache.purge-test.two", JSON.stringify({ t: Date.now(), v: 2 }));
+  });
   const beforePurge = Object.keys(await suiteLS(page)).sort();
   const cacheKeys = beforePurge.filter(k => k.startsWith("suite.cache."));
   log(`before purge: ${beforePurge.length} keys, cache keys: ${cacheKeys.join(", ")}`);

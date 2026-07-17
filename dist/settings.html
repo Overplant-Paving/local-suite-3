@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-gTqJBGu+FqPc1zEhhx3cszfuT0sOtxrizx2WtoGMt4o='; style-src 'unsafe-inline'; img-src data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-E/T8ZfzUE1RclWB+rx3FpG1QIHJeY3CklDGuLwqpV6Y=' 'sha256-dOxjYLYETVhM1ZErfF8PqyQ3oG6X/eAQHMNilF4BT2Y='; style-src 'unsafe-inline'; img-src data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Suite Settings · Local Suite</title>
 <style>
@@ -165,6 +165,15 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 
   .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; }
   @media (max-width:640px){ .grid2 { grid-template-columns:1fr; } }
+  .locpane { grid-column:1 / -1; }
+  .loclist { display:grid; gap:.45rem; margin:.55rem 0 .8rem; }
+  .locitem { display:flex; gap:.55rem; align-items:center; flex-wrap:wrap; padding:.6rem .7rem;
+    border:1px solid var(--line); border-radius:9px; background:var(--bg); }
+  .locitem.active { border-color:var(--accent); background:var(--accent-soft); }
+  .locitem .locname { flex:1; min-width:12rem; }
+  .locitem .locname b { display:block; }
+  .locitem .locname small { color:var(--muted); }
+  .locform { border-top:1px dashed var(--line); padding-top:.7rem; margin-top:.7rem; }
   .locrow { display:flex; gap:.55rem; flex-wrap:wrap; }
   .locrow input { flex:1; min-width:90px; width:auto; }
 
@@ -272,17 +281,28 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
         </div>
         <div class="msg" id="themeMsg"></div>
       </div>
-      <div>
-        <label class="fldlab" id="locLab">Shared location (<code>suite.location</code>, used by the weather/sky/nearby tools)</label>
-        <div class="statline">Current: <span class="cur" id="locCur">not set</span></div>
+      <div class="locpane">
+        <label class="fldlab" id="locLab">Saved locations</label>
+        <p class="note">Keep several places and choose one active location for the weather, sky,
+          nature, and nearby tools. The active place is mirrored to <code>suite.location</code> so
+          every existing tool keeps working. Switching places resets only location-derived station,
+          state, and alert choices; coordinate-keyed and global caches remain available.</p>
+        <div class="statline">Active: <span class="cur" id="locCur">not set</span></div>
+        <div class="loclist" id="locList" aria-labelledby="locLab"></div>
+        <button class="btn ghost" id="locAddBtn">Add location</button>
+        <div class="locform" id="locForm" hidden>
+          <div class="statline"><b id="locFormTitle">Add a location</b></div>
+          <label class="fldlab" for="locLabel">Name</label>
+          <input type="text" id="locLabel" placeholder="Home, Work, Cabin…" aria-label="Location name">
+          <label class="fldlab" id="locCoordsLab">Coordinates</label>
         <div class="locrow">
           <input type="text" id="locLat" inputmode="decimal" placeholder="lat" aria-label="Latitude">
           <input type="text" id="locLon" inputmode="decimal" placeholder="lon" aria-label="Longitude">
-          <input type="text" id="locLabel" placeholder="label (optional)" aria-label="Location label">
         </div>
         <div class="row">
-          <button class="btn" id="locSaveBtn">Save location</button>
-          <button class="btn ghost" id="locClearBtn">Clear</button>
+            <button class="btn" id="locSaveBtn">Save location</button>
+            <button class="btn ghost" id="locCancelBtn">Cancel</button>
+          </div>
         </div>
         <div class="msg" id="locMsg"></div>
       </div>
@@ -339,7 +359,9 @@ const backend = (() => {
     return {
       getItem: k => (mem.has(k) ? mem.get(k) : null),
       setItem: (k, v) => { mem.set(k, String(v)); },
-      removeItem: k => { mem.delete(k); }
+      removeItem: k => { mem.delete(k); },
+      key: i => Array.from(mem.keys())[i] ?? null,
+      get length() { return mem.size; }
     };
   }
 })();
@@ -363,13 +385,15 @@ const store = {
   set(key, value) {
     assertNamespaced(key);
     try {
-      backend.setItem(key, typeof value === "string" ? value : JSON.stringify(value));
-    } catch (e) { /* quota exceeded or denied - never fatal */ }
+      const raw = typeof value === "string" ? value : JSON.stringify(value);
+      backend.setItem(key, raw);
+      return backend.getItem(key) === raw;
+    } catch (e) { return false; /* quota exceeded or denied - never fatal */ }
   },
   /* Deletes a key outright (v1 tools used removeItem for unpin/clear flows). */
   remove(key) {
     assertNamespaced(key);
-    try { backend.removeItem(key); } catch (e) {}
+    try { backend.removeItem(key); return backend.getItem(key) === null; } catch (e) { return false; }
   },
   /* Ordered migrations gated by suite.meta.schemaVersion (ARCHITECTURE.md §6).
      Baseline v2 = v1 layout, so the suite-wide list starts empty. */
@@ -427,6 +451,9 @@ async function fetchJSON(url, opts = {}) {
     accept = "application/json", tries = 1, headers = {}
   } = opts;
   const fullKey = cacheKey ? "suite.cache." + cacheKey : null;
+  /* A location switch may happen in this or another tab while a request is in
+     flight. Never render or cache a response whose location context changed. */
+  const locationAtStart = JSON.stringify(store.get("suite.location"));
 
   let cached = null;
   if (fullKey) {
@@ -450,6 +477,11 @@ async function fetchJSON(url, opts = {}) {
       clearTimeout(timer);
       if (r.ok) {
         const v = await r.json();
+        if (JSON.stringify(store.get("suite.location")) !== locationAtStart) {
+          const changed = new Error("active location changed during request");
+          changed.locationChanged = true;
+          throw changed;
+        }
         const t = Date.now();
         if (fullKey) store.set(fullKey, { t, v });
         return { v, t, stale: false, fromCache: false };
@@ -458,11 +490,15 @@ async function fetchJSON(url, opts = {}) {
       if (r.status === 404) break; /* a 404 will not improve on retry */
     } catch (e) {
       clearTimeout(timer);
+      if (e && e.locationChanged) throw e;
       lastErr = (e && e.name === "AbortError") ? new Error("timed out") : e;
     }
     if (i < n - 1) await new Promise(res => setTimeout(res, 600 * (i + 1)));
   }
   if (fallbackToCache && cached) {
+    if (JSON.stringify(store.get("suite.location")) !== locationAtStart) {
+      throw new Error("active location changed during request");
+    }
     return { v: cached.v, t: cached.t, stale: true, fromCache: true };
   }
   throw lastErr || new Error("fetch failed");
@@ -478,20 +514,215 @@ function liveRegion(el) {
   return el;
 }
 
-/* ---- shared location: the suite.location key, used by ~20 tools ---- */
+/* ---- shared locations ----
+   suite.location remains the active-location mirror, so every v1/v2 tool keeps
+   working unchanged. suite.locations stores the named collection used by v3. */
+const LOCATIONS_KEY = "suite.locations";
+const LOCATIONS_SCHEMA = 1;
+
+function validLocation(l) {
+  return l && typeof l === "object" && isFinite(l.lat) && isFinite(l.lon) &&
+    Math.abs(+l.lat) <= 90 && Math.abs(+l.lon) <= 180;
+}
+
+function cleanLocation(l) {
+  return { lat: +l.lat, lon: +l.lon, label: String(l.label || "").trim() };
+}
+
+/* Only state that is unsafe or derived from the active location is reset.
+   Coordinate/station/query-keyed caches and global feeds remain available. */
+const LOCATION_RESET_KEYS = [
+  "suite.cache.wildfire.all", /* legacy unscoped key; v3 writes coordinate-scoped keys */
+  "suite.radar.station", "suite.tides.station", "suite.normals.station",
+  "suite.state", "suite.alerts.seen"
+];
+function resetLocationState() {
+  let n = 0;
+  try {
+    for (const k of LOCATION_RESET_KEYS) {
+      if (backend.getItem(k) !== null) { backend.removeItem(k); n++; }
+    }
+  } catch (e) {}
+  return n;
+}
+
+function readLocations() {
+  const raw = store.get(LOCATIONS_KEY);
+  if (!raw || typeof raw !== "object" || !Array.isArray(raw.items)) return null;
+  if (raw.schema !== undefined && raw.schema !== LOCATIONS_SCHEMA) {
+    return { schema: raw.schema, activeId: null, items: [], unsupported: true };
+  }
+  const seen = new Set();
+  const items = [];
+  let damaged = false;
+  for (const x of raw.items) {
+    if (!validLocation(x) || typeof x.id !== "string" || !x.id || seen.has(x.id)) {
+      damaged = true; continue;
+    }
+    seen.add(x.id);
+    items.push(Object.assign({}, x, {
+      id: x.id,
+      label: String(x.label || "").trim(),
+      lat: +x.lat,
+      lon: +x.lon,
+      revision: Math.max(1, Number.isInteger(x.revision) ? x.revision : 1)
+    }));
+  }
+  const activeId = items.some(x => x.id === raw.activeId)
+    ? raw.activeId : (items[0] ? items[0].id : null);
+  if (damaged) {
+    return { schema: LOCATIONS_SCHEMA, activeId: null, items: [], invalid: true };
+  }
+  return Object.assign({}, raw, { schema: LOCATIONS_SCHEMA, activeId, items });
+}
+
+function sameValue(a, b) {
+  try { return JSON.stringify(a) === JSON.stringify(b); } catch (e) { return false; }
+}
+function writeLocations(c) {
+  const current = store.get(LOCATIONS_KEY);
+  return sameValue(current, c) || store.set(LOCATIONS_KEY, c);
+}
+function mirrorLocation(item) {
+  if (item) {
+    const next = cleanLocation(item);
+    return sameValue(store.get("suite.location"), next) || store.set("suite.location", next);
+  }
+  return store.get("suite.location") === null || store.remove("suite.location");
+}
+function activeItem(c) { return c && c.items.find(x => x.id === c.activeId) || null; }
+function slug(s) {
+  return String(s || "location").toLowerCase().normalize("NFKD")
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 32) || "location";
+}
+function uniqueId(c, label) {
+  const base = slug(label); let id = base, n = 2;
+  while (c.items.some(x => x.id === id)) id = base + "-" + n++;
+  return id;
+}
+function requireSupported(c) {
+  if (c && c.unsupported) throw new Error("Saved locations were created by a newer Local Suite version");
+  if (c && c.invalid) throw new Error("Saved locations are damaged; restore a backup before editing them");
+  return c;
+}
+
 const loc = {
   get() {
     const l = store.get("suite.location");
-    if (l && typeof l === "object" && isFinite(l.lat) && isFinite(l.lon)) {
-      return { lat: +l.lat, lon: +l.lon, label: l.label || "" };
-    }
-    return null;
+    return validLocation(l) ? cleanLocation(l) : null;
   },
   set(l) {
-    if (!l || !isFinite(l.lat) || !isFinite(l.lon)) {
+    if (!validLocation(l)) {
       throw new Error("Suite.location.set needs {lat, lon}");
     }
-    store.set("suite.location", { lat: +l.lat, lon: +l.lon, label: l.label || "" });
+    const next = cleanLocation(l);
+    const c = readLocations();
+    const item = activeItem(c);
+    if (c && item) {
+      const moved = item.lat !== next.lat || item.lon !== next.lon;
+      item.lat = next.lat; item.lon = next.lon;
+      item.label = next.label;
+      if (moved) item.revision++;
+      if (!writeLocations(c)) return false;
+      const mirrored = mirrorLocation(item);
+      if (moved && mirrored) resetLocationState();
+      return mirrored;
+    }
+    return store.set("suite.location", next);
+  }
+};
+
+const locations = {
+  /* Migration is explicit: only v3 entry points (hub/settings) call init().
+     Older tools that merely read suite.location do not gain a surprise key. */
+  init() {
+    let c = readLocations();
+    if (c && (c.unsupported || c.invalid)) return c;
+    if (c && c.items.length) {
+      const item = activeItem(c);
+      if (item) mirrorLocation(item);
+      return c;
+    }
+    if (c) store.remove(LOCATIONS_KEY);
+    const legacy = loc.get();
+    if (!legacy) return { schema: LOCATIONS_SCHEMA, activeId: null, items: [] };
+    const item = Object.assign({ id: "saved-location", revision: 1 }, legacy);
+    item.label = legacy.label;
+    c = { schema: LOCATIONS_SCHEMA, activeId: item.id, items: [item] };
+    writeLocations(c);
+    return c;
+  },
+  all() { return locations.init().items.map(x => Object.assign({}, x)); },
+  active() {
+    const c = locations.init();
+    if (c.unsupported || c.invalid) {
+      const legacy = loc.get();
+      return legacy ? Object.assign({ id: null, storageIssue: c.unsupported ? "newer" : "invalid" }, legacy) : null;
+    }
+    const item = activeItem(c);
+    return item ? Object.assign({}, item) : null;
+  },
+  add(l) {
+    if (!validLocation(l)) throw new Error("Suite.locations.add needs valid {lat, lon}");
+    const c = requireSupported(locations.init());
+    const label = String(l.label || "").trim() || "Saved location";
+    const item = Object.assign({ id: uniqueId(c, label), label, revision: 1 }, cleanLocation(l));
+    item.label = label;
+    c.items.push(item);
+    const becomesActive = !c.activeId;
+    if (becomesActive) c.activeId = item.id;
+    const collectionSaved = writeLocations(c);
+    const mirrored = collectionSaved && (!becomesActive || mirrorLocation(item));
+    let purged = 0;
+    if (becomesActive && mirrored) purged = resetLocationState();
+    return { location: Object.assign({}, item), purged, saved: !!mirrored };
+  },
+  update(id, changes) {
+    const c = requireSupported(locations.init());
+    const item = c.items.find(x => x.id === id);
+    if (!item) throw new Error("Unknown saved location: " + id);
+    const candidate = {
+      lat: changes && changes.lat !== undefined ? changes.lat : item.lat,
+      lon: changes && changes.lon !== undefined ? changes.lon : item.lon,
+      label: changes && changes.label !== undefined ? changes.label : item.label
+    };
+    if (!validLocation(candidate)) throw new Error("Suite.locations.update needs valid coordinates");
+    const moved = item.lat !== +candidate.lat || item.lon !== +candidate.lon;
+    item.lat = +candidate.lat; item.lon = +candidate.lon;
+    item.label = String(candidate.label || "").trim() || item.label || "Saved location";
+    if (moved) item.revision++;
+    const collectionSaved = writeLocations(c);
+    let mirrored = collectionSaved;
+    let purged = 0;
+    if (collectionSaved && c.activeId === id) {
+      mirrored = mirrorLocation(item);
+      if (moved && mirrored) purged = resetLocationState();
+    }
+    return { location: Object.assign({}, item), purged, saved: !!mirrored };
+  },
+  activate(id) {
+    const c = requireSupported(locations.init());
+    const item = c.items.find(x => x.id === id);
+    if (!item) throw new Error("Unknown saved location: " + id);
+    const changed = c.activeId !== id;
+    c.activeId = id;
+    const saved = writeLocations(c);
+    const mirrored = saved && mirrorLocation(item);
+    return { location: Object.assign({}, item),
+      purged: changed && mirrored ? resetLocationState() : 0, saved: !!mirrored };
+  },
+  remove(id) {
+    const c = requireSupported(locations.init());
+    const i = c.items.findIndex(x => x.id === id);
+    if (i < 0) return { removed: false, active: locations.active(), purged: 0 };
+    const wasActive = c.activeId === id;
+    c.items.splice(i, 1);
+    if (wasActive) c.activeId = c.items[0] ? c.items[0].id : null;
+    const saved = c.items.length ? writeLocations(c) : store.remove(LOCATIONS_KEY);
+    const next = activeItem(c);
+    const mirrored = !wasActive || (saved && mirrorLocation(next));
+    return { removed: true, active: next ? Object.assign({}, next) : null,
+      purged: wasActive && mirrored ? resetLocationState() : 0, saved: !!(saved && mirrored) };
   }
 };
 
@@ -518,7 +749,7 @@ function relay(url) {
   return b + (b.includes("?") ? "&" : "?") + "url=" + encodeURIComponent(url);
 }
 
-window.Suite = { theme, fetchJSON, store, esc, liveRegion, location: loc, key, relay };
+window.Suite = { theme, fetchJSON, store, esc, liveRegion, location: loc, locations, key, relay };
 
 /* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
    The .catch keeps a failed registration from ever costing console noise on a
@@ -618,6 +849,13 @@ function restoreFromText(text) {
     setMsg(restoreMsg, "Restore failed: not a Local Suite backup (expected format \"" + FORMAT + "\").", "err");
     return;
   }
+  /* A v2 backup has suite.location but no suite.locations. Remove any current
+     v3 collection first so refreshAll() migrates the restored v2 location rather
+     than treating the pre-restore collection as authoritative. */
+  if (Object.prototype.hasOwnProperty.call(p.data, "suite.location") &&
+      !Object.prototype.hasOwnProperty.call(p.data, "suite.locations")) {
+    Suite.store.remove("suite.locations");
+  }
   let written = 0, skipped = 0, failed = 0;
   for (const k of Object.keys(p.data)) {
     const v = p.data[k];
@@ -662,7 +900,8 @@ const KEY_REGISTRY = [
   { id: "finnhub",  label: "Finnhub",         used: "markets" },
   { id: "ebird",    label: "eBird",           used: "birds" },
   { id: "usda",     label: "USDA FoodData",   used: "nutrition" },
-  { id: "bart",     label: "BART",            used: "transit" }
+  { id: "bart",     label: "BART",            used: "transit" },
+  { id: "aviationstack", label: "Aviationstack", used: "flight tracker" }
 ];
 const keyEls = {}; // id -> {input, status, reveal}
 
@@ -850,43 +1089,138 @@ document.querySelectorAll("#themeSeg button").forEach(b => {
 document.getElementById("themeBtn").addEventListener("click", () => { paintThemeSeg(); renderStorage(); });
 
 const locCur = document.getElementById("locCur");
+const locList = document.getElementById("locList");
+let editingLocId = null;
+
+function resetLocForm(returnFocus = true) {
+  editingLocId = null;
+  document.getElementById("locForm").hidden = true;
+  document.getElementById("locFormTitle").textContent = "Add a location";
+  document.getElementById("locLabel").value = "";
+  document.getElementById("locLat").value = "";
+  document.getElementById("locLon").value = "";
+  if (returnFocus) document.getElementById("locAddBtn").focus();
+}
 function paintLoc() {
-  const l = Suite.location.get();
-  if (l) {
-    locCur.textContent = l.lat + ", " + l.lon + (l.label ? " — " + l.label : "");
-    document.getElementById("locLat").value = String(l.lat);
-    document.getElementById("locLon").value = String(l.lon);
-    document.getElementById("locLabel").value = l.label;
-  } else {
-    locCur.textContent = "not set";
-    document.getElementById("locLat").value = "";
-    document.getElementById("locLon").value = "";
-    document.getElementById("locLabel").value = "";
+  const active = Suite.locations.active();
+  const all = Suite.locations.all();
+  const blocked = active && active.storageIssue;
+  document.getElementById("locAddBtn").disabled = !!blocked;
+  if (blocked) {
+    setMsg(locMsg, active.storageIssue === "newer"
+      ? "These saved locations were created by a newer Local Suite version; they were left untouched."
+      : "The saved-location collection is damaged; restore a backup before editing it.", "err");
+  }
+  const activeLabel = active ? (active.label || "Saved location") : "";
+  locCur.textContent = active
+    ? activeLabel + " — " + active.lat + ", " + active.lon
+    : "not set";
+  locList.replaceChildren();
+  if (!all.length) {
+    const empty = document.createElement("p");
+    empty.className = "empty";
+    empty.textContent = "No saved locations yet.";
+    locList.append(empty);
+    return;
+  }
+  for (const l of all) {
+    const displayLabel = l.label || "Saved location";
+    const row = document.createElement("div");
+    row.className = "locitem" + (active && active.id === l.id ? " active" : "");
+    row.dataset.locationId = l.id;
+    const name = document.createElement("div");
+    name.className = "locname";
+    const b = document.createElement("b");
+    b.textContent = displayLabel + (active && active.id === l.id ? " · active" : "");
+    const small = document.createElement("small");
+    small.textContent = l.lat + ", " + l.lon;
+    name.append(b, small);
+    const use = document.createElement("button");
+    use.className = "btn ghost";
+    use.textContent = active && active.id === l.id ? "Active" : "Use";
+    use.disabled = !!active && active.id === l.id;
+    use.setAttribute("aria-label", "Use " + displayLabel + " across Local Suite");
+    use.addEventListener("click", () => {
+      const r = Suite.locations.activate(l.id);
+      paintLoc(); renderStorage();
+      if (!r.saved) {
+        setMsg(locMsg, "Couldn't switch locations because browser storage is unavailable or full.", "err");
+        return;
+      }
+      setMsg(locMsg, displayLabel + " is now active" +
+        (r.purged ? "; reset " + r.purged + " location-specific setting" + (r.purged === 1 ? "" : "s") + "." : "."), "ok");
+    });
+    const edit = document.createElement("button");
+    edit.className = "btn ghost"; edit.textContent = "Edit";
+    edit.setAttribute("aria-label", "Edit " + displayLabel);
+    edit.addEventListener("click", () => {
+      editingLocId = l.id;
+      document.getElementById("locForm").hidden = false;
+      document.getElementById("locFormTitle").textContent = "Edit " + displayLabel;
+      document.getElementById("locLabel").value = l.label;
+      document.getElementById("locLat").value = String(l.lat);
+      document.getElementById("locLon").value = String(l.lon);
+      document.getElementById("locLabel").focus();
+    });
+    const del = document.createElement("button");
+    del.className = "btn danger"; del.textContent = "Delete";
+    del.setAttribute("aria-label", "Delete " + displayLabel);
+    del.addEventListener("click", () => {
+      if (!confirm("Delete saved location “" + displayLabel + "”?")) return;
+      const r = Suite.locations.remove(l.id);
+      if (!r.saved) {
+        paintLoc(); renderStorage();
+        setMsg(locMsg, "Couldn't delete that location because browser storage is unavailable.", "err");
+        return;
+      }
+      if (editingLocId === l.id) resetLocForm();
+      paintLoc(); renderStorage();
+      setMsg(locMsg, "Deleted " + displayLabel + (r.active ? "; " + (r.active.label || "Saved location") + " is now active." : "; no active location remains."), "ok");
+    });
+    row.append(name, use, edit, del);
+    locList.append(row);
   }
 }
 function saveLoc() {
   const lat = parseFloat(document.getElementById("locLat").value);
   const lon = parseFloat(document.getElementById("locLon").value);
+  const label = document.getElementById("locLabel").value.trim();
+  if (!label) {
+    setMsg(locMsg, "Give this location a name such as Home, Work, or Cabin.", "err");
+    return;
+  }
   if (!isFinite(lat) || !isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) {
     setMsg(locMsg, "Enter a latitude (−90…90) and longitude (−180…180) first.", "err");
     return;
   }
-  Suite.location.set({ lat, lon, label: document.getElementById("locLabel").value.trim() });
-  paintLoc();
-  renderStorage();
-  setMsg(locMsg, "Location saved — the location-aware tools will pick it up.", "ok");
+  const r = editingLocId
+    ? Suite.locations.update(editingLocId, { lat, lon, label })
+    : Suite.locations.add({ lat, lon, label });
+  if (!r.saved) {
+    paintLoc(); renderStorage();
+    setMsg(locMsg, "Couldn't save that location because browser storage is unavailable or full.", "err");
+    return;
+  }
+  const verb = editingLocId ? "Updated " : "Saved ";
+  resetLocForm(); paintLoc(); renderStorage();
+  setMsg(locMsg, verb + r.location.label +
+    (r.purged ? "; reset " + r.purged + " location-specific setting" + (r.purged === 1 ? "" : "s") + " because its active coordinates changed." : "."), "ok");
 }
+document.getElementById("locAddBtn").addEventListener("click", () => {
+  resetLocForm(false);
+  document.getElementById("locForm").hidden = false;
+  document.getElementById("locLabel").focus();
+});
 document.getElementById("locSaveBtn").addEventListener("click", saveLoc);
+document.getElementById("locCancelBtn").addEventListener("click", resetLocForm);
 ["locLat", "locLon", "locLabel"].forEach(id => {
   document.getElementById(id).addEventListener("keydown", e => {
     if (e.key === "Enter") { e.preventDefault(); saveLoc(); }
+    if (e.key === "Escape") { e.preventDefault(); resetLocForm(); }
   });
 });
-document.getElementById("locClearBtn").addEventListener("click", () => {
-  Suite.store.remove("suite.location");
-  paintLoc();
-  renderStorage();
-  setMsg(locMsg, "Location cleared.", "ok");
+window.addEventListener("storage", e => {
+  if (e.key === "suite.location" || e.key === "suite.locations") paintLoc();
 });
 
 /* ================= storage viewer + cache purge ================= */

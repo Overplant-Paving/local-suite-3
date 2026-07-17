@@ -20,6 +20,11 @@
   .stat b { font-size: 1.5rem; display: block; line-height: 1.15; color: var(--accent); }
   .stat span { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
   .controls { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: .7rem 0 .8rem; }
+  .locswitch { display:flex; align-items:center; gap:.55rem; flex-wrap:wrap; margin-bottom:.6rem;
+    font-size:.85rem; color:var(--muted); }
+  .locswitch select { background:var(--card); color:var(--ink); border:1px solid var(--line);
+    border-radius:8px; padding:.35rem .55rem; font:inherit; }
+  .locswitch a { color:var(--accent); }
   .pills { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .7rem; }
   .pill {
     border: 1px solid var(--line); background: var(--card); color: var(--muted);
@@ -70,6 +75,12 @@
   <div class="stats" id="stats"></div>
 
   <div class="controls">
+    <div class="locswitch" id="locSwitch" hidden>
+      <label for="activeLoc">📍 Active location</label>
+      <select id="activeLoc"></select>
+      <a href="settings.html#prefsCard">Manage locations</a>
+      <span id="locSwitchStatus" class="sr-status" aria-live="polite"></span>
+    </div>
     <input class="search" id="q" type="search" aria-label="Search tools"
       placeholder="Search tools, data sources, keywords…  (press /)" autocomplete="off">
     <div class="pills" id="pills"></div>
@@ -101,6 +112,40 @@ if (location.protocol.startsWith("http") &&
   document.getElementById("originHint").hidden = false;
 }
 Suite.store.migrate([]); // suite entry point; the v2 migration list starts empty (ARCHITECTURE.md §6)
+
+/* v3 named locations: suite.location remains the active mirror used by every
+   existing tool; the hub only chooses which saved entry owns that mirror. */
+const locSwitch = document.getElementById("locSwitch");
+const activeLocEl = document.getElementById("activeLoc");
+function paintLocationSwitch() {
+  const all = Suite.locations.all();
+  const active = Suite.locations.active();
+  activeLocEl.replaceChildren();
+  for (const l of all) {
+    const o = document.createElement("option");
+    o.value = l.id; o.textContent = l.label || "Saved location";
+    o.selected = !!active && active.id === l.id;
+    activeLocEl.append(o);
+  }
+  locSwitch.hidden = !all.length;
+}
+activeLocEl.addEventListener("change", () => {
+  const r = Suite.locations.activate(activeLocEl.value);
+  if (!r.saved) {
+    document.getElementById("locSwitchStatus").textContent =
+      "Couldn't switch locations because browser storage is unavailable.";
+    paintLocationSwitch();
+    return;
+  }
+  document.getElementById("locSwitchStatus").textContent =
+    r.location.label + " is now active" +
+    (r.purged ? "; location-specific station, state, or alert choices were reset." : ".");
+  paintLocationSwitch();
+});
+window.addEventListener("storage", e => {
+  if (e.key === "suite.location" || e.key === "suite.locations") paintLocationSwitch();
+});
+paintLocationSwitch();
 
 /* ==== data: filled from manifest/tools.json by build.py ==== */
 const TOOLS = /* @suite:tools */[]/* /@suite:tools */;

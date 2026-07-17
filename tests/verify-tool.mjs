@@ -33,7 +33,14 @@ const VIEWPORT = { width: 1280, height: 900 };
 const mod = await import(`./interactions/${tool}.mjs`);
 const selectors = mod.selectors || ["body", "header h1", ".theme-btn", "footer"];
 
-const browser = await chromium.launch({ channel: "chrome" });
+let browser;
+try {
+  browser = await chromium.launch({ channel: "chrome" });
+} catch (e) {
+  if (!String(e).includes("distribution 'chrome' is not found")) throw e;
+  console.warn("installed Chrome not found; using Playwright Chromium for local verification");
+  browser = await chromium.launch();
+}
 
 async function newPage(theme) {
   const ctx = await browser.newContext({ viewport: VIEWPORT });

@@ -73,13 +73,20 @@ Suite.fetchJSON(url, {timeout=12000, cacheKey, ttl, fallbackToCache=true})
   // Unifies v1's getJSON / fetchWithTimeout variants.
 
 Suite.store.get(key, fallback)     // JSON parse with try/catch, suite.* namespace enforced
-Suite.store.set(key, value)
+Suite.store.set(key, value)           // returns true only after a successful read-back
+Suite.store.remove(key)               // returns true only when the key is absent
 Suite.store.migrate([...fns])      // ordered migrations, gated by suite.meta.schemaVersion (§6)
 
 Suite.esc(str)                     // HTML-escape; mandatory for remote data in innerHTML (QUALITY.md)
 Suite.liveRegion(el)               // marks an async result container aria-live="polite" (QUALITY.md)
 
 Suite.location.get() / .set({lat, lon, label})   // the shared suite.location key
+Suite.locations.init()                          // migrate the v2 active location into a named list
+Suite.locations.all() / .active()
+Suite.locations.add(location) / .update(id, changes) / .remove(id) / .activate(id)
+  // suite.locations is the v3 collection; suite.location remains its active mirror so
+  // every existing tool stays compatible. Active-place changes reset only unsafe
+  // location-derived station/state/alert choices; safe scoped/global caches remain.
 Suite.key(name)                    // reads suite.key.<name>; returns {value, isDemo} with
                                    // DEMO_KEY fallback where the API offers one
 Suite.relay(url)                   // optional power-user hook: rewrites url through
@@ -168,6 +175,7 @@ header comment redirects anyone who opens a dist file to the real source.
 |---|---|---|
 | `suite.theme` | `"light" \| "dark"` | absent = follow system |
 | `suite.location` | `{lat, lon, label}` | shared across ~20 tools |
+| `suite.locations` | `{schema, activeId, items:[{id,label,lat,lon,revision}]}` | v3 named locations; active entry is mirrored to `suite.location` |
 | `suite.cache.<tool>.<key>` | `{t: epochMs, v: any}` | the cache envelope; TTL per manifest |
 | `suite.key.<name>` | string | user-supplied API keys (nasa, congress, eia, nps, finnhub, ebird, **bart** — new in v2, externalized from v1 `transit.html:163`) |
 | `suite.<tool>.*` | tool-specific | e.g. `suite.notes.*`, history lists |
@@ -193,7 +201,19 @@ One first-class tool closing three v1 gaps:
 2. **API key manager** — UI over `suite.key.*` with signup links from the manifest.
 3. **Relay config** — set `suite.relay.url` + a connection test button.
 
-Plus: theme, location editor, storage usage viewer, per-tool cache purge.
+Plus: theme, named-location manager with one active suite-wide location, storage usage viewer,
+per-tool cache purge.
+
+### V3 named-location compatibility rule
+
+`suite.location` is permanent compatibility surface, not deprecated storage. The hub and Settings
+explicitly migrate an existing v2 value into `suite.locations`; older tools that only read or write
+`Suite.location` continue to work. When a v2-style tool writes a new active location after the
+collection exists, the active named entry is updated and its revision increments if coordinates
+changed. Switching, moving, or deleting the active entry resets ambiguous location-derived
+station/state/alert preferences and the legacy unscoped wildfire cache. Coordinate-, station-, and
+query-keyed caches plus global source feeds remain available. `Suite.fetchJSON` also rejects an
+in-flight response if the active location changed before that response completed.
 
 ---
 

@@ -1436,6 +1436,36 @@
       "flags": []
     },
     {
+      "id": "flight",
+      "file": "flight.html",
+      "name": "Flight Tracker",
+      "cat": "space",
+      "cx": "M",
+      "desc": "Track one dated flight's status, last-known position, and estimated arrival.",
+      "network": "keyed",
+      "key": {
+        "name": "aviationstack",
+        "signup": "https://aviationstack.com/signup/free",
+        "demo": false
+      },
+      "endpoints": [
+        "https://api.aviationstack.com",
+        "https://api.airplanes.live"
+      ],
+      "storage": [
+        "suite.theme",
+        "suite.key.aviationstack",
+        "suite.flight.refresh",
+        "suite.flight.usage",
+        "suite.cache.flight.*"
+      ],
+      "cacheTtlMin": 1,
+      "since": "v3",
+      "flags": [
+        "rl"
+      ]
+    },
+    {
       "id": "jobs",
       "file": "jobs.html",
       "name": "Jobs & Unemployment Snapshot",

@@ -15,7 +15,14 @@ const manifest = JSON.parse(readFileSync(join(ROOT, "manifest", "tools.json"), "
 const networkTools = new Set(manifest.tools.filter(t => (t.endpoints || []).length).map(t => t.file));
 const files = readdirSync(join(ROOT, "dist")).filter(f => f.endsWith(".html")).sort();
 
-const browser = await chromium.launch({ channel: "chrome" });
+let browser;
+try {
+  browser = await chromium.launch({ channel: "chrome" });
+} catch (e) {
+  if (!String(e).includes("distribution 'chrome' is not found")) throw e;
+  console.warn("installed Chrome not found; using Playwright Chromium for local smoke verification");
+  browser = await chromium.launch();
+}
 let failures = 0;
 
 for (const file of files) {

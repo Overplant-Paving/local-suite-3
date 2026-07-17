@@ -171,6 +171,10 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 New in v2 (not migrations): **settings.html** (Phase 4 — backup/restore, keys, relay config) and
 the **games** hub category (Phase 4 — meteor-patrol de-nested).
 
+New in v3: **flight.html** (individual dated flight status and ETA via a user-owned Aviationstack
+key, plus Airplanes.live ADS-B position fallback; deterministic provider/offline/mobile evidence
+under `tests/evidence/flight/`; built `file://` live-key/provider chain verified Jul 2026).
+
 ## 6. Progress tracking
 
 `python build.py --check` prints the counts (migrated / per batch / flags outstanding) computed

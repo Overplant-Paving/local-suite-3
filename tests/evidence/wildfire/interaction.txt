@@ -1,23 +1,21 @@
 first-run setup card visible: true
 ZIP 90012 lookup -> locbar: "Los Angeles, CA", suite.location = {"lat":34.0614,"lon":-118.2385,"label":"Los Angeles, CA"}
 locbar label after seed: "Los Angeles, CA"
-live WFIGS query: 142 incidents in cache envelope (cached at 2026-07-16T06:12:49.819Z)
-sample incident: "CALTRANS FRP RX" — 129.2 acres, null% contained, state US-CA
-stat: 66 WITHIN 250 KM
-stat: 3,915 TOTAL ACRES
-stat: 7 km NEAREST
-stamp: "Data from 1:12 AM"
-fire cards rendered: 66
-first card (nearest): "LAC-246677 CA · WF · discovered Jul 14, 2026 — ACRES — CONTAINED Containment not reported 7 KM AWAY"
-distances (km, nearest-first sort): [7, 9, 12, 13, 15, 15, 15, 16, …]
-distances ascending: true, all <= radius 250: true
+live WFIGS query: 0 incidents in cache envelope (cached at 2026-07-16T18:22:22.554Z)
+sample incident: "null" — null acres, null% contained, state null
+stat: 0 WITHIN 250 KM
+stat: 0 TOTAL ACRES
+stat: — NEAREST
+stamp: "Data from 1:22 PM"
+fire cards rendered: 0
+no cards — calm state: "No active fires within 250 km Nothing on the WFIGS incident feed near you right now. Widen the radius to scan farther out."
 radius label after slider -> 800: "800 KM"
-after radius 800 km: stats [116 WITHIN 800 KM | 220,784 TOTAL ACRES | 7 km NEAREST]; cards = 116
-sort "Largest first": top acres [97458, 27393, 26464, 17042, 13016]; descending: true
-sort "Newest first": first card sub "CA · WF · discovered Jul 16, 2026"
+after radius 800 km: stats [0 WITHIN 800 KM | 0 TOTAL ACRES | — NEAREST]; cards = 0
+sort "Largest first": top acres []; descending: true
+sort "Newest first": first card sub "(no cards)"
 persisted: radius=800, sort=dist
-offline stale stamp: "Data from 1:12 AM · connection issue: offline — showing cached data"
-offline: 66 cached fire cards still render
+offline stale stamp: "Data from 1:22 PM · connection issue: offline — showing cached data"
+offline: 0 cached fire cards still render
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
   console.error: Failed to load resource: net::ERR_FAILED

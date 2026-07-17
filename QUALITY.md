@@ -126,5 +126,7 @@ snapshot. The burn-down table links to it; no evidence, not done.
 - [ ] dist committed; staleness gate confirms source↔dist match
 - [ ] CATALOG.md verification dates touched for any endpoint that changed
 - [ ] `suite.meta.schemaVersion` bumped iff storage layout changed, with migration entry
+- [ ] named-location migration verified from a real v2 `suite.location`; active-location switches
+      mirror correctly and cannot render prior-location cache data
 - [ ] ROADMAP.md status block and MIGRATION.md burn-down table current
 - [ ] tag pushed

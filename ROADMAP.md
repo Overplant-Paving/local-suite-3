@@ -202,6 +202,21 @@ release checklist executed · tag pushed.
 
 ---
 
+## V3 work
+
+- [x] Multiple saved locations — named collection in `suite.locations`, active
+  `suite.location` compatibility mirror, Settings manager, hub switcher, v2 migration, storage
+  failure feedback, and cache-safe active switching. Focused contract test + Settings/hub
+  interactions + 73/73 smoke green; evidence: `tests/evidence/v3-multiple-locations/`.
+- [x] Individual Flight Tracker — dated flight lookup, provider status/ETA, last-known world-map
+  position, telemetry, stale-cache handling, deep links, rate-conscious refresh, Settings key
+  integration, Airport-page link, deterministic provider/error/offline tests, responsive evidence,
+  and 74/74 smoke coverage under `tests/evidence/flight/`.
+- [x] Live keyed flight verification — user-authorized Aviationstack request plus Airplanes.live
+  ADS-B position fallback returned HTTP 200 from both providers under built `file://`; a live JL80
+  instance rendered route, ETA, coordinates, map, and fresh position with zero console errors.
+  No key or account credential is committed.
+
 ## After v2.0 (backlog, unscheduled)
 
 - New tools from CATALOG.md's unbuilt ideas — each a `--new` scaffold + the same Definition of Done.

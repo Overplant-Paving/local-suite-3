@@ -14,8 +14,8 @@ When choosing or replacing a data source, prefer in this order:
    wheretheiss.at, JPL SSD, CelesTrak, NIFC ArcGIS, USDA AWDB, iNaturalist.
 2. **Keyless but CORS-blocked** → bundled at build time via the embedded-data pipeline (§4):
    aviationweather.gov, BLS. (NDBC stays descoped — Open-Meteo covers marine.)
-3. **Free key** (instant signup, stored in `suite.key.*`): Congress.gov, EIA, NPS, Finnhub, eBird,
-   NASA (above demo tier).
+3. **Free personal key** (provider signup, stored in `suite.key.*`): Congress.gov, EIA, NPS, Finnhub, eBird,
+   NASA (above demo tier), Aviationstack (flight tracker; small personal free tier).
 4. **Demo tier** (works keyless with low limits): NASA `DEMO_KEY` (30/hr, 50/day), USDA FDC.
 
 Never: paid APIs, APIs requiring OAuth, sources that demand tracking.
@@ -43,11 +43,13 @@ Never: paid APIs, APIs requiring OAuth, sources that demand tracking.
 | Overpass public | fair-use | nearby | long TTL + kumi.systems mirror fallback |
 | Nominatim | 1 req/s | geo | client-side throttle |
 | ipapi.co | 1k/day | network | cache IP info per session |
+| Aviationstack free | 100/month | flight | 1 min cache; automatic refresh defaults off, stops on rate limit, and has an 80-request local monthly safety threshold |
+| Airplanes.live | 1 req/s documented | flight position fallback | query only one Aviationstack-resolved ICAO24 per user lookup; no local response cache (`no-store`) |
 
 ## 3. Key management
 
 - One convention: `localStorage["suite.key.<name>"]` — names: `nasa`, `congress`, `eia`, `nps`,
-  `finnhub`, `ebird`, `usda`, `bart`.
+  `finnhub`, `ebird`, `usda`, `bart`, `aviationstack`.
 - `Suite.key(name)` returns `{value, isDemo}`; tools render a one-line "using the shared demo key —
   [get your free key]" note when on a demo tier, with the signup URL from the manifest.
 - **settings.html is the single entry UI** for keys (Phase 4). Until then, tools keep their v1

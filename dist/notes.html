@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-YjtYF+lu3oTQ6oZY0cWQjTmY0XqZztOFN6vzDnpXVJs='; style-src 'unsafe-inline'; img-src data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-E/T8ZfzUE1RclWB+rx3FpG1QIHJeY3CklDGuLwqpV6Y=' 'sha256-YjtYF+lu3oTQ6oZY0cWQjTmY0XqZztOFN6vzDnpXVJs='; style-src 'unsafe-inline'; img-src data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Notepad That Stays · Local Suite</title>
 <style>
@@ -259,7 +259,9 @@ const backend = (() => {
     return {
       getItem: k => (mem.has(k) ? mem.get(k) : null),
       setItem: (k, v) => { mem.set(k, String(v)); },
-      removeItem: k => { mem.delete(k); }
+      removeItem: k => { mem.delete(k); },
+      key: i => Array.from(mem.keys())[i] ?? null,
+      get length() { return mem.size; }
     };
   }
 })();
@@ -283,13 +285,15 @@ const store = {
   set(key, value) {
     assertNamespaced(key);
     try {
-      backend.setItem(key, typeof value === "string" ? value : JSON.stringify(value));
-    } catch (e) { /* quota exceeded or denied - never fatal */ }
+      const raw = typeof value === "string" ? value : JSON.stringify(value);
+      backend.setItem(key, raw);
+      return backend.getItem(key) === raw;
+    } catch (e) { return false; /* quota exceeded or denied - never fatal */ }
   },
   /* Deletes a key outright (v1 tools used removeItem for unpin/clear flows). */
   remove(key) {
     assertNamespaced(key);
-    try { backend.removeItem(key); } catch (e) {}
+    try { backend.removeItem(key); return backend.getItem(key) === null; } catch (e) { return false; }
   },
   /* Ordered migrations gated by suite.meta.schemaVersion (ARCHITECTURE.md §6).
      Baseline v2 = v1 layout, so the suite-wide list starts empty. */
@@ -347,6 +351,9 @@ async function fetchJSON(url, opts = {}) {
     accept = "application/json", tries = 1, headers = {}
   } = opts;
   const fullKey = cacheKey ? "suite.cache." + cacheKey : null;
+  /* A location switch may happen in this or another tab while a request is in
+     flight. Never render or cache a response whose location context changed. */
+  const locationAtStart = JSON.stringify(store.get("suite.location"));
 
   let cached = null;
   if (fullKey) {
@@ -370,6 +377,11 @@ async function fetchJSON(url, opts = {}) {
       clearTimeout(timer);
       if (r.ok) {
         const v = await r.json();
+        if (JSON.stringify(store.get("suite.location")) !== locationAtStart) {
+          const changed = new Error("active location changed during request");
+          changed.locationChanged = true;
+          throw changed;
+        }
         const t = Date.now();
         if (fullKey) store.set(fullKey, { t, v });
         return { v, t, stale: false, fromCache: false };
@@ -378,11 +390,15 @@ async function fetchJSON(url, opts = {}) {
       if (r.status === 404) break; /* a 404 will not improve on retry */
     } catch (e) {
       clearTimeout(timer);
+      if (e && e.locationChanged) throw e;
       lastErr = (e && e.name === "AbortError") ? new Error("timed out") : e;
     }
     if (i < n - 1) await new Promise(res => setTimeout(res, 600 * (i + 1)));
   }
   if (fallbackToCache && cached) {
+    if (JSON.stringify(store.get("suite.location")) !== locationAtStart) {
+      throw new Error("active location changed during request");
+    }
     return { v: cached.v, t: cached.t, stale: true, fromCache: true };
   }
   throw lastErr || new Error("fetch failed");
@@ -398,20 +414,215 @@ function liveRegion(el) {
   return el;
 }
 
-/* ---- shared location: the suite.location key, used by ~20 tools ---- */
+/* ---- shared locations ----
+   suite.location remains the active-location mirror, so every v1/v2 tool keeps
+   working unchanged. suite.locations stores the named collection used by v3. */
+const LOCATIONS_KEY = "suite.locations";
+const LOCATIONS_SCHEMA = 1;
+
+function validLocation(l) {
+  return l && typeof l === "object" && isFinite(l.lat) && isFinite(l.lon) &&
+    Math.abs(+l.lat) <= 90 && Math.abs(+l.lon) <= 180;
+}
+
+function cleanLocation(l) {
+  return { lat: +l.lat, lon: +l.lon, label: String(l.label || "").trim() };
+}
+
+/* Only state that is unsafe or derived from the active location is reset.
+   Coordinate/station/query-keyed caches and global feeds remain available. */
+const LOCATION_RESET_KEYS = [
+  "suite.cache.wildfire.all", /* legacy unscoped key; v3 writes coordinate-scoped keys */
+  "suite.radar.station", "suite.tides.station", "suite.normals.station",
+  "suite.state", "suite.alerts.seen"
+];
+function resetLocationState() {
+  let n = 0;
+  try {
+    for (const k of LOCATION_RESET_KEYS) {
+      if (backend.getItem(k) !== null) { backend.removeItem(k); n++; }
+    }
+  } catch (e) {}
+  return n;
+}
+
+function readLocations() {
+  const raw = store.get(LOCATIONS_KEY);
+  if (!raw || typeof raw !== "object" || !Array.isArray(raw.items)) return null;
+  if (raw.schema !== undefined && raw.schema !== LOCATIONS_SCHEMA) {
+    return { schema: raw.schema, activeId: null, items: [], unsupported: true };
+  }
+  const seen = new Set();
+  const items = [];
+  let damaged = false;
+  for (const x of raw.items) {
+    if (!validLocation(x) || typeof x.id !== "string" || !x.id || seen.has(x.id)) {
+      damaged = true; continue;
+    }
+    seen.add(x.id);
+    items.push(Object.assign({}, x, {
+      id: x.id,
+      label: String(x.label || "").trim(),
+      lat: +x.lat,
+      lon: +x.lon,
+      revision: Math.max(1, Number.isInteger(x.revision) ? x.revision : 1)
+    }));
+  }
+  const activeId = items.some(x => x.id === raw.activeId)
+    ? raw.activeId : (items[0] ? items[0].id : null);
+  if (damaged) {
+    return { schema: LOCATIONS_SCHEMA, activeId: null, items: [], invalid: true };
+  }
+  return Object.assign({}, raw, { schema: LOCATIONS_SCHEMA, activeId, items });
+}
+
+function sameValue(a, b) {
+  try { return JSON.stringify(a) === JSON.stringify(b); } catch (e) { return false; }
+}
+function writeLocations(c) {
+  const current = store.get(LOCATIONS_KEY);
+  return sameValue(current, c) || store.set(LOCATIONS_KEY, c);
+}
+function mirrorLocation(item) {
+  if (item) {
+    const next = cleanLocation(item);
+    return sameValue(store.get("suite.location"), next) || store.set("suite.location", next);
+  }
+  return store.get("suite.location") === null || store.remove("suite.location");
+}
+function activeItem(c) { return c && c.items.find(x => x.id === c.activeId) || null; }
+function slug(s) {
+  return String(s || "location").toLowerCase().normalize("NFKD")
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 32) || "location";
+}
+function uniqueId(c, label) {
+  const base = slug(label); let id = base, n = 2;
+  while (c.items.some(x => x.id === id)) id = base + "-" + n++;
+  return id;
+}
+function requireSupported(c) {
+  if (c && c.unsupported) throw new Error("Saved locations were created by a newer Local Suite version");
+  if (c && c.invalid) throw new Error("Saved locations are damaged; restore a backup before editing them");
+  return c;
+}
+
 const loc = {
   get() {
     const l = store.get("suite.location");
-    if (l && typeof l === "object" && isFinite(l.lat) && isFinite(l.lon)) {
-      return { lat: +l.lat, lon: +l.lon, label: l.label || "" };
-    }
-    return null;
+    return validLocation(l) ? cleanLocation(l) : null;
   },
   set(l) {
-    if (!l || !isFinite(l.lat) || !isFinite(l.lon)) {
+    if (!validLocation(l)) {
       throw new Error("Suite.location.set needs {lat, lon}");
     }
-    store.set("suite.location", { lat: +l.lat, lon: +l.lon, label: l.label || "" });
+    const next = cleanLocation(l);
+    const c = readLocations();
+    const item = activeItem(c);
+    if (c && item) {
+      const moved = item.lat !== next.lat || item.lon !== next.lon;
+      item.lat = next.lat; item.lon = next.lon;
+      item.label = next.label;
+      if (moved) item.revision++;
+      if (!writeLocations(c)) return false;
+      const mirrored = mirrorLocation(item);
+      if (moved && mirrored) resetLocationState();
+      return mirrored;
+    }
+    return store.set("suite.location", next);
+  }
+};
+
+const locations = {
+  /* Migration is explicit: only v3 entry points (hub/settings) call init().
+     Older tools that merely read suite.location do not gain a surprise key. */
+  init() {
+    let c = readLocations();
+    if (c && (c.unsupported || c.invalid)) return c;
+    if (c && c.items.length) {
+      const item = activeItem(c);
+      if (item) mirrorLocation(item);
+      return c;
+    }
+    if (c) store.remove(LOCATIONS_KEY);
+    const legacy = loc.get();
+    if (!legacy) return { schema: LOCATIONS_SCHEMA, activeId: null, items: [] };
+    const item = Object.assign({ id: "saved-location", revision: 1 }, legacy);
+    item.label = legacy.label;
+    c = { schema: LOCATIONS_SCHEMA, activeId: item.id, items: [item] };
+    writeLocations(c);
+    return c;
+  },
+  all() { return locations.init().items.map(x => Object.assign({}, x)); },
+  active() {
+    const c = locations.init();
+    if (c.unsupported || c.invalid) {
+      const legacy = loc.get();
+      return legacy ? Object.assign({ id: null, storageIssue: c.unsupported ? "newer" : "invalid" }, legacy) : null;
+    }
+    const item = activeItem(c);
+    return item ? Object.assign({}, item) : null;
+  },
+  add(l) {
+    if (!validLocation(l)) throw new Error("Suite.locations.add needs valid {lat, lon}");
+    const c = requireSupported(locations.init());
+    const label = String(l.label || "").trim() || "Saved location";
+    const item = Object.assign({ id: uniqueId(c, label), label, revision: 1 }, cleanLocation(l));
+    item.label = label;
+    c.items.push(item);
+    const becomesActive = !c.activeId;
+    if (becomesActive) c.activeId = item.id;
+    const collectionSaved = writeLocations(c);
+    const mirrored = collectionSaved && (!becomesActive || mirrorLocation(item));
+    let purged = 0;
+    if (becomesActive && mirrored) purged = resetLocationState();
+    return { location: Object.assign({}, item), purged, saved: !!mirrored };
+  },
+  update(id, changes) {
+    const c = requireSupported(locations.init());
+    const item = c.items.find(x => x.id === id);
+    if (!item) throw new Error("Unknown saved location: " + id);
+    const candidate = {
+      lat: changes && changes.lat !== undefined ? changes.lat : item.lat,
+      lon: changes && changes.lon !== undefined ? changes.lon : item.lon,
+      label: changes && changes.label !== undefined ? changes.label : item.label
+    };
+    if (!validLocation(candidate)) throw new Error("Suite.locations.update needs valid coordinates");
+    const moved = item.lat !== +candidate.lat || item.lon !== +candidate.lon;
+    item.lat = +candidate.lat; item.lon = +candidate.lon;
+    item.label = String(candidate.label || "").trim() || item.label || "Saved location";
+    if (moved) item.revision++;
+    const collectionSaved = writeLocations(c);
+    let mirrored = collectionSaved;
+    let purged = 0;
+    if (collectionSaved && c.activeId === id) {
+      mirrored = mirrorLocation(item);
+      if (moved && mirrored) purged = resetLocationState();
+    }
+    return { location: Object.assign({}, item), purged, saved: !!mirrored };
+  },
+  activate(id) {
+    const c = requireSupported(locations.init());
+    const item = c.items.find(x => x.id === id);
+    if (!item) throw new Error("Unknown saved location: " + id);
+    const changed = c.activeId !== id;
+    c.activeId = id;
+    const saved = writeLocations(c);
+    const mirrored = saved && mirrorLocation(item);
+    return { location: Object.assign({}, item),
+      purged: changed && mirrored ? resetLocationState() : 0, saved: !!mirrored };
+  },
+  remove(id) {
+    const c = requireSupported(locations.init());
+    const i = c.items.findIndex(x => x.id === id);
+    if (i < 0) return { removed: false, active: locations.active(), purged: 0 };
+    const wasActive = c.activeId === id;
+    c.items.splice(i, 1);
+    if (wasActive) c.activeId = c.items[0] ? c.items[0].id : null;
+    const saved = c.items.length ? writeLocations(c) : store.remove(LOCATIONS_KEY);
+    const next = activeItem(c);
+    const mirrored = !wasActive || (saved && mirrorLocation(next));
+    return { removed: true, active: next ? Object.assign({}, next) : null,
+      purged: wasActive && mirrored ? resetLocationState() : 0, saved: !!(saved && mirrored) };
   }
 };
 
@@ -438,7 +649,7 @@ function relay(url) {
   return b + (b.includes("?") ? "&" : "?") + "url=" + encodeURIComponent(url);
 }
 
-window.Suite = { theme, fetchJSON, store, esc, liveRegion, location: loc, key, relay };
+window.Suite = { theme, fetchJSON, store, esc, liveRegion, location: loc, locations, key, relay };
 
 /* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
    The .catch keeps a failed registration from ever costing console noise on a

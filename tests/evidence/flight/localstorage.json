@@ -1,0 +1,11 @@
+{
+  "note": "new-in-v2 tool — no v1 original; parity N/A",
+  "v2": {
+    "suite.cache.flight.aa100.2026-07-16": "{\"t\":1784257134075,\"v\":{\"pagination\":{\"limit\":100,\"offset\":0,\"count\":1,\"total\":1},\"data\":[{\"flight_date\":\"2026-07-16\",\"flight_status\":\"active\",\"depart…(1010 chars)",
+    "suite.cache.flight.zz999.2026-07-16": "{\"t\":1784257133758,\"v\":{\"pagination\":{\"count\":0},\"data\":[]}}",
+    "suite.flight.refresh": "0",
+    "suite.key.aviationstack": "test-key",
+    "suite.theme": "dark",
+    "suite.flight.usage": "{\"month\":\"2026-07\",\"count\":8}"
+  }
+}

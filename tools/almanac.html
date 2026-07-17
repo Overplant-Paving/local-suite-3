@@ -547,6 +547,7 @@ document.getElementById("todayBtn").addEventListener("click", () => {
 });
 
 /* ---------- boot ---------- */
+window.addEventListener("storage", e => { if (e.key === "suite.location") location.reload(); });
 if (loc) showApp(); else showFirstRun();
 </script>
 </body>

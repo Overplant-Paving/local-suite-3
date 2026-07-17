@@ -1,7 +1,10 @@
 {
+  "note": "new-in-v2 tool — no v1 original; parity N/A",
   "v2": {
+    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Work\"}",
+    "suite.cache.hub-switch-probe": "{\"t\":1784232053591,\"v\":\"safe scoped data\"}",
     "suite.meta.schemaVersion": "0",
-    "suite.theme": "light"
-  },
-  "note": "v1 hub writes only suite.theme; suite.meta.schemaVersion is new-in-v2 by design (ARCHITECTURE.md §6)"
+    "suite.theme": "dark",
+    "suite.locations": "{\"schema\":1,\"activeId\":\"work\",\"items\":[{\"id\":\"saved-location\",\"revision\":1,\"lat\":40.7128,\"lon\":-74.006,\"label\":\"Home\"},{\"id\":\"work\",\"label\":\"Work\",\"re…(192 chars)"
+  }
 }

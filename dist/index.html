@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCkgW4heyEfxJM5BUdr3OmW+n1qF1yw1RYFn4S5H/3o=' 'sha256-fyMfgY4FfrR7iVMh6z/wrAWRpSNl471lVQw9eA+gvxg='; style-src 'unsafe-inline'; img-src data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-E/T8ZfzUE1RclWB+rx3FpG1QIHJeY3CklDGuLwqpV6Y=' 'sha256-dru9jybn4kMrT370bIcFGF5NIvaeyV6hLgAhUKk72e8='; style-src 'unsafe-inline'; img-src data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Local Suite · Command Center</title>
 <style>
@@ -115,6 +115,11 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .stat b { font-size: 1.5rem; display: block; line-height: 1.15; color: var(--accent); }
   .stat span { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
   .controls { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: .7rem 0 .8rem; }
+  .locswitch { display:flex; align-items:center; gap:.55rem; flex-wrap:wrap; margin-bottom:.6rem;
+    font-size:.85rem; color:var(--muted); }
+  .locswitch select { background:var(--card); color:var(--ink); border:1px solid var(--line);
+    border-radius:8px; padding:.35rem .55rem; font:inherit; }
+  .locswitch a { color:var(--accent); }
   .pills { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .7rem; }
   .pill {
     border: 1px solid var(--line); background: var(--card); color: var(--muted);
@@ -165,6 +170,12 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   <div class="stats" id="stats"></div>
 
   <div class="controls">
+    <div class="locswitch" id="locSwitch" hidden>
+      <label for="activeLoc">📍 Active location</label>
+      <select id="activeLoc"></select>
+      <a href="settings.html#prefsCard">Manage locations</a>
+      <span id="locSwitchStatus" class="sr-status" aria-live="polite"></span>
+    </div>
     <input class="search" id="q" type="search" aria-label="Search tools"
       placeholder="Search tools, data sources, keywords…  (press /)" autocomplete="off">
     <div class="pills" id="pills"></div>
@@ -205,7 +216,9 @@ const backend = (() => {
     return {
       getItem: k => (mem.has(k) ? mem.get(k) : null),
       setItem: (k, v) => { mem.set(k, String(v)); },
-      removeItem: k => { mem.delete(k); }
+      removeItem: k => { mem.delete(k); },
+      key: i => Array.from(mem.keys())[i] ?? null,
+      get length() { return mem.size; }
     };
   }
 })();
@@ -229,13 +242,15 @@ const store = {
   set(key, value) {
     assertNamespaced(key);
     try {
-      backend.setItem(key, typeof value === "string" ? value : JSON.stringify(value));
-    } catch (e) { /* quota exceeded or denied - never fatal */ }
+      const raw = typeof value === "string" ? value : JSON.stringify(value);
+      backend.setItem(key, raw);
+      return backend.getItem(key) === raw;
+    } catch (e) { return false; /* quota exceeded or denied - never fatal */ }
   },
   /* Deletes a key outright (v1 tools used removeItem for unpin/clear flows). */
   remove(key) {
     assertNamespaced(key);
-    try { backend.removeItem(key); } catch (e) {}
+    try { backend.removeItem(key); return backend.getItem(key) === null; } catch (e) { return false; }
   },
   /* Ordered migrations gated by suite.meta.schemaVersion (ARCHITECTURE.md §6).
      Baseline v2 = v1 layout, so the suite-wide list starts empty. */
@@ -293,6 +308,9 @@ async function fetchJSON(url, opts = {}) {
     accept = "application/json", tries = 1, headers = {}
   } = opts;
   const fullKey = cacheKey ? "suite.cache." + cacheKey : null;
+  /* A location switch may happen in this or another tab while a request is in
+     flight. Never render or cache a response whose location context changed. */
+  const locationAtStart = JSON.stringify(store.get("suite.location"));
 
   let cached = null;
   if (fullKey) {
@@ -316,6 +334,11 @@ async function fetchJSON(url, opts = {}) {
       clearTimeout(timer);
       if (r.ok) {
         const v = await r.json();
+        if (JSON.stringify(store.get("suite.location")) !== locationAtStart) {
+          const changed = new Error("active location changed during request");
+          changed.locationChanged = true;
+          throw changed;
+        }
         const t = Date.now();
         if (fullKey) store.set(fullKey, { t, v });
         return { v, t, stale: false, fromCache: false };
@@ -324,11 +347,15 @@ async function fetchJSON(url, opts = {}) {
       if (r.status === 404) break; /* a 404 will not improve on retry */
     } catch (e) {
       clearTimeout(timer);
+      if (e && e.locationChanged) throw e;
       lastErr = (e && e.name === "AbortError") ? new Error("timed out") : e;
     }
     if (i < n - 1) await new Promise(res => setTimeout(res, 600 * (i + 1)));
   }
   if (fallbackToCache && cached) {
+    if (JSON.stringify(store.get("suite.location")) !== locationAtStart) {
+      throw new Error("active location changed during request");
+    }
     return { v: cached.v, t: cached.t, stale: true, fromCache: true };
   }
   throw lastErr || new Error("fetch failed");
@@ -344,20 +371,215 @@ function liveRegion(el) {
   return el;
 }
 
-/* ---- shared location: the suite.location key, used by ~20 tools ---- */
+/* ---- shared locations ----
+   suite.location remains the active-location mirror, so every v1/v2 tool keeps
+   working unchanged. suite.locations stores the named collection used by v3. */
+const LOCATIONS_KEY = "suite.locations";
+const LOCATIONS_SCHEMA = 1;
+
+function validLocation(l) {
+  return l && typeof l === "object" && isFinite(l.lat) && isFinite(l.lon) &&
+    Math.abs(+l.lat) <= 90 && Math.abs(+l.lon) <= 180;
+}
+
+function cleanLocation(l) {
+  return { lat: +l.lat, lon: +l.lon, label: String(l.label || "").trim() };
+}
+
+/* Only state that is unsafe or derived from the active location is reset.
+   Coordinate/station/query-keyed caches and global feeds remain available. */
+const LOCATION_RESET_KEYS = [
+  "suite.cache.wildfire.all", /* legacy unscoped key; v3 writes coordinate-scoped keys */
+  "suite.radar.station", "suite.tides.station", "suite.normals.station",
+  "suite.state", "suite.alerts.seen"
+];
+function resetLocationState() {
+  let n = 0;
+  try {
+    for (const k of LOCATION_RESET_KEYS) {
+      if (backend.getItem(k) !== null) { backend.removeItem(k); n++; }
+    }
+  } catch (e) {}
+  return n;
+}
+
+function readLocations() {
+  const raw = store.get(LOCATIONS_KEY);
+  if (!raw || typeof raw !== "object" || !Array.isArray(raw.items)) return null;
+  if (raw.schema !== undefined && raw.schema !== LOCATIONS_SCHEMA) {
+    return { schema: raw.schema, activeId: null, items: [], unsupported: true };
+  }
+  const seen = new Set();
+  const items = [];
+  let damaged = false;
+  for (const x of raw.items) {
+    if (!validLocation(x) || typeof x.id !== "string" || !x.id || seen.has(x.id)) {
+      damaged = true; continue;
+    }
+    seen.add(x.id);
+    items.push(Object.assign({}, x, {
+      id: x.id,
+      label: String(x.label || "").trim(),
+      lat: +x.lat,
+      lon: +x.lon,
+      revision: Math.max(1, Number.isInteger(x.revision) ? x.revision : 1)
+    }));
+  }
+  const activeId = items.some(x => x.id === raw.activeId)
+    ? raw.activeId : (items[0] ? items[0].id : null);
+  if (damaged) {
+    return { schema: LOCATIONS_SCHEMA, activeId: null, items: [], invalid: true };
+  }
+  return Object.assign({}, raw, { schema: LOCATIONS_SCHEMA, activeId, items });
+}
+
+function sameValue(a, b) {
+  try { return JSON.stringify(a) === JSON.stringify(b); } catch (e) { return false; }
+}
+function writeLocations(c) {
+  const current = store.get(LOCATIONS_KEY);
+  return sameValue(current, c) || store.set(LOCATIONS_KEY, c);
+}
+function mirrorLocation(item) {
+  if (item) {
+    const next = cleanLocation(item);
+    return sameValue(store.get("suite.location"), next) || store.set("suite.location", next);
+  }
+  return store.get("suite.location") === null || store.remove("suite.location");
+}
+function activeItem(c) { return c && c.items.find(x => x.id === c.activeId) || null; }
+function slug(s) {
+  return String(s || "location").toLowerCase().normalize("NFKD")
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 32) || "location";
+}
+function uniqueId(c, label) {
+  const base = slug(label); let id = base, n = 2;
+  while (c.items.some(x => x.id === id)) id = base + "-" + n++;
+  return id;
+}
+function requireSupported(c) {
+  if (c && c.unsupported) throw new Error("Saved locations were created by a newer Local Suite version");
+  if (c && c.invalid) throw new Error("Saved locations are damaged; restore a backup before editing them");
+  return c;
+}
+
 const loc = {
   get() {
     const l = store.get("suite.location");
-    if (l && typeof l === "object" && isFinite(l.lat) && isFinite(l.lon)) {
-      return { lat: +l.lat, lon: +l.lon, label: l.label || "" };
-    }
-    return null;
+    return validLocation(l) ? cleanLocation(l) : null;
   },
   set(l) {
-    if (!l || !isFinite(l.lat) || !isFinite(l.lon)) {
+    if (!validLocation(l)) {
       throw new Error("Suite.location.set needs {lat, lon}");
     }
-    store.set("suite.location", { lat: +l.lat, lon: +l.lon, label: l.label || "" });
+    const next = cleanLocation(l);
+    const c = readLocations();
+    const item = activeItem(c);
+    if (c && item) {
+      const moved = item.lat !== next.lat || item.lon !== next.lon;
+      item.lat = next.lat; item.lon = next.lon;
+      item.label = next.label;
+      if (moved) item.revision++;
+      if (!writeLocations(c)) return false;
+      const mirrored = mirrorLocation(item);
+      if (moved && mirrored) resetLocationState();
+      return mirrored;
+    }
+    return store.set("suite.location", next);
+  }
+};
+
+const locations = {
+  /* Migration is explicit: only v3 entry points (hub/settings) call init().
+     Older tools that merely read suite.location do not gain a surprise key. */
+  init() {
+    let c = readLocations();
+    if (c && (c.unsupported || c.invalid)) return c;
+    if (c && c.items.length) {
+      const item = activeItem(c);
+      if (item) mirrorLocation(item);
+      return c;
+    }
+    if (c) store.remove(LOCATIONS_KEY);
+    const legacy = loc.get();
+    if (!legacy) return { schema: LOCATIONS_SCHEMA, activeId: null, items: [] };
+    const item = Object.assign({ id: "saved-location", revision: 1 }, legacy);
+    item.label = legacy.label;
+    c = { schema: LOCATIONS_SCHEMA, activeId: item.id, items: [item] };
+    writeLocations(c);
+    return c;
+  },
+  all() { return locations.init().items.map(x => Object.assign({}, x)); },
+  active() {
+    const c = locations.init();
+    if (c.unsupported || c.invalid) {
+      const legacy = loc.get();
+      return legacy ? Object.assign({ id: null, storageIssue: c.unsupported ? "newer" : "invalid" }, legacy) : null;
+    }
+    const item = activeItem(c);
+    return item ? Object.assign({}, item) : null;
+  },
+  add(l) {
+    if (!validLocation(l)) throw new Error("Suite.locations.add needs valid {lat, lon}");
+    const c = requireSupported(locations.init());
+    const label = String(l.label || "").trim() || "Saved location";
+    const item = Object.assign({ id: uniqueId(c, label), label, revision: 1 }, cleanLocation(l));
+    item.label = label;
+    c.items.push(item);
+    const becomesActive = !c.activeId;
+    if (becomesActive) c.activeId = item.id;
+    const collectionSaved = writeLocations(c);
+    const mirrored = collectionSaved && (!becomesActive || mirrorLocation(item));
+    let purged = 0;
+    if (becomesActive && mirrored) purged = resetLocationState();
+    return { location: Object.assign({}, item), purged, saved: !!mirrored };
+  },
+  update(id, changes) {
+    const c = requireSupported(locations.init());
+    const item = c.items.find(x => x.id === id);
+    if (!item) throw new Error("Unknown saved location: " + id);
+    const candidate = {
+      lat: changes && changes.lat !== undefined ? changes.lat : item.lat,
+      lon: changes && changes.lon !== undefined ? changes.lon : item.lon,
+      label: changes && changes.label !== undefined ? changes.label : item.label
+    };
+    if (!validLocation(candidate)) throw new Error("Suite.locations.update needs valid coordinates");
+    const moved = item.lat !== +candidate.lat || item.lon !== +candidate.lon;
+    item.lat = +candidate.lat; item.lon = +candidate.lon;
+    item.label = String(candidate.label || "").trim() || item.label || "Saved location";
+    if (moved) item.revision++;
+    const collectionSaved = writeLocations(c);
+    let mirrored = collectionSaved;
+    let purged = 0;
+    if (collectionSaved && c.activeId === id) {
+      mirrored = mirrorLocation(item);
+      if (moved && mirrored) purged = resetLocationState();
+    }
+    return { location: Object.assign({}, item), purged, saved: !!mirrored };
+  },
+  activate(id) {
+    const c = requireSupported(locations.init());
+    const item = c.items.find(x => x.id === id);
+    if (!item) throw new Error("Unknown saved location: " + id);
+    const changed = c.activeId !== id;
+    c.activeId = id;
+    const saved = writeLocations(c);
+    const mirrored = saved && mirrorLocation(item);
+    return { location: Object.assign({}, item),
+      purged: changed && mirrored ? resetLocationState() : 0, saved: !!mirrored };
+  },
+  remove(id) {
+    const c = requireSupported(locations.init());
+    const i = c.items.findIndex(x => x.id === id);
+    if (i < 0) return { removed: false, active: locations.active(), purged: 0 };
+    const wasActive = c.activeId === id;
+    c.items.splice(i, 1);
+    if (wasActive) c.activeId = c.items[0] ? c.items[0].id : null;
+    const saved = c.items.length ? writeLocations(c) : store.remove(LOCATIONS_KEY);
+    const next = activeItem(c);
+    const mirrored = !wasActive || (saved && mirrorLocation(next));
+    return { removed: true, active: next ? Object.assign({}, next) : null,
+      purged: wasActive && mirrored ? resetLocationState() : 0, saved: !!(saved && mirrored) };
   }
 };
 
@@ -384,7 +606,7 @@ function relay(url) {
   return b + (b.includes("?") ? "&" : "?") + "url=" + encodeURIComponent(url);
 }
 
-window.Suite = { theme, fetchJSON, store, esc, liveRegion, location: loc, key, relay };
+window.Suite = { theme, fetchJSON, store, esc, liveRegion, location: loc, locations, key, relay };
 
 /* ---- PWA registration (PWA.md §1) — inert from file://, forever ----
    The .catch keeps a failed registration from ever costing console noise on a
@@ -407,8 +629,42 @@ if (location.protocol.startsWith("http") &&
 }
 Suite.store.migrate([]); // suite entry point; the v2 migration list starts empty (ARCHITECTURE.md §6)
 
+/* v3 named locations: suite.location remains the active mirror used by every
+   existing tool; the hub only chooses which saved entry owns that mirror. */
+const locSwitch = document.getElementById("locSwitch");
+const activeLocEl = document.getElementById("activeLoc");
+function paintLocationSwitch() {
+  const all = Suite.locations.all();
+  const active = Suite.locations.active();
+  activeLocEl.replaceChildren();
+  for (const l of all) {
+    const o = document.createElement("option");
+    o.value = l.id; o.textContent = l.label || "Saved location";
+    o.selected = !!active && active.id === l.id;
+    activeLocEl.append(o);
+  }
+  locSwitch.hidden = !all.length;
+}
+activeLocEl.addEventListener("change", () => {
+  const r = Suite.locations.activate(activeLocEl.value);
+  if (!r.saved) {
+    document.getElementById("locSwitchStatus").textContent =
+      "Couldn't switch locations because browser storage is unavailable.";
+    paintLocationSwitch();
+    return;
+  }
+  document.getElementById("locSwitchStatus").textContent =
+    r.location.label + " is now active" +
+    (r.purged ? "; location-specific station, state, or alert choices were reset." : ".");
+  paintLocationSwitch();
+});
+window.addEventListener("storage", e => {
+  if (e.key === "suite.location" || e.key === "suite.locations") paintLocationSwitch();
+});
+paintLocationSwitch();
+
 /* ==== data: filled from manifest/tools.json by build.py ==== */
-const TOOLS = /* @suite:tools */[{"id": "focus", "file": "focus.html", "name": "Focus Timer", "cat": "time", "cx": "S", "desc": "Pomodoro with gentle WebAudio chimes and a big calm clock.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.focus.settings", "suite.focus.log"], "cacheTtlMin": null, "since": "v1", "flags": ["xp"]}, {"id": "weather", "file": "weather.html", "name": "Weather Station", "cat": "sky", "cx": "M", "desc": "Current conditions, forecast and details for your saved location. The original.", "network": "cors-open", "key": null, "endpoints": ["https://api.weather.gov", "https://api.zippopotam.us", "https://radar.weather.gov"], "storage": ["suite.theme", "suite.location", "suite.units", "suite.cache.weather.*"], "cacheTtlMin": 10, "since": "v1", "flags": []}, {"id": "almanac", "file": "almanac.html", "name": "Sun & Moon Almanac", "cat": "sky", "cx": "M", "desc": "Sunrise, golden hour, moon phase, solstice countdowns — all computed in the file.", "network": "offline", "key": null, "endpoints": ["https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "holidays", "file": "holidays.html", "name": "Holiday & Observance Calendar", "cat": "civic", "cx": "S", "desc": "Federal holidays, DST changes, long-weekend countdowns.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "voting", "file": "voting.html", "name": "Election & Voting Info", "cat": "civic", "cx": "S", "desc": "Registration deadlines and lookup links for your state, refreshed each cycle.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.voting.state", "suite.location"], "cacheTtlMin": null, "since": "v1", "flags": ["static-curated"]}, {"id": "emergency", "file": "emergency.html", "name": "Emergency Quick-Reference", "cat": "health", "cx": "S", "desc": "First aid, poison control, CPR rhythm — guaranteed to work with no internet.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.emergency.card"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "convert", "file": "convert.html", "name": "Unit & Kitchen Converter", "cat": "ref", "cx": "S", "desc": "Cooking volumes and weights, temperatures, \"half this recipe.\"", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "worldclock", "file": "worldclock.html", "name": "World Clock & Meeting Planner", "cat": "time", "cx": "S", "desc": "Your people's time zones as clocks, plus a civil-hour meeting slider.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.worldclock.zones"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "dates", "file": "dates.html", "name": "Countdown & Date Calculator", "cat": "time", "cx": "S", "desc": "Days until anything, business-day math, age calculator.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.dates.countdowns"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "daylight", "file": "daylight.html", "name": "Daylight Planner", "cat": "time", "cx": "M", "desc": "Year-at-a-glance sunrise/sunset curves for your latitude.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.location"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "printables", "file": "printables.html", "name": "Printable Calendar & Planner", "cat": "time", "cx": "S", "desc": "Clean monthly calendars, weekly planners, habit trackers — print CSS.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": ["print-css"]}, {"id": "tripcost", "file": "tripcost.html", "name": "Trip Cost Estimator", "cat": "local", "cx": "S", "desc": "Distance + MPG + gas price = what the road trip costs.", "network": "offline", "key": {"name": "eia", "signup": "https://www.eia.gov/opendata/register.php", "demo": false}, "endpoints": ["https://api.eia.gov", "https://router.project-osrm.org"], "storage": ["suite.theme", "suite.tripcost.current", "suite.tripcost.vehicles", "suite.key.eia"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "qr", "file": "qr.html", "name": "QR Code Maker", "cat": "util", "cx": "S", "desc": "Text, URL, or wifi credentials → QR on canvas. Print a sheet.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "text", "file": "text.html", "name": "Text Toolbox", "cat": "util", "cx": "S", "desc": "Counts, case, sort/dedupe, diff, SHA-256, URL/Base64.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "color", "file": "color.html", "name": "Color Studio", "cat": "util", "cx": "M", "desc": "Picker, palettes, WCAG contrast, colors from a photo.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.color.palettes"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "random", "file": "random.html", "name": "Decision Maker", "cat": "util", "cx": "S", "desc": "Dice, coins, spinners, pick-from-list — fair, crypto-random.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "notes", "file": "notes.html", "name": "Notepad That Stays", "cat": "util", "cx": "M", "desc": "Autosaving markdown-ish notes that never leave the machine.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.notes"], "cacheTtlMin": null, "since": "v1", "flags": ["xp"]}, {"id": "dataviewer", "file": "dataviewer.html", "name": "Data Viewer", "cat": "util", "cx": "M", "desc": "Drop a JSON/CSV file → collapsible, searchable table.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "sound", "file": "sound.html", "name": "Sound Machine", "cat": "util", "cx": "M", "desc": "White/pink/brown noise and rain-ish synthesis, sleep timer.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.sound"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "paper", "file": "paper.html", "name": "Paper Generator", "cat": "util", "cx": "S", "desc": "Print-perfect graph, lined, dot-grid, and staff paper.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": ["print-css"]}, {"id": "timers", "file": "timers.html", "name": "Stopwatch & Kitchen Timers", "cat": "util", "cx": "S", "desc": "Multiple named timers, laps, chimes, big type.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.timers.v1"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "loan", "file": "loan.html", "name": "Mortgage & Loan Workbench", "cat": "util", "cx": "M", "desc": "Amortization, extra-payment what-ifs, refinance compare — all local.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.loan.v1"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "flashcards", "file": "flashcards.html", "name": "Flashcards", "cat": "util", "cx": "M", "desc": "Spaced-repetition-lite cards in localStorage, JSON/CSV import-export.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.flashcards.v1"], "cacheTtlMin": null, "since": "v1", "flags": ["xp"]}, {"id": "alerts", "file": "alerts.html", "name": "Severe Weather Alert Board", "cat": "sky", "cx": "S", "desc": "Watches and warnings for your area, sorted by severity — turns red when it matters.", "network": "cors-open", "key": null, "endpoints": ["https://api.weather.gov", "https://api.zippopotam.us"], "storage": ["suite.location", "suite.cache.alerts", "suite.alerts.notify", "suite.alerts.seen"], "cacheTtlMin": 5, "since": "v1", "flags": []}, {"id": "radar", "file": "radar.html", "name": "Radar & Satellite Viewer", "cat": "sky", "cx": "S", "desc": "Animated radar loop and GOES satellite imagery for your region.", "network": "cors-open", "key": null, "endpoints": ["https://radar.weather.gov", "https://cdn.star.nesdis.noaa.gov", "https://api.zippopotam.us"], "storage": ["suite.location", "suite.radar.station", "suite.radar.sector", "suite.radar.product"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "air", "file": "air.html", "name": "Air Quality & UV Panel", "cat": "sky", "cx": "S", "desc": "AQI with pollutant breakdown on the EPA color scale, plus today's UV index.", "network": "cors-open", "key": null, "endpoints": ["https://air-quality-api.open-meteo.com", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.cache.air"], "cacheTtlMin": 10, "since": "v1", "flags": []}, {"id": "spaceweather", "file": "spaceweather.html", "name": "Space Weather & Aurora", "cat": "sky", "cx": "M", "desc": "Kp index, solar wind, flares, and “can I see the aurora tonight?”", "network": "cors-open", "key": null, "endpoints": ["https://services.swpc.noaa.gov", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.cache.spaceweather", "suite.cache.spaceweather.*"], "cacheTtlMin": 10, "since": "v1", "flags": []}, {"id": "tides", "file": "tides.html", "name": "Tides & Currents Board", "cat": "sky", "cx": "M", "desc": "Next high/low tides, today's tide curve, and water temperature.", "network": "cors-open", "key": null, "endpoints": ["https://api.tidesandcurrents.noaa.gov"], "storage": ["suite.theme", "suite.location", "suite.tides.station", "suite.cache.tides.*"], "cacheTtlMin": 60, "since": "v1", "flags": []}, {"id": "marine", "file": "marine.html", "name": "Buoy & Marine Conditions", "cat": "sky", "cx": "M", "desc": "Wave height, period, wind and water temp near you.", "network": "cors-open", "key": null, "endpoints": ["https://marine-api.open-meteo.com", "https://api.open-meteo.com", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.cache.marine.*"], "cacheTtlMin": 30, "since": "v1", "flags": []}, {"id": "normals", "file": "normals.html", "name": "Climate Normals Comparator", "cat": "sky", "cx": "L", "desc": "Today vs. 30-year normals and records: is this month actually unusual?", "network": "cors-open", "key": null, "endpoints": ["https://www.ncei.noaa.gov", "https://api.open-meteo.com", "https://archive-api.open-meteo.com"], "storage": ["suite.location", "suite.normals.station", "suite.cache.normals.*"], "cacheTtlMin": 10080, "since": "v1", "flags": []}, {"id": "quakes", "file": "quakes.html", "name": "Earthquake Monitor", "cat": "earth", "cx": "S", "desc": "Live quake list and map, filterable by magnitude and distance from you.", "network": "cors-open", "key": null, "endpoints": ["https://earthquake.usgs.gov", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.quakes.feed", "suite.quakes.minMag", "suite.quakes.maxDist", "suite.quakes.seen", "suite.cache.quakes.*"], "cacheTtlMin": 5, "since": "v1", "flags": []}, {"id": "rivers", "file": "rivers.html", "name": "River & Streamflow Gauges", "cat": "earth", "cx": "M", "desc": "Gauge height and flow for your rivers, with flood-stage context.", "network": "cors-open", "key": null, "endpoints": ["https://api.waterdata.usgs.gov", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.rivers.favs", "suite.cache.rivers.*"], "cacheTtlMin": 15, "since": "v1", "flags": []}, {"id": "wildfire", "file": "wildfire.html", "name": "Wildfire Watchboard", "cat": "earth", "cx": "M", "desc": "Active large fires near you: size, containment, distance.", "network": "cors-open", "key": null, "endpoints": ["https://services3.arcgis.com", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.wildfire.radius", "suite.wildfire.sort", "suite.cache.wildfire.*"], "cacheTtlMin": 30, "since": "v1", "flags": []}, {"id": "drought", "file": "drought.html", "name": "Drought Monitor", "cat": "earth", "cx": "S", "desc": "Your county's drought category and its trend over the year.", "network": "cors-open", "key": null, "endpoints": ["https://services9.arcgis.com", "https://geo.fcc.gov", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.cache.drought.*"], "cacheTtlMin": 1440, "since": "v1", "flags": []}, {"id": "volcano", "file": "volcano.html", "name": "Volcano Status Board", "cat": "earth", "cx": "S", "desc": "US volcanoes at elevated alert. Quietly reassuring, most days.", "network": "cors-open", "key": null, "endpoints": ["https://volcanoes.usgs.gov", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.cache.volcano.*"], "cacheTtlMin": 60, "since": "v1", "flags": []}, {"id": "snow", "file": "snow.html", "name": "Snowpack & SNOTEL", "cat": "earth", "cx": "M", "desc": "Mountain snow depth and snow-water equivalent from SNOTEL stations.", "network": "cors-open", "key": null, "endpoints": ["https://wcc.sc.egov.usda.gov", "https://api.zippopotam.us"], "storage": ["suite.location", "suite.pref.snow.fav", "suite.cache.snow.*"], "cacheTtlMin": 60, "since": "v1", "flags": []}, {"id": "wildlife", "file": "wildlife.html", "name": "Wildlife Sightings Nearby", "cat": "earth", "cx": "S", "desc": "Recent bird and wildlife observations around you.", "network": "cors-open", "key": {"name": "ebird", "signup": "https://ebird.org/api/keygen", "demo": false}, "endpoints": ["https://api.inaturalist.org", "https://inaturalist-open-data.s3.amazonaws.com", "https://static.inaturalist.org", "https://api.ebird.org", "https://api.zippopotam.us"], "storage": ["suite.location", "suite.key.ebird", "suite.cache.wildlife.*"], "cacheTtlMin": 30, "since": "v1", "flags": []}, {"id": "iss", "file": "iss.html", "name": "ISS Tracker", "cat": "space", "cx": "S", "desc": "Where the Space Station is right now, and when it passes over you.", "network": "cors-open", "key": null, "endpoints": ["https://api.wheretheiss.at", "https://api.zippopotam.us"], "storage": ["suite.location", "suite.cache.iss.*", "suite.theme"], "cacheTtlMin": 0, "since": "v1", "flags": []}, {"id": "asteroids", "file": "asteroids.html", "name": "Near-Earth Asteroid Watch", "cat": "space", "cx": "S", "desc": "Today's close approaches in lunar distances. Perspective with breakfast.", "network": "keyed", "key": {"name": "nasa", "signup": "https://api.nasa.gov", "demo": true}, "endpoints": ["https://api.nasa.gov"], "storage": ["suite.theme", "suite.key.nasa", "suite.cache.asteroids.*"], "cacheTtlMin": 1440, "since": "v1", "flags": ["rl"]}, {"id": "fedregister", "file": "fedregister.html", "name": "Federal Register Daily", "cat": "civic", "cx": "S", "desc": "What the federal government published today, filterable by agency.", "network": "cors-open", "key": null, "endpoints": ["https://www.federalregister.gov"], "storage": ["suite.theme", "suite.cache.fedregister.*"], "cacheTtlMin": 60, "since": "v1", "flags": []}, {"id": "recalls", "file": "recalls.html", "name": "Recall Radar", "cat": "civic", "cx": "M", "desc": "Food, vehicle, and product recalls that reach your household — one board.", "network": "cors-open", "key": null, "endpoints": ["https://api.fda.gov", "https://api.nhtsa.gov", "https://www.saferproducts.gov"], "storage": ["suite.theme", "suite.location", "suite.state", "suite.cars", "suite.cache.recalls.*"], "cacheTtlMin": 360, "since": "v1", "flags": []}, {"id": "treasury", "file": "treasury.html", "name": "Treasury & Debt Dashboard", "cat": "civic", "cx": "S", "desc": "Debt to the penny and the country's balance sheet at a glance.", "network": "cors-open", "key": null, "endpoints": ["https://api.fiscaldata.treasury.gov"], "storage": ["suite.theme", "suite.cache.treasury.latest", "suite.cache.treasury.series", "suite.cache.treasury.rates", "suite.cache.treasury.auctions"], "cacheTtlMin": 1440, "since": "v1", "flags": []}, {"id": "yields", "file": "yields.html", "name": "Treasury Yields & Savings", "cat": "money", "cx": "M", "desc": "The yield curve today vs. last quarter — the “move my savings?” glance.", "network": "cors-open", "key": null, "endpoints": ["https://api.fiscaldata.treasury.gov"], "storage": ["suite.theme", "suite.cache.yields.auctions", "suite.cache.yields.compare"], "cacheTtlMin": 1440, "since": "v1", "flags": []}, {"id": "currency", "file": "currency.html", "name": "Exchange Rate Board", "cat": "money", "cx": "S", "desc": "Currency board and converter with 30-day trend.", "network": "cors-open", "key": null, "endpoints": ["https://api.frankfurter.dev", "https://open.er-api.com"], "storage": ["suite.theme", "suite.cache.currency.latest", "suite.cache.currency.trend.*"], "cacheTtlMin": 1440, "since": "v1", "flags": []}, {"id": "illness", "file": "illness.html", "name": "Illness Activity Tracker", "cat": "health", "cx": "M", "desc": "Flu activity and COVID wastewater trend for your state.", "network": "cors-open", "key": null, "endpoints": ["https://data.cdc.gov"], "storage": ["suite.theme", "suite.state", "suite.location", "suite.cache.illness.ww.*", "suite.cache.illness.adm.*"], "cacheTtlMin": 1440, "since": "v1", "flags": []}, {"id": "medicine", "file": "medicine.html", "name": "Medicine Cabinet Lookup", "cat": "health", "cx": "M", "desc": "Drug label info in plain language: uses, warnings, recalls.", "network": "cors-open", "key": null, "endpoints": ["https://api.fda.gov"], "storage": ["suite.theme", "suite.medicine.history", "suite.cache.medicine.*"], "cacheTtlMin": 1440, "since": "v1", "flags": []}, {"id": "foodrecalls", "file": "foodrecalls.html", "name": "Food Recall Alerts", "cat": "health", "cx": "S", "desc": "Slim food-only recall board filtered to your state.", "network": "cors-open", "key": null, "endpoints": ["https://api.fda.gov"], "storage": ["suite.location", "suite.state", "suite.cache.foodrecalls.*"], "cacheTtlMin": 720, "since": "v1", "flags": []}, {"id": "dictionary", "file": "dictionary.html", "name": "Dictionary & Thesaurus", "cat": "ref", "cx": "S", "desc": "Instant definitions and synonyms — the no-ads dictionary.", "network": "cors-open", "key": null, "endpoints": ["https://api.dictionaryapi.dev", "https://en.wiktionary.org"], "storage": ["suite.dictionary.history", "suite.cache.dictionary.*"], "cacheTtlMin": 10080, "since": "v1", "flags": ["ea"]}, {"id": "wiki", "file": "wiki.html", "name": "Wikipedia Reader", "cat": "ref", "cx": "M", "desc": "Clean reader for summaries and articles; random button; on-this-day.", "network": "cors-open", "key": null, "endpoints": ["https://en.wikipedia.org", "https://upload.wikimedia.org"], "storage": ["suite.theme", "suite.wiki.readlist", "suite.cache.wiki.*"], "cacheTtlMin": 1440, "since": "v1", "flags": ["ea"]}, {"id": "zip", "file": "zip.html", "name": "ZIP & Area Code Lookup", "cat": "ref", "cx": "S", "desc": "ZIP ↔ city/coordinates; area code → region.", "network": "cors-open", "key": null, "endpoints": ["https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.cache.zip.*"], "cacheTtlMin": 10080, "since": "v1", "flags": []}, {"id": "factbook", "file": "factbook.html", "name": "Country & State Factbook", "cat": "ref", "cx": "S", "desc": "Flags, capitals, populations, currencies; Census facts for states.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": ["ea"]}, {"id": "books", "file": "books.html", "name": "Book & Library Lookup", "cat": "ref", "cx": "S", "desc": "Search books and editions, covers, ISBN lookup, read-next list.", "network": "cors-open", "key": null, "endpoints": ["https://openlibrary.org", "https://covers.openlibrary.org", "https://www.googleapis.com", "https://books.google.com"], "storage": ["suite.theme", "suite.books.readnext", "suite.cache.books.*"], "cacheTtlMin": 10080, "since": "v1", "flags": []}, {"id": "art", "file": "art.html", "name": "Museum Postcard", "cat": "ref", "cx": "S", "desc": "A daily open-access artwork. APOD for art. (Met JSON blocks fetch — images don't.)", "network": "cors-open", "key": null, "endpoints": ["https://api.artic.edu", "https://www.artic.edu", "https://images.metmuseum.org"], "storage": ["suite.theme", "suite.art.favorites", "suite.cache.art.pool:*", "suite.cache.art.search:*"], "cacheTtlMin": 1440, "since": "v1", "flags": ["ea"]}, {"id": "geo", "file": "geo.html", "name": "Geocoder & Coordinate Toolbox", "cat": "local", "cx": "S", "desc": "Address ↔ coordinates, distance/bearing, DMS conversions.", "network": "cors-open", "key": null, "endpoints": ["https://geocoding-api.open-meteo.com", "https://nominatim.openstreetmap.org", "https://geocoding.geo.census.gov"], "storage": ["suite.location", "suite.cache.geo.*"], "cacheTtlMin": 10080, "since": "v1", "flags": [], "scriptEndpoints": ["https://geocoding.geo.census.gov"]}, {"id": "elevation", "file": "elevation.html", "name": "Elevation Profiler", "cat": "local", "cx": "S", "desc": "Elevation for any point; profile between two points.", "network": "cors-open", "key": null, "endpoints": ["https://epqs.nationalmap.gov", "https://api.open-elevation.com"], "storage": ["suite.theme", "suite.location", "suite.cache.elevation.*"], "cacheTtlMin": 10080, "since": "v1", "flags": []}, {"id": "network", "file": "network.html", "name": "What's My Network", "cat": "local", "cx": "S", "desc": "Public IP, ISP, and a latency sparkline — \"is it my wifi or the site?\"", "network": "cors-open", "key": null, "endpoints": ["https://api.ipify.org", "https://ipapi.co", "https://cloudflare.com", "https://www.google.com", "https://api.weather.gov", "https://en.wikipedia.org"], "storage": ["suite.theme", "suite.cache.network.geo", "suite.cache.network.ip"], "cacheTtlMin": 60, "since": "v1", "flags": []}, {"id": "apod", "file": "apod.html", "name": "Astronomy Picture of the Day", "cat": "space", "cx": "S", "desc": "NASA’s APOD with its explanation — a serene new-tab page.", "network": "keyed", "key": {"name": "nasa", "signup": "https://api.nasa.gov", "demo": true}, "endpoints": ["https://api.nasa.gov", "https://apod.nasa.gov", "https://img.youtube.com", "https://i.vimeocdn.com"], "storage": ["suite.theme", "suite.key.nasa", "suite.cache.apod.*"], "cacheTtlMin": 1440, "since": "v1", "flags": ["rl"]}, {"id": "nutrition", "file": "nutrition.html", "name": "Nutrition Lookup", "cat": "health", "cx": "M", "desc": "Search a food, get calories and nutrients; compare two foods.", "network": "keyed", "key": {"name": "usda", "signup": "https://fdc.nal.usda.gov/api-key-signup.html", "demo": true}, "endpoints": ["https://api.nal.usda.gov"], "storage": ["suite.theme", "suite.key.usda", "suite.cache.nutrition.*"], "cacheTtlMin": 10080, "since": "v1", "flags": ["rl"]}, {"id": "congress", "file": "congress.html", "name": "Congress Tracker", "cat": "civic", "cx": "M", "desc": "Recent bills, what passed this week, your delegation's activity.", "network": "keyed", "key": {"name": "congress", "signup": "https://api.congress.gov/sign-up/", "demo": false}, "endpoints": ["https://api.congress.gov"], "storage": ["suite.theme", "suite.key.congress", "suite.state", "suite.cache.congress.*"], "cacheTtlMin": 360, "since": "v1", "flags": []}, {"id": "gas", "file": "gas.html", "name": "Gas Price Tracker", "cat": "money", "cx": "S", "desc": "National and regional gas/diesel averages with trend lines.", "network": "keyed", "key": {"name": "eia", "signup": "https://www.eia.gov/opendata/register.php", "demo": false}, "endpoints": ["https://api.eia.gov"], "storage": ["suite.theme", "suite.key.eia", "suite.cache.gas.*"], "cacheTtlMin": 1440, "since": "v1", "flags": []}, {"id": "parks", "file": "parks.html", "name": "National Parks Companion", "cat": "civic", "cx": "S", "desc": "Alerts, closures, and events for the parks you're visiting.", "network": "keyed", "key": {"name": "nps", "signup": "https://www.nps.gov/subjects/developer/get-started.htm", "demo": false}, "endpoints": ["https://developer.nps.gov"], "storage": ["suite.theme", "suite.key.nps", "suite.parks", "suite.cache.parks.*"], "cacheTtlMin": 360, "since": "v1", "flags": []}, {"id": "markets", "file": "markets.html", "name": "Market Snapshot", "cat": "money", "cx": "M", "desc": "Index levels once a day. Honest caveat: free keyless stock data doesn't exist.", "network": "keyed", "key": {"name": "finnhub", "signup": "https://finnhub.io/register", "demo": false}, "endpoints": ["https://api.coingecko.com", "https://finnhub.io"], "storage": ["suite.theme", "suite.key.finnhub", "suite.markets.tickers", "suite.cache.markets.crypto", "suite.cache.markets.stock.*", "suite.cache.markets.throttle"], "cacheTtlMin": 1440, "since": "v1", "flags": ["rl"]}, {"id": "launches", "file": "launches.html", "name": "Rocket Launch Schedule", "cat": "space", "cx": "S", "desc": "Upcoming launches worldwide with countdowns and mission blurbs.", "network": "cors-open", "key": null, "endpoints": ["https://ll.thespacedevs.com"], "storage": ["suite.theme", "suite.cache.launches.upcoming", "suite.launches.backoffUntil"], "cacheTtlMin": 60, "since": "v1", "flags": ["rl"]}, {"id": "nearby", "file": "nearby.html", "name": "Nearby Finder", "cat": "local", "cx": "L", "desc": "Nearest pharmacy, EV charger, playground, library — from OpenStreetMap.", "network": "cors-open", "key": null, "endpoints": ["https://overpass-api.de", "https://overpass.kumi.systems", "https://tile.openstreetmap.org", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.cache.nearby.*"], "cacheTtlMin": 60, "since": "v1", "flags": ["rl"]}, {"id": "airport", "file": "airport.html", "name": "Airport & Flight-Weather Board", "cat": "space", "cx": "M", "desc": "METARs/TAFs decoded to plain English, plus FAA delay status.", "network": "blocked", "key": null, "endpoints": [], "storage": ["suite.airports", "suite.cache.airport.metars", "suite.relay.url", "suite.relay"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "jobs", "file": "jobs.html", "name": "Jobs & Unemployment Snapshot", "cat": "money", "cx": "S", "desc": "Unemployment rate and the latest jobs-report numbers.", "network": "blocked", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.data.jobs", "suite.relay.url", "suite.relay"], "cacheTtlMin": null, "since": "v1", "flags": ["embedded-data"]}, {"id": "inflation", "file": "inflation.html", "name": "Cost-of-Living Tracker (CPI)", "cat": "money", "cx": "M", "desc": "Headline and core inflation, plus the categories that hit home.", "network": "blocked", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.data.cpi", "suite.relay.url", "suite.relay"], "cacheTtlMin": null, "since": "v1", "flags": ["embedded-data"]}, {"id": "transit", "file": "transit.html", "name": "Transit Departure Board", "cat": "local", "cx": "L", "desc": "Next departures for your stop, big-type. Scope per city — GTFS varies wildly.", "network": "keyed", "key": {"name": "bart", "signup": "https://api.bart.gov/api/register.aspx", "demo": true}, "endpoints": ["https://api.bart.gov"], "storage": ["suite.theme", "suite.transit.bartStation", "suite.transit.customUrl", "suite.transit.agencyLink", "suite.cache.transit.bartstations", "suite.cache.transit.etd.*", "suite.key.bart", "suite.relay.url"], "cacheTtlMin": 1, "since": "v1", "flags": []}, {"id": "password", "file": "password.html", "name": "Password & Passphrase Generator", "cat": "util", "cx": "S", "desc": "crypto.getRandomValues + embedded EFF wordlist. Sayable passphrases.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": ["embedded-data"]}, {"id": "word", "file": "word.html", "name": "Word of the Day", "cat": "ref", "cx": "S", "desc": "A daily word with origin; keeps a “words I’ve met” list.", "network": "cors-open", "key": null, "endpoints": ["https://api.dictionaryapi.dev"], "storage": ["suite.word.met", "suite.cache.word.*"], "cacheTtlMin": 1440, "since": "v1", "flags": ["embedded-data", "ea"]}, {"id": "passes", "file": "passes.html", "name": "Satellite Pass Predictor", "cat": "space", "cx": "L", "desc": "When bright satellites cross your backyard sky tonight.", "network": "cors-open", "key": null, "endpoints": ["https://celestrak.org", "https://api.zippopotam.us"], "storage": ["suite.location", "suite.cache.passes.visual", "suite.theme"], "cacheTtlMin": 1440, "since": "v1", "flags": ["embedded-data"]}, {"id": "settings", "file": "settings.html", "name": "Suite Settings", "cat": "util", "cx": "M", "desc": "Backup and restore, API keys, relay, and storage — the suite's controls.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.* (reads/writes all suite keys by design)"], "cacheTtlMin": null, "since": "v2", "flags": []}]/* /@suite:tools */;
+const TOOLS = /* @suite:tools */[{"id": "focus", "file": "focus.html", "name": "Focus Timer", "cat": "time", "cx": "S", "desc": "Pomodoro with gentle WebAudio chimes and a big calm clock.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.focus.settings", "suite.focus.log"], "cacheTtlMin": null, "since": "v1", "flags": ["xp"]}, {"id": "weather", "file": "weather.html", "name": "Weather Station", "cat": "sky", "cx": "M", "desc": "Current conditions, forecast and details for your saved location. The original.", "network": "cors-open", "key": null, "endpoints": ["https://api.weather.gov", "https://api.zippopotam.us", "https://radar.weather.gov"], "storage": ["suite.theme", "suite.location", "suite.units", "suite.cache.weather.*"], "cacheTtlMin": 10, "since": "v1", "flags": []}, {"id": "almanac", "file": "almanac.html", "name": "Sun & Moon Almanac", "cat": "sky", "cx": "M", "desc": "Sunrise, golden hour, moon phase, solstice countdowns — all computed in the file.", "network": "offline", "key": null, "endpoints": ["https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "holidays", "file": "holidays.html", "name": "Holiday & Observance Calendar", "cat": "civic", "cx": "S", "desc": "Federal holidays, DST changes, long-weekend countdowns.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "voting", "file": "voting.html", "name": "Election & Voting Info", "cat": "civic", "cx": "S", "desc": "Registration deadlines and lookup links for your state, refreshed each cycle.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.voting.state", "suite.location"], "cacheTtlMin": null, "since": "v1", "flags": ["static-curated"]}, {"id": "emergency", "file": "emergency.html", "name": "Emergency Quick-Reference", "cat": "health", "cx": "S", "desc": "First aid, poison control, CPR rhythm — guaranteed to work with no internet.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.emergency.card"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "convert", "file": "convert.html", "name": "Unit & Kitchen Converter", "cat": "ref", "cx": "S", "desc": "Cooking volumes and weights, temperatures, \"half this recipe.\"", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "worldclock", "file": "worldclock.html", "name": "World Clock & Meeting Planner", "cat": "time", "cx": "S", "desc": "Your people's time zones as clocks, plus a civil-hour meeting slider.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.worldclock.zones"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "dates", "file": "dates.html", "name": "Countdown & Date Calculator", "cat": "time", "cx": "S", "desc": "Days until anything, business-day math, age calculator.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.dates.countdowns"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "daylight", "file": "daylight.html", "name": "Daylight Planner", "cat": "time", "cx": "M", "desc": "Year-at-a-glance sunrise/sunset curves for your latitude.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.location"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "printables", "file": "printables.html", "name": "Printable Calendar & Planner", "cat": "time", "cx": "S", "desc": "Clean monthly calendars, weekly planners, habit trackers — print CSS.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": ["print-css"]}, {"id": "tripcost", "file": "tripcost.html", "name": "Trip Cost Estimator", "cat": "local", "cx": "S", "desc": "Distance + MPG + gas price = what the road trip costs.", "network": "offline", "key": {"name": "eia", "signup": "https://www.eia.gov/opendata/register.php", "demo": false}, "endpoints": ["https://api.eia.gov", "https://router.project-osrm.org"], "storage": ["suite.theme", "suite.tripcost.current", "suite.tripcost.vehicles", "suite.key.eia"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "qr", "file": "qr.html", "name": "QR Code Maker", "cat": "util", "cx": "S", "desc": "Text, URL, or wifi credentials → QR on canvas. Print a sheet.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "text", "file": "text.html", "name": "Text Toolbox", "cat": "util", "cx": "S", "desc": "Counts, case, sort/dedupe, diff, SHA-256, URL/Base64.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "color", "file": "color.html", "name": "Color Studio", "cat": "util", "cx": "M", "desc": "Picker, palettes, WCAG contrast, colors from a photo.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.color.palettes"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "random", "file": "random.html", "name": "Decision Maker", "cat": "util", "cx": "S", "desc": "Dice, coins, spinners, pick-from-list — fair, crypto-random.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "notes", "file": "notes.html", "name": "Notepad That Stays", "cat": "util", "cx": "M", "desc": "Autosaving markdown-ish notes that never leave the machine.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.notes"], "cacheTtlMin": null, "since": "v1", "flags": ["xp"]}, {"id": "dataviewer", "file": "dataviewer.html", "name": "Data Viewer", "cat": "util", "cx": "M", "desc": "Drop a JSON/CSV file → collapsible, searchable table.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "sound", "file": "sound.html", "name": "Sound Machine", "cat": "util", "cx": "M", "desc": "White/pink/brown noise and rain-ish synthesis, sleep timer.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.sound"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "paper", "file": "paper.html", "name": "Paper Generator", "cat": "util", "cx": "S", "desc": "Print-perfect graph, lined, dot-grid, and staff paper.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": ["print-css"]}, {"id": "timers", "file": "timers.html", "name": "Stopwatch & Kitchen Timers", "cat": "util", "cx": "S", "desc": "Multiple named timers, laps, chimes, big type.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.timers.v1"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "loan", "file": "loan.html", "name": "Mortgage & Loan Workbench", "cat": "util", "cx": "M", "desc": "Amortization, extra-payment what-ifs, refinance compare — all local.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.loan.v1"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "flashcards", "file": "flashcards.html", "name": "Flashcards", "cat": "util", "cx": "M", "desc": "Spaced-repetition-lite cards in localStorage, JSON/CSV import-export.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.flashcards.v1"], "cacheTtlMin": null, "since": "v1", "flags": ["xp"]}, {"id": "alerts", "file": "alerts.html", "name": "Severe Weather Alert Board", "cat": "sky", "cx": "S", "desc": "Watches and warnings for your area, sorted by severity — turns red when it matters.", "network": "cors-open", "key": null, "endpoints": ["https://api.weather.gov", "https://api.zippopotam.us"], "storage": ["suite.location", "suite.cache.alerts", "suite.alerts.notify", "suite.alerts.seen"], "cacheTtlMin": 5, "since": "v1", "flags": []}, {"id": "radar", "file": "radar.html", "name": "Radar & Satellite Viewer", "cat": "sky", "cx": "S", "desc": "Animated radar loop and GOES satellite imagery for your region.", "network": "cors-open", "key": null, "endpoints": ["https://radar.weather.gov", "https://cdn.star.nesdis.noaa.gov", "https://api.zippopotam.us"], "storage": ["suite.location", "suite.radar.station", "suite.radar.sector", "suite.radar.product"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "air", "file": "air.html", "name": "Air Quality & UV Panel", "cat": "sky", "cx": "S", "desc": "AQI with pollutant breakdown on the EPA color scale, plus today's UV index.", "network": "cors-open", "key": null, "endpoints": ["https://air-quality-api.open-meteo.com", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.cache.air"], "cacheTtlMin": 10, "since": "v1", "flags": []}, {"id": "spaceweather", "file": "spaceweather.html", "name": "Space Weather & Aurora", "cat": "sky", "cx": "M", "desc": "Kp index, solar wind, flares, and “can I see the aurora tonight?”", "network": "cors-open", "key": null, "endpoints": ["https://services.swpc.noaa.gov", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.cache.spaceweather", "suite.cache.spaceweather.*"], "cacheTtlMin": 10, "since": "v1", "flags": []}, {"id": "tides", "file": "tides.html", "name": "Tides & Currents Board", "cat": "sky", "cx": "M", "desc": "Next high/low tides, today's tide curve, and water temperature.", "network": "cors-open", "key": null, "endpoints": ["https://api.tidesandcurrents.noaa.gov"], "storage": ["suite.theme", "suite.location", "suite.tides.station", "suite.cache.tides.*"], "cacheTtlMin": 60, "since": "v1", "flags": []}, {"id": "marine", "file": "marine.html", "name": "Buoy & Marine Conditions", "cat": "sky", "cx": "M", "desc": "Wave height, period, wind and water temp near you.", "network": "cors-open", "key": null, "endpoints": ["https://marine-api.open-meteo.com", "https://api.open-meteo.com", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.cache.marine.*"], "cacheTtlMin": 30, "since": "v1", "flags": []}, {"id": "normals", "file": "normals.html", "name": "Climate Normals Comparator", "cat": "sky", "cx": "L", "desc": "Today vs. 30-year normals and records: is this month actually unusual?", "network": "cors-open", "key": null, "endpoints": ["https://www.ncei.noaa.gov", "https://api.open-meteo.com", "https://archive-api.open-meteo.com"], "storage": ["suite.location", "suite.normals.station", "suite.cache.normals.*"], "cacheTtlMin": 10080, "since": "v1", "flags": []}, {"id": "quakes", "file": "quakes.html", "name": "Earthquake Monitor", "cat": "earth", "cx": "S", "desc": "Live quake list and map, filterable by magnitude and distance from you.", "network": "cors-open", "key": null, "endpoints": ["https://earthquake.usgs.gov", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.quakes.feed", "suite.quakes.minMag", "suite.quakes.maxDist", "suite.quakes.seen", "suite.cache.quakes.*"], "cacheTtlMin": 5, "since": "v1", "flags": []}, {"id": "rivers", "file": "rivers.html", "name": "River & Streamflow Gauges", "cat": "earth", "cx": "M", "desc": "Gauge height and flow for your rivers, with flood-stage context.", "network": "cors-open", "key": null, "endpoints": ["https://api.waterdata.usgs.gov", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.rivers.favs", "suite.cache.rivers.*"], "cacheTtlMin": 15, "since": "v1", "flags": []}, {"id": "wildfire", "file": "wildfire.html", "name": "Wildfire Watchboard", "cat": "earth", "cx": "M", "desc": "Active large fires near you: size, containment, distance.", "network": "cors-open", "key": null, "endpoints": ["https://services3.arcgis.com", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.wildfire.radius", "suite.wildfire.sort", "suite.cache.wildfire.*"], "cacheTtlMin": 30, "since": "v1", "flags": []}, {"id": "drought", "file": "drought.html", "name": "Drought Monitor", "cat": "earth", "cx": "S", "desc": "Your county's drought category and its trend over the year.", "network": "cors-open", "key": null, "endpoints": ["https://services9.arcgis.com", "https://geo.fcc.gov", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.cache.drought.*"], "cacheTtlMin": 1440, "since": "v1", "flags": []}, {"id": "volcano", "file": "volcano.html", "name": "Volcano Status Board", "cat": "earth", "cx": "S", "desc": "US volcanoes at elevated alert. Quietly reassuring, most days.", "network": "cors-open", "key": null, "endpoints": ["https://volcanoes.usgs.gov", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.cache.volcano.*"], "cacheTtlMin": 60, "since": "v1", "flags": []}, {"id": "snow", "file": "snow.html", "name": "Snowpack & SNOTEL", "cat": "earth", "cx": "M", "desc": "Mountain snow depth and snow-water equivalent from SNOTEL stations.", "network": "cors-open", "key": null, "endpoints": ["https://wcc.sc.egov.usda.gov", "https://api.zippopotam.us"], "storage": ["suite.location", "suite.pref.snow.fav", "suite.cache.snow.*"], "cacheTtlMin": 60, "since": "v1", "flags": []}, {"id": "wildlife", "file": "wildlife.html", "name": "Wildlife Sightings Nearby", "cat": "earth", "cx": "S", "desc": "Recent bird and wildlife observations around you.", "network": "cors-open", "key": {"name": "ebird", "signup": "https://ebird.org/api/keygen", "demo": false}, "endpoints": ["https://api.inaturalist.org", "https://inaturalist-open-data.s3.amazonaws.com", "https://static.inaturalist.org", "https://api.ebird.org", "https://api.zippopotam.us"], "storage": ["suite.location", "suite.key.ebird", "suite.cache.wildlife.*"], "cacheTtlMin": 30, "since": "v1", "flags": []}, {"id": "iss", "file": "iss.html", "name": "ISS Tracker", "cat": "space", "cx": "S", "desc": "Where the Space Station is right now, and when it passes over you.", "network": "cors-open", "key": null, "endpoints": ["https://api.wheretheiss.at", "https://api.zippopotam.us"], "storage": ["suite.location", "suite.cache.iss.*", "suite.theme"], "cacheTtlMin": 0, "since": "v1", "flags": []}, {"id": "asteroids", "file": "asteroids.html", "name": "Near-Earth Asteroid Watch", "cat": "space", "cx": "S", "desc": "Today's close approaches in lunar distances. Perspective with breakfast.", "network": "keyed", "key": {"name": "nasa", "signup": "https://api.nasa.gov", "demo": true}, "endpoints": ["https://api.nasa.gov"], "storage": ["suite.theme", "suite.key.nasa", "suite.cache.asteroids.*"], "cacheTtlMin": 1440, "since": "v1", "flags": ["rl"]}, {"id": "fedregister", "file": "fedregister.html", "name": "Federal Register Daily", "cat": "civic", "cx": "S", "desc": "What the federal government published today, filterable by agency.", "network": "cors-open", "key": null, "endpoints": ["https://www.federalregister.gov"], "storage": ["suite.theme", "suite.cache.fedregister.*"], "cacheTtlMin": 60, "since": "v1", "flags": []}, {"id": "recalls", "file": "recalls.html", "name": "Recall Radar", "cat": "civic", "cx": "M", "desc": "Food, vehicle, and product recalls that reach your household — one board.", "network": "cors-open", "key": null, "endpoints": ["https://api.fda.gov", "https://api.nhtsa.gov", "https://www.saferproducts.gov"], "storage": ["suite.theme", "suite.location", "suite.state", "suite.cars", "suite.cache.recalls.*"], "cacheTtlMin": 360, "since": "v1", "flags": []}, {"id": "treasury", "file": "treasury.html", "name": "Treasury & Debt Dashboard", "cat": "civic", "cx": "S", "desc": "Debt to the penny and the country's balance sheet at a glance.", "network": "cors-open", "key": null, "endpoints": ["https://api.fiscaldata.treasury.gov"], "storage": ["suite.theme", "suite.cache.treasury.latest", "suite.cache.treasury.series", "suite.cache.treasury.rates", "suite.cache.treasury.auctions"], "cacheTtlMin": 1440, "since": "v1", "flags": []}, {"id": "yields", "file": "yields.html", "name": "Treasury Yields & Savings", "cat": "money", "cx": "M", "desc": "The yield curve today vs. last quarter — the “move my savings?” glance.", "network": "cors-open", "key": null, "endpoints": ["https://api.fiscaldata.treasury.gov"], "storage": ["suite.theme", "suite.cache.yields.auctions", "suite.cache.yields.compare"], "cacheTtlMin": 1440, "since": "v1", "flags": []}, {"id": "currency", "file": "currency.html", "name": "Exchange Rate Board", "cat": "money", "cx": "S", "desc": "Currency board and converter with 30-day trend.", "network": "cors-open", "key": null, "endpoints": ["https://api.frankfurter.dev", "https://open.er-api.com"], "storage": ["suite.theme", "suite.cache.currency.latest", "suite.cache.currency.trend.*"], "cacheTtlMin": 1440, "since": "v1", "flags": []}, {"id": "illness", "file": "illness.html", "name": "Illness Activity Tracker", "cat": "health", "cx": "M", "desc": "Flu activity and COVID wastewater trend for your state.", "network": "cors-open", "key": null, "endpoints": ["https://data.cdc.gov"], "storage": ["suite.theme", "suite.state", "suite.location", "suite.cache.illness.ww.*", "suite.cache.illness.adm.*"], "cacheTtlMin": 1440, "since": "v1", "flags": []}, {"id": "medicine", "file": "medicine.html", "name": "Medicine Cabinet Lookup", "cat": "health", "cx": "M", "desc": "Drug label info in plain language: uses, warnings, recalls.", "network": "cors-open", "key": null, "endpoints": ["https://api.fda.gov"], "storage": ["suite.theme", "suite.medicine.history", "suite.cache.medicine.*"], "cacheTtlMin": 1440, "since": "v1", "flags": []}, {"id": "foodrecalls", "file": "foodrecalls.html", "name": "Food Recall Alerts", "cat": "health", "cx": "S", "desc": "Slim food-only recall board filtered to your state.", "network": "cors-open", "key": null, "endpoints": ["https://api.fda.gov"], "storage": ["suite.location", "suite.state", "suite.cache.foodrecalls.*"], "cacheTtlMin": 720, "since": "v1", "flags": []}, {"id": "dictionary", "file": "dictionary.html", "name": "Dictionary & Thesaurus", "cat": "ref", "cx": "S", "desc": "Instant definitions and synonyms — the no-ads dictionary.", "network": "cors-open", "key": null, "endpoints": ["https://api.dictionaryapi.dev", "https://en.wiktionary.org"], "storage": ["suite.dictionary.history", "suite.cache.dictionary.*"], "cacheTtlMin": 10080, "since": "v1", "flags": ["ea"]}, {"id": "wiki", "file": "wiki.html", "name": "Wikipedia Reader", "cat": "ref", "cx": "M", "desc": "Clean reader for summaries and articles; random button; on-this-day.", "network": "cors-open", "key": null, "endpoints": ["https://en.wikipedia.org", "https://upload.wikimedia.org"], "storage": ["suite.theme", "suite.wiki.readlist", "suite.cache.wiki.*"], "cacheTtlMin": 1440, "since": "v1", "flags": ["ea"]}, {"id": "zip", "file": "zip.html", "name": "ZIP & Area Code Lookup", "cat": "ref", "cx": "S", "desc": "ZIP ↔ city/coordinates; area code → region.", "network": "cors-open", "key": null, "endpoints": ["https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.cache.zip.*"], "cacheTtlMin": 10080, "since": "v1", "flags": []}, {"id": "factbook", "file": "factbook.html", "name": "Country & State Factbook", "cat": "ref", "cx": "S", "desc": "Flags, capitals, populations, currencies; Census facts for states.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": ["ea"]}, {"id": "books", "file": "books.html", "name": "Book & Library Lookup", "cat": "ref", "cx": "S", "desc": "Search books and editions, covers, ISBN lookup, read-next list.", "network": "cors-open", "key": null, "endpoints": ["https://openlibrary.org", "https://covers.openlibrary.org", "https://www.googleapis.com", "https://books.google.com"], "storage": ["suite.theme", "suite.books.readnext", "suite.cache.books.*"], "cacheTtlMin": 10080, "since": "v1", "flags": []}, {"id": "art", "file": "art.html", "name": "Museum Postcard", "cat": "ref", "cx": "S", "desc": "A daily open-access artwork. APOD for art. (Met JSON blocks fetch — images don't.)", "network": "cors-open", "key": null, "endpoints": ["https://api.artic.edu", "https://www.artic.edu", "https://images.metmuseum.org"], "storage": ["suite.theme", "suite.art.favorites", "suite.cache.art.pool:*", "suite.cache.art.search:*"], "cacheTtlMin": 1440, "since": "v1", "flags": ["ea"]}, {"id": "geo", "file": "geo.html", "name": "Geocoder & Coordinate Toolbox", "cat": "local", "cx": "S", "desc": "Address ↔ coordinates, distance/bearing, DMS conversions.", "network": "cors-open", "key": null, "endpoints": ["https://geocoding-api.open-meteo.com", "https://nominatim.openstreetmap.org", "https://geocoding.geo.census.gov"], "storage": ["suite.location", "suite.cache.geo.*"], "cacheTtlMin": 10080, "since": "v1", "flags": [], "scriptEndpoints": ["https://geocoding.geo.census.gov"]}, {"id": "elevation", "file": "elevation.html", "name": "Elevation Profiler", "cat": "local", "cx": "S", "desc": "Elevation for any point; profile between two points.", "network": "cors-open", "key": null, "endpoints": ["https://epqs.nationalmap.gov", "https://api.open-elevation.com"], "storage": ["suite.theme", "suite.location", "suite.cache.elevation.*"], "cacheTtlMin": 10080, "since": "v1", "flags": []}, {"id": "network", "file": "network.html", "name": "What's My Network", "cat": "local", "cx": "S", "desc": "Public IP, ISP, and a latency sparkline — \"is it my wifi or the site?\"", "network": "cors-open", "key": null, "endpoints": ["https://api.ipify.org", "https://ipapi.co", "https://cloudflare.com", "https://www.google.com", "https://api.weather.gov", "https://en.wikipedia.org"], "storage": ["suite.theme", "suite.cache.network.geo", "suite.cache.network.ip"], "cacheTtlMin": 60, "since": "v1", "flags": []}, {"id": "apod", "file": "apod.html", "name": "Astronomy Picture of the Day", "cat": "space", "cx": "S", "desc": "NASA’s APOD with its explanation — a serene new-tab page.", "network": "keyed", "key": {"name": "nasa", "signup": "https://api.nasa.gov", "demo": true}, "endpoints": ["https://api.nasa.gov", "https://apod.nasa.gov", "https://img.youtube.com", "https://i.vimeocdn.com"], "storage": ["suite.theme", "suite.key.nasa", "suite.cache.apod.*"], "cacheTtlMin": 1440, "since": "v1", "flags": ["rl"]}, {"id": "nutrition", "file": "nutrition.html", "name": "Nutrition Lookup", "cat": "health", "cx": "M", "desc": "Search a food, get calories and nutrients; compare two foods.", "network": "keyed", "key": {"name": "usda", "signup": "https://fdc.nal.usda.gov/api-key-signup.html", "demo": true}, "endpoints": ["https://api.nal.usda.gov"], "storage": ["suite.theme", "suite.key.usda", "suite.cache.nutrition.*"], "cacheTtlMin": 10080, "since": "v1", "flags": ["rl"]}, {"id": "congress", "file": "congress.html", "name": "Congress Tracker", "cat": "civic", "cx": "M", "desc": "Recent bills, what passed this week, your delegation's activity.", "network": "keyed", "key": {"name": "congress", "signup": "https://api.congress.gov/sign-up/", "demo": false}, "endpoints": ["https://api.congress.gov"], "storage": ["suite.theme", "suite.key.congress", "suite.state", "suite.cache.congress.*"], "cacheTtlMin": 360, "since": "v1", "flags": []}, {"id": "gas", "file": "gas.html", "name": "Gas Price Tracker", "cat": "money", "cx": "S", "desc": "National and regional gas/diesel averages with trend lines.", "network": "keyed", "key": {"name": "eia", "signup": "https://www.eia.gov/opendata/register.php", "demo": false}, "endpoints": ["https://api.eia.gov"], "storage": ["suite.theme", "suite.key.eia", "suite.cache.gas.*"], "cacheTtlMin": 1440, "since": "v1", "flags": []}, {"id": "parks", "file": "parks.html", "name": "National Parks Companion", "cat": "civic", "cx": "S", "desc": "Alerts, closures, and events for the parks you're visiting.", "network": "keyed", "key": {"name": "nps", "signup": "https://www.nps.gov/subjects/developer/get-started.htm", "demo": false}, "endpoints": ["https://developer.nps.gov"], "storage": ["suite.theme", "suite.key.nps", "suite.parks", "suite.cache.parks.*"], "cacheTtlMin": 360, "since": "v1", "flags": []}, {"id": "markets", "file": "markets.html", "name": "Market Snapshot", "cat": "money", "cx": "M", "desc": "Index levels once a day. Honest caveat: free keyless stock data doesn't exist.", "network": "keyed", "key": {"name": "finnhub", "signup": "https://finnhub.io/register", "demo": false}, "endpoints": ["https://api.coingecko.com", "https://finnhub.io"], "storage": ["suite.theme", "suite.key.finnhub", "suite.markets.tickers", "suite.cache.markets.crypto", "suite.cache.markets.stock.*", "suite.cache.markets.throttle"], "cacheTtlMin": 1440, "since": "v1", "flags": ["rl"]}, {"id": "launches", "file": "launches.html", "name": "Rocket Launch Schedule", "cat": "space", "cx": "S", "desc": "Upcoming launches worldwide with countdowns and mission blurbs.", "network": "cors-open", "key": null, "endpoints": ["https://ll.thespacedevs.com"], "storage": ["suite.theme", "suite.cache.launches.upcoming", "suite.launches.backoffUntil"], "cacheTtlMin": 60, "since": "v1", "flags": ["rl"]}, {"id": "nearby", "file": "nearby.html", "name": "Nearby Finder", "cat": "local", "cx": "L", "desc": "Nearest pharmacy, EV charger, playground, library — from OpenStreetMap.", "network": "cors-open", "key": null, "endpoints": ["https://overpass-api.de", "https://overpass.kumi.systems", "https://tile.openstreetmap.org", "https://api.zippopotam.us"], "storage": ["suite.theme", "suite.location", "suite.cache.nearby.*"], "cacheTtlMin": 60, "since": "v1", "flags": ["rl"]}, {"id": "airport", "file": "airport.html", "name": "Airport & Flight-Weather Board", "cat": "space", "cx": "M", "desc": "METARs/TAFs decoded to plain English, plus FAA delay status.", "network": "blocked", "key": null, "endpoints": [], "storage": ["suite.airports", "suite.cache.airport.metars", "suite.relay.url", "suite.relay"], "cacheTtlMin": null, "since": "v1", "flags": []}, {"id": "flight", "file": "flight.html", "name": "Flight Tracker", "cat": "space", "cx": "M", "desc": "Track one dated flight's status, last-known position, and estimated arrival.", "network": "keyed", "key": {"name": "aviationstack", "signup": "https://aviationstack.com/signup/free", "demo": false}, "endpoints": ["https://api.aviationstack.com", "https://api.airplanes.live"], "storage": ["suite.theme", "suite.key.aviationstack", "suite.flight.refresh", "suite.flight.usage", "suite.cache.flight.*"], "cacheTtlMin": 1, "since": "v3", "flags": ["rl"]}, {"id": "jobs", "file": "jobs.html", "name": "Jobs & Unemployment Snapshot", "cat": "money", "cx": "S", "desc": "Unemployment rate and the latest jobs-report numbers.", "network": "blocked", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.data.jobs", "suite.relay.url", "suite.relay"], "cacheTtlMin": null, "since": "v1", "flags": ["embedded-data"]}, {"id": "inflation", "file": "inflation.html", "name": "Cost-of-Living Tracker (CPI)", "cat": "money", "cx": "M", "desc": "Headline and core inflation, plus the categories that hit home.", "network": "blocked", "key": null, "endpoints": [], "storage": ["suite.theme", "suite.data.cpi", "suite.relay.url", "suite.relay"], "cacheTtlMin": null, "since": "v1", "flags": ["embedded-data"]}, {"id": "transit", "file": "transit.html", "name": "Transit Departure Board", "cat": "local", "cx": "L", "desc": "Next departures for your stop, big-type. Scope per city — GTFS varies wildly.", "network": "keyed", "key": {"name": "bart", "signup": "https://api.bart.gov/api/register.aspx", "demo": true}, "endpoints": ["https://api.bart.gov"], "storage": ["suite.theme", "suite.transit.bartStation", "suite.transit.customUrl", "suite.transit.agencyLink", "suite.cache.transit.bartstations", "suite.cache.transit.etd.*", "suite.key.bart", "suite.relay.url"], "cacheTtlMin": 1, "since": "v1", "flags": []}, {"id": "password", "file": "password.html", "name": "Password & Passphrase Generator", "cat": "util", "cx": "S", "desc": "crypto.getRandomValues + embedded EFF wordlist. Sayable passphrases.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.theme"], "cacheTtlMin": null, "since": "v1", "flags": ["embedded-data"]}, {"id": "word", "file": "word.html", "name": "Word of the Day", "cat": "ref", "cx": "S", "desc": "A daily word with origin; keeps a “words I’ve met” list.", "network": "cors-open", "key": null, "endpoints": ["https://api.dictionaryapi.dev"], "storage": ["suite.word.met", "suite.cache.word.*"], "cacheTtlMin": 1440, "since": "v1", "flags": ["embedded-data", "ea"]}, {"id": "passes", "file": "passes.html", "name": "Satellite Pass Predictor", "cat": "space", "cx": "L", "desc": "When bright satellites cross your backyard sky tonight.", "network": "cors-open", "key": null, "endpoints": ["https://celestrak.org", "https://api.zippopotam.us"], "storage": ["suite.location", "suite.cache.passes.visual", "suite.theme"], "cacheTtlMin": 1440, "since": "v1", "flags": ["embedded-data"]}, {"id": "settings", "file": "settings.html", "name": "Suite Settings", "cat": "util", "cx": "M", "desc": "Backup and restore, API keys, relay, and storage — the suite's controls.", "network": "offline", "key": null, "endpoints": [], "storage": ["suite.* (reads/writes all suite keys by design)"], "cacheTtlMin": null, "since": "v2", "flags": []}]/* /@suite:tools */;
 
 const CAT_LABEL = {
   sky:   "☀️ Weather & Sky",

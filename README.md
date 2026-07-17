@@ -1,7 +1,8 @@
-# Local Suite 2 — the v2 rebuild
+# Local Suite 3
 
-This is **Local Suite v2**: the next generation of the single-file HTML tool suite
-(v1 lives in `../Local Suite`, now a read-only archive).
+This is **Local Suite v3**, built on the verified v2 single-file architecture. V3 adds named
+multiple-location support, safer location-aware caching and cross-tab behavior, and an individual
+flight tracker with Aviationstack status/ETA plus Airplanes.live ADS-B position fallback.
 
 **To use the suite: open [`dist/index.html`](dist/index.html).** Everything in `dist/` is
 built and self-contained — double-click any file there. The `tools/` folder holds the
@@ -9,9 +10,9 @@ built and self-contained — double-click any file there. The `tools/` folder ho
 
 ## What Local Suite is
 
-A family of ~71 **single-file HTML tools** — weather station, earthquake monitor, password
-generator, notepad, tide board, flashcards — plus a hub page that maps them all. The philosophy
-(unchanged in v2):
+A family of 73 **single-file HTML tools** — weather station, earthquake monitor, flight tracker,
+password generator, notepad, tide board, flashcards — plus a hub page that maps them all. The philosophy
+(unchanged in v3):
 
 - **One `.html` file per tool.** No framework, no npm, no runtime dependencies. Copy it anywhere,
   double-click it, it works.
@@ -20,9 +21,9 @@ generator, notepad, tide board, flashcards — plus a hub page that maps them al
 - **No tracking, no ads, no accounts.** The only requests a tool makes are to its data source.
   Many tools make *zero* requests.
 - **Pleasant and calm.** Readable typography, light/dark aware, graceful "data unavailable" states.
-- **Remembers politely.** Preferences live in `localStorage` under the `suite.*` namespace —
-  nowhere else.
-- **Just works, easily shared.** v2's defining goal: hand anyone the files (or a link) and every
+- **Remembers politely.** Preferences and named locations live in `localStorage` under the
+  `suite.*` namespace — nowhere else.
+- **Just works, easily shared.** The suite's defining goal: hand anyone the files (or a link) and every
   tool functions with zero setup — no accounts, no keys required for the core experience, no
   configuration steps.
 
@@ -34,6 +35,8 @@ Two supported ways, both zero-setup for the recipient:
    USB stick, a network share, an email attachment. Double-click and it works.
 2. **Share a link.** Deploy `dist/` to any static host (GitHub Pages is the documented free path,
    set up in Phase 3). Recipients get the same suite at a URL, plus the installable PWA.
+
+**Hosted v3:** <https://overplant-paving.github.io/local-suite-3/>
 
 The 4 tools whose data sources block browser scripts stay simple: the two BLS tools (inflation,
 jobs) show monthly numbers embedded at build time, and airport/custom-transit show a clean card
@@ -65,7 +68,7 @@ self-contained, double-clickable HTML file. The only new tooling is one dependen
 ## Target repo layout
 
 ```
-Local Suite 2/
+Local Suite 3/
 ├── README.md · ROADMAP.md · ARCHITECTURE.md · MIGRATION.md
 │   API-AND-RELAY.md · PWA.md · QUALITY.md · CATALOG.md   ← planning + reference docs
 ├── build.py                  # the entire toolchain, Python stdlib only
@@ -97,6 +100,21 @@ python build.py --check    # validation gates (run before committing)
 python build.py --serve    # local server → PWA mode at http://localhost:8000
 python build.py --new foo  # scaffold a new tool + manifest entry
 ```
+
+### Flight Tracker setup
+
+`dist/flight.html` uses a personal Aviationstack API key. The provider's account form requires the
+account owner to supply their own identity, credentials, and acceptance of third-party terms, so
+Local Suite does not create that account or ship a shared key.
+
+1. Follow **Create a key** on the Flight Tracker page.
+2. Open **Settings → API keys** and save it under **Aviationstack**.
+3. Return to Flight Tracker and search using the two-character public airline code, flight number,
+   and service date (for example, `AA100`).
+
+The key remains in local browser storage as `suite.key.aviationstack` unless the user deliberately
+exports a Settings backup; do not commit or share it. The personal tier has a small request
+allowance, so automatic refresh defaults to off and stops at a local 80-request monthly safety threshold.
 
 ## Doc map — read X when doing Y
 

@@ -173,7 +173,14 @@ Departure-board-style view: METARs/TAFs for airports you care about, decoded to 
 - **Key:** none · **Local:** relay ❌ · **Complexity:** M (plus the relay)
 - **Suggested file:** `airport.html`
 
-### 3.6 Satellite Pass Predictor
+### 3.6 Individual Flight Tracker
+Track one dated commercial flight with status, current or last-known coordinates, altitude,
+speed, and the provider's estimated arrival time.
+- **Data:** Aviationstack `https://api.aviationstack.com/v1/flights?access_key={key}&flight_iata=AA100&limit=100`, with records disambiguated locally by service date; when Aviationstack omits `live`, the tracker resolves its `aircraft.icao24` through keyless Airplanes.live `https://api.airplanes.live/v2/hex/{icao24}`. The Aviationstack personal tier advertises 100 requests/month; historical lookup is paid-only. Successful keyed Aviationstack and keyed-to-ADS-B position probes were live-verified Jul 2026; Airplanes.live returned `Access-Control-Allow-Origin: *` for `Origin: null`.
+- **Key:** personal Aviationstack key, user-created at `https://aviationstack.com/signup/free`, stored as `suite.key.aviationstack`; never committed · **Local:** file:// live-verified for both provider surfaces Jul 2026 · **Complexity:** M
+- **Suggested file:** `flight.html`
+
+### 3.7 Satellite Pass Predictor
 When bright satellites (ISS, Starlink trains, Hubble) pass over your backyard tonight.
 - **Data:** CelesTrak TLEs `https://celestrak.org/NORAD/elements/gp.php?GROUP=visual&FORMAT=json` + embedded SGP4 math (keyless); or N2YO API (free key, 1,000 req/hr) if you'd rather not implement SGP4.
 - **Key:** none (CelesTrak+math) / free key (N2YO) · **Local:** file:// ✅ (verify CelesTrak) · **Complexity:** L
@@ -518,6 +525,7 @@ The short version of everything above. **CORS ✓** = documented/community-confi
 | wheretheiss.at | `api.wheretheiss.at` | none (1/sec) | ✓ (community) |
 | Launch Library 2 | `ll.thespacedevs.com/2.3.0` | none (15/hr) | ✓ (v2 live, Jul 2026) |
 | aviationweather.gov | `aviationweather.gov/api/data` | none | ✗ |
+| Aviationstack | `api.aviationstack.com/v1/flights` | personal free key | ✓ (keyless 401 ACAO:*, Jul 2026; keyed response requires user key) |
 | FAA NAS status | `nasstatus.faa.gov` | none | ✗ (likely; XML) |
 | USNO astronomy | `aa.usno.navy.mil/api` | none | ✗ (likely) |
 | sunrise-sunset.org | `api.sunrise-sunset.org` | none | ✓ (community) |

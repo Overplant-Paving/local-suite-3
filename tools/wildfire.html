@@ -196,8 +196,8 @@ function renderShell(){
 }
 
 /* ---------- load ---------- */
-/* The v2 cache envelope holds the raw WFIGS GeoJSON; v1 cached the already-mapped
-   fires array under the same key. Accept both so a v1 user's cache keeps working. */
+/* V3 scopes the raw WFIGS GeoJSON envelope by normalized coordinates. The legacy
+   unscoped cache is intentionally ignored because its bounding box is unknowable. */
 function mapFires(v,loc){
   if(Array.isArray(v)){ // v1-era cache: mapped fire objects — recompute distance
     return v.map(f=>({ ...f, dist:(isFinite(f.lat)&&isFinite(f.lon))?haversineKm(loc.lat,loc.lon,f.lat,f.lon):null }));
@@ -213,11 +213,15 @@ function mapFires(v,loc){
     };
   });
 }
+function fireCacheKey(loc){
+  return "wildfire." + loc.lat.toFixed(3) + "_" + loc.lon.toFixed(3);
+}
 
 async function load(){
   const loc=getLoc(); if(!loc) return;
+  const cacheKey=fireCacheKey(loc);
   // instant paint from the cache envelope while the (possible) network fetch runs — v1 behavior
-  const cached=Suite.store.get("suite.cache.wildfire.all");
+  const cached=Suite.store.get("suite.cache."+cacheKey);
   if(cached && typeof cached==="object" && "v" in cached){
     state.fires=mapFires(cached.v,loc); state.stamp=cached.t; state.error=null; renderData();
   }
@@ -227,7 +231,7 @@ async function load(){
     const geom=`${(loc.lon-dLon).toFixed(3)},${(loc.lat-dLat).toFixed(3)},${(loc.lon+dLon).toFixed(3)},${(loc.lat+dLat).toFixed(3)}`;
     const url=`${WFIGS}?where=1%3D1&outFields=${encodeURIComponent(FIELDS)}&geometry=${encodeURIComponent(geom)}`+
       `&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outSR=4326&f=geojson&resultRecordCount=1000`;
-    const r=await Suite.fetchJSON(url,{cacheKey:"wildfire.all", ttl:TTL});
+    const r=await Suite.fetchJSON(url,{cacheKey, ttl:TTL});
     state.fires=mapFires(r.v,loc); state.stamp=r.t;
     state.error=r.stale ? "offline — showing cached data" : null;
     renderData();

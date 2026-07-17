@@ -492,7 +492,10 @@ def cmd_check(_args):
     for t in tools:
         by_net[t["network"]] = by_net.get(t["network"], 0) + 1
     flagged = sum(1 for t in tools if t.get("flags"))
-    print(f"\nmigrated: {len(tools)}/71 tools (+hub)  "
+    migrated = sum(1 for t in tools if t.get("since") == "v1")
+    suite_native = len(tools) - migrated
+    print(f"\nmanifest: {len(tools)} tools + hub  "
+          f"({migrated} v1 migrations, {suite_native} suite-native)  "
           f"by network: {by_net or '{}'}  flagged: {flagged}")
 
     if failed:

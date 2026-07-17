@@ -2,14 +2,14 @@ NOTE: settings.html is born in v2 (no v1 original) — this run verifies the ROA
 NOTE: Phase 4 spec directly. The relay 'success' path is route-fulfilled (no live
 NOTE: request leaves the machine); the failure path is route-aborted to exercise the
 NOTE: designed blocked/CSP explanation state.
-seeded 9 suite.* keys: suite.cache.demo.one, suite.cache.demo.two, suite.focus.settings, suite.key.finnhub, suite.location, suite.notes.test, suite.roundtrip.spacing, suite.theme, suite.units
-storage viewer rows (9): suite.cache.demo.one, suite.cache.demo.two, suite.focus.settings, suite.key.finnhub, suite.location, suite.notes.test, suite.roundtrip.spacing, suite.theme, suite.units
+seeded 10 suite.* keys: suite.cache.demo.one, suite.cache.demo.two, suite.focus.settings, suite.key.finnhub, suite.location, suite.locations, suite.notes.test, suite.roundtrip.spacing, suite.theme, suite.units
+storage viewer rows (10): suite.cache.demo.one, suite.cache.demo.two, suite.focus.settings, suite.key.finnhub, suite.location, suite.locations, suite.notes.test, suite.roundtrip.spacing, suite.theme, suite.units
 viewer matches live localStorage key set: true
-storage summary: "9 key(s) · 332 B"
+storage summary: "10 key(s) · 469 B"
 viewer row suite.notes.test: size=40 B (UTF-8 bytes, value has multi-byte chars), preview="{"txt":"café ☕ — naïve ünïcode"}"
-export msg: "Backup of 9 key(s) created (750 B). It includes your saved API keys — treat it like a password."
-envelope: format=local-suite.backup.v2, exported=2026-07-16T06:12:38.769Z, keys=9, data entries=9
-envelope.data verbatim vs live localStorage (9 keys): all byte-identical
+export msg: "Backup of 10 key(s) created (937 B). It includes your saved API keys — treat it like a password."
+envelope: format=local-suite.backup.v2, exported=2026-07-16T20:00:46.043Z, keys=10, data entries=10
+envelope.data verbatim vs live localStorage (10 keys): all byte-identical
 download button enabled after export: true
 download event: suggested filename "local-suite-backup-2026-07-16.json"
 after wipe + reload: 1 suite.* key(s) present: suite.theme
@@ -19,22 +19,25 @@ storage summary on wiped profile: "1 key(s) · 5 B"
 restore with empty textarea -> "Paste a backup first (or use “Restore from file…”)."
 restore with invalid JSON -> "Restore failed: that isn't valid JSON."
 restore with wrong format -> "Restore failed: not a Local Suite backup (expected format "local-suite.backup.v2")."
-restore msg: "Restored 9 key(s). Backup dated 2026-07-16T06:12:38.769Z."
+restore msg: "Restored 10 key(s). Backup dated 2026-07-16T20:00:46.043Z."
   round-trip suite.cache.demo.one: byte-identical
   round-trip suite.cache.demo.two: byte-identical
   round-trip suite.focus.settings: byte-identical
   round-trip suite.key.finnhub: byte-identical
   round-trip suite.location: byte-identical
+  round-trip suite.locations: byte-identical
   round-trip suite.notes.test: byte-identical
   round-trip suite.roundtrip.spacing: byte-identical
   round-trip suite.theme: byte-identical
   round-trip suite.units: byte-identical
-ROUND-TRIP VERDICT: 9/9 keys byte-identical, 0 mismatched, 0 unexpected extra key(s)
+ROUND-TRIP VERDICT: 10/10 keys byte-identical, 0 mismatched, 0 unexpected extra key(s)
 tamper restore msg: "Restored 1 key(s) · 3 non-suite or non-string entries skipped. Backup dated 2026-07-16T00:00:00Z."
 tamper guard: evil.key=null, localStorageBomb=null, suite.bad.nonstring=null (all must be null), suite.tamper.ok="kept" (written)
+v2 location-only restore wins over prior v3 collection: {"mirror":{"lat":55,"lon":66,"label":"Restored legacy"},"collection":{"schema":1,"activeId":"saved-location","items":[{"id":"saved-location","revision":1,"lat":55,"lon":66,"label":"Restored legacy"}]}}
 nasa status before set (demo fallback): "using the shared demo key (DEMO_KEY) — low limits; add your free key for more headroom"
 finnhub status (restored custom key): "your key is saved on this machine"
 finnhub input masked: type=password
+aviationstack key row available for Flight Tracker: count=1, status="no key saved — the tool shows its sign-up card when one is needed"
 nasa key saved via Enter: stored="TESTKEY-NASA-LOCAL-HARNESS", status="your key is saved on this machine", card msg="NASA key saved."
 reveal before: input type=password, aria-pressed=false, aria-label="Show NASA API key"
 reveal after click: input type=text, aria-pressed=true, aria-label="Hide NASA API key", visible value="TESTKEY-NASA-LOCAL-HARNESS"
@@ -58,16 +61,19 @@ theme seg initial: {"dataTheme":"light","stored":"light","pressed":"light=true d
 theme -> dark: {"dataTheme":"dark","stored":"dark","pressed":"light=false dark=true system=false"}, msg="Theme set to dark."
 theme -> system (key removed): {"dataTheme":"(unset)","stored":null,"pressed":"light=false dark=false system=true"}, msg="Following the system setting (suite.theme removed)."
 theme -> light: {"dataTheme":"light","stored":"light","pressed":"light=true dark=false system=false"}
-location current (restored seed): "37.77, -122.42 — San Francisco"
+v2 location migration: {"legacy":{"lat":37.77,"lon":-122.42,"label":"San Francisco"},"collection":{"schema":1,"activeId":"saved-location","items":[{"id":"saved-location","revision":1,"lat":37.77,"lon":-122.42,"label":"San Francisco"}]}}
+location current (restored seed): "San Francisco — 37.77, -122.42", saved rows=1
 location save with invalid lat -> "Enter a latitude (−90…90) and longitude (−180…180) first."
-location saved via Enter: suite.location={"lat":51.5,"lon":-0.12,"label":"London"}, current="51.5, -0.12 — London", msg="Location saved — the location-aware tools will pick it up."
-location cleared: suite.location=null, current="not set"
+London added: suite.locations={"schema":1,"activeId":"saved-location","items":[{"id":"saved-location","revision":1,"lat":37.77,"lon":-122.42,"label":"San Francisco"},{"id":"london","label":"London","revision":1,"lat":51.5,"lon":-0.12}]}, rows=2, msg="Saved London."
+London activated: {"mirror":{"lat":51.5,"lon":-0.12,"label":"London"},"collection":{"schema":1,"activeId":"london","items":[{"id":"saved-location","revision":1,"lat":37.77,"lon":-122.42,"label":"San Francisco"},{"id":"london","label":"London","revision":1,"lat":51.5,"lon":-0.12}]},"safeCache":"{\"t\":1784232048181,\"v\":\"safe scoped data\"}","radarStation":null,"state":null}, current="London — 51.5, -0.12", msg="London is now active; reset 2 location-specific settings."
+active London edited: {"mirror":{"lat":51.51,"lon":-0.12,"label":"London"},"collection":{"schema":1,"activeId":"london","items":[{"id":"saved-location","revision":1,"lat":37.77,"lon":-122.42,"label":"San Francisco"},{"id":"london","label":"London","revision":2,"lat":51.51,"lon":-0.12}]},"normalsStation":null,"focus":"locAddBtn"}, msg="Updated London; reset 1 location-specific setting because its active coordinates changed."
+active London deleted: mirror={"lat":37.77,"lon":-122.42,"label":"San Francisco"}, collection={"schema":1,"activeId":"saved-location","items":[{"id":"saved-location","revision":1,"lat":37.77,"lon":-122.42,"label":"San Francisco"}]}, rows=1, msg="Deleted London; San Francisco is now active."
 per-key delete: row button aria-label="Delete suite.tamper.ok" present: true
 after delete: suite.tamper.ok=null, storage msg="Deleted suite.tamper.ok."
-before purge: 8 keys, cache keys: suite.cache.demo.one, suite.cache.demo.two
-purge msg: "Removed 2 cached entries (suite.cache.*)."
-after purge: cache keys remaining=0 (expected 0), non-cache keys intact=true (6/6)
-storage summary now: "6 key(s) · 176 B"
+before purge: 13 keys, cache keys: suite.cache.demo.one, suite.cache.demo.two, suite.cache.location-switch-probe, suite.cache.purge-test.one, suite.cache.purge-test.two
+purge msg: "Removed 5 cached entries (suite.cache.*)."
+after purge: cache keys remaining=0 (expected 0), non-cache keys intact=true (8/8)
+storage summary now: "8 key(s) · 364 B"
 second purge (nothing left): "No cached entries to remove."
 a11y: aria-live regions on all async/result areas: backupMsg, restoreMsg, keysMsg, relayMsg, themeMsg, locMsg, storageMsg
 a11y: inputs/textareas without label or aria-label: (none)

@@ -334,6 +334,7 @@ $("#changeLoc").addEventListener("click", showFirstRun);
 
 /* refresh on focus (gentle) */
 document.addEventListener("visibilitychange",()=>{ if (!document.hidden && loc && lastData && Date.now()-lastData.when>10*60*1000) load(); });
+window.addEventListener("storage",e=>{ if(e.key==="suite.location") location.reload(); });
 
 /* ---------- boot ---------- */
 Suite.liveRegion($("#content"));

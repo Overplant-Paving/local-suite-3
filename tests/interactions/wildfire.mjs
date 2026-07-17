@@ -49,7 +49,8 @@ export async function interact({ page, log, evidenceDir }) {
   log(`locbar label after seed: "${(await page.locator("#locLabel").innerText()).trim()}"`);
 
   const feed = await page.evaluate(() => {
-    const e = JSON.parse(localStorage.getItem("suite.cache.wildfire.all"));
+    const key = Object.keys(localStorage).find(k => k.startsWith("suite.cache.wildfire.") && k !== "suite.cache.wildfire.all");
+    const e = key && JSON.parse(localStorage.getItem(key));
     const f = e && e.v && e.v.features || [];
     const sample = f.length ? {
       name: f[0].properties.IncidentName, size: f[0].properties.IncidentSize,
