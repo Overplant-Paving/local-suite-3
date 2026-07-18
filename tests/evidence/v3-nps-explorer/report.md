@@ -81,6 +81,8 @@ states explain that the NPS upstream service is unavailable and do not invent re
 - Fresh-cache reload without additional requests.
 - Invalid-key handling.
 - Offline stale fallback for all eight planning resources, including manual resources.
+- Native park-option and section-button semantics with `aria-pressed`, avoiding incomplete ARIA
+  listbox/tab interaction contracts.
 - 390-pixel responsive layout without horizontal document overflow.
 - Light/dark theme behavior and clean main-page JavaScript execution.
 

@@ -1,6 +1,7 @@
 no-key state: Add your free NPS key
 key input masked: password
 park directory authenticated by X-Api-Key header: true; URL key leakage: false
+native park-option button semantics: true
 selected park: Yellowstone National Park; active storage: yell
 overview cards: 7; hero image visible: true
 alerts: resources=1, expected content=true

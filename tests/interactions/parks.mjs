@@ -70,12 +70,15 @@ export async function interact({page,log,evidenceDir}){
  await page.fill('#app input[aria-label="NPS API key"]',FAKE_KEY);await page.click("#app button.primary");await page.waitForSelector(".nps-picker");
  log(`park directory authenticated by X-Api-Key header: ${track.headers[0]===FAKE_KEY}; URL key leakage: ${track.queryLeak}`);
  await page.fill('.nps-picker input[type="search"]',"yellowstone");await page.focus('.options .opt:has-text("Yellowstone")');await page.keyboard.press("Enter");await page.waitForSelector(".park-hero h2");
+ const nativePicker=await page.locator('.options .opt').first().evaluate(x=>x.tagName==="BUTTON"&&x.getAttribute("aria-pressed")!==null&&x.parentElement.getAttribute("role")!=="listbox");
+ log(`native park-option button semantics: ${nativePicker}`);if(!nativePicker)throw new Error('park picker uses incomplete listbox semantics');
  log(`selected park: ${(await page.textContent('.park-hero h2')).trim()}; active storage: ${await page.evaluate(()=>localStorage.getItem('suite.parks.active'))}`);
  log(`overview cards: ${await page.locator('.item-card').count()}; hero image visible: ${await page.locator('.hero-image').isVisible()}`);
  await page.click('.park-hero button:has-text("watch alerts")');
  const expectations={alerts:"Thermal area",visit:"Madison Campground",explore:"Walk a geyser basin",learn:"landscape shaped",media:"Sounds of Yellowstone",reference:"NPS activity catalog"};
  for(const tab of ["alerts","visit","explore","learn","media","reference"]){
   await page.click(`.tab[data-tab="${tab}"]`);await waitTab(page);
+  if(await page.getAttribute(`.tab[data-tab="${tab}"]`,'aria-pressed')!=="true")throw new Error(`section button ${tab} lacks aria-pressed state`);
   if(tab==="visit"){const manual=page.locator('button[data-load-resource]');const n=await manual.count();for(let i=n-1;i>=0;i--)await manual.nth(i).click();await waitTab(page)}
   if(tab==="learn")track.unsafeFiltered=(await page.locator('a[href^="javascript:"], img[src^="javascript:"]').count())===0;
   if(tab==="media")track.galleryPickerOptions=await page.locator('select[aria-label="Choose a gallery for assets"] option').count();
