@@ -175,6 +175,12 @@ New in v3: **flight.html** (individual dated flight status and ETA via a user-ow
 key, plus Airplanes.live ADS-B position fallback; deterministic provider/offline/mobile evidence
 under `tests/evidence/flight/`; built `file://` live-key/provider chain verified Jul 2026).
 
+Expanded in v3: **parks.html** now covers all 29 documented NPS API resources in a park-centered,
+lazy-loaded explorer. The original `suite.parks` watch list remains compatible; `suite.parks.active`
+adds the current detail context. Header authentication, gallery identity, stale/offline behavior,
+current upstream failures, and 29/29 deterministic endpoint coverage are documented under
+`tests/evidence/parks/` and `tests/evidence/v3-nps-explorer/`.
+
 ## 6. Progress tracking
 
 `python build.py --check` prints the counts (migrated / per batch / flags outstanding) computed

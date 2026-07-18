@@ -216,6 +216,14 @@ release checklist executed · tag pushed.
   ADS-B position fallback returned HTTP 200 from both providers under built `file://`; a live JL80
   instance rendered route, ETA, coordinates, map, and fresh position with zero console errors.
   No key or account credential is committed.
+- [x] National Parks Explorer — expanded the original alert watcher into a park-centered interface
+  covering all 29 documented NPS API resources across Overview, Alerts, Plan a visit, Explore,
+  Learn, Media, and Reference tabs. Uses `X-Api-Key` header authentication, lazy resource groups,
+  endpoint-specific caching, stale/offline labels, deep links, watched parks, gallery-scoped assets,
+  and on-demand handling for three currently failing upstream services. Deterministic 29/29
+  endpoint coverage, responsive evidence, built `file://` live-key verification, and zero console
+  errors on the 26 healthy live resources are recorded under `tests/evidence/parks/` and
+  `tests/evidence/v3-nps-explorer/`. No key is committed.
 
 ## After v2.0 (backlog, unscheduled)
 

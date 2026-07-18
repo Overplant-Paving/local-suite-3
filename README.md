@@ -1,8 +1,9 @@
 # Local Suite 3
 
 This is **Local Suite v3**, built on the verified v2 single-file architecture. V3 adds named
-multiple-location support, safer location-aware caching and cross-tab behavior, and an individual
-flight tracker with Aviationstack status/ETA plus Airplanes.live ADS-B position fallback.
+multiple-location support, safer location-aware caching and cross-tab behavior, an individual
+flight tracker with Aviationstack status/ETA plus Airplanes.live ADS-B position fallback, and a
+park-centered National Parks Explorer covering all 29 documented NPS API resources.
 
 **To use the suite: open [`dist/index.html`](dist/index.html).** Everything in `dist/` is
 built and self-contained — double-click any file there. The `tools/` folder holds the
@@ -100,6 +101,18 @@ python build.py --check    # validation gates (run before committing)
 python build.py --serve    # local server → PWA mode at http://localhost:8000
 python build.py --new foo  # scaffold a new tool + manifest entry
 ```
+
+### National Parks Explorer setup
+
+`dist/parks.html` uses a free personal National Park Service API key. Save it under
+**Settings → API keys → NPS**. The key stays in `suite.key.nps` in that browser and requests use the
+safer `X-Api-Key` header rather than a URL query parameter.
+
+The explorer groups every documented NPS resource into Overview, Alerts, Plan a visit, Explore,
+Learn, Media, and Reference tabs. Resource groups load on demand, use endpoint-specific cache
+lifetimes, and visibly retain stale data offline. The NPS default allowance is 1,000 requests per
+rolling hour. Events, road events, and park boundaries are explicit on-demand checks because those
+three upstream services returned errors during live verification.
 
 ### Flight Tracker setup
 

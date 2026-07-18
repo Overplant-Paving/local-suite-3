@@ -4,9 +4,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-E/T8ZfzUE1RclWB+rx3FpG1QIHJeY3CklDGuLwqpV6Y=' 'sha256-UkVFljnc+ZJzuhX0IuDYlME4pEij6wOTkxA3Z5viTmQ='; style-src 'unsafe-inline'; img-src data: https://developer.nps.gov; media-src https://developer.nps.gov; connect-src https://developer.nps.gov; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-E/T8ZfzUE1RclWB+rx3FpG1QIHJeY3CklDGuLwqpV6Y=' 'sha256-bUEFc59y1E5dC1e8JKkAaUSSFxGpxJTs5dH0wyvo9Gw='; style-src 'unsafe-inline'; img-src data: https://developer.nps.gov https://www.nps.gov; media-src https://developer.nps.gov https://www.nps.gov; connect-src https://developer.nps.gov https://www.nps.gov; worker-src 'self'; manifest-src 'self'">
 <link rel="manifest" href="manifest.webmanifest">
-<title>National Parks Companion · Local Suite</title>
+<title>National Parks Explorer · Local Suite</title>
 <style>
 /* Local Suite v2 — core/suite.css
    Extraction of the v1 shared theme (canonical copy: weather.html:8–70 at v1-import)
@@ -101,102 +101,20 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
 }
 </style>
 <style>
-  /* tool accents: alert-category palette (3-layer, same pattern as core) */
-  /* a11y (Phase 4): light --closure/--caution darkened so white badge text clears 4.5:1
-     (was 3.3/3.0); --catink switches the badge text to near-black on the light dark-theme
-     pastels (white was 2.4–3.3 on them) */
-  :root { --danger: #c0392b; --closure: #9c6420; --caution: #856612; --info: #2f6f6a; --catink: #fff; }
-  @media (prefers-color-scheme: dark) {
-    :root { --danger: #e0685a; --closure: #d09a53; --caution: #cbb45a; --info: #6fb5ae; --catink: #15171b; }
-  }
-  :root[data-theme="light"] { --danger: #c0392b; --closure: #9c6420; --caution: #856612; --info: #2f6f6a; --catink: #fff; }
-  :root[data-theme="dark"] { --danger: #e0685a; --closure: #d09a53; --caution: #cbb45a; --info: #6fb5ae; --catink: #15171b; }
-
-  body { padding: 1.4rem 1.25rem 4rem; }
-  .wrap { max-width: 900px; margin: 0 auto; }
-  .topbar { display: flex; align-items: center; gap: 1rem; }
-  .back { white-space: nowrap; }
-  .theme-btn { margin-left: auto; float: none; }
-  header h1 { font-size: 1.7rem; letter-spacing: -.02em; margin-top: .8rem; }
-  header .tag { color: var(--muted); margin-top: .3rem; max-width: 46rem; font-size: .95rem; }
-  .picker { margin-top: 1.3rem; background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: 1rem 1.1rem; }
-  .picker h2 { font-size: 1rem; margin-bottom: .5rem; }
-  .selected { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .6rem; }
-  .pchip {
-    display: inline-flex; align-items: center; gap: .35rem; background: var(--accent-soft); color: var(--accent);
-    border: 1px solid var(--accent); border-radius: 999px; padding: .2rem .3rem .2rem .65rem; font-size: .82rem;
-  }
-  .pchip button { border: none; background: none; color: var(--accent); cursor: pointer; font-size: .9rem; line-height: 1; padding: 0 .2rem; }
-  input[type=text], input[type=search] {
-    width: 100%; font: inherit; font-size: .92rem; color: var(--ink); background: var(--bg);
-    border: 1px solid var(--line); border-radius: 10px; padding: .5rem .7rem;
-  }
-  .options { max-height: 240px; overflow-y: auto; margin-top: .5rem; border: 1px solid var(--line); border-radius: 10px; }
-  .opt { padding: .4rem .7rem; cursor: pointer; font-size: .9rem; display: flex; justify-content: space-between; gap: .5rem; border-bottom: 1px solid var(--line); }
-  .opt:last-child { border-bottom: none; }
-  .opt:hover { background: var(--accent-soft); }
-  .opt.on { color: var(--accent); font-weight: 600; }
-  .opt .code { font-size: .74rem; color: var(--muted); font-family: ui-monospace, Consolas, monospace; }
-  .parkgroup { margin-top: 1.4rem; }
-  .parkgroup > h2 { font-size: 1.12rem; display: flex; align-items: baseline; gap: .5rem; }
-  .parkgroup > h2 .n { font-size: .8rem; color: var(--muted); font-weight: 500; }
-  .parkgroup > h2 a { font-size: .8rem; margin-left: auto; }
-  .alert {
-    background: var(--card); border: 1px solid var(--line); border-left-width: 4px; border-radius: 12px;
-    padding: .8rem 1rem; box-shadow: var(--shadow); margin-top: .7rem;
-  }
-  .alert.k-danger { border-left-color: var(--danger); }
-  .alert.k-closure { border-left-color: var(--closure); }
-  .alert.k-caution { border-left-color: var(--caution); }
-  .alert.k-info { border-left-color: var(--info); }
-  .alert .cat {
-    display: inline-block; font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
-    color: var(--catink); border-radius: 6px; padding: .1rem .45rem; margin-bottom: .35rem;
-  }
-  .cat.k-danger { background: var(--danger); } .cat.k-closure { background: var(--closure); }
-  .cat.k-caution { background: var(--caution); } .cat.k-info { background: var(--info); }
-  .alert h3 { font-size: .98rem; line-height: 1.35; }
-  .alert h3 a { color: var(--ink); text-decoration: none; }
-  .alert h3 a:hover { color: var(--accent); text-decoration: underline; }
-  .alert .desc { font-size: .88rem; color: var(--muted); margin-top: .35rem; }
-  .card-msg {
-    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
-    padding: 1.2rem 1.15rem; box-shadow: var(--shadow); color: var(--muted); font-size: .92rem;
-  }
-  .card-msg h3 { color: var(--ink); font-size: 1.05rem; margin-bottom: .5rem; }
-  .card-msg p { margin-bottom: .6rem; }
-  .card-msg .keyrow { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .6rem; }
-  .card-msg .keyrow input { flex: 1; min-width: 200px; }
-  button.primary {
-    border: 1px solid var(--accent); background: var(--accent); color: var(--bg); /* a11y: was #fff — 2.4:1 on the dark accent */
-    border-radius: 10px; padding: .5rem 1rem; cursor: pointer; font: inherit; font-size: .9rem;
-  }
-  button.ghost {
-    border: 1px solid var(--line); background: var(--card); color: var(--accent);
-    border-radius: 999px; padding: .28rem .7rem; cursor: pointer; font: inherit; font-size: .8rem;
-  }
-  .stamp { font-size: .78rem; color: var(--muted); margin-top: .4rem; }
-  footer { font-size: .82rem; }
+:root{--danger:#b9362a;--closure:#8d5b1c;--caution:#786016;--info:#286a60;--catink:#fff;--forest:#245d3c;--forest-soft:#e7f1e9}
+@media(prefers-color-scheme:dark){:root{--danger:#e37368;--closure:#d5a05a;--caution:#d0b85d;--info:#72bcb0;--catink:#141815;--forest:#81c99a;--forest-soft:#1c3023}}
+:root[data-theme="light"]{--danger:#b9362a;--closure:#8d5b1c;--caution:#786016;--info:#286a60;--catink:#fff;--forest:#245d3c;--forest-soft:#e7f1e9}
+:root[data-theme="dark"]{--danger:#e37368;--closure:#d5a05a;--caution:#d0b85d;--info:#72bcb0;--catink:#141815;--forest:#81c99a;--forest-soft:#1c3023}
+[hidden]{display:none!important}body{padding:1.35rem 1.15rem 4rem}.wrap{max-width:1100px;margin:0 auto}.topbar{display:flex;align-items:center;gap:1rem}.theme-btn{margin-left:auto;float:none}header h1{font-size:clamp(1.65rem,4vw,2.25rem);letter-spacing:-.025em;margin-top:.8rem}header .tag{color:var(--muted);margin-top:.3rem;max-width:54rem;font-size:.96rem}.card-msg,.nps-picker,.park-hero,.resource,.endpoint-health{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}.card-msg{padding:1.2rem;margin-top:1rem;color:var(--muted)}.card-msg h2,.card-msg h3{color:var(--ink);margin-bottom:.45rem}.keyrow{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:.8rem}.keyrow input{flex:1;min-width:230px}.nps-picker{padding:1rem;margin-top:1.15rem}.picker-head{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}.picker-head h2{font-size:1.05rem;margin:0}.picker-head .key-action{margin-left:auto}.watchlist{display:flex;gap:.4rem;flex-wrap:wrap;margin:.7rem 0}.pchip{display:inline-flex;align-items:center;gap:.3rem;background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:.18rem .3rem .18rem .65rem;font-size:.8rem}.pchip button{border:0;background:none;color:inherit;cursor:pointer;padding:0 .25rem;font-size:1rem}.nps-picker input[type=search],.keyrow input{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:.58rem .7rem}.options{max-height:250px;overflow:auto;margin-top:.5rem;border:1px solid var(--line);border-radius:10px}.opt{padding:.45rem .7rem;display:flex;justify-content:space-between;gap:.7rem;border-bottom:1px solid var(--line);cursor:pointer;font-size:.9rem}.opt:last-child{border-bottom:0}.opt:hover,.opt:focus{background:var(--accent-soft);outline:0}.opt.active{background:var(--forest-soft);color:var(--forest);font-weight:700}.opt .code{font:12px ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--muted)}button.primary,button.secondary,button.ghost{font:inherit;cursor:pointer;border-radius:10px;padding:.5rem .85rem}button.primary{border:1px solid var(--accent);background:var(--accent);color:var(--bg);font-weight:700}button.secondary{border:1px solid var(--line);background:var(--card);color:var(--accent)}button.ghost{border:1px solid var(--line);background:transparent;color:var(--accent);border-radius:999px;padding:.28rem .68rem;font-size:.8rem}.park-hero{margin-top:1rem;overflow:hidden}.hero-image{width:100%;height:clamp(180px,32vw,330px);object-fit:cover;display:block;background:var(--line)}.hero-body{padding:1.1rem}.hero-top{display:flex;gap:1rem;align-items:flex-start;justify-content:space-between}.hero-body h2{font-size:clamp(1.35rem,3vw,1.85rem);margin:0}.hero-meta,.stamp,.resource-note{color:var(--muted);font-size:.8rem}.hero-description{margin-top:.55rem;color:var(--muted)}.hero-actions{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:.8rem}.tabs{display:flex;gap:.45rem;overflow-x:auto;padding:.85rem 0 .2rem;scrollbar-width:thin}.tab{white-space:nowrap;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:.48rem .82rem;font:inherit;font-size:.86rem;cursor:pointer}.tab[aria-selected=true]{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:700}.tab:focus-visible{outline:3px solid var(--accent-soft);outline-offset:2px}.tab-intro{margin:.8rem 0;color:var(--muted)}.resource{padding:1rem;margin-top:.85rem}.resource-head{display:flex;align-items:flex-start;gap:.7rem;flex-wrap:wrap}.resource-head h2{font-size:1.08rem;margin:0}.resource-head .count{color:var(--muted);font-size:.8rem}.resource-head details{margin-left:auto;font-size:.76rem;color:var(--muted)}.resource-head code{font-size:.72rem}.resource-status{margin-top:.55rem;color:var(--muted)}.resource-status.error{color:var(--danger)}.resource-status.stale{color:var(--closure)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:.75rem;margin-top:.8rem}.item-card{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--bg);min-width:0}.item-card img{display:block;width:100%;height:145px;object-fit:cover;background:var(--line)}.item-body{padding:.8rem}.item-card h3{font-size:.98rem;line-height:1.3;margin:0}.item-card h3 a{color:var(--ink);text-decoration:none}.item-card h3 a:hover{text-decoration:underline;color:var(--accent)}.item-desc{color:var(--muted);font-size:.85rem;margin-top:.38rem;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}.item-meta{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.55rem}.pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:.1rem .45rem;color:var(--muted);font-size:.7rem}.alert-card{border-left:4px solid var(--info)}.alert-card.k-danger{border-left-color:var(--danger)}.alert-card.k-closure{border-left-color:var(--closure)}.alert-card.k-caution{border-left-color:var(--caution)}.cat{display:inline-block;color:var(--catink);border-radius:5px;padding:.08rem .4rem;font-size:.66rem;font-weight:800;text-transform:uppercase}.cat.k-danger{background:var(--danger)}.cat.k-closure{background:var(--closure)}.cat.k-caution{background:var(--caution)}.cat.k-info{background:var(--info)}.resource-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem}.endpoint-health{padding:1rem;margin-top:.8rem}.health-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.4rem;margin-top:.7rem}.health-row{display:flex;justify-content:space-between;gap:.5rem;border-bottom:1px solid var(--line);padding:.3rem 0;font-size:.78rem}.health-row code{overflow-wrap:anywhere}.health-state{color:var(--muted);white-space:nowrap}.health-state.ok{color:var(--info)}.health-state.error{color:var(--danger)}footer{font-size:.82rem}.loading-dot::after{content:"";animation:dots 1.2s steps(4,end) infinite}@keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%,100%{content:"..."}}@media(max-width:620px){body{padding:.9rem .75rem 3rem}.hero-top{display:block}.hero-top .ghost{margin-top:.55rem}.resource{padding:.85rem}.options{max-height:210px}.grid{grid-template-columns:1fr}.tabs{flex-wrap:wrap;overflow:visible}.tab{flex:0 0 auto}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="topbar">
-    <a class="back" href="index.html">← suite</a>
-    <button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button>
-  </div>
-  <header>
-    <h1>National Parks Companion</h1>
-    <p class="tag">Current alerts — closures, danger notices, and caution advisories — for the parks you're
-      planning to visit, straight from the National Park Service.</p>
-  </header>
-
-  <div id="app"></div>
-  <div id="content"></div>
-
-  <footer>Data: National Park Service · developer.nps.gov. Free key from developer.nps.gov/get-started.</footer>
+<div class="topbar"><a class="back" href="index.html">← suite</a><button class="theme-btn" id="themeBtn" title="Toggle light/dark">◐ theme</button></div>
+<header><h1>National Parks Explorer</h1><p class="tag">Authoritative park details, alerts, trip planning, activities, learning resources, media, and reference data from every National Park Service API resource.</p></header>
+<div id="app"></div><div id="park"></div><nav id="tabs" class="tabs" role="tablist" aria-label="Park information" hidden></nav><main id="content"></main>
+<footer>Data: National Park Service · developer.nps.gov · API content may trail NPS.gov by about two hours. Always follow posted signs and ranger instructions.</footer>
 </div>
-
 <script>
 /* Local Suite v2 — core/suite.js
    One IIFE, one global. Small, boring, dependency-free. Spec: ARCHITECTURE.md §3.
@@ -621,230 +539,82 @@ if (location.protocol.startsWith("http") && "serviceWorker" in navigator) {
 </script>
 <script>
 "use strict";
-
 Suite.theme.init();
-
-/* ---- helpers ---- */
-const KEY_NAME = "nps"; // suite.key.nps — no demo tier (Suite.key falls through to null)
-function getKey(){ return Suite.key(KEY_NAME).value || ""; }
-function cacheGet(key){
-  const e = Suite.store.get("suite.cache.parks." + key);
-  return (e && typeof e === "object" && "t" in e && "v" in e) ? e : null;
+const API="https://developer.nps.gov/api/v1",KEY_NAME="nps",HOUR=3600000,DAY=24*HOUR;
+const app=Suite.liveRegion(document.getElementById("app")),parkEl=Suite.liveRegion(document.getElementById("park")),tabsEl=document.getElementById("tabs"),content=Suite.liveRegion(document.getElementById("content"));
+const TAB_INFO={overview:["Overview","Official description, hours, contacts, directions, fees, and weather."],alerts:["Alerts","Closures, danger notices, cautions, and watched parks."],visit:["Plan a visit","Campgrounds, events, fees, parking, roads, stamps, centers, and boundaries."],explore:["Explore","Things to do, tours, webcams, and activity relationships."],learn:["Learn","Articles, lessons, news, people, and places."],media:["Media","Audio, galleries, gallery assets, and video."],reference:["Reference","Activity, amenity, topic catalogs, relationships, and endpoint health."]};
+const ENDPOINTS=["/activities","/activities/parks","/alerts","/amenities","/amenities/parksplaces","/amenities/parksvisitorcenters","/articles","/campgrounds","/events","/feespasses","/lessonplans","/mapdata/parkboundaries/{sitecode}","/multimedia/audio","/multimedia/galleries","/multimedia/galleries/assets","/multimedia/videos","/newsreleases","/parkinglots","/parks","/passportstamplocations","/people","/places","/roadevents","/thingstodo","/topics","/topics/parks","/tours","/visitorcenters","/webcams"];
+const state={parks:[],watched:[],active:"",tab:"overview",health:{},seq:0,galleryId:"",galleries:[]};
+const stored=Suite.store.get("suite.parks",[]);state.watched=Array.isArray(stored)?stored:[];
+function getKey(){return Suite.key(KEY_NAME).value||""}function auth(){return {"X-Api-Key":getKey()}}
+function el(tag,cls,text){const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x}
+function safeHref(raw){if(!raw)return"";try{const u=new URL(raw,location.href);if(u.protocol==="http:"||u.protocol==="https:")return u.href;const explicit=/^[a-z][a-z0-9+.-]*:/i.test(raw);return !explicit&&u.protocol===location.protocol?u.href:""}catch(e){return""}}
+function safeImage(raw){if(!raw)return"";if(raw.startsWith("data:image/"))return raw;try{const u=new URL(raw);return u.protocol==="https:"?u.href:""}catch(e){return""}}
+function link(text,url){const href=safeHref(url);if(!href)return document.createTextNode(text);const a=el("a",null,text);a.href=href;a.target="_blank";a.rel="noopener";return a}
+function statusOf(e){const m=/^HTTP (\d+)$/.exec(e&&e.message||"");return m?+m[1]:0}
+function fmtTime(ms){return new Date(ms).toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})}
+function safeArray(v){return Array.isArray(v)?v:[]}function text(v){return v===null||v===undefined?"":String(v).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()}
+function firstText(obj,keys){for(const k of keys){const v=text(obj&&obj[k]);if(v)return v}return ""}
+function currentPark(){return state.parks.find(p=>p.parkCode===state.active)||null}
+function cacheGet(k){const v=Suite.store.get("suite.cache.parks."+k);return v&&typeof v==="object"&&"t" in v&&"v" in v?v:null}
+function cacheSet(k,v){Suite.store.set("suite.cache.parks."+k,{t:Date.now(),v})}
+function msg(container,title,lines,kind){container.textContent="";const c=el("section","card-msg"+(kind?" "+kind:""));c.append(el("h2",null,title));safeArray(lines).forEach(s=>c.append(el("p",null,s)));container.append(c);return c}
+function showKeyCard(invalid){parkEl.textContent="";tabsEl.hidden=true;content.textContent="";const c=msg(app,invalid?"That NPS key did not work":"Add your free NPS key",[invalid?"The National Park Service rejected the saved credential. Paste a current key below.":"NPS keys are free and may take up to an hour to arrive. The key stays in this browser and is sent only in the X-Api-Key request header."]);const row=el("div","keyrow");const inp=el("input");inp.type="password";inp.placeholder="Paste NPS API key";inp.autocomplete="off";inp.setAttribute("aria-label","NPS API key");const save=el("button","primary","Save key");save.addEventListener("click",()=>{const v=inp.value.trim();if(!v)return;Suite.store.set("suite.key.nps",v);boot()});inp.addEventListener("keydown",e=>{if(e.key==="Enter")save.click()});row.append(inp,save);c.append(row);const p=el("p");p.append(link("Get an NPS API key →","https://www.nps.gov/subjects/developer/get-started.htm"),document.createTextNode(" · "),link("Open suite Settings →","settings.html"));c.append(p)}
+function normalizeParks(items){return safeArray(items).filter(p=>p&&p.parkCode&&(p.fullName||p.name)).map(p=>p.fullName?p:{parkCode:p.code,fullName:p.name,states:p.states||"",name:p.name}) .sort((a,b)=>(a.fullName||"").localeCompare(b.fullName||""))}
+async function loadParks(){const cached=cacheGet("parklist.v3");if(cached&&Date.now()-cached.t<30*DAY){state.parks=normalizeParks(cached.v);if(state.parks.length){state.health["/parks"]={status:"ok",time:cached.t};return}}msg(app,"Loading National Park Service units…",["Fetching the park directory. It will be cached for 30 days."]);try{const url=API+"/parks?limit=700&start=0";const r=await Suite.fetchJSON(url,{headers:auth(),timeout:20000,fallbackToCache:false});const parks=normalizeParks(r.v.data);if(!parks.length)throw new Error("Empty park directory");state.parks=parks;cacheSet("parklist.v3",parks);state.health["/parks"]={status:"ok",time:Date.now()}}catch(e){const s=statusOf(e);if(s===401||s===403){showKeyCard(true);throw e}if(cached){state.parks=normalizeParks(cached.v);state.health["/parks"]={status:"stale",time:cached.t};return}throw e}}
+function renderShell(){app.textContent="";const box=el("section","nps-picker");const head=el("div","picker-head");head.append(el("h2",null,"Choose a park"));const change=el("button","ghost key-action","change key");change.addEventListener("click",()=>showKeyCard(false));head.append(change);const watch=el("div","watchlist");const search=el("input");search.type="search";search.placeholder="Search by park, state, or code…";search.setAttribute("aria-label","Search National Park Service units");const options=el("div","options");options.setAttribute("role","listbox");box.append(head,watch,search,options);app.append(box);
+ function parkName(code){const p=state.parks.find(x=>x.parkCode===code);return p?p.fullName:code.toUpperCase()}
+ function drawWatch(){watch.textContent="";if(!state.watched.length){watch.append(el("span","stamp","No watched parks yet. Open a park and choose “watch alerts.”"));return}state.watched.forEach(code=>{const chip=el("span","pchip");chip.append(document.createTextNode(parkName(code)));const b=el("button",null,"×");b.setAttribute("aria-label","Stop watching "+parkName(code));b.addEventListener("click",()=>{state.watched=state.watched.filter(x=>x!==code);Suite.store.set("suite.parks",state.watched);drawWatch();if(state.tab==="alerts")activateTab("alerts")});chip.append(b);watch.append(chip)})}
+ function drawOptions(){const q=search.value.trim().toLowerCase();options.textContent="";const rows=state.parks.filter(p=>!q||(p.fullName||"").toLowerCase().includes(q)||(p.states||"").toLowerCase().includes(q)||p.parkCode.toLowerCase().includes(q)).slice(0,q?80:35);rows.forEach(p=>{const row=el("div","opt"+(p.parkCode===state.active?" active":""));row.tabIndex=0;row.setAttribute("role","option");row.setAttribute("aria-selected",String(p.parkCode===state.active));row.append(el("span",null,p.fullName+(p.states?" ("+p.states+")":"")),el("span","code",p.parkCode));const choose=()=>selectPark(p.parkCode);row.addEventListener("click",choose);row.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();choose()}});options.append(row)});if(!rows.length)options.append(el("div","opt","No parks match."))}
+ search.addEventListener("input",drawOptions);box._drawWatch=drawWatch;box._drawOptions=drawOptions;drawWatch();drawOptions()}
+function selectPark(code){if(!state.parks.some(p=>p.parkCode===code))return;state.active=code;state.galleryId="";state.galleries=[];Suite.store.set("suite.parks.active",code);const picker=document.querySelector(".nps-picker");if(picker&&picker._drawOptions)picker._drawOptions();renderHero();tabsEl.hidden=false;activateTab(state.tab);history.replaceState(null,"","?park="+encodeURIComponent(code)+"&tab="+encodeURIComponent(state.tab))}
+function parkImage(p){const i=safeArray(p&&p.images)[0];return safeImage(i&&(i.url||i.imageUrl)||"")}
+function renderHero(){parkEl.textContent="";const p=currentPark();if(!p){msg(parkEl,"Choose a park",["Search the National Park Service directory above to begin."]);return}const hero=el("section","park-hero");const image=parkImage(p);if(image){const img=el("img","hero-image");img.src=image;img.alt=(safeArray(p.images)[0].altText||p.fullName);img.loading="lazy";hero.append(img)}const body=el("div","hero-body");const top=el("div","hero-top");const names=el("div");names.append(el("h2",null,p.fullName),el("div","hero-meta",[p.designation,p.states,p.parkCode&&p.parkCode.toUpperCase()].filter(Boolean).join(" · ")));const watch=el("button","ghost",state.watched.includes(p.parkCode)?"watching alerts ✓":"watch alerts");watch.setAttribute("aria-pressed",String(state.watched.includes(p.parkCode)));watch.addEventListener("click",()=>{const on=state.watched.includes(p.parkCode);state.watched=on?state.watched.filter(x=>x!==p.parkCode):state.watched.concat(p.parkCode);Suite.store.set("suite.parks",state.watched);watch.textContent=on?"watch alerts":"watching alerts ✓";watch.setAttribute("aria-pressed",String(!on));const picker=document.querySelector(".nps-picker");if(picker&&picker._drawWatch)picker._drawWatch()});top.append(names,watch);body.append(top);if(p.description)body.append(el("p","hero-description",text(p.description)));const actions=el("div","hero-actions");if(p.url)actions.append(link("Official park page →",p.url));if(p.directionsUrl)actions.append(link("Directions →",p.directionsUrl));body.append(actions);hero.append(body);parkEl.append(hero)}
+function renderTabs(){tabsEl.textContent="";Object.entries(TAB_INFO).forEach(([id,v])=>{const b=el("button","tab",v[0]);b.type="button";b.dataset.tab=id;b.setAttribute("role","tab");b.setAttribute("aria-selected",String(id===state.tab));b.addEventListener("click",()=>activateTab(id));tabsEl.append(b)})}
+function catInfo(c){const s=text(c).toLowerCase();if(s.includes("danger"))return{label:"Danger",cls:"k-danger"};if(s.includes("closure"))return{label:text(c)||"Closure",cls:"k-closure"};if(s.includes("caution"))return{label:"Caution",cls:"k-caution"};return{label:text(c)||"Information",cls:"k-info"}}
+function imageOf(x){for(const v of [safeArray(x.images)[0],x.listingImage,x.image,x.splashImage]){if(typeof v==="string"&&v)return v;if(v&&typeof v==="object"&&(v.url||v.imageUrl))return v.url||v.imageUrl}return ""}
+function urlOf(x){return firstText(x,["url","permalinkUrl","reservationUrl","directionsUrl","callToActionUrl","managedByUrl"])}
+function titleOf(x){return firstText(x,["title","name","fullName","label","heading","category","type"])||"NPS resource"}
+function descOf(x){return firstText(x,["description","shortDescription","listingDescription","abstract","longDescription","questionObjective","statusMessage","directionsOverview","entranceFeeDescription","locationDescription","bodyText"])}
+function metaOf(x){const out=[];for(const [k,label] of [["category",""],["type",""],["status",""],["date",""],["releaseDate","Released"],["gradeLevel","Grades"],["subject",""],["duration",""],["durationDescription",""],["seasonDescription",""],["states",""],["parkCode",""]]){const v=text(x[k]);if(v)out.push((label?label+": ":"")+v)}if(Number.isFinite(+x.durationMs)&&+x.durationMs>0)out.push(Math.max(1,Math.round(+x.durationMs/60000))+" min");if(Number.isFinite(+x.durationMin)&&+x.durationMin>0)out.push(x.durationMin+(x.durationMax&&x.durationMax!==x.durationMin?"–"+x.durationMax:"")+" "+(x.durationUnit||"min"));if(x.assetCount!==null&&x.assetCount!==undefined&&x.assetCount!==""&&Number.isFinite(+x.assetCount))out.push(x.assetCount+" assets");if(x.numberOfSitesReservable!==null&&x.numberOfSitesReservable!==undefined&&x.numberOfSitesReservable!==""&&Number.isFinite(+x.numberOfSitesReservable))out.push(x.numberOfSitesReservable+" reservable sites");if(Array.isArray(x.parks))out.push(x.parks.length+" related park"+(x.parks.length===1?"":"s"));if(Array.isArray(x.categories))out.push(x.categories.map(text).filter(Boolean).join(" · "));if(x.cost)out.push("$"+text(x.cost));if(x.isReservationRequired===true)out.push("Reservation required");if(x.isStreaming===true)out.push("Streaming");if(x.isOpenToPublic===true)out.push("Open to public");return out.filter(Boolean).slice(0,6)}
+function itemCard(x,kind){const card=el("article","item-card"+(kind==="alert"?" alert-card "+catInfo(x.category).cls:""));const image=safeImage(imageOf(x));if(image){const img=el("img");img.src=image;img.alt=text((safeArray(x.images)[0]||{}).altText)||titleOf(x);img.loading="lazy";card.append(img)}const body=el("div","item-body");if(kind==="alert"){const ci=catInfo(x.category);body.append(el("span","cat "+ci.cls,ci.label))}const h=el("h3");h.append(link(titleOf(x),urlOf(x)));body.append(h);const d=descOf(x);if(d)body.append(el("p","item-desc",d));const metas=metaOf(x);if(metas.length){const m=el("div","item-meta");metas.forEach(v=>m.append(el("span","pill",v)));body.append(m)}card.append(body);return card}
+function flattenRelationship(data,child){const out=[];safeArray(data).forEach(group=>safeArray(group).forEach(item=>{const parks=safeArray(item.parks);parks.forEach(p=>safeArray(p[child]).forEach(v=>out.push(Object.assign({},v,{title:v.title||v.name||item.name,description:(item.name?item.name+" · ":"")+(v.description||"")}))))}));return out}
+function normalizeItems(cfg,body){if(cfg.kind==="road")return safeArray(body.features).map(f=>Object.assign({title:firstText(f.properties||{},["core_details","description","type"])||"Road event"},f.properties||{}));if(cfg.kind==="boundary")return safeArray(body.features||body.data||[]);let items=safeArray(body.data);if(cfg.kind==="amenityPlaces")items=flattenRelationship(items,"places");if(cfg.kind==="amenityCenters")items=flattenRelationship(items,"visitorcenters");return items}
+function resourceSection(cfg){const section=el("section","resource");section.dataset.resource=cfg.id;const head=el("div","resource-head");head.append(el("h2",null,cfg.label));const count=el("span","count");head.append(count);const details=el("details");details.append(el("summary",null,"API resource"),el("code",null,cfg.endpoint||cfg.path));head.append(details);const status=el("div","resource-status loading-dot","Loading");const body=el("div");section.append(head,status,body);section._count=count;section._status=status;section._body=body;return section}
+function renderResource(section,cfg,result){const body=result.v||{},items=normalizeItems(cfg,body),total=Number(body.total);section._count.textContent=Number.isFinite(total)?total+" available":items.length+" returned";section._status.className="resource-status"+(result.stale?" stale":"");section._status.textContent=(result.stale?"Offline — cached from ":result.fromCache?"Cached from ":"Updated ")+fmtTime(result.t);section._body.textContent="";if(cfg.kind==="fees"){renderFees(section._body,items[0]);return}if(cfg.kind==="boundary"){renderBoundary(section._body,body,items);return}if(!items.length){section._body.append(el("p","resource-note",cfg.empty||"No matching information is currently published for this park."));return}const grid=el("div","grid");const initially=cfg.show||12;items.slice(0,initially).forEach(x=>grid.append(itemCard(x,cfg.kind)));section._body.append(grid);if(items.length>initially){const actions=el("div","resource-actions");const more=el("button","secondary","Show "+(items.length-initially)+" more loaded items");more.addEventListener("click",()=>{items.slice(initially).forEach(x=>grid.append(itemCard(x,cfg.kind)));actions.remove()});actions.append(more);section._body.append(actions)}if(Number.isFinite(total)&&total>items.length)section._body.append(el("p","resource-note","Showing the first "+items.length+" of "+total+" records. Refine the selected park or use the official NPS links for the full catalog."))}
+function renderFees(container,x){if(!x){container.append(el("p","resource-note","No fee or pass information is currently published."));return}const grid=el("div","grid");const summary={title:x.isFeeFreePark?"No entrance fee":"Entrance fees and passes",description:firstText(x,["entranceFeeDescription","entrancePassDescription","customFeeDescription"]),status:x.cashless?"Cashless":""};grid.append(itemCard(summary));safeArray(x.fees).concat(safeArray(x.passes)).forEach(v=>grid.append(itemCard(v)));container.append(grid)}
+function renderBoundary(container,body,items){if(!items.length){container.append(el("p","resource-note","No boundary geometry was returned. The NPS boundary service may be temporarily unavailable; use the official park map instead."));return}container.append(el("p","resource-note","Boundary geometry returned "+items.length+" feature"+(items.length===1?"":"s")+". Coordinates are available from the NPS map-data resource."))}
+function renderResourceError(section,cfg,e){const s=statusOf(e);section._count.textContent="unavailable";section._status.className="resource-status error";section._status.textContent=s===429?"NPS rate limit reached. Wait for the rolling hourly window or use cached data.":s?"NPS currently reports this resource unavailable (HTTP "+s+").":"Network unavailable and no cached copy exists.";section._body.textContent="";if(cfg.kind==="boundary"||cfg.kind==="road"||cfg.id==="events")section._body.append(el("p","resource-note","This endpoint is retained in the explorer and will recover automatically when the upstream NPS service does."))}
+function queryString(obj){const p=new URLSearchParams;Object.entries(obj||{}).forEach(([k,v])=>{if(v!==""&&v!==null&&v!==undefined)p.set(k,String(v))});return p.toString()}
+async function fetchConfig(cfg,seq,extra){const p=currentPark(),params=Object.assign({},typeof cfg.query==="function"?cfg.query(p):cfg.query||{},extra||{});const path=typeof cfg.path==="function"?cfg.path(p):cfg.path;const url=API+path+(queryString(params)?"?"+queryString(params):"");const identity=(path+"?"+queryString(params)).replace(/[^a-z0-9]+/gi,".").replace(/^\.|\.$/g,"");try{const r=await Suite.fetchJSON(url,{headers:auth(),timeout:20000,cacheKey:"parks.resource."+identity,ttl:cfg.ttl||2*HOUR,tries:1});if(seq!==state.seq)return null;state.health[cfg.endpoint||path]={status:r.stale?"stale":"ok",time:r.t};return r}catch(e){if(seq!==state.seq)return null;const s=statusOf(e);state.health[cfg.endpoint||path]={status:"error",code:s};if(s===401||s===403)showKeyCard(true);throw e}}
+function activityIds(p){return safeArray(p&&p.activities).map(x=>x.id).filter(Boolean).join(",")}function topicIds(p){return safeArray(p&&p.topics).map(x=>x.id).filter(Boolean).join(",")}
+function configs(tab){const code=p=>p.parkCode;const q=p=>({parkCode:code(p),limit:100,start:0});const sets={
+ alerts:[{id:"alerts",label:"Current alerts",path:"/alerts",query:p=>({parkCode:Array.from(new Set(state.watched.concat(p.parkCode))).sort().join(","),limit:200,start:0}),kind:"alert",endpoint:"/alerts",ttl:2*HOUR}],
+ visit:[{id:"campgrounds",label:"Campgrounds",path:"/campgrounds",query:q},{id:"events",label:"Events",path:"/events",query:p=>({parkCode:code(p),pageSize:100,pageNumber:1,expandRecurring:true}),endpoint:"/events",manual:true},{id:"fees",label:"Fees and passes",path:"/feespasses",query:q,kind:"fees"},{id:"parking",label:"Parking lots",path:"/parkinglots",query:q},{id:"roads",label:"Road incidents and work zones",path:"/roadevents",query:p=>({parkCode:code(p)}),kind:"road",endpoint:"/roadevents",ttl:15*60000,manual:true},{id:"stamps",label:"Passport stamp locations",path:"/passportstamplocations",query:q},{id:"centers",label:"Visitor centers",path:"/visitorcenters",query:q},{id:"boundary",label:"Park boundary data",path:p=>"/mapdata/parkboundaries/"+encodeURIComponent(code(p)),query:{},kind:"boundary",endpoint:"/mapdata/parkboundaries/{sitecode}",ttl:30*DAY,manual:true}],
+ explore:[{id:"activityParks",label:"Activities at this park",path:"/activities/parks",query:p=>({id:activityIds(p),limit:100,start:0}),endpoint:"/activities/parks",ttl:30*DAY},{id:"things",label:"Things to do",path:"/thingstodo",query:q},{id:"tours",label:"Tours",path:"/tours",query:q},{id:"webcams",label:"Webcams",path:"/webcams",query:q,ttl:30*60000}],
+ learn:[{id:"articles",label:"Articles",path:"/articles",query:q},{id:"lessons",label:"Lesson plans",path:"/lessonplans",query:q,ttl:DAY},{id:"news",label:"News releases",path:"/newsreleases",query:q},{id:"people",label:"People",path:"/people",query:q,ttl:DAY},{id:"places",label:"Places",path:"/places",query:q,ttl:DAY}],
+ media:[{id:"audio",label:"Audio",path:"/multimedia/audio",query:q,ttl:DAY},{id:"galleries",label:"Photo galleries",path:"/multimedia/galleries",query:q,ttl:DAY},{id:"galleryAssets",label:"Gallery assets",path:"/multimedia/galleries/assets",query:()=>({galleryId:state.galleryId,limit:100,start:0}),endpoint:"/multimedia/galleries/assets",ttl:DAY,after:"galleries"},{id:"videos",label:"Videos",path:"/multimedia/videos",query:q,ttl:DAY}],
+ reference:[{id:"activities",label:"NPS activity catalog",path:"/activities",query:{limit:100,start:0},ttl:30*DAY},{id:"amenities",label:"NPS amenity catalog",path:"/amenities",query:{limit:200,start:0},ttl:30*DAY},{id:"amenityPlaces",label:"Amenities at park places",path:"/amenities/parksplaces",query:q,kind:"amenityPlaces",ttl:DAY},{id:"amenityCenters",label:"Amenities at visitor centers",path:"/amenities/parksvisitorcenters",query:q,kind:"amenityCenters",ttl:DAY},{id:"topics",label:"NPS topic catalog",path:"/topics",query:{limit:100,start:0},ttl:30*DAY},{id:"topicParks",label:"Topics at this park",path:"/topics/parks",query:p=>({id:topicIds(p),limit:100,start:0}),endpoint:"/topics/parks",ttl:30*DAY}]
+ };return sets[tab]||[]}
+function renderOverview(){const p=currentPark();const intro=el("p","tab-intro",TAB_INFO.overview[1]);content.append(intro);const section=el("section","resource");const head=el("div","resource-head");head.append(el("h2",null,"Park essentials"),el("span","count","/parks"));section.append(head);const grid=el("div","grid");const hours=safeArray(p.operatingHours).map(x=>x.description).filter(Boolean).join(" ");const contacts=p.contacts||{};const phone=safeArray(contacts.phoneNumbers)[0];const email=safeArray(contacts.emailAddresses)[0];const address=safeArray(p.addresses)[0];const essentials=[{title:"Operating hours",description:hours||"See the official park page for current hours."},{title:"Weather",description:text(p.weatherInfo)||"Weather guidance is not published."},{title:"Contact",description:[phone&&phone.phoneNumber,email&&email.emailAddress].filter(Boolean).join(" · ")||"No contact details published."},{title:"Address",description:address?[address.line1,address.city,address.stateCode,address.postalCode].filter(Boolean).join(", "):"No address published."},{title:"Directions",description:text(p.directionsInfo),url:p.directionsUrl},{title:"Activities",description:safeArray(p.activities).map(x=>x.name).filter(Boolean).slice(0,20).join(" · ")||"No activities listed."},{title:"Topics",description:safeArray(p.topics).map(x=>x.name).filter(Boolean).slice(0,20).join(" · ")||"No topics listed."}];essentials.forEach(x=>grid.append(itemCard(x)));section.append(grid);content.append(section);state.health["/parks"]={status:"ok",time:Date.now()}}
+function renderHealth(){const box=el("section","endpoint-health");box.append(el("h2",null,"NPS API resource coverage"),el("p","resource-note","All 29 documented resources are represented. Status reflects requests made during this browser session; “not loaded” means its tab has not been opened."));const grid=el("div","health-grid");ENDPOINTS.forEach(path=>{const h=state.health[path];const row=el("div","health-row");row.append(el("code",null,path));const label=h?(h.status==="error"?(h.code?"HTTP "+h.code:"error"):h.status):"not loaded";row.append(el("span","health-state "+(h?h.status:""),label));grid.append(row)});box.append(grid);content.append(box)}
+async function loadInto(section,cfg,seq){
+ section._status.className="resource-status loading-dot";section._status.textContent="Loading";section._body.textContent="";
+ try{const r=await fetchConfig(cfg,seq);if(!r)return;if(cfg.id==="galleries"){state.galleries=safeArray(r.v&&r.v.data);const first=state.galleries[0];state.galleryId=first&&first.id||""}renderResource(section,cfg,r);if(cfg.id==="galleryAssets")addGalleryPicker(section,cfg,seq)}
+ catch(e){if(seq===state.seq){renderResourceError(section,cfg,e);if(cfg.manual)addManualButton(section,cfg,seq,"Try this NPS resource again")}}
 }
-function cacheSet(key, v){ Suite.store.set("suite.cache.parks." + key, { t: Date.now(), v: v }); }
-/* Suite.fetchJSON reports HTTP failures as Error("HTTP <status>") — recover the status
-   for the invalid-key (401/403) gate. */
-function statusOf(e){ const m = /^HTTP (\d+)$/.exec((e && e.message) || ""); return m ? +m[1] : 0; }
-function fmtTime(ms){ return new Date(ms).toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}); }
-function catInfo(c){
-  const s = (c || "").toLowerCase();
-  if (s.indexOf("danger") >= 0) return { label: "Danger", cls: "k-danger", rank: 0 };
-  if (s.indexOf("closure") >= 0) return { label: c || "Closure", cls: "k-closure", rank: 1 };
-  if (s.indexOf("caution") >= 0) return { label: "Caution", cls: "k-caution", rank: 2 };
-  return { label: c || "Information", cls: "k-info", rank: 3 };
+function addManualButton(section,cfg,seq,label){const actions=el("div","resource-actions");const load=el("button","secondary",label||"Load from NPS");load.dataset.loadResource=cfg.id;load.addEventListener("click",()=>loadInto(section,cfg,seq));actions.append(load);section._body.append(actions)}
+function addGalleryPicker(section,cfg,seq){if(state.galleries.length<2)return;const wrap=el("div","resource-actions");const label=el("label",null,"Gallery: ");const select=el("select");select.setAttribute("aria-label","Choose a gallery for assets");state.galleries.forEach(g=>{const option=el("option",null,titleOf(g));option.value=g.id||"";select.append(option)});select.value=state.galleryId;select.addEventListener("change",()=>{state.galleryId=select.value;loadInto(section,cfg,seq)});label.append(select);wrap.append(label);section._body.prepend(wrap)}
+async function activateTab(id){
+ if(!TAB_INFO[id])id="overview";state.tab=id;state.seq++;const seq=state.seq;tabsEl.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===id)));content.textContent="";
+ if(!currentPark()){msg(content,"Choose a park",["Select a park above to load this section."]);return}
+ history.replaceState(null,"","?park="+encodeURIComponent(state.active)+"&tab="+encodeURIComponent(id));if(id==="overview"){renderOverview();return}
+ content.append(el("p","tab-intro",TAB_INFO[id][1]));const list=configs(id),sections=new Map();list.forEach(cfg=>{const section=resourceSection(cfg);sections.set(cfg.id,section);content.append(section);if(cfg.manual){section._count.textContent="on demand";section._status.className="resource-status";section._status.textContent="This NPS service is currently unreliable, so it is loaded only when requested.";section._body.textContent="";addManualButton(section,cfg,seq)}});
+ const primary=list.filter(cfg=>!cfg.manual&&!cfg.after);await Promise.allSettled(primary.map(cfg=>loadInto(sections.get(cfg.id),cfg,seq)));
+ if(seq!==state.seq)return;const dependent=list.filter(cfg=>!cfg.manual&&cfg.after);for(const cfg of dependent){if(cfg.id==="galleryAssets"&&!state.galleryId){const section=sections.get(cfg.id);section._count.textContent="not loaded";section._status.className="resource-status";section._status.textContent="No gallery was returned for this park, so there are no gallery assets to request.";continue}await loadInto(sections.get(cfg.id),cfg,seq)}
+ if(seq===state.seq&&id==="reference")renderHealth()
 }
-
-/* good-citizen TTLs: alerts per the manifest (cacheTtlMin 360); the park roster is
-   reference data and keeps v1's 30-day window */
-const ALERTS_TTL = 360 * 60 * 1000;
-const PARKLIST_TTL = 30 * 24 * 3600 * 1000;
-
-const app = Suite.liveRegion(document.getElementById("app"));
-const content = Suite.liveRegion(document.getElementById("content"));
-const state = { parks: [], selected: [] };
-{
-  const sel = Suite.store.get("suite.parks", []);
-  state.selected = Array.isArray(sel) ? sel : [];
-}
-
-function msgCard(container, title, lines){
-  container.textContent = "";
-  const c = document.createElement("div"); c.className = "card-msg";
-  if (title){ const h = document.createElement("h3"); h.textContent = title; c.append(h); }
-  (lines || []).forEach(function(t){ const p = document.createElement("p"); p.textContent = t; c.append(p); });
-  container.append(c);
-  return c;
-}
-
-/* ---- key gate (designed no-key state: explanation + paste field + signup link) ---- */
-function showKeyCard(invalid){
-  content.textContent = "";
-  const c = msgCard(app, invalid ? "That key didn't work" : "Add your free NPS key",
-    invalid ? ["The National Park Service API rejected the saved key. Paste a valid one below."]
-      : ["The NPS API needs a free key. Get one instantly at developer.nps.gov/get-started. Paste it here — it stays in this browser only, sent only to the NPS API."]);
-  const row = document.createElement("div"); row.className = "keyrow";
-  const inp = document.createElement("input"); inp.type = "text"; inp.placeholder = "paste API key";
-  inp.setAttribute("aria-label", "NPS API key");
-  inp.value = invalid ? "" : getKey();
-  const btn = document.createElement("button"); btn.className = "primary"; btn.textContent = "Save key";
-  btn.addEventListener("click", function(){ const v = inp.value.trim(); if (!v) return; Suite.store.set("suite.key." + KEY_NAME, v); boot(); });
-  inp.addEventListener("keydown", function(e){ if (e.key === "Enter") btn.click(); });
-  row.append(inp, btn);
-  const link = document.createElement("p");
-  const a = document.createElement("a"); a.href = "https://www.nps.gov/subjects/developer/get-started.htm"; a.target = "_blank"; a.rel = "noopener"; a.textContent = "Open developer.nps.gov/get-started →";
-  link.append(a); c.append(row, link);
-}
-
-/* ---- park list ---- */
-async function loadParks(){
-  const cached = cacheGet("parklist");
-  if (cached && Date.now() - cached.t < PARKLIST_TTL && cached.v.length){ state.parks = cached.v; return; }
-  msgCard(app, "Loading park list…", ["Fetching the roster of national park units (once — then cached)."]);
-  const url = "https://developer.nps.gov/api/v1/parks?limit=600&api_key=" + encodeURIComponent(getKey());
-  try {
-    /* cache handled manually: v1 stores the slim mapped array, not the raw response */
-    const r = await Suite.fetchJSON(url, { timeout: 15000, fallbackToCache: false });
-    const parks = (r.v.data || []).map(function(p){ return { code: p.parkCode, name: p.fullName, states: p.states }; })
-      .filter(function(p){ return p.code && p.name; })
-      .sort(function(a,b){ return a.name.localeCompare(b.name); });
-    if (parks.length){ cacheSet("parklist", parks); state.parks = parks; }
-    else if (cached){ state.parks = cached.v; }
-  } catch(e){
-    const s = statusOf(e);
-    if (s === 403 || s === 401){ showKeyCard(true); throw e; }
-    if (cached){ state.parks = cached.v; return; }
-    msgCard(app, "Couldn't load the park list",
-      ["Network error" + (e && e.message ? " (" + e.message + ")" : "") + ". Check your connection and reload."]);
-    throw e;
-  }
-}
-
-/* ---- picker UI ---- */
-function renderPicker(){
-  app.textContent = "";
-  const box = document.createElement("div"); box.className = "picker";
-  const head = document.createElement("h2"); head.textContent = "Parks you're watching";
-  const chg = document.createElement("button"); chg.className = "ghost"; chg.textContent = "change key"; chg.style.marginLeft = ".6rem";
-  chg.addEventListener("click", function(){ showKeyCard(false); });
-  head.append(chg);
-  const sel = document.createElement("div"); sel.className = "selected";
-  const search = document.createElement("input"); search.type = "search"; search.placeholder = "Search parks (name or state)…";
-  search.setAttribute("aria-label", "Search parks by name, state, or code");
-  const opts = document.createElement("div"); opts.className = "options";
-  opts.setAttribute("role", "listbox");
-  opts.setAttribute("aria-multiselectable", "true");
-  opts.setAttribute("aria-label", "Park list — select the parks to watch");
-  box.append(head, sel, search, opts);
-  app.append(box);
-
-  function nameFor(code){ const f = state.parks.filter(function(p){ return p.code === code; })[0]; return f ? f.name : code; }
-  function drawSelected(){
-    sel.textContent = "";
-    if (!state.selected.length){ const s = document.createElement("span"); s.className = "stamp"; s.textContent = "None yet — pick from the list below."; sel.append(s); return; }
-    state.selected.forEach(function(code){
-      const chip = document.createElement("span"); chip.className = "pchip";
-      chip.append(document.createTextNode(nameFor(code)));
-      const x = document.createElement("button"); x.textContent = "×"; x.title = "remove";
-      x.setAttribute("aria-label", "Remove " + nameFor(code));
-      x.addEventListener("click", function(){ state.selected = state.selected.filter(function(c){ return c !== code; }); persist(); drawSelected(); drawOpts(); loadAlerts(); });
-      chip.append(x); sel.append(chip);
-    });
-  }
-  function drawOpts(){
-    const q = search.value.trim().toLowerCase();
-    opts.textContent = "";
-    const matched = state.parks.filter(function(p){
-      if (!q) return true;
-      return p.name.toLowerCase().indexOf(q) >= 0 || (p.states || "").toLowerCase().indexOf(q) >= 0 || p.code.indexOf(q) >= 0;
-    }).slice(0, 60);
-    matched.forEach(function(p){
-      const on = state.selected.indexOf(p.code) >= 0;
-      const row = document.createElement("div"); row.className = "opt" + (on ? " on" : "");
-      row.setAttribute("role", "option");
-      row.setAttribute("aria-selected", String(on));
-      row.tabIndex = 0;
-      const left = document.createElement("span"); left.textContent = p.name + (p.states ? " (" + p.states + ")" : "");
-      const code = document.createElement("span"); code.className = "code"; code.textContent = p.code;
-      row.append(left, code);
-      function toggle(){
-        const i = state.selected.indexOf(p.code);
-        if (i >= 0) state.selected.splice(i, 1); else state.selected.push(p.code);
-        persist(); drawSelected(); drawOpts(); loadAlerts();
-      }
-      row.addEventListener("click", toggle);
-      row.addEventListener("keydown", function(e){ if (e.key === "Enter" || e.key === " "){ e.preventDefault(); toggle(); } });
-      opts.append(row);
-    });
-    if (!matched.length){ const e = document.createElement("div"); e.className = "opt"; e.textContent = "No parks match."; opts.append(e); }
-  }
-  function persist(){ Suite.store.set("suite.parks", state.selected); }
-  search.addEventListener("input", drawOpts);
-  drawSelected(); drawOpts();
-}
-
-/* ---- alerts ---- */
-async function loadAlerts(){
-  if (!state.selected.length){ msgCard(content, "Pick a park", ["Choose one or more parks above to see their current alerts."]); return; }
-  const codes = state.selected.slice().sort();
-  const cacheKey = "alerts." + codes.join(",");
-  const cached = cacheGet(cacheKey);
-  if (cached && Date.now() - cached.t < ALERTS_TTL){ renderAlerts(cached.v, cached.t, false); return; }
-  msgCard(content, "Loading alerts…", ["Checking " + codes.length + " park" + (codes.length === 1 ? "" : "s") + "."]);
-  const url = "https://developer.nps.gov/api/v1/alerts?parkCode=" + encodeURIComponent(codes.join(",")) + "&limit=200&api_key=" + encodeURIComponent(getKey());
-  try {
-    /* cache handled manually: v1 stores the alerts array, not the raw response */
-    const r = await Suite.fetchJSON(url, { timeout: 15000, fallbackToCache: false });
-    const alerts = r.v.data || [];
-    cacheSet(cacheKey, alerts);
-    renderAlerts(alerts, Date.now(), false);
-  } catch(e){
-    const s = statusOf(e);
-    if (s === 403 || s === 401){ showKeyCard(true); return; }
-    if (cached){ renderAlerts(cached.v, cached.t, true); return; }
-    msgCard(content, "Couldn't load alerts", ["Network error" + (e && e.message ? " (" + e.message + ")" : "") + ". Try again shortly."]);
-  }
-}
-
-function nameFor(code){ const f = state.parks.filter(function(p){ return p.code === code; })[0]; return f ? f.name : code.toUpperCase(); }
-
-function renderAlerts(alerts, stampMs, stale){
-  content.textContent = "";
-  const stamp = document.createElement("div"); stamp.className = "stamp";
-  stamp.textContent = (stale ? "Offline — cached data from " : "data from ") + fmtTime(stampMs);
-  content.append(stamp);
-  const byPark = {};
-  state.selected.forEach(function(c){ byPark[c] = []; });
-  alerts.forEach(function(a){ const c = a.parkCode || "?"; if (!byPark[c]) byPark[c] = []; byPark[c].push(a); });
-  state.selected.forEach(function(code){
-    const group = document.createElement("section"); group.className = "parkgroup";
-    const h = document.createElement("h2");
-    h.append(document.createTextNode(nameFor(code)));
-    const n = document.createElement("span"); n.className = "n";
-    const items = (byPark[code] || []).slice().sort(function(a,b){ return catInfo(a.category).rank - catInfo(b.category).rank; });
-    n.textContent = items.length ? items.length + (items.length === 1 ? " alert" : " alerts") : "no active alerts";
-    h.append(n);
-    const link = document.createElement("a"); link.href = "https://www.nps.gov/" + code + "/"; link.target = "_blank"; link.rel = "noopener"; link.textContent = "park page →";
-    h.append(link);
-    group.append(h);
-    if (!items.length){
-      const c = document.createElement("div"); c.className = "card-msg"; c.style.marginTop = ".6rem";
-      c.textContent = "No active alerts for this park. Enjoy your visit.";
-      group.append(c);
-    } else {
-      items.forEach(function(a){
-        const ci = catInfo(a.category);
-        const el = document.createElement("article"); el.className = "alert " + ci.cls;
-        const cat = document.createElement("span"); cat.className = "cat " + ci.cls; cat.textContent = ci.label;
-        const t = document.createElement("h3");
-        if (a.url){ const link2 = document.createElement("a"); link2.href = a.url; link2.target = "_blank"; link2.rel = "noopener"; link2.textContent = a.title || "(untitled alert)"; t.append(link2); }
-        else { t.textContent = a.title || "(untitled alert)"; }
-        el.append(cat, t);
-        if (a.description){ const d = document.createElement("div"); d.className = "desc"; d.textContent = a.description; el.append(d); }
-        group.append(el);
-      });
-    }
-    content.append(group);
-  });
-}
-
-/* ---- boot ---- */
-async function boot(){
-  if (!getKey()){ showKeyCard(false); content.textContent = ""; return; }
-  try { await loadParks(); } catch(e){ return; }
-  if (!state.parks.length){ msgCard(app, "Couldn't load the park list", ["The NPS API didn't return any parks. Check your key or connection and retry."]); return; }
-  renderPicker();
-  loadAlerts();
-}
+async function boot(){if(!getKey()){showKeyCard(false);return}try{await loadParks()}catch(e){if(!document.querySelector(".keyrow"))msg(app,"Could not load the NPS park directory",["Check the connection and try again. Cached park data will be used automatically when available."]);return}const params=new URLSearchParams(location.search),requested=(params.get("park")||Suite.store.get("suite.parks.active","")||state.watched[0]||"").toLowerCase();state.active=state.parks.some(p=>p.parkCode===requested)?requested:"";state.tab=TAB_INFO[params.get("tab")]?params.get("tab"):"overview";renderShell();renderHero();renderTabs();tabsEl.hidden=!state.active;if(state.active)activateTab(state.tab);else msg(content,"Choose a park",["Search the directory above. Data is loaded only when you open a section, protecting your NPS request allowance."])}
 boot();
 </script>
 </body>

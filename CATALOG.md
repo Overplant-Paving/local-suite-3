@@ -208,10 +208,20 @@ One board for the recalls that actually reach your household: food (FDA), vehicl
 - **Key:** none · **Local:** file:// ✅ (openFDA) / verify (NHTSA, CPSC) · **Complexity:** M
 - **Suggested file:** `recalls.html`
 
-### 4.4 National Parks Companion
-Conditions, alerts (closures, fire restrictions), and events for parks you're planning to visit.
-- **Data:** NPS API `https://developer.nps.gov/api/v1/alerts?parkCode={code}&api_key={key}` (free instant key, 1,000 req/hr; client-side use with key in query string is common — CORS-open confirmed Jul 2026: keyless curl → 403 **with** ACAO:*).
-- **Key:** free key · **Local:** file:// ✅ (verify) · **Complexity:** S
+### 4.4 National Parks Explorer
+A park-centered explorer for all 29 documented NPS API resources: overview, alerts, trip planning,
+activities, learning material, multimedia, amenities, topic catalogs, road data, and boundaries.
+- **Data:** NPS API `https://developer.nps.gov/api/v1/*`, authenticated with the safer
+  `X-Api-Key` header (free personal key; default 1,000 requests per rolling hour). Park and
+  resource images are served from `https://www.nps.gov/common/uploads/`. Both hosts are CORS/CSP
+  allowlisted for `file://`; header preflight and `Origin: null` were verified Jul 2026.
+- **Behavior:** directory cached 30 days; resource groups load only when their tab opens; most
+  content follows the NPS two-hour publication cadence; reference/media data use longer TTLs;
+  stale cache is labeled and retained offline. `/events`, `/roadevents`, and
+  `/mapdata/parkboundaries/{sitecode}` returned upstream 4xx/5xx errors during live verification,
+  so those resources remain visible but load on demand. Gallery assets are scoped by `galleryId`
+  because that endpoint ignores `parkCode`.
+- **Key:** free key · **Local:** file:// ✅ · **Complexity:** L
 - **Suggested file:** `parks.html`
 
 ### 4.5 Treasury & National Debt Dashboard

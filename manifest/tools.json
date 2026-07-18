@@ -1312,10 +1312,10 @@
     {
       "id": "parks",
       "file": "parks.html",
-      "name": "National Parks Companion",
+      "name": "National Parks Explorer",
       "cat": "civic",
       "cx": "S",
-      "desc": "Alerts, closures, and events for the parks you're visiting.",
+      "desc": "Complete NPS explorer: alerts, trip planning, activities, learning, media, maps, and reference data.",
       "network": "keyed",
       "key": {
         "name": "nps",
@@ -1323,7 +1323,8 @@
         "demo": false
       },
       "endpoints": [
-        "https://developer.nps.gov"
+        "https://developer.nps.gov",
+        "https://www.nps.gov"
       ],
       "storage": [
         "suite.theme",
@@ -1331,7 +1332,7 @@
         "suite.parks",
         "suite.cache.parks.*"
       ],
-      "cacheTtlMin": 360,
+      "cacheTtlMin": 120,
       "since": "v1",
       "flags": []
     },

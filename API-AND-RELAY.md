@@ -42,6 +42,7 @@ Never: paid APIs, APIs requiring OAuth, sources that demand tracking.
 | NASA `DEMO_KEY` | 30/hr, 50/day | apod, (nutrition via USDA demo) | 24 h TTL + "add your free key" nudge |
 | Overpass public | fair-use | nearby | long TTL + kumi.systems mirror fallback |
 | Nominatim | 1 req/s | geo | client-side throttle |
+| National Park Service | 1,000 req/rolling hr | parks | `X-Api-Key` header; tab-lazy endpoint groups; 2 h content TTL, longer reference/media TTLs; three unreliable services load only on demand |
 | ipapi.co | 1k/day | network | cache IP info per session |
 | Aviationstack free | 100/month | flight | 1 min cache; automatic refresh defaults off, stops on rate limit, and has an 80-request local monthly safety threshold |
 | Airplanes.live | 1 req/s documented | flight position fallback | query only one Aviationstack-resolved ICAO24 per user lookup; no local response cache (`no-store`) |
@@ -57,6 +58,9 @@ Never: paid APIs, APIs requiring OAuth, sources that demand tracking.
 - **Keys are never committed.** The `--check` gate greps source for key-shaped strings; the only
   allowed embedded key is BART's officially published public demo key, and v2 externalizes even
   that (v1 `transit.html:163` → `suite.key.bart` with the public value as the documented default).
+- Prefer provider-supported authentication headers over URL query parameters. The NPS explorer
+  sends `suite.key.nps` as `X-Api-Key`; NPS `file://` preflight permits that header. This avoids
+  exposing the credential in request URLs while preserving direct-browser operation.
 
 ## 4. CORS-blocked sources — the embedded-data pipeline (no relay, no extra infrastructure)
 
