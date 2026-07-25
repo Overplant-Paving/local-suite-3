@@ -24,26 +24,14 @@ Standing rules for the executing agent:
 
 - [x] Analysis of v1 complete (architecture + quality/risk audits, July 2026)
 - [x] Planning document set written
-- [x] Version-control hazard fixed (home-dir `.git` removed; v1 suite committed as `7088cab` on `main` in `../Local Suite`)
+- [x] Version-control hazard fixed during the original migration; historical v1 parity evidence is archived under `tests/evidence/`
 - [x] Phase 0 — Foundation (2026-07-15 — evidence: `tests/evidence/phase0/gates.txt`)
 - [x] Phase 1 — Core machinery, proven on pilots (2026-07-15 — 3 pilots at Definition of Done; CSP verdict: full hashes, all 3 browsers, recorded in ARCHITECTURE D6 addendum; evidence: `tests/evidence/{focus,weather,index,phase1}/`)
-- [ ] Phase 2 — Full migration: 71/71 migrated 2026-07-16, all gates green, smoke 72/72
-  (`tests/evidence/batchC/gates.txt`, `tests/evidence/batchD/gates.txt`; Batch D byte-exact
-  hashes proven v1==source==dist per tool). **One exit item open:** the v1 read-only-archive
-  README commit in `../Local Suite` — the session's permission settings deny writes there;
-  needs the user (text drafted, see HANDOFF.md). Tick this box when it lands.
-- [ ] Phase 3 — PWA machinery done 2026-07-16 (sw.js + webmanifest + icons emitted, pwa-sync
-  fatal gate, file:// parity + offline matrix + update path + Firefox no-op all verified —
-  `tests/evidence/phase3/`). **GitHub half done 2026-07-16:**
-  repo `Overplant-Paving/local-suite-2` (public), Pages workflow publishing `dist/` —
-  live at <https://overplant-paving.github.io/local-suite-2/>, fresh-profile verified
-  (72 links, SW precached, click-through, zero errors — `tests/evidence/phase3/pages-live-verify.txt`).
-  Remaining: one headed Chrome/Edge install-prompt check (needs a human's browser).
-- [ ] Phase 4 — Suite-wide audit DONE 2026-07-16 (settings.html at DoD; escaping audit: 5 EA
-  files + extras, 3 real fixes; a11y audit: all 73 files, 6 agents, ~60 tools fixed, core
-  ruling D10; games parked as designed hub card; gates zero-warning green, smoke 73/73 —
-  `tests/evidence/phase4/`). **Tag `v2.0` HELD on the two user items** (v1 archive README,
-  Phase 3 GitHub half) — see `tests/evidence/phase4/release-checklist.md`. Tick with the tag.
+- [x] Phase 2 — Full migration: 71/71 migrated 2026-07-16 with green gates and archived parity evidence. The planned sibling-repository archive note never landed; that repository and the `v1-import` object are not present in this clone, so this is recorded as historical provenance rather than an open v3 release gate.
+- [x] Phase 3 — PWA + sharing: generated service worker, webmanifest and icons; file parity, offline matrix, update path and headed Chromium installability verified. V3 Pages is live at <https://overplant-paving.github.io/local-suite-3/>. Evidence: `tests/evidence/phase3/` and `tests/evidence/v3-release/`.
+- [x] Phase 4 — Suite-wide audit: Settings, CSP, escaping, accessibility and full smoke evidence completed. The planned `v2.0` tag was never created and is superseded, not backfilled.
+- [x] V3 foundation — multiple saved locations, Flight Tracker and the 29-resource National Parks Explorer complete with focused and full-suite evidence.
+- [x] **Local Suite v3.0.0 — first formal release, 2026-07-25.** Release checklist: `tests/evidence/v3-release/release-checklist.md`.
 
 ## Overview
 
@@ -225,7 +213,7 @@ release checklist executed · tag pushed.
   errors on the 26 healthy live resources are recorded under `tests/evidence/parks/` and
   `tests/evidence/v3-nps-explorer/`. No key is committed.
 
-## After v2.0 (backlog, unscheduled)
+## After v3.0.0 (backlog, unscheduled)
 
 - New tools from CATALOG.md's unbuilt ideas — each a `--new` scaffold + the same Definition of Done.
 - Second game; games get the suite theme treatment.

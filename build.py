@@ -75,7 +75,9 @@ def build_csp(html, endpoints, script_endpoints=()):
     script_src = hashes + "".join(f" {host_of(e)}" for e in script_endpoints)
     hosts = " ".join(dict.fromkeys(host_of(e) for e in endpoints))  # dedupe, keep order
     connect = hosts if hosts else "'none'"
-    img = f"data: {hosts}".strip()
+    # 'self' is required for the hosted PWA's same-origin manifest icons. Without it,
+    # Chromium parses the manifest but rejects every install icon under the page CSP.
+    img = f"'self' data: {hosts}".strip()
     # worker-src/manifest-src 'self': lets the served (PWA) mode register sw.js and
     # fetch the webmanifest; both directives are inert from file:// (PWA.md §1).
     return ('<meta http-equiv="Content-Security-Policy" content="'
@@ -156,7 +158,7 @@ self.addEventListener("install", (e) => {
 self.addEventListener("activate", (e) => {
   e.waitUntil(caches.keys()
     .then((keys) => Promise.all(keys
-      .filter((k) => k.startsWith("suite-v2-") && k !== CACHE)
+      .filter((k) => /^suite-v\\d+-/.test(k) && k !== CACHE)
       .map((k) => caches.delete(k))))
     .then(() => self.clients.claim()));
 });
@@ -198,7 +200,7 @@ def render_pwa(rendered):
             h.update((CORE_DIR / "icons" / name.split("/")[1]).read_bytes())
         else:
             h.update(rendered[name].encode("utf-8"))
-    cache_name = f"suite-v2-{h.hexdigest()[:12]}"
+    cache_name = f"suite-v3-{h.hexdigest()[:12]}"
     sw = SW_TEMPLATE % {"cache": json.dumps(cache_name),
                         "precache": json.dumps(precache, indent=2)}
     return webmanifest, sw, precache, cache_name

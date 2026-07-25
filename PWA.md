@@ -28,7 +28,7 @@ from `file://` behaves byte-identically to the pre-PWA build.
   `start_url: index.html`, `display: standalone`. Per-tool deep links work because every tool is
   just a page.
 - **`dist/sw.js`** — precache list = every dist HTML file + icons + webmanifest. Cache name
-  includes a content hash of the precache set (`suite-v2-<hash>`), so any rebuild that changes
+  includes a content hash of the precache set (`suite-v3-<hash>`), so any rebuild that changes
   anything produces a new cache.
 
 ## 3. Caching strategy
@@ -41,7 +41,7 @@ from `file://` behaves byte-identically to the pre-PWA build.
   SW cache layer would serve stale data without the "cached from <time>" honesty. One caching
   brain, not two.
 - **Update policy:** new SW calls `skipWaiting()`; on `activate`, `clients.claim()` + delete old
-  `suite-v2-*` caches. Worst case a user sees fresh HTML one reload late — acceptable for this
+  `suite-vN-*` caches. Worst case a user sees fresh HTML one reload late — acceptable for this
   suite; never let an old cache pin the whole suite stale.
 
 ## 4. Offline matrix
@@ -78,7 +78,9 @@ A user who lives in file:// mode and then installs the PWA starts with empty set
 - **Precache is sequential and revalidating** (`cache: "no-cache"` per request, one at a
   time), not `addAll`: a host's `max-age` (GitHub Pages: 600 s) must never precache stale
   bytes on update, and the 76-way `addAll` burst was observed to fail its install during
-  verification. Cache name `suite-v2-<sha256[:12]>` over the full precache contents.
+  verification. Cache name `suite-v3-<sha256[:12]>` over the full precache contents. The v3
+  release also allows same-origin images in generated CSP so Chromium can load the manifest icons;
+  the headed installability gate checks this explicitly.
 - **`--check` gains a fatal `pwa-sync` gate** (dist sw.js + webmanifest must match a fresh
   render; negative-tested like every fatal gate).
 - **Update-path verification** uses `registration.update()` as the deterministic stand-in

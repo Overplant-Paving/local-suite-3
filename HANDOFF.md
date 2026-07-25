@@ -1,4 +1,10 @@
-# HANDOFF — continue the v2 build from here
+# HANDOFF — archived v2 migration handoff
+
+> **ARCHIVED:** This file preserves the interrupted v2 migration history and is not current project
+> state. Local Suite v3 is complete; use `ROADMAP.md`, `CLAUDE.md`, and
+> `tests/evidence/v3-release/release-checklist.md` for current development and release status.
+> References below to unstarted phases, the sibling `../Local Suite` repository, `7088cab`, or a
+> future `v2.0` tag are historical and are not actionable in this clone.
 
 > **STATUS (2026-07-16, session 2): §Batch C is COMPLETE** — all 13 tasks recovered,
 > integrated, committed; `--refresh-data` implemented and live-verified; gates + smoke

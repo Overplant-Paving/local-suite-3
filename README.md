@@ -5,9 +5,12 @@ multiple-location support, safer location-aware caching and cross-tab behavior, 
 flight tracker with Aviationstack status/ETA plus Airplanes.live ADS-B position fallback, and a
 park-centered National Parks Explorer covering all 29 documented NPS API resources.
 
+Current release: **v3.0.0** (2026-07-25). Release evidence is archived under
+`tests/evidence/v3-release/`.
+
 **To use the suite: open [`dist/index.html`](dist/index.html).** Everything in `dist/` is
 built and self-contained — double-click any file there. The `tools/` folder holds the
-*sources*, which don't link up until `python build.py` runs.
+*sources*, which don't link up until `python3 build.py` runs.
 
 ## What Local Suite is
 
@@ -44,7 +47,7 @@ jobs) show monthly numbers embedded at build time, and airport/custom-transit sh
 linking straight to the source's own website. Nothing needs setup, hosting, or accounts — see
 [API-AND-RELAY.md](API-AND-RELAY.md) §4–5.
 
-## Why v2
+## Why the v2 architecture still matters
 
 v1 (in `../Local Suite`) is a disciplined, high-quality build — but it was produced in one shot,
 outside version control, with every shared piece copy-pasted per file. The audit that preceded
@@ -96,10 +99,10 @@ Local Suite 3/
 # Use the suite: open dist/index.html — that's it. Double-click works.
 
 # Develop: edit tools/*.html (they run as-is from file:// via relative core links)
-python build.py            # inline core into dist/
-python build.py --check    # validation gates (run before committing)
-python build.py --serve    # local server → PWA mode at http://localhost:8000
-python build.py --new foo  # scaffold a new tool + manifest entry
+python3 build.py            # inline core into dist/
+python3 build.py --check    # validation gates (run before committing)
+python3 build.py --serve    # local server → PWA mode at http://localhost:8000
+python3 build.py --new foo  # scaffold a new tool + manifest entry
 ```
 
 ### National Parks Explorer setup

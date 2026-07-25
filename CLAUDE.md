@@ -1,48 +1,50 @@
-# Local Suite 2 — instructions for Claude
+# Local Suite 3 — development instructions
 
-You are the developer of this project. It is the v2 rebuild of the Local Suite: ~71 single-file
-HTML tools + hub, currently living in `../Local Suite` (a git repo — treat it as a read-only
-reference; never modify it).
+Local Suite 3 is the released continuation of the verified v2 single-file suite. It contains 73
+manifest tools plus a generated hub. The source is in `tools/`; committed, self-contained output is
+in `dist/`.
 
-## Read first, in this order
+## Read first
 
-1. [README.md](README.md) — what this is, the philosophy, the preserve list
-2. [ROADMAP.md](ROADMAP.md) — the phases, the standing rules, **the current-status checklist**
-3. [ARCHITECTURE.md](ARCHITECTURE.md) — technical spec + decisions D1–D9 (don't relitigate them)
-4. The other docs as the work needs them: [MIGRATION.md](MIGRATION.md),
-   [API-AND-RELAY.md](API-AND-RELAY.md), [PWA.md](PWA.md), [QUALITY.md](QUALITY.md)
+1. [README.md](README.md) — product contract and current release.
+2. [ROADMAP.md](ROADMAP.md) — current status and backlog.
+3. [ARCHITECTURE.md](ARCHITECTURE.md) — technical decisions and invariants.
+4. [MIGRATION.md](MIGRATION.md), [API-AND-RELAY.md](API-AND-RELAY.md), [PWA.md](PWA.md), and
+   [QUALITY.md](QUALITY.md) as the work requires.
 
-## Standing rules (summary — full version tops ROADMAP.md)
+`HANDOFF.md` is an archived v2 migration handoff. It is retained as provenance, not current state.
+The historical sibling `../Local Suite` repository and `v1-import` object are not present in this
+checkout; do not claim otherwise. Existing migration evidence remains under `tests/evidence/`.
 
-- Nothing ships unverified: every claim of "done" is backed by evidence (gate output,
-  screenshots, live-fetch records) archived under `tests/evidence/`.
-- `python build.py --check` is the authority. Never route around a failing gate.
-- Never edit `dist/` by hand — it's generated. Edit `tools/`, `core/`, `manifest/`.
-- v1 (`../Local Suite`, tag `v1-import` once created) is the reference implementation; diff
-  migrations against it.
-- Parallelize independent tool migrations to subagents; serialize `core/` and `build.py` changes.
-- Update ROADMAP's status block and MIGRATION's burn-down table in the same commit as the work.
-- Keep it simple. The user has explicitly rejected elaborate machinery for small problems.
-  No new infrastructure, services, or accounts — everything lives in this one repo.
+## Standing rules
 
-## Project state (as of 2026-07-16, end of session 2)
+- Nothing ships unverified. Archive command output, screenshots, and live-fetch records under
+  `tests/evidence/`.
+- `python3 build.py --check` is authoritative. Never route around a failing gate.
+- Never edit `dist/` by hand. Edit `tools/`, `core/`, `manifest/`, or `build.py`, then rebuild.
+- Keep every built tool self-contained and double-clickable under `file://`.
+- Preserve keyless-first data access, local `suite.*` storage, explicit freshness/offline states,
+  generated CSP, and the no-framework/no-runtime-dependency contract.
+- Serialize changes to `core/` and `build.py`; independently scoped tool work may run in parallel.
+- Keep changes simple. Do not introduce an account, service, framework, or required relay.
+- API keys are user-owned local data. Never commit, print, or place them in URLs when a provider
+  supports header authentication.
 
-- **All four phases' technical work is DONE.** 71/71 v1 tools migrated + settings.html
-  (Batches A-D + Phase 4, per-tool evidence under `tests/evidence/`); PWA machinery built
-  and verified (`tests/evidence/phase3/`); Phase 4 audits complete — escaping (3 real
-  fixes), a11y (all 73 files; core ruling ARCHITECTURE D10), games parked as a designed
-  hub WIP card. Gates zero-warning green; smoke 73/73 (`tests/evidence/phase4/gates.txt`);
-  release checklist executed (`tests/evidence/phase4/release-checklist.md`).
-- **Tag `v2.0` is HELD on two user-side items:** (1) the v1 read-only-archive README
-  commit in `../Local Suite` (session permissions deny writes there; text drafted in
-  HANDOFF.md); (2) one headed Chrome/Edge install-prompt
-  check (the rest of Phase 3's GitHub half is DONE: public repo Overplant-Paving/local-suite-2,
-  Pages live + fresh-profile verified — https://overplant-paving.github.io/local-suite-2/). Deferred verifications (upstream outages /
-  shared demo-pool budgets) are listed in the release checklist; none block the tag.
-- v1 is committed in `../Local Suite` on `main` (commit `7088cab`, 175 files), imported here
-  as the `v1-import` tag.
-- Distribution model: this repo goes on GitHub; Pages serves `dist/`; sharing = the link or the
-  files. CORS-blocked sources: BLS numbers embedded at build; airport/custom-transit link out.
-- `relay/worker.js` is an optional power-user template only — nothing depends on it.
-- Things that need the user (flag, don't block): GitHub account for the Pages setup (Phase 3);
-  any real API keys for live-verifying keyed tools (demo tiers otherwise).
+## Current project state (v3.0.0, 2026-07-25)
+
+- 71 v1 tools are preserved on the v2 architecture; Settings and Flight Tracker bring the manifest
+  to 73 tools, plus the hub (74 generated HTML pages).
+- V3 adds named multiple locations, cache-safe active switching and cross-tab behavior, an
+  individual Flight Tracker, and a 29-resource National Parks Explorer.
+- GitHub repository: https://github.com/Overplant-Paving/local-suite-3
+- Hosted suite: https://overplant-paving.github.io/local-suite-3/
+- Release evidence and the final checklist live under `tests/evidence/v3-release/`.
+- The final headed Chromium gate verifies a real `beforeinstallprompt` event, zero manifest and
+  installability errors, service-worker control, same-origin manifest icons under CSP, and the v3
+  precache. Full build, PWA, update, and 74-page smoke gates remain mandatory for future releases.
+
+## Distribution model
+
+GitHub Pages publishes committed `dist/` files. The same files can be copied and opened directly.
+The service worker is hosted-mode-only and never caches provider API responses. `relay/worker.js`
+is an optional power-user template; no core tool depends on it.

@@ -2,7 +2,7 @@
    App shell cache-first; API calls are a network-only pass-through — the tools'
    own localStorage caching (visible "cached from <time>" stamps) is the single
    caching brain, never a second invisible layer. */
-const CACHE = "suite-v2-76658159d8fa";
+const CACHE = "suite-v3-21b1517d37a3";
 const PRECACHE = [
   "air.html",
   "airport.html",
@@ -103,7 +103,7 @@ self.addEventListener("install", (e) => {
 self.addEventListener("activate", (e) => {
   e.waitUntil(caches.keys()
     .then((keys) => Promise.all(keys
-      .filter((k) => k.startsWith("suite-v2-") && k !== CACHE)
+      .filter((k) => /^suite-v\d+-/.test(k) && k !== CACHE)
       .map((k) => caches.delete(k))))
     .then(() => self.clients.claim()));
 });

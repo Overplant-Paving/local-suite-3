@@ -1,0 +1,9 @@
+sw ready; caches: ["suite-v3-21b1517d37a3"] (expected suite-v3-21b1517d37a3)
+rebuilt: suite-v3-21b1517d37a3 -> suite-v3-4e68896a7ac4
+  t+0ms {"keys":["suite-v3-21b1517d37a3","suite-v3-4e68896a7ac4"],"installing":"installing","active":"activated"}
+  t+500ms {"keys":["suite-v3-21b1517d37a3","suite-v3-4e68896a7ac4"],"active":"activating"}
+  t+1000ms {"keys":["suite-v3-21b1517d37a3","suite-v3-4e68896a7ac4"],"active":"activating"}
+  t+1500ms {"keys":["suite-v3-4e68896a7ac4"],"active":"activated"}
+cache-side check: canary in suite-v3-4e68896a7ac4 convert.html = true
+update path: canary served=true, caches after reload=["suite-v3-4e68896a7ac4"]
+UPDATE PATH OK

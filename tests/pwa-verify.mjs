@@ -51,7 +51,7 @@ if (MODE === "update") {
   // but leaves dist on the old build; the rebuild happens here, mid-session, so one
   // live browser genuinely transitions old cache -> new.
   const { execSync } = await import("node:child_process");
-  execSync("python build.py", { cwd: join(DIST, ".."), stdio: "pipe" });
+  execSync(`${process.env.PYTHON || "python3"} build.py`, { cwd: join(DIST, ".."), stdio: "pipe" });
   const newSw = readFileSync(join(DIST, "sw.js"), "utf-8");
   const newCache = newSw.match(/const CACHE = "([^"]+)"/)[1];
   log(`rebuilt: ${expectedCache} -> ${newCache}`);
@@ -105,6 +105,9 @@ const cdp = await ctx.newCDPSession(page);
 const appManifest = await cdp.send("Page.getAppManifest");
 log(`app manifest url: ${appManifest.url}; parse errors: ${JSON.stringify(appManifest.errors)}`);
 if (appManifest.errors.some((e) => e.critical)) die("critical webmanifest error");
+const installability = await cdp.send("Page.getInstallabilityErrors");
+log(`installability errors: ${JSON.stringify(installability.installabilityErrors)}`);
+if (installability.installabilityErrors.length) die("PWA is not installable");
 
 // first-run origin hint: visible with empty suite.* storage, gone once any suite.* key exists
 const hintFresh = await page.evaluate(() => !document.getElementById("originHint").hidden);
