@@ -27,7 +27,7 @@ multiple saved locations, Flight Tracker, and the National Parks Explorer.
 - [x] PWA update verification green with old v2/v3 cache cleanup (`pwa-update.txt`).
 - [x] Headed Chromium emits `beforeinstallprompt`, reports zero installability/manifest errors, loads same-origin icons under CSP, and is service-worker controlled (`headed-installability.txt`, `headed-installability.png`).
 - [x] Hosted site returns release bytes exactly matching local `dist/index.html` and `dist/sw.js` (`hosted-verify.txt`).
-- [x] GitHub Pages workflow for the release-preparation commit succeeds ([run 30145330137](https://github.com/Overplant-Paving/local-suite-3/actions/runs/30145330137)).
+- [x] GitHub Pages workflow for the final release candidate succeeds ([run 30145591822](https://github.com/Overplant-Paving/local-suite-3/actions/runs/30145591822)).
 - [x] Working tree clean at the final release commit before tagging.
 - [x] Annotated `v3.0.0` tag and GitHub Release published and read back after the final release commit.
 
