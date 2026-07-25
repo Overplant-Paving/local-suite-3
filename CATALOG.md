@@ -553,7 +553,7 @@ The short version of everything above. **CORS ✓** = documented/community-confi
 | openFDA | `api.fda.gov` | none (1k/day) | ✓ |
 | NHTSA recalls/VIN | `api.nhtsa.gov`, `vpic.nhtsa.dot.gov` | none | ✓ (echoes Origin; verified Jul 2026) |
 | CPSC recalls | `saferproducts.gov/RestWebServices` | none | ✓ (verified Jul 2026) |
-| NPS parks | `developer.nps.gov/api/v1` | free key (1k/hr) | ✓ (CORS confirmed Jul 2026; render pipeline route-verified, first real key = first live render) |
+| NPS parks | `developer.nps.gov/api/v1` | free key (1k/hr) | ✓ (built `file://` live-key verification Jul 2026: 26 healthy resources; events, road events, and boundaries failed upstream and remain explicit on-demand checks) |
 | Nager.Date holidays | `date.nager.at/api/v3` | none | ✓ |
 | Census geocoder | `geocoding.geo.census.gov` | none | ✗ fetch / ✓ JSONP |
 | Census data (ACS) | `api.census.gov/data` | none (500/day) | ✓ (community) |

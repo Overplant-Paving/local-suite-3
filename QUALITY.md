@@ -80,7 +80,7 @@ Per tool (applied at migration time — recipe step 8; re-verified in the Phase 
 
 ## 3. Testing
 
-**Tier 1 — static gates, every commit:** `python build.py --check`. The gates (ARCHITECTURE.md
+**Tier 1 — static gates, every commit:** `python3 build.py --check`. The gates (ARCHITECTURE.md
 §4.4): manifest↔file sync, markers present, dist staleness, no inline handlers, CSP present +
 hashes valid, escaping heuristic, CATALOG cross-check, key hygiene. Zero-dependency, seconds to
 run. **Every fatal gate ships with negative tests** — fixture inputs under `tests/fixtures/` that
@@ -89,7 +89,7 @@ that has never been seen to fail is assumed broken.
 
 **Tier 2 — smoke suite, mandatory:** `tests/smoke.mjs` (Playwright — the one npm concession,
 isolated in `tests/`, never required for *building*, always required for *shipping*). For each of
-the 72 dist files:
+every generated HTML file (currently 73 tools plus the hub, 74 files):
 
 1. open via `file://`
 2. assert zero console errors
@@ -97,10 +97,10 @@ the 72 dist files:
 4. click theme toggle → `document.documentElement.dataset.theme` flips, and flips back
 5. (network tools) block fetch → assert the offline/stale card renders instead of a blank
 
-Run: after any `core/` or `build.py` change (full suite), at every batch completion in Phase 2,
-and as a release gate. There is no CI server; the discipline is the same — the executing agent
-runs the suite and archives the output, and a release with a red or unrun smoke suite does not
-happen.
+Run: after any `core/` or `build.py` change (full suite), at every migration batch completion,
+and as a release gate. The GitHub Pages workflow repeats the static, focused-v3, and smoke gates
+before deployment; the executing agent also archives release output. A release with a red or unrun
+suite does not happen.
 
 **Tier 3 — per-tool verification evidence:** produced by the migration recipe (MIGRATION.md §1
 step 10) and archived under `tests/evidence/<tool>/`: side-by-side screenshots against v1 in both
@@ -117,11 +117,13 @@ snapshot. The burn-down table links to it; no evidence, not done.
 - [ ] a11y per-tool checklist (§2) complete — not deferred
 - [ ] diff reviewed against the `v1-import` tag; v1 feature walk-through shows no regressions
 
-## 5. Release checklist (per release, finally `v2.0`)
+## 5. Release checklist (version-neutral)
 
-- [ ] `python build.py` — clean build
-- [ ] `python build.py --check` — green, including negative tests
-- [ ] smoke suite green across all 72 files (tier 2), output archived
+- [ ] `python3 build.py` — clean build
+- [ ] `python3 build.py --check` — green, including negative tests
+- [ ] smoke suite green across every generated HTML file (tier 2), output archived
+- [ ] focused current-version contracts green (for v3: multiple locations, location cross-tab,
+      Flight Tracker, and Parks Explorer)
 - [ ] zero unresolved escaping-heuristic flags (§1.2)
 - [ ] dist committed; staleness gate confirms source↔dist match
 - [ ] CATALOG.md verification dates touched for any endpoint that changed
@@ -129,4 +131,5 @@ snapshot. The burn-down table links to it; no evidence, not done.
 - [ ] named-location migration verified from a real v2 `suite.location`; active-location switches
       mirror correctly and cannot render prior-location cache data
 - [ ] ROADMAP.md status block and MIGRATION.md burn-down table current
+- [ ] Pages verification/deploy workflow green; hosted `index.html` and `sw.js` byte-checked against local `dist/`
 - [ ] tag pushed

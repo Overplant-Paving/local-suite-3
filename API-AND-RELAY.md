@@ -53,8 +53,8 @@ Never: paid APIs, APIs requiring OAuth, sources that demand tracking.
   `finnhub`, `ebird`, `usda`, `bart`, `aviationstack`.
 - `Suite.key(name)` returns `{value, isDemo}`; tools render a one-line "using the shared demo key —
   [get your free key]" note when on a demo tier, with the signup URL from the manifest.
-- **settings.html is the single entry UI** for keys (Phase 4). Until then, tools keep their v1
-  paste-a-key prompts.
+- **settings.html is the current single entry UI** for keys. Individual tools link there for setup;
+  any retained local key prompt is a deliberate tool-specific fallback, not the primary flow.
 - **Keys are never committed.** The `--check` gate greps source for key-shaped strings; the only
   allowed embedded key is BART's officially published public demo key, and v2 externalizes even
   that (v1 `transit.html:163` → `suite.key.bart` with the public value as the documented default).

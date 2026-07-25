@@ -86,8 +86,7 @@ Local Suite 3/
 │   ├── index.html            # the hub
 │   └── weather.html …
 ├── relay/
-│   ├── worker.js             # Cloudflare Worker template (opt-in)
-│   └── README.md
+│   └── worker.js             # Cloudflare Worker template (opt-in)
 ├── dist/                     # BUILT: self-contained double-clickable files (committed)
 └── tests/                    # smoke suite + gate fixtures + per-tool evidence (required to ship)
 ```

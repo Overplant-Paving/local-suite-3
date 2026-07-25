@@ -1,6 +1,12 @@
-# Local Suite v3 — candidate tools and quality-of-life improvements
+# Archived v3 reconnaissance — post-v3 backlog source
 
 Grounded reconnaissance at commit `8b8690f` (2026-07-16). This is a proposal, not a committed v3 specification.
+
+> **ARCHIVED AFTER v3.0.0:** Multiple locations, Flight Tracker, and the National Parks Explorer
+> shipped in v3.0.0. The remaining ideas below are unscheduled post-v3 candidates, not v3 release
+> requirements. Current status and release gates live in `ROADMAP.md` and
+> `tests/evidence/v3-release/release-checklist.md`; historical 72-tool counts below describe the
+> pre-v3 baseline.
 
 ## Constraints worth preserving
 
