@@ -1,0 +1,18 @@
+Local Suite v3.0.0 hosted deployment verification
+Date: 2026-07-25
+Release-preparation commit: 90e27a5169748cf93e3ab275006623a92094b0c1
+Pages run: https://github.com/Overplant-Paving/local-suite-3/actions/runs/30145330137
+Pages conclusion: success
+Hosted URL: https://overplant-paving.github.io/local-suite-3/
+HTTP status: 200
+
+Exact deployed/local SHA-256 matches:
+index.html local:  3edb6c4fd0abe8d06bc313a764e0f46e19ee74a26f8ffe90cc8a80e913fa3099
+index.html hosted: 3edb6c4fd0abe8d06bc313a764e0f46e19ee74a26f8ffe90cc8a80e913fa3099
+sw.js local:       28cb54074c2f324f2a35a53cd23a0c5758fe5fb3ed9fc4a90d5e32233069b612
+sw.js hosted:      28cb54074c2f324f2a35a53cd23a0c5758fe5fb3ed9fc4a90d5e32233069b612
+
+Hosted markers:
+- generated CSP contains: img-src 'self' data:
+- service-worker cache: suite-v3-21b1517d37a3
+- GitHub Pages Last-Modified: Sat, 25 Jul 2026 05:11:45 GMT
