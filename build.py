@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""build.py — the entire Local Suite v2 toolchain. Python stdlib only (ADR D1).
+"""build.py — the entire Local Suite v3 toolchain. Python stdlib only (ADR D1).
 
 Commands:
-  python build.py            inline core into tools/*.html -> dist/; hub injection; CSP
-  python build.py --check    validation gates + negative fixture tests; non-zero on failure
-  python build.py --serve    build + http.server on 8000 (PWA mode)
-  python build.py --new ID   scaffold tools/ID.html + manifest entry
-  python build.py --refresh-data   fetch BLS numbers, embed into jobs/inflation (Batch C)
+  python3 build.py            inline core into tools/*.html -> dist/; hub injection; CSP
+  python3 build.py --check    validation gates + negative fixture tests; non-zero on failure
+  python3 build.py --serve    build + http.server on 8000 (PWA mode)
+  python3 build.py --new ID   scaffold tools/ID.html + manifest entry
+  python3 build.py --refresh-data   fetch BLS numbers, embed into jobs/inflation (Batch C)
 """
 
 import argparse
@@ -557,7 +557,7 @@ def cmd_new(args):
         "id": tool_id, "file": f"{tool_id}.html", "name": name,
         "cat": "util", "cx": "S", "desc": "What this tool does, in one calm sentence.",
         "network": "offline", "key": None, "endpoints": [], "storage": ["suite.theme"],
-        "cacheTtlMin": None, "since": "v2", "flags": [],
+        "cacheTtlMin": None, "since": "v3", "flags": [],
     })
     write(MANIFEST, json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
     print(f"scaffolded tools/{tool_id}.html and added the manifest entry — "
@@ -673,7 +673,7 @@ def cmd_refresh_data(_args):
 # ---------------------------------------------------------------- main
 
 def main():
-    p = argparse.ArgumentParser(description="Local Suite v2 toolchain")
+    p = argparse.ArgumentParser(description="Local Suite v3 toolchain")
     g = p.add_mutually_exclusive_group()
     g.add_argument("--check", action="store_true", help="run validation gates")
     g.add_argument("--serve", action="store_true", help="build + serve on :8000")

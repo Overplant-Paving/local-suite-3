@@ -156,5 +156,5 @@ node tests/smoke.mjs
 git diff --check
 ```
 
-The report should only be considered complete when that sequence and the hosted GitHub Pages check
-are green for the final committed revision.
+That sequence and the hosted GitHub Pages check are green for `v3.0.0`; final release evidence is
+archived under `tests/evidence/v3-release/`.

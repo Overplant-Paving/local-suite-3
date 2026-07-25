@@ -2,8 +2,12 @@
 import { chromium } from "playwright";
 import { pathToFileURL } from "node:url";
 import { resolve, join } from "node:path";
+import { readFileSync } from "node:fs";
 
 const ROOT = resolve(import.meta.dirname, "..");
+const EXPECTED_TOOL_LINKS = JSON.parse(
+  readFileSync(join(ROOT, "manifest", "tools.json"), "utf-8")
+).tools.length;
 let browser;
 try {
   browser = await chromium.launch({ channel: "chrome" });
@@ -148,7 +152,7 @@ const hub = await page.evaluate(() => ({
   activeLabel: document.querySelector("#activeLoc option:checked")?.textContent,
   collection: JSON.parse(localStorage.getItem("suite.locations"))
 }));
-if (hub.toolLinks !== 72 || hub.activeLabel !== "Home" || hub.collection.items.length !== 1) {
+if (hub.toolLinks !== EXPECTED_TOOL_LINKS || hub.activeLabel !== "Home" || hub.collection.items.length !== 1) {
   throw new Error("built hub integration failed: " + JSON.stringify(hub));
 }
 result.builtHub = hub;

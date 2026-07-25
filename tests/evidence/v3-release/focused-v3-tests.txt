@@ -1,0 +1,25 @@
+--- multiple locations ---
+multiple locations: PASS {"migration":true,"uniqueIds":["home","home-2"],"legacyWriterSync":true,"labelClear":true,"activeFallback":true,"finalClear":true,"invalidRejected":true,"unknownFieldsPreserved":true,"futureSchemaPreserved":true,"damagedDataPreserved":true,"inFlightGuard":{"rejected":true,"cached":null},"builtHub":{"toolLinks":73,"activeLabel":"Home","collection":{"schema":1,"activeId":"saved-location","items":[{"id":"saved-location","revision":1,"lat":40.7128,"lon":-74.006,"label":"Home"}]}},"wildfireScoped":true}
+--- location cross-tab ---
+location cross-tab: PASS {"reloads":2,"active":{"lat":34.0522,"lon":-118.2437,"label":"B"}}
+--- flight tracker ---
+built flight tracker: PASS {"title":"AA100","route":["JFK","LAX"],"mapVisible":true,"keyExposed":false,"cspAllowsProvider":true,"positionSource":"Airplanes.live ADS-B · Position updated less than a minute ago","cached":true}
+--- parks explorer ---
+{
+  "title": "National Parks Explorer · Local Suite",
+  "park": "Yellowstone National Park",
+  "healthRows": 29,
+  "healthOk": 29,
+  "nativeSectionButtons": true,
+  "nativeParkButtons": true,
+  "cspAllowsApi": true,
+  "cspAllowsImages": true,
+  "keyVisible": false,
+  "horizontalOverflow": false,
+  "galleryPickerOptions": 2,
+  "endpointCount": 29,
+  "allHeaderAuth": true,
+  "queryLeak": false,
+  "galleryScoped": true,
+  "consoleIssues": []
+}

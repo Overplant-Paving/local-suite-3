@@ -88,7 +88,6 @@ Local Suite 3/
 ├── relay/
 │   ├── worker.js             # Cloudflare Worker template (opt-in)
 │   └── README.md
-├── games/                    # meteor-patrol, de-nested, in the manifest
 ├── dist/                     # BUILT: self-contained double-clickable files (committed)
 └── tests/                    # smoke suite + gate fixtures + per-tool evidence (required to ship)
 ```

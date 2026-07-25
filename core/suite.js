@@ -1,8 +1,5 @@
-/* Local Suite v2 — core/suite.js
-   One IIFE, one global. Small, boring, dependency-free. Spec: ARCHITECTURE.md §3.
-
-   Not here yet (no dead API surface ships):
-   - Protocol-gated service-worker registration lands in Phase 3 (PWA.md). */
+/* Local Suite v3 — core/suite.js
+   One IIFE, one global. Small, boring, dependency-free. Spec: ARCHITECTURE.md §3. */
 (() => {
 "use strict";
 

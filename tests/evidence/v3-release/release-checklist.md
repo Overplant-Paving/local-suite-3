@@ -22,6 +22,7 @@ multiple saved locations, Flight Tracker, and the National Parks Explorer.
 - [x] Clean deterministic build (`build.txt`).
 - [x] `python3 build.py --check` — all fatal and negative gates green (`build-check.txt`).
 - [x] Playwright smoke — 74/74 HTML pages green (`smoke.txt`).
+- [x] Focused v3 contracts — multiple locations, cross-tab location updates, Flight Tracker, and all 29 Parks resources green (`focused-v3-tests.txt`).
 - [x] PWA install/offline verification green (`pwa-install-offline.txt`).
 - [x] PWA update verification green with old v2/v3 cache cleanup (`pwa-update.txt`).
 - [x] Headed Chromium emits `beforeinstallprompt`, reports zero installability/manifest errors, loads same-origin icons under CSP, and is service-worker controlled (`headed-installability.txt`, `headed-installability.png`).
@@ -37,6 +38,10 @@ remote image hosts but not same-origin images. Chromium consequently reported
 `no-acceptable-icon` and did not emit `beforeinstallprompt`. The release changes generated
 `img-src` to include `'self'`, adds installability errors to the automated PWA gate, and moves the
 service-worker cache namespace to `suite-v3-*` while deleting stale `suite-vN-*` caches.
+
+An independent release review also caught a stale hardcoded 72-tool assertion in the named-location
+contract after Flight Tracker raised the manifest to 73 tools. The test now derives its expected
+link count from `manifest/tools.json`; all focused v3 contracts were rerun and archived.
 
 ## Historical note
 

@@ -1,6 +1,6 @@
 # V3 Flight Tracker — provider and verification record
 
-Branch: `v3/multiple-locations` (uncommitted v3 worktree)
+Originally verified on branch `v3/multiple-locations`; released in `v3.0.0`.
 
 ## Provider due diligence
 

@@ -1,9 +1,9 @@
-sw ready; caches: ["suite-v3-21b1517d37a3"] (expected suite-v3-21b1517d37a3)
-rebuilt: suite-v3-21b1517d37a3 -> suite-v3-4e68896a7ac4
-  t+0ms {"keys":["suite-v3-21b1517d37a3","suite-v3-4e68896a7ac4"],"installing":"installing","active":"activated"}
-  t+500ms {"keys":["suite-v3-21b1517d37a3","suite-v3-4e68896a7ac4"],"active":"activating"}
-  t+1000ms {"keys":["suite-v3-21b1517d37a3","suite-v3-4e68896a7ac4"],"active":"activating"}
-  t+1500ms {"keys":["suite-v3-4e68896a7ac4"],"active":"activated"}
-cache-side check: canary in suite-v3-4e68896a7ac4 convert.html = true
-update path: canary served=true, caches after reload=["suite-v3-4e68896a7ac4"]
+sw ready; caches: ["suite-v3-79d989b3f4ff"] (expected suite-v3-79d989b3f4ff)
+rebuilt: suite-v3-79d989b3f4ff -> suite-v3-3ad5242f14f7
+  t+0ms {"keys":["suite-v3-79d989b3f4ff","suite-v3-3ad5242f14f7"],"installing":"installing","active":"activated"}
+  t+500ms {"keys":["suite-v3-79d989b3f4ff","suite-v3-3ad5242f14f7"],"active":"activating"}
+  t+1000ms {"keys":["suite-v3-79d989b3f4ff","suite-v3-3ad5242f14f7"],"active":"activating"}
+  t+1500ms {"keys":["suite-v3-3ad5242f14f7"],"active":"activated"}
+cache-side check: canary in suite-v3-3ad5242f14f7 convert.html = true
+update path: canary served=true, caches after reload=["suite-v3-3ad5242f14f7"]
 UPDATE PATH OK

@@ -1,4 +1,4 @@
-sw ready; caches: ["suite-v3-21b1517d37a3"] (expected suite-v3-21b1517d37a3)
+sw ready; caches: ["suite-v3-79d989b3f4ff"] (expected suite-v3-79d989b3f4ff)
 precache entries: 78 (expected 78)
 app manifest url: http://127.0.0.1:8031/manifest.webmanifest; parse errors: []
 installability errors: []
@@ -12,5 +12,5 @@ offline shell ok: quakes.html — "Earthquake Monitor · Local Suite"
 offline shell ok: apod.html — "Astronomy Picture of the Day · Local Suite"
 offline shell ok: jobs.html — "Jobs & Unemployment Snapshot · Local Suite"
 offline shell ok: airport.html — "Airport & Flight-Weather Board · Local Suite"
-offline function: password.html generated "e&EwiSz=3[{dtRG!$Etj…" (len shown truncated)
+offline function: password.html generated "ifjWHeHb9Eos;_{[pd6&…" (len shown truncated)
 INSTALL/OFFLINE VERIFICATION OK
