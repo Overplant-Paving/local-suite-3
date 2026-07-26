@@ -1,24 +1,12 @@
 {
-  "v1": {
-    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
-    "suite.tides.station": "{\"id\":\"9410840\",\"n\":\"Santa Monica\",\"s\":\"CA\",\"lat\":34.0083,\"lon\":-118.5}",
-    "suite.theme": "dark",
-    "suite.cache.tides.9410840": "{\"t\":1784182309245,\"v\":{\"station\":{\"id\":\"9410840\",\"n\":\"Santa Monica\",\"s\":\"CA\",\"lat\":34.0083,\"lon\":-118.5},\"when\":1784182309245,\"hilo\":[{\"t\":\"2026-07-1…(20469 chars)"
-  },
+  "note": "new-in-v2 tool — no v1 original; parity N/A",
   "v2": {
-    "suite.cache.tides.9410840.curve": "{\"t\":1784095907430,\"v\":{\"predictions\":[{\"t\":\"2026-07-15 00:00\",\"v\":\"5.402\"},{\"t\":\"2026-07-15 00:06\",\"v\":\"5.245\"},{\"t\":\"2026-07-15 00:12\",\"v\":\"5.084\"},…(8932 chars)",
-    "suite.cache.tides.9410840.temp": "{\"t\":1784095907430,\"v\":{\"metadata\":{\"id\":\"9410840\",\"name\":\"Santa Monica\",\"lat\":\"34.0083\",\"lon\":\"-118.5\"},\"data\":[{\"t\":\"2026-07-15 00:00\",\"v\":\"71.2\",\"f…(11199 chars)",
+    "suite.cache.tides.9410840.curve": "{\"t\":1784883092157,\"v\":{\"predictions\":[{\"t\":\"2026-07-25 00:00\",\"v\":\"1.362\"},{\"t\":\"2026-07-25 00:06\",\"v\":\"1.27\"},{\"t\":\"2026-07-25 00:12\",\"v\":\"1.179\"},{…(8880 chars)",
+    "suite.cache.tides.9410840.temp": "{\"t\":1784883092156,\"v\":{\"metadata\":{\"id\":\"9410840\",\"name\":\"Santa Monica\",\"lat\":\"34.0083\",\"lon\":\"-118.5\"},\"data\":[{\"t\":\"2026-07-25 00:00\",\"v\":\"73.8\",\"f…(931 chars)",
     "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
-    "suite.cache.tides.9410840.hilo": "{\"t\":1784095907430,\"v\":{\"predictions\":[{\"t\":\"2026-07-16 05:46\",\"v\":\"-1.232\",\"type\":\"L\"},{\"t\":\"2026-07-16 12:15\",\"v\":\"4.495\",\"type\":\"H\"},{\"t\":\"2026-07-…(379 chars)",
     "suite.tides.station": "{\"id\":\"9410840\",\"n\":\"Santa Monica\",\"s\":\"CA\",\"lat\":34.0083,\"lon\":-118.5}",
+    "suite.location.autoDenied": "denied",
+    "suite.cache.tides.9410840.hilo": "{\"t\":1784883092157,\"v\":{\"predictions\":[{\"t\":\"2026-07-25 02:30\",\"v\":\"0.094\",\"type\":\"L\"},{\"t\":\"2026-07-25 09:25\",\"v\":\"3.517\",\"type\":\"H\"},{\"t\":\"2026-07-2…(426 chars)",
     "suite.theme": "dark"
-  },
-  "keysOnlyInV1": [
-    "suite.cache.tides.9410840"
-  ],
-  "keysOnlyInV2": [
-    "suite.cache.tides.9410840.curve",
-    "suite.cache.tides.9410840.temp",
-    "suite.cache.tides.9410840.hilo"
-  ]
+  }
 }

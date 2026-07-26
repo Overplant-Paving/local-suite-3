@@ -187,9 +187,44 @@ New in v2:
 | `suite.meta.schemaVersion` | int; `Suite.store.migrate()` runs any migrations above the stored version, then bumps it. Baseline v2 = v1 layout, so the migration list **starts empty** |
 | `suite.relay.url` | opt-in relay endpoint (API-AND-RELAY.md) |
 | `suite.backup.lastExport` | settings.html nags gently when stale |
+| `suite.location.auto` | `"off"` disables automatic first-location detection; absent = on (§6.1) |
+| `suite.location.autoDenied` | `"denied"` — the browser refused once, so never ask again |
 
 Caveat (also in PWA.md): `file://` and `http://localhost` are **different origins** with separate
 localStorage. The sanctioned bridge is settings.html export/import.
+
+### 6.1 Automatic first location
+
+The suite has always shared **one** location — every tool writes through `Suite.location.set()`,
+which mirrors to `suite.location`. What it never did was acquire the *first* one, so each tool
+cold-started into a "type a ZIP" card even though 19 of them already had a `navigator.geolocation`
+button.
+
+`Suite.location` therefore gains `autoEnabled()` / `setAuto()` / `autoDenied()` / `autoPossible()` /
+`auto()` / `autoBoot()`. Design constraints worth keeping:
+
+- **Geolocation, never an IP lookup.** The device answers, so there is *no network request*: it works
+  under every tool's generated CSP (the hub's is `connect-src 'none'`) and from `file://`, needs no
+  manifest or CATALOG entry, and hands no third party the user's IP.
+- **`auto()` resolves truthy only after re-reading `loc.get()`.** A write that did not stick — quota,
+  private mode, denied storage — must report failure, or `autoBoot()` would reload forever into the
+  same empty page.
+- **A refusal is terminal — but only a refusal someone made.** `PERMISSION_DENIED` sets
+  `suite.location.autoDenied` and nothing asks again; re-ticking the Settings toggle is the
+  documented way back, because the browser itself stops prompting and the user is otherwise stuck
+  with no explanation. Crucially, automation, headless runs and enterprise policy report *the same*
+  `code 1` while `navigator.permissions.query({name:"geolocation"})` still reads `"prompt"` — nobody
+  was ever asked. Verified against a real `file://` page: Chromium reports
+  `isSecureContext: true` and exposes `navigator.geolocation`, then denies without prompting under
+  automation. So the flag is written only when the permission state is not `"prompt"`; when the
+  Permissions API cannot answer at all (older Safari rejects for geolocation), the denial is
+  persisted, since re-prompting every load is the worse failure.
+- **`autoBoot()` reloads rather than re-renders**, because tools read the location in a dozen shapes
+  and several cache it at parse time — the same move they already make on the cross-tab `storage`
+  event. It is cancelled by any `input`/`change` event: tools like geo, elevation and recalls are
+  usable without a location, and a reload must never discard something the user typed.
+- **The hub detects at the front door**, so entering through `index.html` (the PWA `start_url`)
+  means the tools find a location already set and no reload happens at all.
 
 ## 7. New tool: `settings.html`
 
@@ -198,7 +233,9 @@ One first-class tool closing three v1 gaps:
 1. **Suite-wide backup/restore** — export every `suite.*` key to timestamped JSON; import with
    merge. Fixes the focus.html silent-data-loss class of bug generically (per-tool exports in
    notes/flashcards stay, for interop formats).
-2. **API key manager** — UI over `suite.key.*` with signup links from the manifest.
+2. **API key manager** — UI over `suite.key.*` with signup links from the manifest, plus guided
+   setup: provider-ordered steps, a local `suite.profile.*` used only to fill signup forms, paste
+   routing, and a live per-key check. See API-AND-RELAY.md §3.
 3. **Relay config** — set `suite.relay.url` + a connection test button.
 
 Plus: theme, named-location manager with one active suite-wide location, storage usage viewer,

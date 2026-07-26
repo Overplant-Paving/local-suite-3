@@ -1,27 +1,27 @@
 first-run food panel: "Choose your state above to see food recalls affecting it."
 first-run vehicle panel: "No vehicles yet. Add one above and its open recalls will appear here."
 CPSC (live, boot): prodN = "40 recent"
-CPSC first card: "THE RECALLED RANGES' FRONT-MOUNTED KNOBS… Jul 9, 2026 Best Buy Recalls Insignia® Gas Ranges Due to Risk of Serious Injury from a Fire Hazard Insignia Front Control Gas Ranges This recall involves Insignia gas ranges with"
-CPSC cache envelope: 40 recalls cached at 2026-07-16T06:23:19.531Z
-CPSC sample recall: {"title":"Best Buy Recalls Insignia® Gas Ranges Due to Risk of Serious Injury from a Fire Hazard","date":"2026-07-09T00:00:00","hazard":"The recalled ranges' front-mounted knobs can be activated accidentally by humans or pets, posing a risk of serious injury from a fire hazard.","url":"https://www.cpsc.gov/Recalls/2026/Best-Buy-Recalls-Insignia-Gas-Ranges-Due-to-Risk-of-Serious-Injury-from-a-Fire-Hazard"}
+CPSC first card: "THE RECALLED DRESSERS ARE UNSTABLE IF TH… Jul 23, 2026 12-Drawer Fabric Dressers Recalled Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violate Mandatory Standard for Clothing Storage Units"
+CPSC cache envelope: 40 recalls cached at 2026-07-25T08:51:05.629Z
+CPSC sample recall: {"title":"12-Drawer Fabric Dressers Recalled Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violate Mandatory Standard for Clothing Storage Units; Sold on Amazon by Romorgniz","date":"2026-07-23T00:00:00","hazard":"The recalled dressers are unstable if they are not anchored to the wall, posing tip-over and entrapment hazards that can result in risks of serious injuries or death to children. The dressers violate the mandatory safety standards as required by the STURDY Act.","url":"https://www.cpsc.gov/Recalls/2026/12-Drawer-Fabric-Dressers-Recalled-Due-to-Risk-of-Serious-Injury-or-Death-from-Tip-Over-and-Entrapment-Hazards-Violate-Mandatory-Standard-for-Clothing-Storage-Units-Sold-on-Amazon-by-Romorgniz"}
 state derived from suite.location: stateSel = "CA" (expect CA)
 FDA (live): foodN = "30"
-FDA first card: "CLASS I Jun 15, 2026 · Ongoing FIRST STREET Dark Chocolate Raisins Net Wt. 9 oz. (255g) UPC 797565011830 INGREDIENTS: DARK CHOCOLATE (SUGAR, CHOCOLATE LIQUOR, COCOA BUTTER, MILK FAT, SOY LEC… Western Mixers Produce & Nuts, Inc. Reason: Undeclared peanuts."
-FDA cache envelope: 30 results cached at 2026-07-16T06:23:20.389Z
-FDA sample recall: {"classification":"Class I","firm":"Western Mixers Produce & Nuts, Inc.","product":"FIRST STREET Dark Chocolate Raisins Net Wt. 9 oz. (255g) UPC 797565011830  INGREDIENTS: DARK CHOCOLA","initiated":"20260615","status":"Ongoing"}
+FDA first card: "CLASS II Jun 24, 2026 · Ongoing Bakr Brown Butter Chocolate Chunk Ready to Bake Cookie Dough, 8-oz pouch 12 cookies per pouch, UPC 8 50073 08700 8, 8 pouches per case Bear Stewart Co Reason: undeclared soy"
+FDA cache envelope: 30 results cached at 2026-07-25T08:51:06.458Z
+FDA sample recall: {"classification":"Class II","firm":"Bear Stewart Co","product":"Bakr Brown Butter Chocolate Chunk Ready to Bake Cookie Dough, 8-oz pouch 12 cookies per pouch, UPC 8","initiated":"20260624","status":"Ongoing"}
 suite.state after manual pick: CA
 add clicked with empty fields: suite.cars = null (expect null), panel = "No vehicles yet. Add one above and its open recalls will appear here."
 vehicle added: vehN = "1 vehicle", header = "2020 Honda Odyssey"
 NHTSA (live): carcount-0 = "14 recalls"
 NHTSA first card: "BACK OVER PREVENTION: SENSING SYSTEM: CA… 20V438000 · Jul 28, 2020 American Honda Motor Co. (Honda) is recalling certain 2019-2020 Odyssey vehicles. Water may get into the rearview camera mounting holes and enter the camera lens and cause a distorted image, or"
-NHTSA cache envelope: 14 recalls cached at 2026-07-16T06:23:20.555Z
+NHTSA cache envelope: 14 recalls cached at 2026-07-25T08:51:06.942Z
 NHTSA sample recall: {"campaign":"20V438000","component":"BACK OVER PREVENTION: SENSING SYSTEM: CAMERA","received":"28/07/2020","summary":"American Honda Motor Co. (Honda) is recalling certain 2019-2020 Odyssey vehicles.  Water may get int"}
 suite.cars = [{"make":"Honda","model":"Odyssey","year":"2020"}]
 after remove: vehicle panel = "No vehicles yet. Add one above and its open recalls will appear here.", suite.cars = []
 re-added via Enter key (cache hit, no refetch): carcount-0 = "14 recalls"
-offline stale — food: foodN = "30 · data from Jul 15, 2026", rows = 30
-offline stale — vehicle: carcount-0 = "14 recalls · data from Jul 15, 2026", rows = 14
-offline stale — CPSC: prodN = "40 recent · data from Jul 15, 2026", rows = 40
+offline stale — food: foodN = "30 · data from Jul 24, 2026", rows = 30
+offline stale — vehicle: carcount-0 = "14 recalls · data from Jul 24, 2026", rows = 14
+offline stale — CPSC: prodN = "40 recent · data from Jul 24, 2026", rows = 40
 FDA-only outage — food panel: "Couldn't reach openFDA (Failed to fetch). Try again later."
 FDA-only outage — vehicle panel still renders: carcount-0 = "14 recalls", rows = 14
 FDA-only outage — CPSC panel still renders: prodN = "40 recent", rows = 40

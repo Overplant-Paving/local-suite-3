@@ -1,29 +1,29 @@
 firstrun visible on fresh open: true
 location label after ZIP 92101: San Diego, CA 92101
 suite.location = {"lat":32.7185,"lon":-117.1593,"label":"San Diego, CA 92101"}
-sun date label: JULY 16, 2026
-sun row: Sunrise 7:53 AM
-sun row: Solar noon 2:55 PM
-sun row: Sunset 9:58 PM
-sun row: Day length 14h 05m
-twilight row: Astronomical dawn 6:15 AM
-twilight row: Nautical dawn 6:51 AM
-twilight row: Civil dawn 7:25 AM
-twilight row: Morning golden hour 7:53 AM – 8:28 AM
-twilight row: Evening golden hour 9:22 PM – 9:58 PM
-twilight row: Civil dusk 10:26 PM
-twilight row: Nautical dusk 11:00 PM
-twilight row: Astronomical dusk 11:36 PM
-sun arc svg: 1011 chars, 2 circles, 5 text labels
-moon: Waxing Crescent · 10% illuminated · 3.0-day age
+sun date label: JULY 25, 2026
+sun row: Sunrise 7:59 AM
+sun row: Solar noon 2:56 PM
+sun row: Sunset 9:53 PM
+sun row: Day length 13h 55m
+twilight row: Astronomical dawn 6:23 AM
+twilight row: Nautical dawn 6:58 AM
+twilight row: Civil dawn 7:31 AM
+twilight row: Morning golden hour 7:59 AM – 8:34 AM
+twilight row: Evening golden hour 9:18 PM – 9:53 PM
+twilight row: Civil dusk 10:20 PM
+twilight row: Nautical dusk 10:54 PM
+twilight row: Astronomical dusk 11:29 PM
+sun arc svg: 1020 chars, 2 circles, 5 text labels
+moon: Waxing Gibbous · 89% illuminated · 11.5-day age
 moon row: Trend Waxing (growing)
-moon row: Next full moon Wed, Jul 29 · 13 days
-moon row: Next new moon Wed, Aug 12 · 27 days
-moon canvas: 1480 bright (lit) pixels painted
-season: 68 days Autumn Equinox Tue, Sep 22, 2026 · 7:06 PM
-season: 158 days Winter Solstice Mon, Dec 21, 2026 · 2:51 PM
-season: 247 days Spring Equinox Sat, Mar 20, 2027 · 3:26 PM
-season: 340 days Summer Solstice Mon, Jun 21, 2027 · 9:11 AM
+moon row: Next full moon Wed, Jul 29 · 4 days
+moon row: Next new moon Wed, Aug 12 · 18 days
+moon canvas: 13972 bright (lit) pixels painted
+season: 59 days Autumn Equinox Tue, Sep 22, 2026 · 7:06 PM
+season: 149 days Winter Solstice Mon, Dec 21, 2026 · 2:51 PM
+season: 238 days Spring Equinox Sat, Mar 20, 2027 · 3:26 PM
+season: 331 days Summer Solstice Mon, Jun 21, 2027 · 9:11 AM
 season countdown cards rendered: 4
 after date -> 2026-12-21: label "DECEMBER 21, 2026"
 sun row (Dec 21): Sunrise 8:48 AM
@@ -31,7 +31,7 @@ sun row (Dec 21): Solar noon 1:48 PM
 sun row (Dec 21): Sunset 6:47 PM
 sun row (Dec 21): Day length 10h 00m
 moon (Dec 21): Waxing Gibbous · 95%
-after "today": label "JULY 16, 2026", date input = 2026-07-16
+after "today": label "JULY 25, 2026", date input = 2026-07-25
 after "change": firstrun visible = true
 re-set location, app visible again: true
 Enter in ZIP field submitted and restored the app view

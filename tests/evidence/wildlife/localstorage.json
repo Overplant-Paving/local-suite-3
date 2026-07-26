@@ -1,16 +1,10 @@
 {
-  "v1": {
-    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
-    "suite.cache.wildlife.34.05,-118.24.rg": "{\"t\":1784182937712,\"v\":[{\"quality_grade\":\"research\",\"time_observed_at\":\"2026-07-15T21:24:42-07:00\",\"taxon_geoprivacy\":null,\"annotations\":[],\"uuid\":\"9b…(1927004 chars)",
-    "suite.cache.wildlife.34.05,-118.24.all": "{\"t\":1784182938415,\"v\":[{\"quality_grade\":\"needs_id\",\"time_observed_at\":\"2026-07-15T22:38:23-07:00\",\"taxon_geoprivacy\":\"open\",\"annotations\":[],\"uuid\":\"…(1158033 chars)",
-    "suite.theme": "dark"
-  },
+  "note": "new-in-v2 tool — no v1 original; parity N/A",
   "v2": {
     "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
-    "suite.cache.wildlife.34.05,-118.24.rg": "{\"t\":1784096536018,\"v\":{\"total_results\":865348,\"page\":1,\"per_page\":36,\"results\":[{\"quality_grade\":\"research\",\"time_observed_at\":\"2026-07-15T21:24:42-0…(1927062 chars)",
-    "suite.cache.wildlife.34.05,-118.24.all": "{\"t\":1784096536040,\"v\":{\"total_results\":1329299,\"page\":1,\"per_page\":36,\"results\":[{\"quality_grade\":\"needs_id\",\"time_observed_at\":\"2026-07-15T22:38:23-…(1158092 chars)",
-    "suite.theme": "dark"
-  },
-  "keysOnlyInV1": [],
-  "keysOnlyInV2": []
+    "suite.cache.wildlife.34.05,-118.24.rg": "{\"t\":1784883109372,\"v\":{\"total_results\":867343,\"page\":1,\"per_page\":36,\"results\":[{\"quality_grade\":\"research\",\"time_observed_at\":\"2026-07-24T22:38:28-0…(2134991 chars)",
+    "suite.cache.wildlife.34.05,-118.24.all": "{\"t\":1784883109389,\"v\":{\"total_results\":1331943,\"page\":1,\"per_page\":36,\"results\":[{\"quality_grade\":\"needs_id\",\"time_observed_at\":\"2026-07-25T01:39:41-…(886635 chars)",
+    "suite.theme": "dark",
+    "suite.location.autoDenied": "denied"
+  }
 }

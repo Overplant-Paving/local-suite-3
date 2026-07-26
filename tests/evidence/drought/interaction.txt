@@ -1,13 +1,13 @@
 first-run card (no suite.location): "Set your location"
 LIVE zippopotam: ZIP 90012 -> suite.location {lat:34.0614, lon:-118.2385, label:"Los Angeles, CA"}; locbar shows "Los Angeles, CA"
-LIVE response (suite.cache.drought.c_34.052_-118.244): curDm=-1, latestPeriod=20260707, county={"name":"Los Angeles County","state":"CA","fips":"06037"}, trend weeks=52, first={"period":"20250715","dm":2}, last={"period":"20260707","dm":-1}, dm histogram={"0":1,"1":4,"2":14,"-1":33}
-LIVE drought category (Los Angeles): hero="No Drought", county line="Los Angeles County, CA", validity="Week of July 7, 2026", hero background=rgb(233, 236, 236)
+LIVE response (suite.cache.drought.c_34.061_-118.239): curDm=-1, latestPeriod=20260721, county={"name":"Los Angeles County","state":"CA","fips":"06037"}, trend weeks=52, first={"period":"20250729","dm":2}, last={"period":"20260721","dm":-1}, dm histogram={"0":1,"1":4,"2":12,"-1":35}
+LIVE drought category (Los Angeles): hero="No Drought", county line="Los Angeles County, CA", validity="Week of July 21, 2026", hero background=rgb(233, 236, 236)
 USDM category check: raw dm=-1 -> expected "No Drought" #e9ecec (rgb(233, 236, 236)); rendered "No Drought" bg rgb(233, 236, 236) -> MATCH
 FCC county check: cache county="Los Angeles County, CA" (FIPS 06037); hero county line "Los Angeles County, CA" -> MATCH (rendered from FCC)
-trend chart: 52 bars for 52 weeks -> MATCH; last bar fill=#e9ecec expected #e9ecec -> MATCH; last tooltip "Jul 7, 2026 — No drought"
-legend: None D0 D1 D2 D3 D4; stamp: "Data from 1:15 AM · USDM updates weekly (Thursdays)"
+trend chart: 52 bars for 52 weeks -> MATCH; last bar fill=#e9ecec expected #e9ecec -> MATCH; last tooltip "Jul 21, 2026 — No drought"
+legend: None D0 D1 D2 D3 D4; stamp: "Data from 3:49 AM · USDM updates weekly (Thursdays)"
 change-location button -> setup card again: "Set your location"
-STALE PATH (network blocked, cache aged 24h): hero still renders "No Drought" from cache; stamp [stamp err]: "Data from 1:15 AM · USDM updates weekly (Thursdays) · connection issue: Failed to fetch"
+STALE PATH (network blocked, cache aged 24h): hero still renders "No Drought" from cache; stamp [stamp err]: "Data from 3:49 AM · USDM updates weekly (Thursdays) · connection issue: Failed to fetch"
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
   console.error: Failed to load resource: net::ERR_FAILED

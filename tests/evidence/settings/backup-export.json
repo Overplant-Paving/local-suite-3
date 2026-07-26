@@ -1,6 +1,6 @@
 {
   "format": "local-suite.backup.v2",
-  "exported": "2026-07-16T20:00:46.043Z",
+  "exported": "2026-07-25T08:51:55.586Z",
   "keys": 10,
   "data": {
     "suite.cache.demo.one": "{\"t\":1752000000000,\"v\":{\"rows\":[1,2,3],\"note\":\"cache envelope\"}}",

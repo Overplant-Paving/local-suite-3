@@ -1,16 +1,10 @@
 {
-  "v1": {
-    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
-    "suite.cache.nearby.library.34.0522_-118.2437_1600": "{\"t\":1784182433815,\"v\":[{\"id\":\"node/11\",\"name\":\"Canned Test Pharmacy\",\"lat\":34.0555,\"lon\":-118.241,\"dist\":443.305124080422,\"addr\":\"200 S Main St\",\"ext…(282 chars)",
-    "suite.cache.nearby.pharmacy.34.0522_-118.2437_1600": "{\"t\":1784182433740,\"v\":[{\"id\":\"node/11\",\"name\":\"Canned Test Pharmacy\",\"lat\":34.0555,\"lon\":-118.241,\"dist\":443.305124080422,\"addr\":\"200 S Main St\",\"ext…(282 chars)",
-    "suite.theme": "dark"
-  },
+  "note": "new-in-v2 tool — no v1 original; parity N/A",
   "v2": {
-    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
-    "suite.cache.nearby.library.34.0522_-118.2437_1600": "{\"t\":1784096032885,\"v\":{\"version\":0.6,\"generator\":\"canned-kumi-mirror\",\"elements\":[{\"type\":\"node\",\"id\":1,\"lat\":34.054,\"lon\":-118.25,\"tags\":{\"name\":\"<b…(361 chars)",
     "suite.theme": "dark",
-    "suite.cache.nearby.pharmacy.34.0522_-118.2437_1600": "{\"t\":1784096032885,\"v\":{\"version\":0.6,\"generator\":\"canned-pharmacy\",\"elements\":[{\"type\":\"node\",\"id\":11,\"lat\":34.0555,\"lon\":-118.241,\"tags\":{\"name\":\"Ca…(328 chars)"
-  },
-  "keysOnlyInV1": [],
-  "keysOnlyInV2": []
+    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
+    "suite.cache.nearby.library.34.0522_-118.2437_1600": "{\"t\":1784883018611,\"v\":{\"version\":0.6,\"generator\":\"canned-kumi-mirror\",\"elements\":[{\"type\":\"node\",\"id\":1,\"lat\":34.054,\"lon\":-118.25,\"tags\":{\"name\":\"<b…(361 chars)",
+    "suite.cache.nearby.pharmacy.34.0522_-118.2437_1600": "{\"t\":1784883018611,\"v\":{\"version\":0.6,\"generator\":\"canned-pharmacy\",\"elements\":[{\"type\":\"node\",\"id\":11,\"lat\":34.0555,\"lon\":-118.241,\"tags\":{\"name\":\"Ca…(328 chars)",
+    "suite.location.autoDenied": "denied"
+  }
 }

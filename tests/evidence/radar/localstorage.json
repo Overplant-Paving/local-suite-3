@@ -1,18 +1,11 @@
 {
-  "v1": {
-    "suite.radar.product": "13",
-    "suite.radar.sector": "psw",
-    "suite.radar.station": "KOKX",
-    "suite.location": "{\"lat\":34.0614,\"lon\":-118.2385,\"label\":\"Los Angeles, CA 90012\"}",
-    "suite.theme": "dark"
-  },
+  "note": "new-in-v2 tool — no v1 original; parity N/A",
   "v2": {
     "suite.radar.product": "13",
     "suite.radar.sector": "psw",
-    "suite.radar.station": "KOKX",
     "suite.location": "{\"lat\":34.0614,\"lon\":-118.2385,\"label\":\"Los Angeles, CA 90012\"}",
-    "suite.theme": "dark"
-  },
-  "keysOnlyInV1": [],
-  "keysOnlyInV2": []
+    "suite.radar.station": "KOKX",
+    "suite.theme": "dark",
+    "suite.location.autoDenied": "denied"
+  }
 }

@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-+IzSgjmTpVkn/7iKZzHanAA640f5SOTN+htMqmBW7A0=' 'sha256-dOxjYLYETVhM1ZErfF8PqyQ3oG6X/eAQHMNilF4BT2Y='; style-src 'unsafe-inline'; img-src 'self' data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-//3u9UqhTrL2EMZ/TV460clarzwH88eQnv7QrSzebl4=' 'sha256-vh4d9HXLYW3RsFHvTK/fPGNiTemMLuRMweE6RbfCkkU='; style-src 'unsafe-inline'; img-src 'self' data: https://api.nasa.gov https://api.congress.gov https://api.nal.usda.gov https://api.eia.gov https://developer.nps.gov https://finnhub.io https://api.ebird.org https://api.bart.gov https://api.aviationstack.com; media-src https://api.nasa.gov https://api.congress.gov https://api.nal.usda.gov https://api.eia.gov https://developer.nps.gov https://finnhub.io https://api.ebird.org https://api.bart.gov https://api.aviationstack.com; connect-src https://api.nasa.gov https://api.congress.gov https://api.nal.usda.gov https://api.eia.gov https://developer.nps.gov https://finnhub.io https://api.ebird.org https://api.bart.gov https://api.aviationstack.com; worker-src 'self'; manifest-src 'self'">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Suite Settings · Local Suite</title>
 <style>
@@ -132,6 +132,7 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .btn.icon { padding:.45rem .6rem; font-weight:400; background:transparent; border:1px solid var(--line); color:var(--ink); border-radius:8px; }
   .btn:hover { filter:brightness(1.05); }
   .btn:disabled { opacity:.45; cursor:default; }
+  a.btn { text-decoration:none; display:inline-block; }
   .btn.danger { background:transparent; border:1px solid var(--err); color:var(--err); }
 
   label.fldlab { display:block; font-size:.72rem; color:var(--muted); text-transform:uppercase;
@@ -154,6 +155,26 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .keyrow input { flex:1; min-width:170px; width:auto; }
   .keyrow .kstatus { flex-basis:100%; font-size:.8rem; color:var(--muted); }
   .keyrow .kstatus.good { color:var(--ok); }
+  .keyrow .kstatus.err { color:var(--err); }
+
+  /* guided key setup (wizard) + local profile */
+  .wiz { border:1px solid var(--line); border-radius:11px; padding:.85rem .95rem .9rem; margin:.1rem 0 1rem; }
+  .wizhead { display:flex; align-items:center; gap:.7rem; flex-wrap:wrap; }
+  .wizhead h3 { font-size:.98rem; }
+  .wizhead .count { color:var(--muted); font-size:.82rem; }
+  .wizhead .spacer { flex:1; }
+  .steplab { font-size:.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; margin:.75rem 0 .15rem; }
+  .covers { font-size:.85rem; color:var(--muted); margin-bottom:.5rem; }
+  .covers b { color:var(--ink); }
+  .kv { display:flex; gap:.45rem; align-items:center; flex-wrap:wrap; margin:.3rem 0; }
+  .kv .kvlab { flex:0 0 3.6rem; color:var(--muted); font-size:.74rem; text-transform:uppercase; letter-spacing:.05em; }
+  .kv .kvval { font-family:ui-monospace,"Cascadia Code",Menlo,Consolas,monospace; font-size:.82rem;
+    background:var(--chip); border-radius:6px; padding:.2rem .45rem; word-break:break-all; }
+  .kv input { flex:1; min-width:150px; width:auto; }
+  .pastebox { border-top:1px dashed var(--line); margin-top:.7rem; padding-top:.6rem; font-size:.84rem; color:var(--muted); }
+  .pastebox kbd { font-family:ui-monospace,"Cascadia Code",Menlo,Consolas,monospace; font-size:.8em;
+    background:var(--chip); border-radius:5px; padding:.05rem .3rem; }
+  .provlist { display:flex; gap:.4rem; flex-wrap:wrap; margin:.4rem 0 .2rem; }
 
   .statline { font-size:.88rem; margin:.3rem 0 .5rem; }
   .statline .cur { font-family:ui-monospace,"Cascadia Code",Menlo,Consolas,monospace; font-size:.82rem; word-break:break-all; }
@@ -174,6 +195,10 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   .locitem .locname b { display:block; }
   .locitem .locname small { color:var(--muted); }
   .locform { border-top:1px dashed var(--line); padding-top:.7rem; margin-top:.7rem; }
+  .autoloc { border-top:1px dashed var(--line); padding-top:.7rem; margin-top:.8rem; }
+  .autorow { display:flex; gap:.6rem; align-items:flex-start; cursor:pointer; font-size:.9rem; }
+  .autorow input { margin-top:.2rem; flex:0 0 auto; width:auto; accent-color:var(--accent); }
+  .autorow small { color:var(--muted); font-size:.85em; }
   .locrow { display:flex; gap:.55rem; flex-wrap:wrap; }
   .locrow input { flex:1; min-width:90px; width:auto; }
 
@@ -204,8 +229,9 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
   <header>
     <h1>Suite Settings</h1>
     <p class="tag">Backup and restore, API keys, relay, and storage — the suite's controls, all in one
-      place. Every tool keeps its data in this browser's <code>suite.*</code> localStorage; nothing
-      here talks to the network except the relay test you trigger yourself.</p>
+      place. Every tool keeps its data in this browser's <code>suite.*</code> localStorage; the only
+      requests this page makes are the ones you press a button for — testing a key with its provider,
+      or testing the relay you configured.</p>
   </header>
 
   <!-- ============================ backup & restore ============================ -->
@@ -244,8 +270,51 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
       <code>suite.key.&lt;name&gt;</code> on this machine only. Tools with a published demo tier work
       without a key at shared low limits. Keys are masked here — and remember they ride along in
       backups.</p>
+
+    <!-- guided setup: shortens the signup round-trip, never performs it -->
+    <div class="wiz" id="wizCard">
+      <div class="wizhead">
+        <h3>Guided setup</h3>
+        <span class="count" id="wizCount"></span>
+        <span class="spacer"></span>
+        <button class="btn" id="wizStartBtn">Start</button>
+        <button class="btn ghost" id="wizCloseBtn" hidden>Close</button>
+      </div>
+      <p class="note" id="wizIntro">Walks the providers you're still missing, one at a time, and puts
+        the details each signup form asks for one click from your clipboard. Every provider requires
+        a captcha and its own terms, so the suite can never create an account for you — it opens the
+        form, then takes the key you're given and checks it against the live API.</p>
+
+      <div id="wizBody" hidden>
+        <div class="steplab" id="wizStepLab"></div>
+        <div class="covers" id="wizCovers"></div>
+
+        <div id="wizProfile"></div>
+
+        <div class="row">
+          <a class="btn" id="wizOpenBtn" href="#" target="_blank" rel="noopener noreferrer">Open signup ↗</a>
+          <button class="btn ghost" id="wizSkipBtn">Skip</button>
+          <button class="btn ghost" id="wizNextBtn">Next ▸</button>
+        </div>
+
+        <label class="fldlab" for="wizKeyInput">Paste the key you were given</label>
+        <div class="row">
+          <input type="text" id="wizKeyInput" autocomplete="off" spellcheck="false" placeholder="paste key">
+          <button class="btn" id="wizSaveBtn">Save &amp; check</button>
+        </div>
+        <div class="msg" id="wizMsg"></div>
+      </div>
+
+      <div class="pastebox" id="pasteBox">Or just paste — press <kbd>Ctrl/Cmd-V</kbd> anywhere on this
+        page with a key, or the whole signup email, and the suite works out which provider it belongs
+        to and offers to file it.</div>
+    </div>
+
     <div id="keyRows"></div>
     <div class="msg" id="keysMsg"></div>
+    <p class="note" id="profileNote">Your name and email are stored locally as
+      <code>suite.profile.*</code> purely to save retyping them into signup forms. They're never
+      sent anywhere by this page — but like everything else here they're included in a backup.</p>
   </div>
 
   <!-- ============================ relay ============================ -->
@@ -305,6 +374,18 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
           </div>
         </div>
         <div class="msg" id="locMsg"></div>
+
+        <div class="autoloc">
+          <label class="autorow">
+            <input type="checkbox" id="autoLocChk">
+            <span><b>Detect my location automatically</b> (<code>suite.location.auto</code>)<br>
+              <small>When a tool opens with no location yet, ask the browser for one and share it
+                with the whole suite — no typing, and no network request: the coordinates come from
+                the device, not from a lookup service. Off means every tool waits for you to enter
+                a place by hand.</small></span>
+          </label>
+          <div class="msg" id="autoLocMsg"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -333,8 +414,9 @@ textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
     <div class="empty" id="storageEmpty" hidden>No suite.* keys yet — use a few tools and check back.</div>
   </div>
 
-  <footer>No network of its own — the relay test contacts only the URL you configure. Everything
-    lives in this browser's localStorage.</footer>
+  <footer>Requests only on request: the relay test contacts the URL you configure, and a key test
+    contacts that one provider. Nothing is sent anywhere else, and everything the page keeps —
+    keys, profile, preferences — lives in this browser's localStorage.</footer>
 </div>
 
 <script>
@@ -629,6 +711,113 @@ const loc = {
   }
 };
 
+/* ---- first-run location, acquired once and shared ----
+   The suite has always shared one location; what it never did was acquire the
+   first one for you, so every tool cold-started into a "type a ZIP" card. This
+   asks the browser once — no network request, so it works under every tool's
+   generated CSP and from file:// — and hands the result to loc.set(), which is
+   the same path the manual buttons already use. Off switch: suite.location.auto.
+   A refusal is remembered so the prompt never appears twice. */
+const AUTO_KEY = "suite.location.auto";
+const AUTO_DENIED_KEY = "suite.location.autoDenied";
+const GEO_TIMEOUT_MS = 10000;
+
+Object.assign(loc, {
+  autoEnabled() { return store.get(AUTO_KEY) !== "off"; },   /* absent = on */
+  /* sentinel is non-numeric on purpose: store.get JSON-parses first, so "1"
+     would come back as the number 1 and never match a string compare */
+  autoDenied() { return store.get(AUTO_DENIED_KEY) === "denied"; },
+  setAuto(on) {
+    /* turning it back on is also how you take back a "Block" — otherwise a
+       single misclick would be unrecoverable without the storage viewer */
+    if (on) { store.remove(AUTO_DENIED_KEY); return store.remove(AUTO_KEY); }
+    return store.set(AUTO_KEY, "off");
+  },
+  /* true when asking could actually get somewhere — used to stay silent rather
+     than paint a "finding you…" state that can never resolve */
+  autoPossible() {
+    return !loc.get() && loc.autoEnabled() && !loc.autoDenied() &&
+      typeof navigator !== "undefined" && !!navigator.geolocation;
+  },
+  auto() {
+    const have = loc.get();
+    if (have) return Promise.resolve(have);
+    if (!loc.autoPossible()) return Promise.resolve(null);
+    return new Promise(resolve => {
+      let settled = false;
+      const done = v => { if (!settled) { settled = true; resolve(v); } };
+      try {
+        navigator.geolocation.getCurrentPosition(
+          pos => {
+            const lat = +pos.coords.latitude.toFixed(4);
+            const lon = +pos.coords.longitude.toFixed(4);
+            try {
+              loc.set({ lat, lon, label: "My location (" + lat + ", " + lon + ")" });
+            } catch (e) { return done(null); }
+            /* resolve only on a write that actually stuck: a failed write (storage
+               full, denied, private mode) must not report success, or autoBoot
+               would reload into the same empty page forever */
+            done(loc.get());
+          },
+          err => {
+            if (!err || err.code !== 1) return done(null);   // 1 = PERMISSION_DENIED
+            /* Remember only a refusal someone actually made. Automation, headless
+               runs and enterprise policy all report the same code 1 while the
+               permission state is still "prompt" — persisting that would switch
+               the feature off for good for a user who was never asked. When the
+               Permissions API can't say (older Safari rejects for geolocation),
+               treat it as a real refusal: re-prompting on every load is worse. */
+            let q = null;
+            try {
+              q = navigator.permissions && navigator.permissions.query({ name: "geolocation" });
+            } catch (e) { q = null; }
+            if (!q || typeof q.then !== "function") {
+              store.set(AUTO_DENIED_KEY, "denied");
+              return done(null);
+            }
+            q.then(
+              s => { if (!s || s.state !== "prompt") store.set(AUTO_DENIED_KEY, "denied"); },
+              () => { store.set(AUTO_DENIED_KEY, "denied"); }
+            ).then(() => done(null), () => done(null));
+          },
+          { timeout: GEO_TIMEOUT_MS, maximumAge: 600000 }
+        );
+      } catch (e) { done(null); }
+    });
+  },
+  /* Drop-in for a tool's boot: does nothing at all unless this is a genuine cold
+     start, then reloads once the location lands. Reload rather than re-render
+     because tools read the location in a dozen different shapes — several cache
+     it at parse time — and on a cold start there is nothing on screen to lose:
+     the page is showing its empty "set your location" card. Same move those
+     tools already make on the cross-tab storage event.
+
+     But not every tool blocks on a location — geo, elevation, recalls and the
+     station pickers are usable straight away — so anything the user has typed
+     cancels the reload. The location is saved and shared either way; only the
+     free re-render is given up, and the next visit opens on it. */
+  autoBoot() {
+    if (!loc.autoPossible()) return Promise.resolve(null);
+    let typed = false;
+    const mark = () => { typed = true; };
+    const watch = typeof document !== "undefined" && document.addEventListener;
+    if (watch) {
+      document.addEventListener("input", mark, true);
+      document.addEventListener("change", mark, true);
+    }
+    const unwatch = () => {
+      if (!watch) return;
+      document.removeEventListener("input", mark, true);
+      document.removeEventListener("change", mark, true);
+    };
+    return loc.auto().then(l => {
+      unwatch();
+      if (l && !typed && typeof window !== "undefined") window.location.reload();
+      return l;
+    }, () => { unwatch(); return null; });
+  }
+});
+
 const locations = {
   /* Migration is explicit: only v3 entry points (hub/settings) call init().
      Older tools that merely read suite.location do not gain a surprise key. */
@@ -888,24 +1077,113 @@ document.getElementById("restoreFile").addEventListener("change", e => {
   reader.readAsText(file);
 });
 
-/* ================= key manager (API-AND-RELAY.md §3) ================= */
+/* ================= key manager (API-AND-RELAY.md §3) =================
+   `check` is the cheapest request that proves a key: one call, minimal page size,
+   never cached. Every host here is already catalogued for the tool that uses it —
+   settings.html carries them in its own manifest entry so the generated CSP allows
+   the check (ARCHITECTURE ADR D6). Verified live 2026-07-25: a bad key returns 401
+   or 403 with a machine-readable body at every one of them, so "rejected" is never
+   guessed from a network failure. */
 const KEY_REGISTRY = [
-  { id: "nasa",     label: "NASA",            used: "apod, asteroids" },
-  { id: "congress", label: "Congress.gov",    used: "congress" },
-  { id: "eia",      label: "EIA",             used: "gas" },
-  { id: "nps",      label: "Park Service",    used: "parks" },
-  { id: "finnhub",  label: "Finnhub",         used: "markets" },
-  { id: "ebird",    label: "eBird",           used: "birds" },
-  { id: "usda",     label: "USDA FoodData",   used: "nutrition" },
-  { id: "bart",     label: "BART",            used: "transit" },
-  { id: "aviationstack", label: "Aviationstack", used: "flight tracker" }
+  { id: "nasa",     label: "NASA",            used: "apod, asteroids",
+    signup: "https://api.nasa.gov", family: "datagov",
+    hints: [/\bnasa\b/i, /apod/i],
+    check: k => ["https://api.nasa.gov/planetary/apod?api_key=" + encodeURIComponent(k), null] },
+  { id: "congress", label: "Congress.gov",    used: "congress",
+    signup: "https://api.congress.gov/sign-up/", family: "datagov",
+    hints: [/congress\.gov/i, /\bcongress\b/i],
+    check: k => ["https://api.congress.gov/v3/bill?format=json&limit=1&api_key=" +
+      encodeURIComponent(k), null] },
+  { id: "usda",     label: "USDA FoodData",   used: "nutrition",
+    signup: "https://fdc.nal.usda.gov/api-key-signup", family: "datagov",
+    hints: [/fooddata/i, /\bfdc\b/i, /usda/i, /nal\.usda/i],
+    check: k => ["https://api.nal.usda.gov/fdc/v1/foods/search?query=apple&pageSize=1&api_key=" +
+      encodeURIComponent(k), null] },
+  { id: "eia",      label: "EIA",             used: "gas, tripcost",
+    signup: "https://www.eia.gov/opendata/register.php",
+    hints: [/\beia\b/i, /energy information/i],
+    check: k => ["https://api.eia.gov/v2/?api_key=" + encodeURIComponent(k), null] },
+  { id: "nps",      label: "Park Service",    used: "parks",
+    signup: "https://www.nps.gov/subjects/developer/get-started.htm",
+    hints: [/national park/i, /\bnps\b/i, /developer\.nps/i],
+    check: k => ["https://developer.nps.gov/api/v1/parks?limit=1", ["X-Api-Key", k]] },
+  { id: "finnhub",  label: "Finnhub",         used: "markets",
+    signup: "https://finnhub.io/register",
+    hints: [/finnhub/i],
+    check: k => ["https://finnhub.io/api/v1/quote?symbol=AAPL&token=" + encodeURIComponent(k), null] },
+  { id: "ebird",    label: "eBird",           used: "wildlife",
+    signup: "https://ebird.org/api/keygen",
+    hints: [/ebird/i, /cornell/i],
+    check: k => ["https://api.ebird.org/v2/data/obs/US-NY/recent?maxResults=1", ["X-eBirdApiToken", k]] },
+  { id: "bart",     label: "BART",            used: "transit",
+    signup: "https://api.bart.gov/api/register.aspx",
+    hints: [/\bbart\b/i],
+    check: k => ["https://api.bart.gov/api/stn.aspx?cmd=stns&json=y&key=" + encodeURIComponent(k), null] },
+  { id: "aviationstack", label: "Aviationstack", used: "flight tracker",
+    signup: "https://aviationstack.com/signup/free", costly: true,
+    hints: [/aviationstack/i, /apilayer/i],
+    check: k => ["https://api.aviationstack.com/v1/flights?limit=1&access_key=" +
+      encodeURIComponent(k), null] }
 ];
-const keyEls = {}; // id -> {input, status, reveal}
+const byId = id => KEY_REGISTRY.find(r => r.id === id);
+const keyEls = {}; // id -> {input, status, reveal, test}
+
+/* ---- live key check ------------------------------------------------------
+   Aviationstack's free tier is 100 requests a month, so a check there spends
+   real allowance: it needs a confirming second click and is counted into the
+   same suite.flight.usage ledger the Flight Tracker keeps. */
+const AV_USAGE = "suite.flight.usage";
+function countAviationstack() {
+  const month = new Date().toISOString().slice(0, 7);
+  const raw = Suite.store.get(AV_USAGE, {});
+  const u = raw && raw.month === month ? { month, count: Math.max(0, +raw.count || 0) } : { month, count: 0 };
+  u.count++;
+  Suite.store.set(AV_USAGE, u);
+  return u.count;
+}
+
+async function checkKey(id, value) {
+  const r = byId(id);
+  const [url, header] = r.check(value);
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 12000);
+  const opts = { signal: ctrl.signal, cache: "no-store" };
+  if (header) opts.headers = { [header[0]]: header[1] };
+  try {
+    const res = await fetch(url, opts);
+    clearTimeout(timer);
+    if (r.costly) countAviationstack();
+    if (res.ok) return { state: "ok" };
+    if (res.status === 429) return { state: "limited" };
+    if (res.status === 401 || res.status === 403 || res.status === 400) return { state: "rejected" };
+    return { state: "unclear", detail: "the provider answered HTTP " + res.status };
+  } catch (e) {
+    clearTimeout(timer);
+    if (r.costly) countAviationstack(); // a request that left the browser still counts
+    const why = e && e.name === "AbortError" ? "no answer within 12 s"
+      : (e && e.message ? e.message : String(e));
+    return { state: "unreachable", detail: why };
+  }
+}
+
+function checkWord(id, res) {
+  const label = labelOf(id);
+  if (res.state === "ok") return { text: label + ": the provider accepted this key.", cls: "ok" };
+  if (res.state === "rejected") return { text: label + " rejected this key — check for a stray space or a truncated paste.", cls: "err" };
+  if (res.state === "limited") return { text: label + " is rate-limiting right now, so the key could not be judged. It is saved; try again later.", cls: "" };
+  if (res.state === "unclear") return { text: label + ": " + res.detail + ", which is neither a clear pass nor a rejection. The key is saved.", cls: "" };
+  return { text: label + ": could not reach the provider (" + res.detail + "). The key is saved — " +
+    "if you're on the built (dist) copy this check needs the page's catalogued endpoints, and offline it can't run at all.", cls: "" };
+}
 
 function paintKeyStatus(id) {
   const el = keyEls[id];
   const stored = rawGet("suite.key." + id);
-  if (typeof stored === "string" && stored.trim()) {
+  const saved = typeof stored === "string" && !!stored.trim();
+  el.test.disabled = !saved;
+  el.test.textContent = "Test";
+  delete el.test.dataset.armed;
+  if (saved) {
     el.status.textContent = "your key is saved on this machine";
     el.status.className = "kstatus good";
     if (document.activeElement !== el.input) el.input.value = stored;
@@ -926,12 +1204,61 @@ function saveKeyFor(id) {
   const el = keyEls[id];
   const v = el.input.value.trim();
   if (!v) { setMsg(keysMsg, "Paste a " + labelOf(id) + " key first — or use Clear to remove the saved one.", "err"); return; }
-  Suite.store.set("suite.key." + id, v);
-  paintKeyStatus(id);
-  renderStorage();
+  storeKey(id, v);
   setMsg(keysMsg, labelOf(id) + " key saved.", "ok");
 }
-const labelOf = id => KEY_REGISTRY.find(r => r.id === id).label;
+function storeKey(id, value) {
+  Suite.store.set("suite.key." + id, value);
+  paintKeyStatus(id);
+  renderStorage();
+  paintWizard();
+}
+const labelOf = id => byId(id).label;
+
+/* ---- one api.data.gov key, several providers -----------------------------
+   NASA, Congress.gov and USDA FoodData sit behind the same api.data.gov
+   gateway (all three answer `via: api-umbrella` and accept the universal
+   DEMO_KEY — verified 2026-07-25), so one signup covers all three. EIA and the
+   Park Service run their own API Umbrella instances and issue their own keys.
+   Nothing here is assumed: the key is offered to a sibling only after that
+   provider's own endpoint has accepted it. */
+async function fanOutDatagov(sourceId, value, say) {
+  const src = byId(sourceId);
+  if (src.family !== "datagov") return 0;
+  const siblings = KEY_REGISTRY.filter(r => r.family === "datagov" && r.id !== sourceId &&
+    rawGet("suite.key." + r.id) !== value);
+  if (!siblings.length) return 0;
+  say("Checking whether this key also works for " + siblings.map(r => r.label).join(" and ") + " …", "");
+  const filled = [];
+  for (const r of siblings) {
+    const res = await checkKey(r.id, value);
+    if (res.state !== "ok") continue;
+    storeKey(r.id, value);
+    filled.push(r.label);
+    const el = keyEls[r.id];   // storeKey repaints to the generic saved line; this one was checked
+    if (el) {
+      el.status.textContent = "same api.data.gov key — " + r.label + " accepted it";
+      el.status.className = "kstatus good";
+    }
+  }
+  if (filled.length) {
+    say("Same key accepted by " + filled.join(" and ") + " — filled in, no second signup needed.", "ok");
+  }
+  return filled.length;
+}
+
+/* Save, then check, then spread — the whole round trip for one pasted key. */
+async function adoptKey(id, value, say) {
+  storeKey(id, value);
+  say("Saved. Checking it against " + labelOf(id) + " …", "");
+  const res = await checkKey(id, value);
+  const word = checkWord(id, res);
+  say(word.text, word.cls);
+  const el = keyEls[id];
+  if (el) { el.status.textContent = word.text; el.status.className = "kstatus " + (word.cls || ""); }
+  if (res.state === "ok") await fanOutDatagov(id, value, say);
+  return res;
+}
 
 function buildKeyRows() {
   const box = document.getElementById("keyRows");
@@ -974,6 +1301,38 @@ function buildKeyRows() {
     save.setAttribute("aria-label", "Save " + r.label + " API key");
     save.addEventListener("click", () => saveKeyFor(r.id));
 
+    /* one live call against the provider — the only network this page makes,
+       and only ever on this click. Aviationstack spends real monthly allowance,
+       so it arms first and fires on a confirming second click. */
+    const test = document.createElement("button");
+    test.className = "btn ghost";
+    test.textContent = "Test";
+    test.setAttribute("aria-label", "Test the saved " + r.label + " API key against the provider");
+    test.addEventListener("click", async () => {
+      const v = (rawGet("suite.key." + r.id) || "").trim();
+      if (!v) { setMsg(keysMsg, "Save a " + r.label + " key first.", "err"); return; }
+      if (r.costly && !test.dataset.armed) {
+        test.dataset.armed = "1";
+        test.textContent = "Spend 1 request?";
+        setMsg(keysMsg, "Aviationstack's free tier is 100 requests a month and a test spends one of " +
+          "them (it counts into the Flight Tracker's ledger). Click again to go ahead.", "");
+        return;
+      }
+      delete test.dataset.armed;
+      test.disabled = true;
+      test.textContent = "Testing…";
+      status.textContent = "checking with " + r.label + " …";
+      status.className = "kstatus";
+      const res = await checkKey(r.id, v);
+      const word = checkWord(r.id, res);
+      status.textContent = word.text;
+      status.className = "kstatus " + (word.cls || "");
+      setMsg(keysMsg, word.text, word.cls);
+      test.disabled = false;
+      test.textContent = "Test";
+      if (res.state === "ok") await fanOutDatagov(r.id, v, (t, c) => setMsg(keysMsg, t, c));
+    });
+
     const clear = document.createElement("button");
     clear.className = "btn ghost";
     clear.textContent = "Clear";
@@ -982,18 +1341,312 @@ function buildKeyRows() {
       Suite.store.remove("suite.key." + r.id);
       paintKeyStatus(r.id);
       renderStorage();
+      paintWizard();
       setMsg(keysMsg, labelOf(r.id) + " key cleared.", "ok");
     });
 
     const status = document.createElement("div");
     status.className = "kstatus";
 
-    row.append(name, input, reveal, save, clear, status);
+    row.append(name, input, reveal, save, test, clear, status);
     box.append(row);
-    keyEls[r.id] = { input, status, reveal };
+    keyEls[r.id] = { input, status, reveal, test };
     paintKeyStatus(r.id);
   }
 }
+
+/* ================= local profile (signup forms, nothing else) ================= */
+const PROFILE_FIELDS = [
+  { id: "email", label: "Email", type: "email", ph: "you@example.com" },
+  { id: "first", label: "First", type: "text",  ph: "first name" },
+  { id: "last",  label: "Last",  type: "text",  ph: "last name" }
+];
+const profileGet = f => (rawGet("suite.profile." + f) || "");
+function profileSet(f, v) {
+  const t = v.trim();
+  if (t) Suite.store.set("suite.profile." + f, t);
+  else Suite.store.remove("suite.profile." + f);
+  renderStorage();
+}
+async function copyText(text, say) {
+  if (!text) { say("Nothing to copy — fill this in first.", "err"); return; }
+  try {
+    await navigator.clipboard.writeText(text);
+    say("Copied — paste it into the provider's form.", "ok");
+  } catch (e) {
+    say("Clipboard unavailable here (browsers deny it on file:// in some modes) — select the value and copy manually.", "");
+  }
+}
+
+/* ================= guided setup =================
+   Steps are provider signups, not key rows: the api.data.gov step ends with
+   three rows filled. BART is absent on purpose — it ships a published public
+   key and needs no signup at all. */
+const WIZ_STEPS = [
+  { id: "datagov", title: "api.data.gov", signup: "https://api.data.gov/signup/",
+    members: ["nasa", "congress", "usda"], fields: ["email", "first", "last"],
+    blurb: "One signup, three providers. The form wants a name and an email and shows the key on " +
+      "screen straight away (it also emails a copy)." },
+  { id: "nps", title: "National Park Service", signup: "https://www.nps.gov/subjects/developer/get-started.htm",
+    members: ["nps"], fields: ["email", "first", "last"],
+    blurb: "Its own key, separate from api.data.gov. The key arrives by email." },
+  { id: "eia", title: "U.S. Energy Information Administration", signup: "https://www.eia.gov/opendata/register.php",
+    members: ["eia"], fields: ["email"],
+    blurb: "Email only. The key arrives by email — paste the whole message below if you like." },
+  { id: "finnhub", title: "Finnhub", signup: "https://finnhub.io/register",
+    members: ["finnhub"], fields: ["email"],
+    blurb: "Free account. The key is on your dashboard the moment you land on it." },
+  { id: "ebird", title: "eBird", signup: "https://ebird.org/api/keygen",
+    members: ["ebird"], fields: ["email"],
+    blurb: "Needs a free Cornell Lab / eBird account first — the key page redirects you to sign in, " +
+      "then hands you a key." },
+  { id: "aviationstack", title: "Aviationstack", signup: "https://aviationstack.com/signup/free",
+    members: ["aviationstack"], fields: ["email"],
+    blurb: "Free plan is 100 requests a month, so the Flight Tracker and this page both count what " +
+      "they spend." }
+];
+const wizMsg = Suite.liveRegion(document.getElementById("wizMsg"));
+const wizSaid = (t, c) => setMsg(wizMsg, t, c);
+const wizSkipped = new Set();   // this visit only — skipping is not a preference worth storing
+let wizStepId = null;
+
+const hasKey = id => !!(rawGet("suite.key." + id) || "").trim();
+const stepDone = s => s.members.every(hasKey);
+const stepsLeft = () => WIZ_STEPS.filter(s => !stepDone(s) && !wizSkipped.has(s.id));
+
+function paintWizard() {
+  const saved = KEY_REGISTRY.filter(r => hasKey(r.id)).length;
+  document.getElementById("wizCount").textContent =
+    saved + " of " + KEY_REGISTRY.length + " keys saved";
+  const body = document.getElementById("wizBody");
+  if (!wizStepId) { body.hidden = true; return; }
+
+  const step = WIZ_STEPS.find(s => s.id === wizStepId);
+  if (!step) { wizStepId = null; body.hidden = true; return; }
+  body.hidden = false;
+
+  const queue = stepsLeft();
+  const pos = queue.findIndex(s => s.id === step.id);
+  document.getElementById("wizStepLab").textContent = pos >= 0
+    ? "Step " + (pos + 1) + " of " + queue.length + " · " + step.title
+    : "Done · " + step.title;   // finishing a step takes it out of the queue
+
+  const covers = document.getElementById("wizCovers");
+  covers.replaceChildren();
+  const names = step.members.map(labelOf).join(" · ");
+  const b = document.createElement("b");
+  b.textContent = step.members.length > 1
+    ? "One key unlocks " + names
+    : "Unlocks " + names;
+  covers.append(b, document.createElement("br"), document.createTextNode(step.blurb));
+  /* standing state belongs here, not in the message line — that line is for what
+     just happened, and paintWizard runs after every save */
+  const done = step.members.filter(hasKey).map(labelOf);
+  if (done.length) {
+    const s = document.createElement("small");
+    s.textContent = "Already saved: " + done.join(", ") + ".";
+    covers.append(document.createElement("br"), s);
+  }
+
+  const openBtn = document.getElementById("wizOpenBtn");
+  openBtn.href = step.signup;
+  openBtn.textContent = "Open " + step.title + " signup ↗";
+
+  /* the fields this particular form asks for, each one click from the clipboard */
+  const pane = document.getElementById("wizProfile");
+  pane.replaceChildren();
+  for (const f of PROFILE_FIELDS.filter(f => step.fields.includes(f.id))) {
+    const kv = document.createElement("div");
+    kv.className = "kv";
+    const lab = document.createElement("label");
+    lab.className = "kvlab";
+    lab.textContent = f.label;
+    lab.htmlFor = "prof_" + f.id;
+    const inp = document.createElement("input");
+    inp.type = "text";
+    inp.id = "prof_" + f.id;
+    inp.autocomplete = "off";
+    inp.placeholder = f.ph;
+    inp.value = profileGet(f.id);
+    inp.addEventListener("change", () => profileSet(f.id, inp.value));
+    const copy = document.createElement("button");
+    copy.className = "btn ghost";
+    copy.textContent = "Copy";
+    copy.setAttribute("aria-label", "Copy your " + f.label.toLowerCase() + " to the clipboard");
+    copy.addEventListener("click", () => {
+      profileSet(f.id, inp.value);
+      copyText(inp.value.trim(), wizSaid);
+    });
+    kv.append(lab, inp, copy);
+    pane.append(kv);
+  }
+
+  document.getElementById("wizNextBtn").textContent = queue.length > 1 ? "Next ▸" : "Finish";
+}
+
+/* moving to a step clears the previous step's result; repainting in place does not */
+function wizGo(stepId) { wizStepId = stepId; setMsg(wizMsg, "", ""); paintWizard(); }
+function wizAdvance() {
+  const queue = stepsLeft();
+  if (!queue.length) {
+    wizStepId = null;
+    paintWizard();
+    document.getElementById("wizBody").hidden = true;
+    setMsg(keysMsg, "Every provider is either set up or skipped. BART needs no signup — it ships " +
+      "its published public key.", "ok");
+    return;
+  }
+  const at = queue.findIndex(s => s.id === wizStepId);
+  wizGo(queue[(at + 1) % queue.length].id);
+}
+
+document.getElementById("wizStartBtn").addEventListener("click", () => {
+  wizSkipped.clear();
+  const queue = stepsLeft();
+  document.getElementById("wizStartBtn").hidden = true;
+  document.getElementById("wizCloseBtn").hidden = false;
+  document.getElementById("wizIntro").hidden = true;
+  if (!queue.length) {
+    document.getElementById("wizBody").hidden = true;
+    setMsg(keysMsg, "Nothing left to do — every provider that needs a key has one.", "ok");
+    return;
+  }
+  wizGo(queue[0].id);
+  setMsg(wizMsg, "", "");
+});
+document.getElementById("wizCloseBtn").addEventListener("click", () => {
+  wizStepId = null;
+  document.getElementById("wizBody").hidden = true;
+  document.getElementById("wizStartBtn").hidden = false;
+  document.getElementById("wizCloseBtn").hidden = true;
+  document.getElementById("wizIntro").hidden = false;
+  paintWizard();
+});
+document.getElementById("wizSkipBtn").addEventListener("click", () => {
+  if (wizStepId) wizSkipped.add(wizStepId);
+  wizAdvance();
+});
+document.getElementById("wizNextBtn").addEventListener("click", wizAdvance);
+
+const wizKeyInput = document.getElementById("wizKeyInput");
+async function wizSave() {
+  const step = WIZ_STEPS.find(s => s.id === wizStepId);
+  const v = wizKeyInput.value.trim();
+  if (!step) return;
+  if (!v) { wizSaid("Paste the key first.", "err"); return; }
+  const target = step.members.find(id => !hasKey(id)) || step.members[0];
+  const btn = document.getElementById("wizSaveBtn");
+  btn.disabled = true;
+  await adoptKey(target, v, wizSaid);
+  btn.disabled = false;
+  wizKeyInput.value = "";
+  paintWizard();
+}
+document.getElementById("wizSaveBtn").addEventListener("click", wizSave);
+wizKeyInput.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); wizSave(); } });
+
+/* ================= paste anywhere =================
+   Signup keys arrive in an email or on a dashboard, so the fastest path is to
+   let the user paste the lot and work out where it belongs. Shape narrows the
+   field, wording in the surrounding text usually settles it, and when it still
+   doesn't the live check decides — which is the one thing that can be certain. */
+const KEY_SHAPES = [
+  { re: /\b[A-Za-z0-9]{40}\b/g, ids: ["nasa", "congress", "usda", "eia", "nps"] }, // API Umbrella
+  { re: /\b[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}\b/g, ids: ["bart"] },
+  { re: /\b[0-9a-f]{32}\b/g, ids: ["aviationstack"] },
+  { re: /\b[a-z0-9]{20}\b/g, ids: ["finnhub"] },
+  { re: /\b[a-z0-9]{12}\b/g, ids: ["ebird"] }
+];
+function detectKeys(text) {
+  const out = [];
+  const seen = new Set();
+  for (const shape of KEY_SHAPES) {
+    shape.re.lastIndex = 0;
+    let m;
+    while ((m = shape.re.exec(text)) !== null) {
+      const value = m[0];
+      if (seen.has(value)) continue;
+      seen.add(value);
+      const narrowed = shape.ids.filter(id => byId(id).hints.some(h => h.test(text)));
+      out.push({ value, ids: narrowed.length ? narrowed : shape.ids });
+    }
+  }
+  return out;
+}
+
+const pasteBox = Suite.liveRegion(document.getElementById("pasteBox"));
+const PASTE_HELP = Array.from(pasteBox.childNodes).map(n => n.cloneNode(true)); // keeps the <kbd>
+function resetPasteBox() {
+  pasteBox.replaceChildren(...PASTE_HELP.map(n => n.cloneNode(true)));
+}
+function pasteSay(text, cls) {
+  pasteBox.replaceChildren();
+  const p = document.createElement("div");
+  p.className = "msg" + (cls ? " " + cls : "");
+  p.textContent = text;
+  pasteBox.append(p);
+}
+
+/* try each candidate provider in turn and keep the one that accepts the key */
+async function identifyByChecking(value, ids) {
+  const free = ids.filter(id => !byId(id).costly);
+  for (const id of free) {
+    pasteSay("Trying " + labelOf(id) + " …", "");
+    const res = await checkKey(id, value);
+    if (res.state === "ok") return id;
+  }
+  return null;
+}
+
+function offerCandidates(cand) {
+  pasteBox.replaceChildren();
+  const line = document.createElement("div");
+  line.textContent = "That looks like a key, but the paste doesn't say whose. Pick one — or let the " +
+    "suite try them against the live APIs and keep whichever accepts it:";
+  const list = document.createElement("div");
+  list.className = "provlist";
+  for (const id of cand.ids) {
+    const b = document.createElement("button");
+    b.className = "btn ghost";
+    b.textContent = labelOf(id);
+    b.addEventListener("click", () => { adoptKey(id, cand.value, pasteSay); });
+    list.append(b);
+  }
+  const auto = document.createElement("button");
+  auto.className = "btn";
+  auto.textContent = "Check and file it";
+  auto.addEventListener("click", async () => {
+    auto.disabled = true;
+    const hit = await identifyByChecking(cand.value, cand.ids);
+    if (hit) await adoptKey(hit, cand.value, pasteSay);
+    else pasteSay("No provider accepted that key. If it's an Aviationstack key, file it by hand — " +
+      "testing it would spend one of your 100 monthly requests.", "err");
+  });
+  const cancel = document.createElement("button");
+  cancel.className = "btn ghost";
+  cancel.textContent = "Ignore";
+  cancel.addEventListener("click", resetPasteBox);
+  list.append(auto, cancel);
+  pasteBox.replaceChildren(line, list);
+}
+
+document.addEventListener("paste", e => {
+  const t = e.target;
+  if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return; // a real field wins
+  const text = e.clipboardData && e.clipboardData.getData("text");
+  if (!text || !text.trim()) return;
+  const found = detectKeys(text);
+  if (!found.length) { pasteSay("Nothing key-shaped in that paste.", ""); return; }
+  e.preventDefault();
+  const cand = found[0];
+  if (cand.ids.length === 1) {
+    const id = cand.ids[0];
+    pasteSay("Found what looks like a " + labelOf(id) + " key. Saving and checking …", "");
+    adoptKey(id, cand.value, pasteSay);
+    return;
+  }
+  offerCandidates(cand);
+});
 
 /* ================= relay config + live test (API-AND-RELAY.md §6) ================= */
 const relayInput = document.getElementById("relayInput");
@@ -1098,7 +1751,41 @@ function resetLocForm(returnFocus = true) {
   document.getElementById("locLon").value = "";
   if (returnFocus) document.getElementById("locAddBtn").focus();
 }
+/* ---- automatic first location (core: Suite.location.auto*) ---- */
+const autoLocChk = document.getElementById("autoLocChk");
+const autoLocMsg = Suite.liveRegion(document.getElementById("autoLocMsg"));
+
+function paintAutoLoc() {
+  const on = Suite.location.autoEnabled();
+  autoLocChk.checked = on;
+  if (!on) {
+    setMsg(autoLocMsg, "Off — tools show their “set your location” card until you fill one in.", "");
+  } else if (Suite.location.autoDenied()) {
+    /* without this the one-time refusal is a dead end: the browser stops asking,
+       and nothing on screen explains why detection never happens */
+    setMsg(autoLocMsg, "On, but this browser refused the last location request, so the suite stopped " +
+      "asking. Untick and retick this box to try again — you may also need to clear the site's " +
+      "location permission in your browser.", "err");
+  } else if (Suite.location.get()) {
+    setMsg(autoLocMsg, "On. A location is already saved, so nothing will be asked for.", "ok");
+  } else if (!(typeof navigator !== "undefined" && navigator.geolocation)) {
+    setMsg(autoLocMsg, "On, but this browser offers no geolocation, so tools will ask you to type a place.", "");
+  } else {
+    setMsg(autoLocMsg, "On. The next tool you open with no location will ask the browser once.", "ok");
+  }
+}
+autoLocChk.addEventListener("change", () => {
+  const want = autoLocChk.checked;
+  Suite.location.setAuto(want);           // re-enabling also clears a remembered refusal
+  paintAutoLoc();
+  renderStorage();
+  setMsg(locMsg, want
+    ? "Automatic location detection is on."
+    : "Automatic location detection is off.", "ok");
+});
+
 function paintLoc() {
+  paintAutoLoc();
   const active = Suite.locations.active();
   const all = Suite.locations.all();
   const blocked = active && active.storageIssue;
@@ -1279,6 +1966,7 @@ document.getElementById("purgeBtn").addEventListener("click", () => {
 /* ================= boot ================= */
 function paintEverythingButStorage() {
   for (const r of KEY_REGISTRY) paintKeyStatus(r.id);
+  paintWizard();
   paintRelay();
   paintThemeSeg();
   paintLoc();

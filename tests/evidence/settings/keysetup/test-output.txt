@@ -1,0 +1,40 @@
+settings guided key setup: PASS {
+  "cspAllows": true,
+  "step1Label": "Step 1 of 6 · api.data.gov",
+  "step1Signup": "https://api.data.gov/signup/",
+  "step1Fields": [
+    "prof_email",
+    "prof_first",
+    "prof_last"
+  ],
+  "step1CoversThree": true,
+  "profile": {
+    "email": "someone@example.com",
+    "first": "Ada"
+  },
+  "fanout": {
+    "nasa": true,
+    "congress": true,
+    "usda": true,
+    "eiaUntouched": true,
+    "npsUntouched": true
+  },
+  "fanoutProbedOnlySiblings": true,
+  "rejected": "EIA rejected this key — check for a stray space or a truncated paste.",
+  "pasteRouted": true,
+  "ambiguousChoices": [
+    "NASA",
+    "Congress.gov",
+    "USDA FoodData",
+    "EIA",
+    "Park Service",
+    "Check and file it",
+    "Ignore"
+  ],
+  "identifiedNasaFirst": true,
+  "armedNoRequest": true,
+  "armedLabel": "Spend 1 request?",
+  "aviationstackCounted": true,
+  "expectedRejections": 1,
+  "issues": []
+}

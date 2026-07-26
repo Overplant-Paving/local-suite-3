@@ -1,11 +1,12 @@
 {
   "note": "new-in-v2 tool — no v1 original; parity N/A",
   "v2": {
-    "suite.cache.wildfire.34.061_-118.239": "{\"t\":1784139743867,\"v\":{\"error\":{\"code\":429,\"message\":\"Unable to perform query. Too many requests.\",\"details\":[\"API calls quota exceeded (69429 reques…(234 chars)",
     "suite.wildfire.radius": "250",
     "suite.wildfire.sort": "dist",
     "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
-    "suite.cache.wildfire.34.052_-118.244": "{\"t\":1784139743867,\"v\":{\"error\":{\"code\":429,\"message\":\"Unable to perform query. Too many requests.\",\"details\":[\"API calls quota exceeded (69493 reques…(234 chars)",
+    "suite.cache.wildfire.34.052_-118.244": "{\"t\":1784883104131,\"v\":{\"type\":\"FeatureCollection\",\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"EPSG:4326\"}},\"features\":[{\"type\":\"Feature\",\"geometry\":{\"…(46519 chars)",
+    "suite.location.autoDenied": "denied",
+    "suite.cache.wildfire.34.061_-118.239": "{\"t\":1784883104131,\"v\":{\"type\":\"FeatureCollection\",\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"EPSG:4326\"}},\"features\":[{\"type\":\"Feature\",\"geometry\":{\"…(46519 chars)",
     "suite.theme": "dark"
   }
 }

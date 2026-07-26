@@ -1,17 +1,10 @@
 {
-  "v1": {
-    "suite.cache.volcano.elevated": "{\"t\":1784182421201,\"v\":[{\"obs_fullname\":\"Alaska Volcano Observatory\",\"obs_abbr\":\"avo\",\"volcano_name\":\"Great Sitkin\",\"vnum\":\"311120\",\"notice_type_cd\":\"…(2870 chars)",
-    "suite.theme": "dark",
-    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}"
-  },
+  "note": "new-in-v2 tool — no v1 original; parity N/A",
   "v2": {
-    "suite.cache.volcano.vsc": "{\"t\":1784096020658,\"v\":[{\"noticeId\":\"DOI-USGS-HVO-2026-07-16T03:55:25+00:00\",\"vName\":\"Kilauea\",\"vnum\":\"332010\",\"volcanoCd\":\"hi3\",\"nvewsThreat\":\"Very H…(4432 chars)",
+    "suite.cache.volcano.vsc": "{\"t\":1784883096062,\"v\":[{\"noticeId\":\"DOI-USGS-AVO-2026-07-24T17:54:57+00:00\",\"vName\":\"Great Sitkin\",\"vnum\":\"311120\",\"volcanoCd\":\"ak111\",\"nvewsThreat\":…(4449 chars)",
     "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
-    "suite.cache.volcano.elevated": "{\"t\":1784096020658,\"v\":[{\"obs_fullname\":\"Alaska Volcano Observatory\",\"obs_abbr\":\"avo\",\"volcano_name\":\"Great Sitkin\",\"vnum\":\"311120\",\"notice_type_cd\":\"…(2583 chars)",
-    "suite.theme": "dark"
-  },
-  "keysOnlyInV1": [],
-  "keysOnlyInV2": [
-    "suite.cache.volcano.vsc"
-  ]
+    "suite.cache.volcano.elevated": "{\"t\":1784883096062,\"v\":[{\"obs_fullname\":\"Alaska Volcano Observatory\",\"obs_abbr\":\"avo\",\"volcano_name\":\"Great Sitkin\",\"vnum\":\"311120\",\"notice_type_cd\":\"…(2583 chars)",
+    "suite.theme": "dark",
+    "suite.location.autoDenied": "denied"
+  }
 }

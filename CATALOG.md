@@ -498,6 +498,24 @@ Amortization schedule, extra-payment what-ifs, refinance comparison — all loca
 Spaced-repetition-lite flashcards stored in localStorage, import/export as JSON/CSV.
 - **Complexity:** M · **Suggested file:** `flashcards.html`
 
+### 10.13 Suite Settings *(offline except the checks you click)*
+Backup/restore, the key manager and its guided setup, relay config, theme, locations, storage viewer.
+- **Complexity:** M · **File:** `settings.html`
+- **Data:** none of its own. It calls a provider **only** when you press Test or Save-and-check, one
+  request per click, `no-store`, never cached: `api.nasa.gov/planetary/apod`,
+  `api.congress.gov/v3/bill`, `api.nal.usda.gov/fdc/v1/foods/search`, `api.eia.gov/v2/`,
+  `developer.nps.gov/api/v1/parks` (`X-Api-Key`), `finnhub.io/api/v1/quote`,
+  `api.ebird.org/v2/data/obs` (`X-eBirdApiToken`), `api.bart.gov/api/stn.aspx`,
+  `api.aviationstack.com/v1/flights`. Each is the cheapest request that proves a key, and each host
+  is already catalogued for the tool that uses it.
+- **Verified 2026-07-25 (CORS ✓, live):** every one of the nine rejects a bad key with 401/403 and a
+  machine-readable body, so a rejection is never inferred from a network failure. NASA, Congress.gov
+  and USDA FoodData proved to be one api.data.gov gateway (`via: api-umbrella`, shared `DEMO_KEY`),
+  which is why one signup fills three key rows; **EIA and NPS run their own API Umbrella instances**
+  and issue their own keys despite the identical error shape.
+- **Gotcha:** Aviationstack's free tier is 100 requests/month, so its test costs one and is
+  double-click confirmed, counted into `suite.flight.usage`.
+
 ---
 
 ## Suggested build order

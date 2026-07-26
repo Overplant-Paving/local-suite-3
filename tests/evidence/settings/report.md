@@ -102,6 +102,11 @@ none — zero `innerHTML` in the tool; all dynamic DOM is `createElement`/`textC
 
 ## endpoints
 
+**Superseded 2026-07-25 by `keysetup/report.md`** — guided key setup added a live per-key check, so
+the manifest entry is now `network:"keyed"` with nine provider hosts, and the tool makes one
+request per Test/Save-and-check click and none otherwise. Everything below still describes the
+relay path and remains accurate for it.
+
 None (manifest `network:"offline"`, `endpoints:[]`). The only fetch the tool can ever make is
 the user-initiated relay test to the user's own configured base URL — which the dist CSP
 intentionally blocks for arbitrary hosts; the tool's failure state explains exactly that and

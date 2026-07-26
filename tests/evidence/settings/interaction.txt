@@ -8,10 +8,10 @@ viewer matches live localStorage key set: true
 storage summary: "10 key(s) · 469 B"
 viewer row suite.notes.test: size=40 B (UTF-8 bytes, value has multi-byte chars), preview="{"txt":"café ☕ — naïve ünïcode"}"
 export msg: "Backup of 10 key(s) created (937 B). It includes your saved API keys — treat it like a password."
-envelope: format=local-suite.backup.v2, exported=2026-07-16T20:00:46.043Z, keys=10, data entries=10
+envelope: format=local-suite.backup.v2, exported=2026-07-25T08:51:55.586Z, keys=10, data entries=10
 envelope.data verbatim vs live localStorage (10 keys): all byte-identical
 download button enabled after export: true
-download event: suggested filename "local-suite-backup-2026-07-16.json"
+download event: suggested filename "local-suite-backup-2026-07-25.json"
 after wipe + reload: 1 suite.* key(s) present: suite.theme
   (suite.theme is re-seeded by the harness's addInitScript on every load; its restored
    value "light" is byte-identical to the seeded one, so the round trip still covers it)
@@ -19,7 +19,7 @@ storage summary on wiped profile: "1 key(s) · 5 B"
 restore with empty textarea -> "Paste a backup first (or use “Restore from file…”)."
 restore with invalid JSON -> "Restore failed: that isn't valid JSON."
 restore with wrong format -> "Restore failed: not a Local Suite backup (expected format "local-suite.backup.v2")."
-restore msg: "Restored 10 key(s). Backup dated 2026-07-16T20:00:46.043Z."
+restore msg: "Restored 10 key(s). Backup dated 2026-07-25T08:51:55.586Z."
   round-trip suite.cache.demo.one: byte-identical
   round-trip suite.cache.demo.two: byte-identical
   round-trip suite.focus.settings: byte-identical
@@ -65,7 +65,7 @@ v2 location migration: {"legacy":{"lat":37.77,"lon":-122.42,"label":"San Francis
 location current (restored seed): "San Francisco — 37.77, -122.42", saved rows=1
 location save with invalid lat -> "Enter a latitude (−90…90) and longitude (−180…180) first."
 London added: suite.locations={"schema":1,"activeId":"saved-location","items":[{"id":"saved-location","revision":1,"lat":37.77,"lon":-122.42,"label":"San Francisco"},{"id":"london","label":"London","revision":1,"lat":51.5,"lon":-0.12}]}, rows=2, msg="Saved London."
-London activated: {"mirror":{"lat":51.5,"lon":-0.12,"label":"London"},"collection":{"schema":1,"activeId":"london","items":[{"id":"saved-location","revision":1,"lat":37.77,"lon":-122.42,"label":"San Francisco"},{"id":"london","label":"London","revision":1,"lat":51.5,"lon":-0.12}]},"safeCache":"{\"t\":1784232048181,\"v\":\"safe scoped data\"}","radarStation":null,"state":null}, current="London — 51.5, -0.12", msg="London is now active; reset 2 location-specific settings."
+London activated: {"mirror":{"lat":51.5,"lon":-0.12,"label":"London"},"collection":{"schema":1,"activeId":"london","items":[{"id":"saved-location","revision":1,"lat":37.77,"lon":-122.42,"label":"San Francisco"},{"id":"london","label":"London","revision":1,"lat":51.5,"lon":-0.12}]},"safeCache":"{\"t\":1784969517815,\"v\":\"safe scoped data\"}","radarStation":null,"state":null}, current="London — 51.5, -0.12", msg="London is now active; reset 2 location-specific settings."
 active London edited: {"mirror":{"lat":51.51,"lon":-0.12,"label":"London"},"collection":{"schema":1,"activeId":"london","items":[{"id":"saved-location","revision":1,"lat":37.77,"lon":-122.42,"label":"San Francisco"},{"id":"london","label":"London","revision":2,"lat":51.51,"lon":-0.12}]},"normalsStation":null,"focus":"locAddBtn"}, msg="Updated London; reset 1 location-specific setting because its active coordinates changed."
 active London deleted: mirror={"lat":37.77,"lon":-122.42,"label":"San Francisco"}, collection={"schema":1,"activeId":"saved-location","items":[{"id":"saved-location","revision":1,"lat":37.77,"lon":-122.42,"label":"San Francisco"}]}, rows=1, msg="Deleted London; San Francisco is now active."
 per-key delete: row button aria-label="Delete suite.tamper.ok" present: true
@@ -75,8 +75,8 @@ purge msg: "Removed 5 cached entries (suite.cache.*)."
 after purge: cache keys remaining=0 (expected 0), non-cache keys intact=true (8/8)
 storage summary now: "8 key(s) · 364 B"
 second purge (nothing left): "No cached entries to remove."
-a11y: aria-live regions on all async/result areas: backupMsg, restoreMsg, keysMsg, relayMsg, themeMsg, locMsg, storageMsg
-a11y: inputs/textareas without label or aria-label: (none)
+a11y: aria-live regions on all async/result areas: backupMsg, restoreMsg, wizMsg, pasteBox, keysMsg, relayMsg, themeMsg, locMsg, autoLocMsg, storageMsg
+a11y: inputs/textareas without label or aria-label: autoLocChk
 a11y: icon-only buttons missing aria-label: (none) (theme-btn "◐ theme" has text + core label; reveal/delete buttons carry per-item labels)
 a11y: overlays/dialogs needing Esc: 0 (none exist by design)
 theme toggle: light -> dark, aria-pressed=true

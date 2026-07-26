@@ -1,19 +1,11 @@
 {
-  "v1": {
-    "suite.theme": "dark",
-    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}"
-  },
+  "note": "new-in-v2 tool — no v1 original; parity N/A",
   "v2": {
-    "suite.cache.geo.fwd.om.denver": "{\"t\":1783491185966,\"v\":{\"results\":[{\"id\":5419384,\"name\":\"Denver\",\"latitude\":39.73915,\"longitude\":-104.9847,\"elevation\":1609,\"feature_code\":\"PPLA\",\"cou…(3407 chars)",
-    "suite.cache.geo.census.1600 pennsylvania ave nw, washington, dc": "{\"t\":1783491185967,\"v\":{\"result\":{\"input\":{\"address\":{\"address\":\"1600 Pennsylvania Ave NW, Washington, DC\"},\"benchmark\":{\"isDefault\":true,\"benchmarkDe…(696 chars)",
+    "suite.cache.geo.fwd.om.denver": "{\"t\":1784278194614,\"v\":{\"results\":[{\"id\":5419384,\"name\":\"Denver\",\"latitude\":39.73915,\"longitude\":-104.9847,\"elevation\":1609,\"feature_code\":\"PPLA\",\"cou…(3407 chars)",
     "suite.location": "{\"lat\":39.73915,\"lon\":-104.9847,\"label\":\"Denver\"}",
-    "suite.cache.geo.rev.38.8977,-77.0365": "{\"t\":1783491185967,\"v\":{\"place_id\":347527726,\"licence\":\"Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright\",\"osm_type\":\"relation\",\"…(795 chars)",
-    "suite.theme": "dark"
-  },
-  "keysOnlyInV1": [],
-  "keysOnlyInV2": [
-    "suite.cache.geo.fwd.om.denver",
-    "suite.cache.geo.census.1600 pennsylvania ave nw, washington, dc",
-    "suite.cache.geo.rev.38.8977,-77.0365"
-  ]
+    "suite.cache.geo.census.1600 pennsylvania ave nw, washington, dc": "{\"t\":1784278194614,\"v\":{\"result\":{\"input\":{\"address\":{\"address\":\"1600 Pennsylvania Ave NW, Washington, DC\"},\"benchmark\":{\"isDefault\":true,\"benchmarkDe…(696 chars)",
+    "suite.cache.geo.rev.38.8977,-77.0365": "{\"t\":1784278194614,\"v\":{\"place_id\":347527726,\"licence\":\"Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright\",\"osm_type\":\"relation\",\"…(795 chars)",
+    "suite.theme": "dark",
+    "suite.location.autoDenied": "denied"
+  }
 }

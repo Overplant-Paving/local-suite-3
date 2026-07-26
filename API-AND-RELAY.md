@@ -55,6 +55,42 @@ Never: paid APIs, APIs requiring OAuth, sources that demand tracking.
   [get your free key]" note when on a demo tier, with the signup URL from the manifest.
 - **settings.html is the current single entry UI** for keys. Individual tools link there for setup;
   any retained local key prompt is a deliberate tool-specific fallback, not the primary flow.
+
+### Guided setup — what can and cannot be automated
+
+Signup itself **cannot** be automated and no future change should try. Every provider gates its form
+with a captcha (api.data.gov runs reCAPTCHA v2 *and* v3) and requires the user to accept its own
+terms; the api.data.gov embed additionally pulls scripts from `api.data.gov` and `google.com`, which
+the no-runtime-dependency contract and the generated CSP both forbid. The suite opens the form and
+takes the key back — it never poses as the user. flight.html has said this in as many words since
+v3: "Local Suite cannot create or accept a third-party account on your behalf."
+
+Everything around the signup is automated instead:
+
+- **One key, three providers.** NASA, Congress.gov and USDA FoodData sit behind the same
+  api.data.gov gateway — all three answer `via: api-umbrella` and accept the universal `DEMO_KEY`
+  (verified 2026-07-25), and api.data.gov's developer manual states a key "gives you access to all
+  APIs from agencies participating in api.data.gov's service". So the wizard's first step is the
+  gateway, not a tool, and one signup fills three `suite.key.*` rows. **EIA and the Park Service run
+  their own API Umbrella instances** — same software, hence the same `DEMO_KEY` and the same
+  `API_KEY_INVALID` body, but separate registration and separate keys. Do not fold them into the
+  api.data.gov step.
+- **Nothing is assumed.** A sibling row is filled only after that provider's own endpoint has
+  accepted the key. If api.data.gov ever splits its key space, the feature degrades to filling one
+  row and says so, rather than writing a key that does not work.
+- **Paste routing.** Keys arrive in an email or on a dashboard, so a paste anywhere on the page is
+  scanned: key shape narrows the field, provider wording in the surrounding text usually settles it,
+  and when it does not the live check decides. A paste landing in a real input is left alone.
+- **`suite.profile.email|first|last`** exists only to save retyping into signup forms. The page
+  never transmits it. It is in backups like everything else, and the card says so.
+- **Live key check.** One minimal request per click, `cache: "no-store"`, distinguishing accepted /
+  rejected / rate-limited / unreachable. Verified 2026-07-25: every provider returns 401 or 403 with
+  a machine-readable body for a bad key, so "rejected" is never inferred from a network failure.
+  This is why settings.html is `"network": "keyed"` in the manifest with the nine provider hosts as
+  its endpoints — the generated CSP has to allow the check. It makes no request until clicked.
+- **Aviationstack spends real allowance** (100 requests/month), so its test arms on the first click
+  and fires on a confirming second, counting into the same `suite.flight.usage` ledger the Flight
+  Tracker keeps. BART is absent from the wizard: it ships a published public key and needs no signup.
 - **Keys are never committed.** The `--check` gate greps source for key-shaped strings; the only
   allowed embedded key is BART's officially published public demo key, and v2 externalizes even
   that (v1 `transit.html:163` → `suite.key.bart` with the public value as the documented default).

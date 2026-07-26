@@ -1,24 +1,24 @@
 first run (no location/station): picker auto-open=true, embedded station rows=54, nearest-list hidden (no location)=true, content card="No station selected"
 auto-selected nearest station to LA seed: "Los Angeles Downtown" (CA · USW00093134)
-LIVE comparison render: verdict="8° warmer than normal" sub="Forecast high 91° vs the 83° normal high."
-LIVE comparison tiles: Right now=73° · Today's high=91° · Normal high=83° · Today's low=66° · Normal low=64°
-LIVE NCEI response (suite.cache.normals.USW00093134): 366 daily rows; today 07-16: TMAX-NORMAL=83.4°F, TMIN-NORMAL=63.8°F (units=standard, real °F not tenths)
-LIVE Open-Meteo actual (suite.cache.normals.actual.34.02,-118.29): current=72.5°F, forecast hi=90.9°F lo=66°F
-verdict math check: forecast hi 90.9 vs normal hi 83.4 -> diff 7.5 -> expected "8° warmer than normal"; rendered "8° warmer than normal" -> MATCH
+LIVE comparison render: verdict="7° warmer than normal" sub="Forecast high 90° vs the 84° normal high."
+LIVE comparison tiles: Right now=72° · Today's high=90° · Normal high=84° · Today's low=68° · Normal low=64°
+LIVE NCEI response (suite.cache.normals.USW00093134): 366 daily rows; today 07-25: TMAX-NORMAL=83.7°F, TMIN-NORMAL=64.0°F (units=standard, real °F not tenths)
+LIVE Open-Meteo actual (suite.cache.normals.actual.34.02,-118.29): current=71.6°F, forecast hi=90.2°F lo=67.5°F
+verdict math check: forecast hi 90.2 vs normal hi 83.7 -> diff 6.5 -> expected "7° warmer than normal"; rendered "7° warmer than normal" -> MATCH
 year chart drawn: 3 paths (band+hi+lo), 2 today markers, 17 axis labels
 footer: "Data: NOAA NCEI Climate Normals 1991–2020 · ncei.noaa.gov · today's temperature from Open-Meteo. Normals are the 1991–2020 average, not record extremes."
-updated line: "updated 1:12 AM"; status dot class="statusdot ok"
+updated line: "updated 3:50 AM"; status dot class="statusdot ok"
 picker with location set — "Nearest to you": Los Angeles Downtown CA3 mi | Los Angeles Intl CA11 mi | San Diego Intl CA110 mi | Las Vegas NV223 mi
 bad-ID validation ("xyz"): pickErr="Enter a GHCND station ID (e.g. USW00023188)."
 Escape closes picker: backdrop open=false
-station switch (picker row -> San Diego Intl): stationbar="San Diego Intl"; verdict="7° warmer than normal"; tiles: Right now=70° · Today's high=82° · Normal high=75° · Today's low=67° · Normal low=66°
-ARCHIVE FALLBACK (NCEI blocked, manual ID USW00023174/LAX): verdict="About normal"; tiles: Right now=69° · Today's high=81° · Normal high=81° · Today's low=64° · Normal low=63°
-archive climatology cached at suite.cache.normals.archive.33.94,-118.39: 366 MM-DD entries, source="Open-Meteo archive (1991–2020, ERA5)", today's computed normal hi/lo=80.7/63.0°F
+station switch (picker row -> San Diego Intl): stationbar="San Diego Intl"; verdict="5° warmer than normal"; tiles: Right now=69° · Today's high=80° · Normal high=75° · Today's low=68° · Normal low=66°
+ARCHIVE FALLBACK (NCEI blocked, manual ID USW00023174/LAX): verdict="2° cooler than normal"; tiles: Right now=67° · Today's high=80° · Normal high=81° · Today's low=64° · Normal low=64°
+archive climatology cached at suite.cache.normals.archive.33.94,-118.39: 366 MM-DD entries, source="Open-Meteo archive (1991–2020, ERA5)", today's computed normal hi/lo=81.3/63.7°F
 footer (fallback attribution): "Data: Open-Meteo archive (ERA5 reanalysis), normals computed here from 1991–2020 daily data — NCEI was unreachable. These differ slightly from official NOAA normals. Normals are the 1991–2020 average, not record extremes."
 re-selected San Diego: rendered from fresh cache (7-day TTL) — saved station for the reload test
 STALE PATH (caches aged 8 days, all network blocked, reload): verdict="Normals loaded" sub="Today's temperature couldn't be fetched."
 STALE tiles (normals from stale cache, actuals honestly "—"): Right now=— · Today's high=— · Normal high=75° · Today's low=— · Normal low=66°
-STALE updated line: "offline — cached from 1:12 AM Jul 8"; status dot class="statusdot stale"
+STALE updated line: "offline — cached from 3:50 AM Jul 17"; status dot class="statusdot stale"
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
   console.error: Failed to load resource: net::ERR_FAILED

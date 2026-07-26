@@ -4,7 +4,7 @@ after invalid save, suite.location = null
 picked New York; autofill lat=40.7128 lon=-74.006
 locLabel: New York, USA
 yearLbl: 2026 · 40.7°N
-stat: 14h 49m | DAYLIGHT TODAY↑ 4:37am · ↓ 7:27pm
+stat: 14h 34m | DAYLIGHT TODAY↑ 4:46am · ↓ 7:19pm
 stat: 15h 06m | LONGEST DAYJun 22
 stat: 9h 15m | SHORTEST DAYDec 22
 stat: 5h 51m | YEARLY SWINGlongest minus shortest

@@ -312,6 +312,11 @@ function boot(){
 }
 document.addEventListener("visibilitychange",()=>{ if(!document.hidden && getLoc()) load(); });
 boot();
+
+/* First run: no location saved anywhere yet — ask the browser once and reload into
+   the normal view. Inert when a location exists, when the user turned detection off
+   in Settings, or when a previous request was refused (core: Suite.location). */
+Suite.location.autoBoot();
 </script>
 </body>
 </html>

@@ -1,16 +1,10 @@
 {
-  "v1": {
-    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
-    "suite.cache.drought.c_34.052_-118.244": "{\"t\":1784182507021,\"v\":{\"curDm\":-1,\"trend\":[{\"period\":\"20250715\",\"dm\":2},{\"period\":\"20250722\",\"dm\":2},{\"period\":\"20250729\",\"dm\":2},{\"period\":\"20250805…(1680 chars)",
-    "suite.theme": "dark",
-    "suite.cache.drought.c_34.061_-118.239": "{\"t\":1784182505793,\"v\":{\"curDm\":-1,\"trend\":[{\"period\":\"20250715\",\"dm\":2},{\"period\":\"20250722\",\"dm\":2},{\"period\":\"20250729\",\"dm\":2},{\"period\":\"20250805…(1680 chars)"
-  },
+  "note": "new-in-v2 tool — no v1 original; parity N/A",
   "v2": {
+    "suite.cache.drought.c_34.061_-118.239": "{\"t\":1784882982124,\"v\":{\"curDm\":-1,\"trend\":[{\"period\":\"20250729\",\"dm\":2},{\"period\":\"20250805\",\"dm\":2},{\"period\":\"20250812\",\"dm\":2},{\"period\":\"20250819…(1682 chars)",
     "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}",
-    "suite.cache.drought.c_34.052_-118.244": "{\"t\":1784096103675,\"v\":{\"curDm\":-1,\"trend\":[{\"period\":\"20250715\",\"dm\":2},{\"period\":\"20250722\",\"dm\":2},{\"period\":\"20250729\",\"dm\":2},{\"period\":\"20250805…(1680 chars)",
+    "suite.cache.drought.c_34.052_-118.244": "{\"t\":1784882982124,\"v\":{\"curDm\":-1,\"trend\":[{\"period\":\"20250729\",\"dm\":2},{\"period\":\"20250805\",\"dm\":2},{\"period\":\"20250812\",\"dm\":2},{\"period\":\"20250819…(1682 chars)",
     "suite.theme": "dark",
-    "suite.cache.drought.c_34.061_-118.239": "{\"t\":1784096103675,\"v\":{\"curDm\":-1,\"trend\":[{\"period\":\"20250715\",\"dm\":2},{\"period\":\"20250722\",\"dm\":2},{\"period\":\"20250729\",\"dm\":2},{\"period\":\"20250805…(1680 chars)"
-  },
-  "keysOnlyInV1": [],
-  "keysOnlyInV2": []
+    "suite.location.autoDenied": "denied"
+  }
 }

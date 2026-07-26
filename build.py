@@ -360,6 +360,25 @@ def gate_catalog_crosscheck(tools, catalog_text):
                 problems.append(f"{t['file']}: endpoint host {host} not mentioned in CATALOG.md")
     return problems
 
+SIGNUP_RE = re.compile(r'signup:\s*"([^"]+)"')
+
+def gate_settings_signup_sync(sources, tools):
+    """Advisory: settings.html is the single key-setup UI (API-AND-RELAY.md §3), so every
+    signup URL the manifest declares must actually be offered there. Extra URLs in the tool
+    are fine — the guided setup groups providers behind one gateway signup (api.data.gov)
+    that no single tool owns."""
+    text = sources.get("settings.html", "")
+    if not text:
+        return []
+    offered = set(SIGNUP_RE.findall(text))
+    problems = []
+    for t in tools:
+        k = t.get("key") or {}
+        url = k.get("signup")
+        if url and url not in offered:
+            problems.append(f"settings.html: manifest signup for '{k['name']}' is not offered: {url}")
+    return sorted(set(problems))
+
 KEY_PATTERNS = [
     re.compile(r'(?i)api[_-]?key["\']?\s*[:=]\s*["\'][A-Za-z0-9_\-]{16,}["\']'),
     re.compile(r'(?i)(?:^|[^A-Za-z0-9])[sp]k-[A-Za-z0-9]{20,}'),
@@ -458,6 +477,7 @@ def cmd_check(_args):
         ("csp",                 True,  gate_csp(dist_texts, tools)),
         ("escaping-heuristic",  False, gate_escaping_heuristic(sources, load_escape_allowlist())),
         ("catalog-crosscheck",  False, gate_catalog_crosscheck(tools, catalog_text)),
+        ("settings-signup-sync", False, gate_settings_signup_sync(sources, tools)),
         ("key-hygiene",         True,  gate_key_hygiene({**sources, **core_texts})),
         ("no-example-urls",     True,  gate_no_example_urls(dist_texts)),
         ("pwa-sync",            True,  gate_pwa_sync(

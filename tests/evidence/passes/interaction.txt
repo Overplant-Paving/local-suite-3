@@ -16,7 +16,7 @@ change link reopens location card: hidden=false
 locbar after ZIP lookup: "Location: Beverly Hills, CA 90210 change"
 suite.location now: {"lat":34.0901,"lon":-118.4065,"label":"Beverly Hills, CA 90210"}
 passes recomputed for new observer: 148 rows
-LIVE CelesTrak fetch: 157 satellites in cache; first name="ATLAS CENTAUR 2"; sample l1="1   694U 00000A   26196.12653080  .00000000  00000+0  00000+0 0  9990"
+LIVE CelesTrak fetch: 157 satellites in cache; first name="ATLAS CENTAUR 2"; sample l1="1   694U 00000A   26205.24144627  .00000000  00000+0  00000+0 0  9990"
 live status line: "Elements just now. 157 satellites tracked."
 live stats: ["323 VISIBLE PASSES","719 PASSES ≥ THRESHOLD","157 SATELLITES"]
 failure card (no cache, empty feed): "Couldn't load satellite data. CelesTrak was unreachable and no cached data is stored. Check your connection and try “Refresh satellite data.” (no TLEs parsed)"

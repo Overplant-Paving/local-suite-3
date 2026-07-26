@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-+IzSgjmTpVkn/7iKZzHanAA640f5SOTN+htMqmBW7A0=' 'sha256-fbkQLt24ASLak0Zm+k6o8pAflOdqJMwJU23tNZUJAHM='; style-src 'unsafe-inline'; img-src 'self' data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-//3u9UqhTrL2EMZ/TV460clarzwH88eQnv7QrSzebl4=' 'sha256-fbkQLt24ASLak0Zm+k6o8pAflOdqJMwJU23tNZUJAHM='; style-src 'unsafe-inline'; img-src 'self' data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Country &amp; State Factbook · Local Suite</title>
 <style>
@@ -477,6 +477,113 @@ const loc = {
     return store.set("suite.location", next);
   }
 };
+
+/* ---- first-run location, acquired once and shared ----
+   The suite has always shared one location; what it never did was acquire the
+   first one for you, so every tool cold-started into a "type a ZIP" card. This
+   asks the browser once — no network request, so it works under every tool's
+   generated CSP and from file:// — and hands the result to loc.set(), which is
+   the same path the manual buttons already use. Off switch: suite.location.auto.
+   A refusal is remembered so the prompt never appears twice. */
+const AUTO_KEY = "suite.location.auto";
+const AUTO_DENIED_KEY = "suite.location.autoDenied";
+const GEO_TIMEOUT_MS = 10000;
+
+Object.assign(loc, {
+  autoEnabled() { return store.get(AUTO_KEY) !== "off"; },   /* absent = on */
+  /* sentinel is non-numeric on purpose: store.get JSON-parses first, so "1"
+     would come back as the number 1 and never match a string compare */
+  autoDenied() { return store.get(AUTO_DENIED_KEY) === "denied"; },
+  setAuto(on) {
+    /* turning it back on is also how you take back a "Block" — otherwise a
+       single misclick would be unrecoverable without the storage viewer */
+    if (on) { store.remove(AUTO_DENIED_KEY); return store.remove(AUTO_KEY); }
+    return store.set(AUTO_KEY, "off");
+  },
+  /* true when asking could actually get somewhere — used to stay silent rather
+     than paint a "finding you…" state that can never resolve */
+  autoPossible() {
+    return !loc.get() && loc.autoEnabled() && !loc.autoDenied() &&
+      typeof navigator !== "undefined" && !!navigator.geolocation;
+  },
+  auto() {
+    const have = loc.get();
+    if (have) return Promise.resolve(have);
+    if (!loc.autoPossible()) return Promise.resolve(null);
+    return new Promise(resolve => {
+      let settled = false;
+      const done = v => { if (!settled) { settled = true; resolve(v); } };
+      try {
+        navigator.geolocation.getCurrentPosition(
+          pos => {
+            const lat = +pos.coords.latitude.toFixed(4);
+            const lon = +pos.coords.longitude.toFixed(4);
+            try {
+              loc.set({ lat, lon, label: "My location (" + lat + ", " + lon + ")" });
+            } catch (e) { return done(null); }
+            /* resolve only on a write that actually stuck: a failed write (storage
+               full, denied, private mode) must not report success, or autoBoot
+               would reload into the same empty page forever */
+            done(loc.get());
+          },
+          err => {
+            if (!err || err.code !== 1) return done(null);   // 1 = PERMISSION_DENIED
+            /* Remember only a refusal someone actually made. Automation, headless
+               runs and enterprise policy all report the same code 1 while the
+               permission state is still "prompt" — persisting that would switch
+               the feature off for good for a user who was never asked. When the
+               Permissions API can't say (older Safari rejects for geolocation),
+               treat it as a real refusal: re-prompting on every load is worse. */
+            let q = null;
+            try {
+              q = navigator.permissions && navigator.permissions.query({ name: "geolocation" });
+            } catch (e) { q = null; }
+            if (!q || typeof q.then !== "function") {
+              store.set(AUTO_DENIED_KEY, "denied");
+              return done(null);
+            }
+            q.then(
+              s => { if (!s || s.state !== "prompt") store.set(AUTO_DENIED_KEY, "denied"); },
+              () => { store.set(AUTO_DENIED_KEY, "denied"); }
+            ).then(() => done(null), () => done(null));
+          },
+          { timeout: GEO_TIMEOUT_MS, maximumAge: 600000 }
+        );
+      } catch (e) { done(null); }
+    });
+  },
+  /* Drop-in for a tool's boot: does nothing at all unless this is a genuine cold
+     start, then reloads once the location lands. Reload rather than re-render
+     because tools read the location in a dozen different shapes — several cache
+     it at parse time — and on a cold start there is nothing on screen to lose:
+     the page is showing its empty "set your location" card. Same move those
+     tools already make on the cross-tab storage event.
+
+     But not every tool blocks on a location — geo, elevation, recalls and the
+     station pickers are usable straight away — so anything the user has typed
+     cancels the reload. The location is saved and shared either way; only the
+     free re-render is given up, and the next visit opens on it. */
+  autoBoot() {
+    if (!loc.autoPossible()) return Promise.resolve(null);
+    let typed = false;
+    const mark = () => { typed = true; };
+    const watch = typeof document !== "undefined" && document.addEventListener;
+    if (watch) {
+      document.addEventListener("input", mark, true);
+      document.addEventListener("change", mark, true);
+    }
+    const unwatch = () => {
+      if (!watch) return;
+      document.removeEventListener("input", mark, true);
+      document.removeEventListener("change", mark, true);
+    };
+    return loc.auto().then(l => {
+      unwatch();
+      if (l && !typed && typeof window !== "undefined") window.location.reload();
+      return l;
+    }, () => { unwatch(); return null; });
+  }
+});
 
 const locations = {
   /* Migration is explicit: only v3 entry points (hub/settings) call init().

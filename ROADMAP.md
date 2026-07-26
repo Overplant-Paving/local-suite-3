@@ -32,6 +32,17 @@ Standing rules for the executing agent:
 - [x] Phase 4 — Suite-wide audit: Settings, CSP, escaping, accessibility and full smoke evidence completed. The planned `v2.0` tag was never created and is superseded, not backfilled.
 - [x] V3 foundation — multiple saved locations, Flight Tracker and the 29-resource National Parks Explorer complete with focused and full-suite evidence.
 - [x] **Local Suite v3.0.0 — first formal release, 2026-07-25.** Release checklist: `tests/evidence/v3-release/release-checklist.md`.
+- [x] Guided API-key setup in Settings (2026-07-25) — provider-ordered wizard, `suite.profile.*`
+  form-fill, paste routing, and a live per-key check; one api.data.gov signup now fills the NASA,
+  Congress.gov and USDA FoodData rows after each provider verifies the key. Settings becomes
+  `"network": "keyed"` (requests only on click). Signup itself stays manual by design — see
+  API-AND-RELAY.md §3. Evidence: `tests/evidence/settings/keysetup/`, gate:
+  `node tests/settings-keysetup.mjs`.
+- [x] Automatic first location (2026-07-25) — the suite already shared one location; now it acquires
+  the first one itself via browser geolocation (no network request, no CSP change), at the hub and
+  in all 23 location tools, with a Settings toggle (`suite.location.auto`) and a remembered refusal.
+  See ARCHITECTURE.md §6.1. Evidence: `tests/evidence/location-auto/`, gate:
+  `node tests/location-auto.mjs`.
 
 ## Overview
 

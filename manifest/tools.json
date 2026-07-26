@@ -39,6 +39,8 @@
       "storage": [
         "suite.theme",
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.units",
         "suite.cache.weather.*"
       ],
@@ -60,7 +62,9 @@
       ],
       "storage": [
         "suite.theme",
-        "suite.location"
+        "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied"
       ],
       "cacheTtlMin": null,
       "since": "v1",
@@ -186,7 +190,9 @@
       "key": null,
       "endpoints": [],
       "storage": [
-        "suite.location"
+        "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied"
       ],
       "cacheTtlMin": null,
       "since": "v1",
@@ -452,6 +458,8 @@
       ],
       "storage": [
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.cache.alerts",
         "suite.alerts.notify",
         "suite.alerts.seen"
@@ -476,6 +484,8 @@
       ],
       "storage": [
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.radar.station",
         "suite.radar.sector",
         "suite.radar.product"
@@ -500,6 +510,8 @@
       "storage": [
         "suite.theme",
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.cache.air"
       ],
       "cacheTtlMin": 10,
@@ -522,6 +534,8 @@
       "storage": [
         "suite.theme",
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.cache.spaceweather",
         "suite.cache.spaceweather.*"
       ],
@@ -544,6 +558,8 @@
       "storage": [
         "suite.theme",
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.tides.station",
         "suite.cache.tides.*"
       ],
@@ -568,6 +584,8 @@
       "storage": [
         "suite.theme",
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.cache.marine.*"
       ],
       "cacheTtlMin": 30,
@@ -590,6 +608,8 @@
       ],
       "storage": [
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.normals.station",
         "suite.cache.normals.*"
       ],
@@ -613,6 +633,8 @@
       "storage": [
         "suite.theme",
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.quakes.feed",
         "suite.quakes.minMag",
         "suite.quakes.maxDist",
@@ -639,6 +661,8 @@
       "storage": [
         "suite.theme",
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.rivers.favs",
         "suite.cache.rivers.*"
       ],
@@ -662,6 +686,8 @@
       "storage": [
         "suite.theme",
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.wildfire.radius",
         "suite.wildfire.sort",
         "suite.cache.wildfire.*"
@@ -687,6 +713,8 @@
       "storage": [
         "suite.theme",
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.cache.drought.*"
       ],
       "cacheTtlMin": 1440,
@@ -709,6 +737,8 @@
       "storage": [
         "suite.theme",
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.cache.volcano.*"
       ],
       "cacheTtlMin": 60,
@@ -730,6 +760,8 @@
       ],
       "storage": [
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.pref.snow.fav",
         "suite.cache.snow.*"
       ],
@@ -759,6 +791,8 @@
       ],
       "storage": [
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.key.ebird",
         "suite.cache.wildlife.*"
       ],
@@ -781,6 +815,8 @@
       ],
       "storage": [
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.cache.iss.*",
         "suite.theme"
       ],
@@ -852,6 +888,8 @@
       "storage": [
         "suite.theme",
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.state",
         "suite.cars",
         "suite.cache.recalls.*"
@@ -1144,6 +1182,8 @@
       ],
       "storage": [
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.cache.geo.*"
       ],
       "cacheTtlMin": 10080,
@@ -1169,6 +1209,8 @@
       "storage": [
         "suite.theme",
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.cache.elevation.*"
       ],
       "cacheTtlMin": 10080,
@@ -1241,7 +1283,7 @@
       "network": "keyed",
       "key": {
         "name": "usda",
-        "signup": "https://fdc.nal.usda.gov/api-key-signup.html",
+        "signup": "https://fdc.nal.usda.gov/api-key-signup",
         "demo": true
       },
       "endpoints": [
@@ -1408,6 +1450,8 @@
       "storage": [
         "suite.theme",
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.cache.nearby.*"
       ],
       "cacheTtlMin": 60,
@@ -1597,6 +1641,8 @@
       ],
       "storage": [
         "suite.location",
+        "suite.location.auto",
+        "suite.location.autoDenied",
         "suite.cache.passes.visual",
         "suite.theme"
       ],
@@ -1612,12 +1658,27 @@
       "name": "Suite Settings",
       "cat": "util",
       "cx": "M",
-      "desc": "Backup and restore, API keys, relay, and storage — the suite's controls.",
-      "network": "offline",
+      "desc": "Backup and restore, guided API-key setup, relay, and storage — the suite's controls.",
+      "network": "keyed",
       "key": null,
-      "endpoints": [],
+      "endpoints": [
+        "https://api.nasa.gov",
+        "https://api.congress.gov",
+        "https://api.nal.usda.gov",
+        "https://api.eia.gov",
+        "https://developer.nps.gov",
+        "https://finnhub.io",
+        "https://api.ebird.org",
+        "https://api.bart.gov",
+        "https://api.aviationstack.com"
+      ],
       "storage": [
-        "suite.* (reads/writes all suite keys by design)"
+        "suite.* (reads/writes all suite keys by design)",
+        "suite.profile.email",
+        "suite.profile.first",
+        "suite.profile.last",
+        "suite.location.auto",
+        "suite.location.autoDenied"
       ],
       "cacheTtlMin": null,
       "since": "v2",

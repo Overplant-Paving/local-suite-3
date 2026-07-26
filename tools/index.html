@@ -147,6 +147,25 @@ window.addEventListener("storage", e => {
 });
 paintLocationSwitch();
 
+/* First visit with no location: ask the browser once, here at the front door, so
+   the 23 location tools open straight into their data instead of a setup card.
+   Doing it on the hub is what spares those tools the reload their own autoBoot()
+   would otherwise need. Toggle lives in Settings (suite.location.auto). */
+if (Suite.location.autoPossible()) {
+  const status = document.getElementById("locSwitchStatus");
+  locSwitch.hidden = false;
+  status.textContent = "Finding your location…";
+  Suite.location.auto().then(l => {
+    if (l) {
+      paintLocationSwitch();    // all()/active() run locations.init(), folding the fresh mirror in
+      status.textContent = (l.label || "Your location") + " is now active and shared with every tool.";
+    } else {
+      paintLocationSwitch();    // re-hides the switcher when nothing was saved
+      status.textContent = "";
+    }
+  });
+}
+
 /* ==== data: filled from manifest/tools.json by build.py ==== */
 const TOOLS = /* @suite:tools */[]/* /@suite:tools */;
 
@@ -160,7 +179,7 @@ const CAT_LABEL = {
   ref:   "📚 Reference & Lookup",
   time:  "🕰️ Time & Planning",
   local: "📍 Local Life",
-  util:  "🧰 Utilities & Toys (offline)",
+  util:  "🧰 Utilities & Toys",  /* 12 of 13 are offline; Settings makes a request when you test a key — the per-card chip is the precise truth */
   games: "🎮 Games",
 };
 const CATS = Object.keys(CAT_LABEL).filter(id => TOOLS.some(t => t.cat === id));

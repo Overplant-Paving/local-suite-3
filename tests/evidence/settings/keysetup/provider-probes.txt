@@ -1,0 +1,57 @@
+# live provider probes for settings.html guided key setup
+# recorded 2026-07-25T07:09:07Z from the terminal (CORS headers requested with Origin: null,
+# which is what a file:// page sends)
+
+## 1. gateway identity — which providers share one api.data.gov key
+--- GET https://api.nasa.gov/planetary/apod  (DEMO_KEY)
+    HTTP/2 200 
+    access-control-allow-origin: null
+    via: https/1.1 api-umbrella (ApacheTrafficServer [cMsSf ])
+    x-ratelimit-limit: 10
+--- GET https://api.congress.gov/v3/bill  (DEMO_KEY)
+    HTTP/2 200 
+    access-control-allow-origin: *
+    via: https/1.1 api-umbrella (ApacheTrafficServer [cMsSf ])
+    x-ratelimit-limit: 10
+--- GET https://api.nal.usda.gov/fdc/v1/foods/search  (DEMO_KEY)
+    HTTP/2 200 
+    access-control-allow-origin: *
+    via: https/1.1 api-umbrella (ApacheTrafficServer [cMsSf ])
+    x-ratelimit-limit: 10
+--- GET https://developer.nps.gov/api/v1/parks  (DEMO_KEY)
+    HTTP/2 200 
+    access-control-allow-origin: *
+    via: https/1.1 api-umbrella (ApacheTrafficServer [cMsSf ])
+    x-ratelimit-limit: 10
+--- GET https://api.eia.gov/v2/  (DEMO_KEY)
+    HTTP/2 200 
+    access-control-allow-origin: *
+    via: https/1.1 api-umbrella (ApacheTrafficServer [cMsSf ])
+    x-ratelimit-limit: 10
+
+## 2. bad-key behaviour — every provider must reject machine-readably
+    nasa           HTTP 403  { "error": { "code": "API_KEY_INVALID", "message": "An invalid api_key was supplied. Get one at http
+    congress       HTTP 403  { "error": { "code": "API_KEY_INVALID", "message": "An invalid api_key was supplied. Get one at http
+    usda           HTTP 403  { "error": { "code": "API_KEY_INVALID", "message": "An invalid api_key was supplied. Get one at http
+    eia            HTTP 403  { "error": { "code": "API_KEY_INVALID", "message": "An invalid api_key was supplied. Get one at http
+    nps            HTTP 403  { "error": { "code": "API_KEY_INVALID", "message": "Your API key is not valid. Please get a new one 
+    finnhub        HTTP 401  {"error":"Invalid API key."}
+    ebird          HTTP 403  
+    bart           HTTP 400  {"?xml":{"@version":"1.0","@encoding":"utf-8"},"root":{"message":{"error":{"text":"Invalid key","details":"The
+    aviationstack  HTTP 401  { "error": { "code": "invalid_access_key", "message": "You have not supplied a valid API Access Key.
+
+## 3. signup URLs resolve
+    https://api.data.gov/signup/                             200 
+    https://www.nps.gov/subjects/developer/get-started.htm   200 
+    https://www.eia.gov/opendata/register.php                200 
+    https://finnhub.io/register                              200 
+    https://ebird.org/api/keygen                             302 https://secure.birds.cornell.edu/cassso/login?service=https%3A%2F%2Febird.org%2Flogin%2Fcas%3Fportal%3Debird&locale=en_US
+    https://aviationstack.com/signup/free                    200 
+    https://fdc.nal.usda.gov/api-key-signup                  302 http://fdc.nal.usda.gov/api-key-signup/
+
+## 4. why signup itself cannot be automated
+    api.data.gov's embeddable signup form requires reCAPTCHA tokens and external scripts:
+      "g-recaptcha-response-v2"
+      "g-recaptcha-response-v3"
+      https://www.google.com/recaptcha/api.js
+      "user_terms_and_conditions"

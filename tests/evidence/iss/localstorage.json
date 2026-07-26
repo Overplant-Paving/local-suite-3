@@ -1,15 +1,9 @@
 {
-  "v1": {
-    "suite.theme": "dark",
-    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}"
-  },
+  "note": "new-in-v2 tool — no v1 original; parity N/A",
   "v2": {
     "suite.location": "{\"lat\":34.0901,\"lon\":-118.4065,\"label\":\"Beverly Hills, CA\"}",
-    "suite.cache.iss.pos": "{\"t\":1784096561129,\"v\":{\"name\":\"iss\",\"id\":25544,\"latitude\":-51.608164726831,\"longitude\":29.967617375223,\"altitude\":433.66188232521,\"velocity\":27552.15…(336 chars)",
-    "suite.theme": "dark"
-  },
-  "keysOnlyInV1": [],
-  "keysOnlyInV2": [
-    "suite.cache.iss.pos"
-  ]
+    "suite.cache.iss.pos": "{\"t\":1784883006589,\"v\":{\"name\":\"iss\",\"id\":25544,\"latitude\":-42.674180960843,\"longitude\":-10.975774567956,\"altitude\":429.47202749511,\"velocity\":27560.9…(337 chars)",
+    "suite.theme": "dark",
+    "suite.location.autoDenied": "denied"
+  }
 }

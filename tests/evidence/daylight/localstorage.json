@@ -1,12 +1,8 @@
 {
-  "v1": {
-    "suite.theme": "dark",
-    "suite.location": "{\"lat\":40.7128,\"lon\":-74.006,\"label\":\"New York, USA\"}"
-  },
+  "note": "new-in-v2 tool — no v1 original; parity N/A",
   "v2": {
+    "suite.location": "{\"lat\":40.7128,\"lon\":-74.006,\"label\":\"New York, USA\"}",
     "suite.theme": "dark",
-    "suite.location": "{\"lat\":40.7128,\"lon\":-74.006,\"label\":\"New York, USA\"}"
-  },
-  "keysOnlyInV1": [],
-  "keysOnlyInV2": []
+    "suite.location.autoDenied": "denied"
+  }
 }

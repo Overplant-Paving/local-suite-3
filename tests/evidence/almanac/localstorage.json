@@ -1,12 +1,8 @@
 {
-  "v1": {
-    "suite.theme": "dark",
-    "suite.location": "{\"lat\":32.7185,\"lon\":-117.1593,\"label\":\"San Diego, CA 92101\"}"
-  },
+  "note": "new-in-v2 tool — no v1 original; parity N/A",
   "v2": {
+    "suite.location": "{\"lat\":32.7185,\"lon\":-117.1593,\"label\":\"San Diego, CA 92101\"}",
     "suite.theme": "dark",
-    "suite.location": "{\"lat\":32.7185,\"lon\":-117.1593,\"label\":\"San Diego, CA 92101\"}"
-  },
-  "keysOnlyInV1": [],
-  "keysOnlyInV2": []
+    "suite.location.autoDenied": "denied"
+  }
 }

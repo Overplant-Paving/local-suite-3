@@ -1,23 +1,13 @@
 {
-  "v1": {
-    "suite.cache.spaceweather": "{\"t\":1784182301190,\"v\":{\"kp\":3,\"kpWhen\":\"3-hr period to Jul 15, 10 PM\",\"kpHistory\":[1.67,1.33,2,2.33,2,3.67,2,1.67,2,2,1.33,1.67,2,2.33,3,3.67,3.33,3,…(428 chars)",
-    "suite.theme": "dark",
-    "suite.location": "{\"lat\":34.0522,\"lon\":-118.2437,\"label\":\"Los Angeles, CA\"}"
-  },
+  "note": "new-in-v2 tool — no v1 original; parity N/A",
   "v2": {
-    "suite.cache.spaceweather.windspeed": "{\"t\":1784095899865,\"v\":[{\"proton_speed\":466,\"time_tag\":\"2026-07-16T06:06:00Z\"}]}",
+    "suite.cache.spaceweather.windspeed": "{\"t\":1784883088104,\"v\":[{\"proton_speed\":514,\"time_tag\":\"2026-07-25T08:45:00Z\"}]}",
     "suite.location": "{\"lat\":34.0614,\"lon\":-118.2385,\"label\":\"Los Angeles, CA 90012\"}",
-    "suite.cache.spaceweather.windmag": "{\"t\":1784095899865,\"v\":[{\"bt\":5,\"bz_gsm\":-1,\"time_tag\":\"2026-07-16T06:06:00Z\"}]}",
-    "suite.cache.spaceweather.kp": "{\"t\":1784095899865,\"v\":[{\"time_tag\":\"2026-07-09T00:00:00\",\"Kp\":2.67,\"a_running\":12,\"station_count\":8},{\"time_tag\":\"2026-07-09T03:00:00\",\"Kp\":1,\"a_runn…(4459 chars)",
-    "suite.cache.spaceweather.scales": "{\"t\":1784095899865,\"v\":{\"0\":{\"DateStamp\":\"2026-07-16\",\"TimeStamp\":\"06:09:00\",\"R\":{\"Scale\":\"0\",\"Text\":\"none\",\"MinorProb\":null,\"MajorProb\":null},\"S\":{\"S…(994 chars)",
-    "suite.cache.spaceweather": "{\"t\":1784095899865,\"v\":{\"kp\":3,\"kpWhen\":\"3-hr period to Jul 15, 10 PM\",\"kpHistory\":[1.67,1.33,2,2.33,2,3.67,2,1.67,2,2,1.33,1.67,2,2.33,3,3.67,3.33,3,…(428 chars)",
+    "suite.cache.spaceweather.windmag": "{\"t\":1784883088104,\"v\":[{\"bt\":4,\"bz_gsm\":-1,\"time_tag\":\"2026-07-25T08:45:00Z\"}]}",
+    "suite.location.autoDenied": "denied",
+    "suite.cache.spaceweather.kp": "{\"t\":1784883088104,\"v\":[{\"time_tag\":\"2026-07-18T00:00:00\",\"Kp\":1.67,\"a_running\":6,\"station_count\":8},{\"time_tag\":\"2026-07-18T03:00:00\",\"Kp\":1,\"a_runni…(4454 chars)",
+    "suite.cache.spaceweather.scales": "{\"t\":1784883088104,\"v\":{\"0\":{\"DateStamp\":\"2026-07-25\",\"TimeStamp\":\"08:49:00\",\"R\":{\"Scale\":\"0\",\"Text\":\"none\",\"MinorProb\":null,\"MajorProb\":null},\"S\":{\"S…(994 chars)",
+    "suite.cache.spaceweather": "{\"t\":1784883088104,\"v\":{\"kp\":0.67,\"kpWhen\":\"3-hr period to Jul 24, 10 PM\",\"kpHistory\":[2.33,3.33,3,2.67,2,2.67,2,2,2.67,2.67,2.67,5.33,5,3.33,4,2.67,1…(437 chars)",
     "suite.theme": "dark"
-  },
-  "keysOnlyInV1": [],
-  "keysOnlyInV2": [
-    "suite.cache.spaceweather.windspeed",
-    "suite.cache.spaceweather.windmag",
-    "suite.cache.spaceweather.kp",
-    "suite.cache.spaceweather.scales"
-  ]
+  }
 }

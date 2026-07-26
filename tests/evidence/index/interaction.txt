@@ -1,7 +1,7 @@
 legacy migration: {"schema":1,"activeId":"saved-location","items":[{"id":"saved-location","revision":1,"lat":40.7128,"lon":-74.006,"label":"Home"}]}
 hub active location: saved-location / Home
 saved options after add: Home,Work
-hub switch result: {"mirror":{"lat":34.0522,"lon":-118.2437,"label":"Work"},"collection":{"schema":1,"activeId":"work","items":[{"id":"saved-location","revision":1,"lat":40.7128,"lon":-74.006,"label":"Home"},{"id":"work","label":"Work","revision":1,"lat":34.0522,"lon":-118.2437}]},"safeCache":"{\"t\":1784232053591,\"v\":\"safe scoped data\"}","tidesStation":null,"status":"Work is now active; location-specific station, state, or alert choices were reset."}
+hub switch result: {"mirror":{"lat":34.0522,"lon":-118.2437,"label":"Work"},"collection":{"schema":1,"activeId":"work","items":[{"id":"saved-location","revision":1,"lat":40.7128,"lon":-74.006,"label":"Home"},{"id":"work","label":"Work","revision":1,"lat":34.0522,"lon":-118.2437}]},"safeCache":"{\"t\":1784969512535,\"v\":\"safe scoped data\"}","tidesStation":null,"status":"Work is now active; location-specific station, state, or alert choices were reset."}
 source-hub guard remains designed: "This is the source hub — the built suite lives in dist/ The tool list is injected by build.py, so this un-built file has no tool links. Open the built hub instead — every tool works from there, straight off the disk. Open the built suite (dist/index.html) →"
 theme toggle: light -> dark, aria-pressed=true
 console: clean (no errors)

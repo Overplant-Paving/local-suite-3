@@ -2,7 +2,7 @@ first-run card (no suite.location): "Where are you?"
 invalid ZIP "1234" -> frMsg: "Enter a 5-digit US ZIP."
 LIVE zippopotam (submitted via Enter): ZIP 90012 -> locbar "Near Los Angeles, CA 90012change"
 locbar "change" -> first-run card visible again: true
-Overpass health probe (node-side /api/status): primary=HTTP 406, mirror=HTTP 429 -> OUTAGE — designed error state + canned render path instead
+Overpass health probe (node-side /api/status): primary=HTTP 406, mirror=timeout (8 s) -> OUTAGE — designed error state + canned render path instead
 designed error state (boot search, endpoints aborted): searchMsg="Search failed (Failed to fetch)."; list="Couldn't reach Overpass. It may be rate-limited — wait a moment and retry."
 render path via CANNED pharmacy response (NOT live — source down): resStamp="2 found"; names=["Canned Test Pharmacy","Second Canned Pharmacy"]; dists=["443 m","1.14 km"] (distance-sorted)
 map: 6 tile imgs, all tile.openstreetmap.org=true, LIVE-loaded ok=6; you-dot=true, result dots=2, attribution="© OpenStreetMap contributors"
@@ -11,7 +11,7 @@ keyboard select last item (focus+Enter): list .sel="Second Canned Pharmacy"
 MIRROR FALLBACK: request sequence = [primary(overpass-api.de) -> mirror(overpass.kumi.systems)] (primary route-aborted, mirror fulfilled a distinct canned 2-element response)
 mirror render: resStamp="2 found"; names=["<b>Kumi & Mirror</b> Library","Central Branch"] dists=["614 m","1.70 km"] (distance-sorted: node ~620 m before way ~1.7 km); det="630 W 5th St · Mo-Su 10:00-20:00"
 escaping probe: name "<b>Kumi & Mirror</b> Library" rendered as TEXT, injected <b> element present=false; dot title="<b>Kumi & Mirror</b> Library · 614 m"
-STALE PATH (network blocked, cache aged 24 h): rendered from cache, resStamp="2 found · cached 1:13 AM", searchMsg="Offline — cached from 1:13 AM."
+STALE PATH (network blocked, cache aged 24 h): rendered from cache, resStamp="2 found · cached 3:50 AM", searchMsg="Offline — cached from 3:50 AM."
 theme toggle: light -> dark, aria-pressed=true
 CONSOLE ISSUES:
   console.error: Failed to load resource: net::ERR_FAILED
