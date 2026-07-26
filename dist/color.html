@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-//3u9UqhTrL2EMZ/TV460clarzwH88eQnv7QrSzebl4=' 'sha256-Hggy/yxOxD2zorobcEMSwv89dKIkx/5W9vy28eBfQqc='; style-src 'unsafe-inline'; img-src 'self' data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-//3u9UqhTrL2EMZ/TV460clarzwH88eQnv7QrSzebl4=' 'sha256-tYTdmSO3wBBobTImVd5G+NfuI81ZqM5veIMCvnLF7S0='; style-src 'unsafe-inline'; img-src 'self' data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Color Studio · Local Suite</title>
 <style>
@@ -1148,15 +1148,20 @@ const fileInput = document.getElementById("fileInput");
 const photoSwatchesEl = Suite.liveRegion(document.getElementById("photoSwatches"));
 function handleImage(file) {
   if (!file || !file.type.startsWith("image/")) { toast("That’s not an image"); return; }
-  const img = new Image();
-  img.addEventListener("load", () => {
+  /* Decode with createImageBitmap rather than an <img> holding an object URL: the
+     generated CSP is img-src 'self' data:, which refuses blob: URLs, so an <img>
+     could never load a dropped file (verified from file:// and when hosted). A
+     bitmap is not an image-source fetch, and it leaves the canvas untainted, so the
+     getImageData sampling below still works. */
+  createImageBitmap(file).then(bmp => {
     const maxW = 160;
-    const scale = Math.min(1, maxW / img.width);
-    const w = Math.max(1, Math.round(img.width * scale));
-    const h = Math.max(1, Math.round(img.height * scale));
+    const scale = Math.min(1, maxW / bmp.width);
+    const w = Math.max(1, Math.round(bmp.width * scale));
+    const h = Math.max(1, Math.round(bmp.height * scale));
     canvas.width = w; canvas.height = h;
     const ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0, w, h);
+    ctx.drawImage(bmp, 0, 0, w, h);
+    bmp.close();
     canvas.style.display = "block";
     // show a nicer preview at larger size
     const data = ctx.getImageData(0, 0, w, h).data;
@@ -1174,10 +1179,7 @@ function handleImage(file) {
     colors.forEach(c => photoSwatchesEl.append(swatch(c)));
     pal.classList.remove("hidden");
     pal.dataset.hexes = JSON.stringify(colors.map(c => rgbToHex(c.r, c.g, c.b)));
-    URL.revokeObjectURL(img.src);
-  });
-  img.addEventListener("error", () => toast("Could not read that image"));
-  img.src = URL.createObjectURL(file);
+  }).catch(() => toast("Could not read that image"));
 }
 fileInput.addEventListener("change", () => handleImage(fileInput.files[0]));
 drop.addEventListener("dragover", e => { e.preventDefault(); drop.classList.add("over"); });

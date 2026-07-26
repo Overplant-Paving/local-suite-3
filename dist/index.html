@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-//3u9UqhTrL2EMZ/TV460clarzwH88eQnv7QrSzebl4=' 'sha256-JjBZgg19qtRATqbUn8JUWpSXUL9pkAqVV8xjMYNB764='; style-src 'unsafe-inline'; img-src 'self' data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-//3u9UqhTrL2EMZ/TV460clarzwH88eQnv7QrSzebl4=' 'sha256-SvxHQArDhokZJvbXsv5Vtr4PAtRsQdLXwE0SDxFJsSg='; style-src 'unsafe-inline'; img-src 'self' data:; media-src 'none'; connect-src 'none'; worker-src 'self'; manifest-src 'self'">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Local Suite · Command Center</title>
 <style>
@@ -800,7 +800,6 @@ const CAT_LABEL = {
   time:  "🕰️ Time & Planning",
   local: "📍 Local Life",
   util:  "🧰 Utilities & Toys",  /* 12 of 13 are offline; Settings makes a request when you test a key — the per-card chip is the precise truth */
-  games: "🎮 Games",
 };
 const CATS = Object.keys(CAT_LABEL).filter(id => TOOLS.some(t => t.cat === id));
 
@@ -922,34 +921,9 @@ function render() {
     sec.append(h2, grid);
     catsEl.append(sec);
   }
-  /* games: meteor-patrol is deliberately PARKED (ROADMAP Phase 4 item 5) — a designed
-     work-in-progress state, not a shipped tool. The card renders only in the unfiltered
-     view (it is not searchable content) and links nowhere until the game ships. */
-  if (!state.q && !state.cat && !state.offline && !state.nokey) {
-    const sec = document.createElement("section");
-    const h2 = document.createElement("h2");
-    h2.textContent = CAT_LABEL.games + " ";
-    const n = document.createElement("span");
-    n.className = "n";
-    n.textContent = "in the workshop";
-    h2.append(n);
-    const grid = document.createElement("div");
-    grid.className = "grid";
-    const card = document.createElement("article");
-    card.className = "card wip";
-    const name = document.createElement("h3");
-    name.textContent = "Meteor Patrol";
-    const desc = document.createElement("p");
-    desc.className = "desc";
-    desc.textContent = "The v1 arcade prototype is being brought up to suite quality — sprites, theme, and all. It ships in a later release; nothing here is broken.";
-    const chip = document.createElement("span");
-    chip.className = "chip";
-    chip.textContent = "work in progress";
-    card.append(name, desc, chip);
-    grid.append(card);
-    sec.append(h2, grid);
-    catsEl.append(sec);
-  }
+  /* games: the meteor-patrol prototype was RETIRED, not parked (ROADMAP, 2026-07-25) — the
+     category reopens only with a purpose-built toy at full Definition of Done. Until then the
+     hub shows manifest tools and nothing else. */
   emptyEl.style.display = shown ? "none" : "block";
   /* announce the filter outcome (QUALITY.md §2: result containers are heard, not just seen) */
   document.getElementById("resStatus").textContent =

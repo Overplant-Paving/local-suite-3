@@ -56,7 +56,7 @@ touched. The only items that wait are ones with a genuine dependency:
 |---|---|
 | broken `.example` URLs → embedded BLS data / link-out cards (Batch C) | CSP suite-wide emission — blocked on the Phase 1 browser-compatibility verdict |
 | hardcoded BART key → `suite.key.bart` (Batch C) | escaping re-audit of the 5 flagged files — a dedicated adversarial pass, done once against final code |
-| focus.html missing export (pilot, Phase 1 — data-loss risk) | games integration — depends on the meteor-patrol finish-or-park decision |
+| focus.html missing export (pilot, Phase 1 — data-loss risk) | games integration — depended on the meteor-patrol finish-or-park decision, answered "retire" on 2026-07-25 |
 | inline handlers (build rejects them) | suite-wide smoke run + a11y re-verification — audits of migration-time work |
 | divergent fetch helpers → `Suite.fetchJSON` | |
 | per-tool a11y checklist (recipe step 8) | |
@@ -110,7 +110,7 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 12 | tripcost.html | local | off | (eia opt.) | A | optional gas-price fetch | ✅ `tests/evidence/tripcost/` |
 | 13 | qr.html | util | off | — | A | | ✅ `tests/evidence/qr/` |
 | 14 | text.html | util | off | — | A | | ✅ `tests/evidence/text/` |
-| 15 | color.html | util | off | — | A | | ✅ `tests/evidence/color/` |
+| 15 | color.html | util | off | — | A | photo palette re-fixed 2026-07-25: the v1 object-URL `<img>` was blocked by the Phase-4 CSP (`img-src 'self' data:` refuses `blob:`); now `createImageBitmap` | ✅ `tests/evidence/color/` · `tests/evidence/color/csp-blob/` |
 | 16 | random.html | util | off | — | A | | ✅ `tests/evidence/random/` |
 | 17 | notes.html | util | off | — | A | XP (keep) | ✅ `tests/evidence/notes/` |
 | 18 | dataviewer.html | util | off | — | A | | ✅ `tests/evidence/dataviewer/` |
@@ -169,7 +169,10 @@ source blocks browser scripts (embedded data or link-out). **Flags**: EA = escap
 | 71 | passes.html | space | cors | — | D | LD (SGP4 math + TLE handling) | ✅ `tests/evidence/passes/` |
 
 New in v2 (not migrations): **settings.html** (Phase 4 — backup/restore, keys, relay config) and
-the **games** hub category (Phase 4 — meteor-patrol de-nested).
+the **games** hub category (Phase 4 — meteor-patrol de-nested). The games category was **retired on
+2026-07-25**: the parked prototype was never brought to suite quality, so the card and
+`CAT_LABEL.games` were removed rather than left as a permanent work-in-progress state. It reopens
+only with a purpose-built toy at full Definition of Done (see ROADMAP Current status).
 
 New in v3: **flight.html** (individual dated flight status and ETA via a user-owned Aviationstack
 key, plus Airplanes.live ADS-B position fallback; deterministic provider/offline/mobile evidence

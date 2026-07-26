@@ -457,10 +457,12 @@ Zero network requests, ever. These are the "works on an airplane" tier.
 ### 10.2 QR Code Maker
 Text/URL/wifi-credentials → QR, rendered on canvas by an embedded ~10 KB public-domain QR encoder. Print sheet of codes.
 - **Complexity:** S · **Suggested file:** `qr.html`
+- **Proposed addition — a "read" tab, spike-gated:** this tool makes codes but can't read one. A reader needs `getUserMedia` plus an embedded decoder (~15 KB), still zero-network. **Run the spike before designing anything:** confirm camera access works from `file://` in Chrome *and* Firefox. If it only works when hosted, drop the idea — a tool that fails when double-clicked breaks the suite's defining promise, and a camera prompt that leads nowhere is worse than no feature.
 
 ### 10.3 Text Toolbox
 Word/char count, case conversion, sort/dedupe lines, diff two texts, SHA-256 hash (WebCrypto), URL/Base64 encode-decode.
 - **Complexity:** S · **Suggested file:** `text.html`
+- **Proposed addition — a regex tester** as a fourth tab beside Diff: same input, same mental model, too small to earn its own hub card. Note this tool hashes *text* only; hashing **files** is 10.15.
 
 ### 10.4 Color Studio
 Picker, palette builder, contrast checker (WCAG), HEX/RGB/HSL conversions, "colors from an uploaded photo" (canvas).
@@ -477,6 +479,7 @@ Markdown-ish notepad autosaving to localStorage, with export/import as a file. S
 ### 10.7 Data Viewer
 Drop a JSON or CSV file onto the page → pretty-printed, collapsible, searchable table view. No more pasting data into random websites.
 - **Complexity:** M · **Suggested file:** `dataviewer.html`
+- **Proposed upgrade — Data Workbench (M):** column type inference, sort/filter, select-rename-drop columns, dedupe, simple group/count/sum, JSON ↔ CSV, and export of the transformed result — with explicit row and file-size limits and a designed state above them. Deliberately an *evolution of this tool*, not a second card: any new tool would also start with "drop a CSV," and the hub doesn't need two of those.
 
 ### 10.8 Sound Machine
 White/pink/brown noise, rain-ish synthesis via WebAudio, sleep timer. No audio files, no streaming service.
@@ -515,6 +518,93 @@ Backup/restore, the key manager and its guided setup, relay config, theme, locat
   and issue their own keys despite the identical error shape.
 - **Gotcha:** Aviationstack's free tier is 100 requests/month, so its test costs one and is
   double-click confirmed, counted into `suite.flight.usage`.
+
+### Proposed additions (2026-07-25)
+
+10.1–10.13 are all built. The entries below are **candidates, not commitments** — every one is
+zero-network, utility-first, and marked *proposed (not built)* until it ships. They are ranked in
+`ROADMAP.md`'s post-v3 backlog; smaller ideas are recorded as sub-bullets on the tool that should
+host them (see 10.2, 10.3, 10.7) rather than as new numbers, so a §10 number keeps meaning "a tool."
+
+Four constraints shape every one of them, all verified against built `dist/` files under `file://`:
+`eval`/`new Function` are impossible (per-file `script-src` is sha256-pinned), Web Workers are
+unavailable (`worker-src 'self'` + `file://`), `blob:` image URLs are refused by the generated
+`img-src 'self' data:` — use `createImageBitmap` + canvas + `toDataURL` — while downloads via
+`URL.createObjectURL` + `a[download]` work fine, as `notes`/`paper`/`loan`/`qr` already prove.
+
+### 10.14 Calculator & Percentage Workbench — *proposed (not built)*
+A tape, not a keypad: every line is an expression you can go back and edit, with its result beside
+it and earlier lines referencable, so a household calculation stays visible instead of vanishing
+into a running total. Modes for percent-of / percent-change / markup-vs-margin, tip and tax with an
+explicit rounding line, bill splitting with unequal shares and a reconciliation line naming who
+absorbs the odd cent, ratios, and change-over-time (%Δ, CAGR). The most conspicuous daily-use gap in
+the suite: 73 tools and none of them works out "18% of 64.50" — `convert.html` does units,
+`loan.html` amortizes, and nothing does arithmetic. No `eval`: a hand-written tokenizer and
+recursive-descent parser, which also bounds what a pasted expression can do. Money math is
+integer-cent so `0.1 + 0.2` never surfaces; division by zero is a designed inline state, not `NaN`
+in the tape. Worth mirroring the fraction parsing already in `convert.html` for `1 1/2` input.
+- Also the right host for three ideas too small to be cards: a **number base & bitwise desk**
+  (hex/bin/dec/oct, bit toggles, two's complement), **duration & timesheet math** (add/subtract
+  `hh:mm`, total a week — `dates.html` owns calendar-day math and shouldn't grow a second model),
+  and **unit-price comparison** ("is the big box cheaper?"), cross-linked from `convert.html`.
+- **Complexity:** S/M · **Suggested file:** `calc.html` · **Storage:** `suite.calc.tape`, `suite.calc.mode`
+
+### 10.15 File Integrity & Hash Desk — *proposed (not built)*
+Drop files in, get hashes out: SHA-256 (default), SHA-1, SHA-512, with size, MIME type and
+last-modified. Paste a published checksum for a large PASS / DOES NOT MATCH verdict — whitespace and
+case tolerant, algorithm inferred from digest length — rather than making anyone compare 64 hex
+characters by eye. Compare two files; copy or download a `SHA256SUMS`-style manifest. 10.3 hashes
+*text* and contains no file reader at all, so today the question "is this download the file they
+published?" sends people to a stranger's website with their file. `crypto.subtle.digest` has no
+streaming API and workers are unavailable, so hashing means holding the file in memory: set an
+explicit threshold and, above it, show a designed "too large to hash in the browser" card naming the
+limit and the OS command that does it instead — the same first-class-state treatment the
+blocked-source tools get. Cancel must work mid-hash. Reuse the drop-zone and its Enter/Space
+keyboard path from `color.html`.
+- **Complexity:** S/M · **Suggested file:** `hash.html` · **Storage:** `suite.hash.algo`, `suite.hash.recent` (names and digests only — never file contents)
+
+### 10.16 Checklist & Routine Tracker — *proposed (not built)*
+Templates and runs, kept deliberately calm. A template is the master list (packing, pre-trip,
+seasonal maintenance, weekly chores) with sections and per-item notes; a run is one instance of
+working through it, remembering when it started and finished, archived rather than celebrated when
+done. Optional recurrence stated in plain language — "resets Monday" — and applied when you open the
+page, never in the background. Fills the gap between free-form Notes, study Flashcards, printed
+habit grids, and Focus/Timers. JSON export/import following `flashcards.html`, print view following
+`printables.html`. Explicitly no streaks, badges, scores, or notifications. Both keys hold
+user-authored content, so every write checks what `Suite.store.set` returns and surfaces a save
+failure — this is the class of tool where silent quota loss actually costs someone something.
+Editing a template mid-run must not rewrite the run in progress: a run snapshots its items at start.
+- **Complexity:** S/M · **Suggested file:** `checklists.html` · **Storage:** `suite.checklists.templates`, `suite.checklists.runs`
+
+### 10.17 Image Toolbox — *proposed (not built)*
+Local-only resize (max dimension or percentage, aspect locked), crop, rotate/flip, PNG/JPEG/WebP
+conversion, a quality slider with live before/after byte counts, and metadata-stripping by canvas
+re-encode. No uploads, ever — the everyday "make this 4 MB photo emailable" errand currently means
+handing a personal photo to a stranger's website. 10.4 opens a photo only to sample colors; nothing
+resizes or exports one. Build it on `createImageBitmap(file)` + canvas, **not** `URL.createObjectURL`
+on an `<img>`: the generated CSP refuses `blob:` image URLs, while the bitmap path is verified
+working with untainted `getImageData` and a successful `toDataURL()`. Ship the honest caveats —
+re-encoding drops common metadata but is not a forensic sanitizer, lossy output is lossy,
+transparency survives only in formats that have it — plus explicit dimension and memory limits.
+- **Complexity:** M · **Suggested file:** `image.html` · **Storage:** `suite.image.prefs`
+
+### 10.18 Calendar / ICS Maker — *proposed (not built)*
+Compose events (one-off, all-day, simple recurrence) and export a valid `.ics`; import a local
+`.ics` into a private read-only agenda view. Seeded from a countdown in 8.2, an observance in 4.6,
+or a meeting time from 8.1 — nothing in the suite can currently leave it as a calendar entry. File
+import/export only, never OS calendar integration, which would need exactly the account coupling the
+suite refuses. The format is fussier than it looks and a subtly malformed file fails *silently* in
+the user's calendar app, which is the worst possible failure for a tool whose whole job is producing
+a file: CRLF line endings, 75-octet line folding, escaping `,` `;` and newlines in text fields,
+`DTSTART` in floating vs `TZID` vs UTC form, and DST-boundary events each need a test, with a
+compose → export → re-import → compare round-trip as the cheapest way to hold the line.
+- **Complexity:** M · **Suggested file:** `ics.html` · **Storage:** `suite.ics.drafts`
+
+**Considered and deliberately not proposed**, so the next reader doesn't re-propose them: recipe
+scaling (7.3 has a Recipe scaler tab), Base64/URL encode-decode, text SHA-256 and text diff (all
+10.3), printed habit grids (8.5), pomodoro (8.4), palette-from-photo (10.4), amortization and
+refinance what-ifs (10.11), dice and pick-from-list (10.5). Storage and quota diagnostics belong in
+10.13 as a section, not as a tool.
 
 ---
 

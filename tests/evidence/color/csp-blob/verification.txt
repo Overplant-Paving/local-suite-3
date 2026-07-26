@@ -1,0 +1,20 @@
+
+file://
+  ok   no CSP violation after the drop
+  ok   no console errors
+  ok   no "Could not read that image"
+  ok   palette revealed
+  ok   six colours extracted — ["#35649d","#995d46","#c83c3c","#c83c3c","#3ca05a","#3ca05a"]
+  ok   swatches rendered — 6
+  ok   preview canvas shown — block
+
+hosted
+  ok   no CSP violation after the drop
+  ok   no console errors
+  ok   no "Could not read that image"
+  ok   palette revealed
+  ok   six colours extracted — ["#35649d","#995d46","#c83c3c","#c83c3c","#3ca05a","#3ca05a"]
+  ok   swatches rendered — 6
+  ok   preview canvas shown — block
+
+color-photo: all assertions green

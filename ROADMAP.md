@@ -38,6 +38,20 @@ Standing rules for the executing agent:
   `"network": "keyed"` (requests only on click). Signup itself stays manual by design — see
   API-AND-RELAY.md §3. Evidence: `tests/evidence/settings/keysetup/`, gate:
   `node tests/settings-keysetup.mjs`.
+- [x] Color Studio photo palette fixed (2026-07-25) — "colors from a photo" had been broken since
+  CSP went suite-wide in Phase 4: `color.html` set an `<img>` src to `URL.createObjectURL(file)`,
+  and the generated `img-src 'self' data:` refuses `blob:` URLs, so every valid photo fell into the
+  "Could not read that image" handler in **both** `file://` and hosted mode. Now decoded with
+  `createImageBitmap`, which is not an image-source fetch and leaves the canvas untainted — no CSP
+  change, no `core/` change. The smoke suite only asserts zero console errors *on load*, which is
+  why an after-interaction violation went unseen; the new focused test closes that blind spot and
+  was confirmed to fail against the pre-fix build (12 assertions, both modes) before passing against
+  the fixed one. Evidence: `tests/evidence/color/csp-blob/`, gate: `node tests/color-photo.mjs`.
+- [x] Meteor Patrol retired (2026-07-25) — the parked v1 arcade prototype and the `games` hub
+  category are removed rather than finished, converting Phase 4 item 5's holding state ("finish or
+  park") into a final answer. The hub's work-in-progress card and `CAT_LABEL.games` are gone;
+  `.card.wip` stays because the un-built source-hub guard still uses it. Games reopen only with a
+  purpose-built toy at full Definition of Done. Evidence: `tests/evidence/games-retire/`.
 - [x] Automatic first location (2026-07-25) — the suite already shared one location; now it acquires
   the first one itself via browser geolocation (no network request, no CSP change), at the hub and
   in all 23 location tools, with a Settings toggle (`suite.location.auto`) and a remembered refusal.
@@ -226,7 +240,32 @@ release checklist executed · tag pushed.
 
 ## After v3.0.0 (backlog, unscheduled)
 
-- New tools from CATALOG.md's unbuilt ideas — each a `--new` scaffold + the same Definition of Done.
-- Second game; games get the suite theme treatment.
+**Next utilities — ranked candidate slate (2026-07-25).** Every entry is a candidate, not a
+commitment; each is written up in `CATALOG.md` §10 marked *proposed (not built)*, and each is
+zero-network, so it needs no key, no endpoint, and no stale-cache path. Ranked by size of the
+verified gap, then everyday frequency, then whether it reaches the Definition of Done with no new
+`core/` API, then implementation risk. Building one means `python3 build.py --new <id>` plus the
+same Definition of Done (QUALITY.md §4) as any migrated tool.
+
+- **Tier 1 — build first.** 10.14 Calculator & Percentage Workbench (`calc.html`) · 10.15 File
+  Integrity & Hash Desk (`hash.html`) · 10.16 Checklist & Routine Tracker (`checklists.html`).
+  Each closes a verified gap: no arithmetic surface exists anywhere in 73 tools; `text.html` hashes
+  text but has no file path at all; nothing holds a reusable list that resets.
+- **Tier 2 — strong, one real risk each.** 10.17 Image Toolbox (`image.html` — must use
+  `createImageBitmap`, not `blob:` image URLs) · 10.18 Calendar / ICS Maker (`ics.html` — an
+  unforgiving format that fails silently downstream) · Data Workbench as an **upgrade to
+  `dataviewer.html`**, not a second card (CATALOG 10.7).
+- **Tier 3 — fold into existing tools, no new cards.** Number base & bitwise desk, duration and
+  timesheet math, and unit-price comparison as `calc.html` modes; a regex tester as a fourth tab in
+  `text.html` (CATALOG 10.3).
+- **Spike-gated.** A "read" tab for `qr.html`: prove `getUserMedia` works from `file://` in Chrome
+  *and* Firefox before any design work, and drop it outright if it needs hosting (CATALOG 10.2).
+- Constraints that shape all of the above, verified against built `dist/` files under `file://`: no
+  `eval`/`new Function` (sha256-pinned `script-src`), no Web Workers, no `blob:` images under the
+  generated `img-src 'self' data:`. Object-URL downloads are unaffected.
+
+**Games.** The category is retired for now, not paused — see the Meteor Patrol decision in Current
+status. It reopens only with a purpose-built toy held to the full Definition of Done.
+
 - Periodic CATALOG endpoint re-verification sweep (verification dates are part of the contract;
   the USGS legacy water API sunset ~Q1 2027 is already flagged).
